@@ -203,6 +203,11 @@ We'd love your help making the Inbox ruby gem better. Join the Google Group for 
 
 Please sign the Contributor License Agreement before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
+The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. When you're ready to release a new version, do something like this:
+
+    rake version:bump:minor
+    rake release
+
 Tests can be run with:
 
     rspec spec
