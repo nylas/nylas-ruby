@@ -44,12 +44,11 @@ The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides a
 
 **Step 1: Redirect the user to Inbox:**
 
-```
-:::ruby
+```ruby
 require 'inbox'
 
 def login
-    inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret,         nil)
+    inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
     # The email address of the user you want to authenticate
     user_email = 'ben@inboxapp.com'
 
@@ -62,8 +61,7 @@ end
 
 **Step 2: Handle the Authentication Response:**
 
-```
-:::ruby
+```ruby
 def login_callback 
     inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
     inbox_token = inbox.auth_token_for_code(params[:code])
@@ -74,8 +72,7 @@ end
 
 ### Fetching Namespaces
 
-```
-:::ruby
+```ruby
 inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
 
 # Get the first namespace
@@ -89,8 +86,7 @@ puts namespace.provider
 
 ### Fetching Threads
 
-```
-:::ruby
+```ruby
 # Fetch the first thread
 thread = namespace.threads.first
 
@@ -121,8 +117,7 @@ threads = namespace.threads.where(:any_email => 'ben@inboxapp.com').all
 
 ### Working with Threads
 
-```
-:::ruby
+```ruby
 # List thread participants
 thread.participants.each do |participant|
     puts participant['email']
@@ -148,8 +143,7 @@ end
 
 ### Working with Files
 
-```
-:::ruby
+```ruby
 # List files
 namespace.files.each do |file|
     puts file.filename
@@ -164,8 +158,7 @@ file.save!
 
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
-```
-:::ruby
+```ruby
 messages = namespace.messages.where(:to => 'ben@inboxapp.com`).all
 ```
 
@@ -173,8 +166,7 @@ The `where` method accepts a hash of filters, as documented in the [Inbox Filter
 
 ### Creating and Sending Drafts
 
-```
-:::ruby
+```ruby
 # Create a new draft
 draft = namespace.drafts.build(
   :to => [{:name => 'Ben Gotow', :email => 'ben@inboxapp.com'}],
