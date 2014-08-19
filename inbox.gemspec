@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "inbox"
-  s.version = "0.0.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Gotow"]
@@ -173,12 +173,28 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<pry-nav>, [">= 0"])
       s.add_development_dependency(%q<pry-stack_explorer>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, [">= 0"])
+      s.add_development_dependency(%q<shoulda>, [">= 0"])
+      s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_development_dependency(%q<bundler>, [">= 1.3.5"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
+      s.add_development_dependency(%q<pry>, [">= 0"])
+      s.add_development_dependency(%q<pry-nav>, [">= 0"])
+      s.add_development_dependency(%q<pry-stack_explorer>, [">= 0"])
     else
       s.add_dependency(%q<inbox>, [">= 0"])
       s.add_dependency(%q<rest-client>, ["~> 1.6.8"])
       s.add_dependency(%q<activesupport>, ["~> 4.1.4"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
+      s.add_dependency(%q<rspec>, [">= 0"])
+      s.add_dependency(%q<shoulda>, [">= 0"])
+      s.add_dependency(%q<rdoc>, ["~> 3.12"])
+      s.add_dependency(%q<bundler>, [">= 1.3.5"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
+      s.add_dependency(%q<pry>, [">= 0"])
+      s.add_dependency(%q<pry-nav>, [">= 0"])
+      s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
@@ -242,6 +258,14 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<activesupport>, ["~> 4.1.4"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<rake>, [">= 0"])
+    s.add_dependency(%q<rspec>, [">= 0"])
+    s.add_dependency(%q<shoulda>, [">= 0"])
+    s.add_dependency(%q<rdoc>, ["~> 3.12"])
+    s.add_dependency(%q<bundler>, [">= 1.3.5"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
+    s.add_dependency(%q<pry>, [">= 0"])
+    s.add_dependency(%q<pry-nav>, [">= 0"])
+    s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
