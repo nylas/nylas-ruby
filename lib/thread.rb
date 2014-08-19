@@ -11,8 +11,6 @@ module Inbox
     attr_accessor :tags
     attr_accessor :message_ids
     attr_accessor :draft_ids
-    attr_accessor :namespace
-
 
     def inflate(json)
       super
@@ -21,18 +19,18 @@ module Inbox
     end
 
     def messages
-      @messages ||= RestfulModelCollection.new(Message, @_api, @_api, {:thread=>@id})
+      @messages ||= RestfulModelCollection.new(Message, @_api, @namespace, {:thread=>@id})
     end
 
     def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, @_api, @_api, {:thread=>@id})
+      @drafts ||= RestfulModelCollection.new(Draft, @_api, @namespace, {:thread=>@id})
     end
 
     def update_tags!(tags_to_add = [], tags_to_remove = [])
       update('PUT', '', {
         :add_tags => tags_to_add,
         :remove_tags => tags_to_remove
-      }.to_json)
+      })
     end
 
     def mark_as_read!

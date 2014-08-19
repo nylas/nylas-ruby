@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def login
+    # This URL must be registered with your application in the developer portal
     callback_url = url_for(:action => 'login_callback')
     redirect_to @inbox.url_for_authentication(callback_url, 'ben@inboxapp.com')
   end
@@ -34,9 +35,10 @@ class ApplicationController < ActionController::Base
         text += "#{thread.subject} - #{thread.id}<br>";
     end
 
-    # Mark a thread as read
-    thread = namespace.threads.first
-    thread.mark_as_read!
+    # Print out threads with the subject 'Daily Update'
+    namespace.threads.where(:subject => 'Daily Update').each do |thread|
+        text += "#{thread.subject} - #{thread.id}<br>";
+    end
 
     # List messages on the first thread
     text += "<br><br>"
@@ -44,10 +46,15 @@ class ApplicationController < ActionController::Base
         text += "#{message.subject}<br>";
     end
 
-    # Upload a file to a draft
-    file = namespace.files.build({:file => File.new("./public/favicon.ico", 'rb')})
-    file.save!
-    
+    # Create a new draft
+    # draft = namespace.drafts.build(
+    #   :to => [{:name => 'Ben Gotow', :email => 'bengotow@gmail.com'}],
+    #   :subject => "Sent by Ruby",
+    #   :body => "Hi there!<strong>This is HTML</strong>"
+    # )
+    # draft.save!
+    # draft.send!
+
     render :text => text
   end
 

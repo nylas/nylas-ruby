@@ -5,7 +5,6 @@ module Inbox
 
     attr_accessor :name
     attr_accessor :email
-    attr_accessor :namespace
 
   end
 end

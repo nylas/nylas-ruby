@@ -86,7 +86,7 @@ module Inbox
     # Convenience Methods
 
     def namespaces
-      @namespaces ||= RestfulModelCollection.new(Namespace, self)
+      @namespaces ||= RestfulModelCollection.new(Namespace, self, nil)
       @namespaces
     end
 

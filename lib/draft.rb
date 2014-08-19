@@ -6,12 +6,21 @@ module Inbox
     attr_accessor :reply_to_thread
     attr_accessor :state
 
+    def attach(file)
+      file.save! unless file.id
+      @file_ids.push(file.id)
+    end
+
     def send!
-      send_url = @_api.url_for_path("/n/#{@namespace}/send")
-      data = as_json()
-      ::RestClient.post(send_url, data) do |response, request, result|
+      save! unless @id
+
+      url = @_api.url_for_path("/n/#{@namespace}/send")
+      data = {:draft_id => @id}
+
+      ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
         Inbox.interpret_response(result, response, :expected_class => Object)
       end
+
       self
     end
 

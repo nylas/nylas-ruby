@@ -3,10 +3,13 @@ require 'restful_model'
 module Inbox
   class RestfulModelCollection
 
-    def initialize(model_class, api, parent = nil, filters = {})
+    attr_accessor :filters
+    
+    def initialize(model_class, api, namespace, filters = {})
+      raise StandardError.new unless api.class <= Inbox::API
       @model_class = model_class
-      @model_filters = filters
-      @_parent = parent
+      @filters = filters
+      @namespace = namespace
       @_api = api
     end
 
@@ -33,7 +36,7 @@ module Inbox
 
     def where(filters)
       collection = self.clone
-      collection.model_filters = filters
+      collection.filters = filters
       collection
     end
 
@@ -56,8 +59,7 @@ module Inbox
 
     def delete(item_or_id)
       item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
-      url = @_api.url_for_path(path(item_or_id))
-      RestClient.delete(url)
+      RestClient.delete("#{url}/#{id}")
     end
 
     def find(id)
@@ -65,8 +67,13 @@ module Inbox
       get_model(id)
     end
 
-    def build(*args)
-      @model_class.new(self, *args)
+    def build(args)
+      for key in args.keys
+        args[key.to_s] = args[key] 
+      end
+      model = @model_class.new(@_api, @namespace)
+      model.inflate(args)
+      model
     end
 
     def inflate_collection(items = [])
@@ -75,7 +82,7 @@ module Inbox
       return unless items.is_a?(Array)
       items.each do |json|
         if @model_class < RestfulModel
-          model = @model_class.new(self)
+          model = @model_class.new(@_api)
           model.inflate(json)
         else
           model = @model_class.new(json)
@@ -85,21 +92,20 @@ module Inbox
       models
     end
 
-    def path(id = "")
-      prefix = @_parent ? @_parent.path : ''
-      "#{prefix}/#{@model_class.collection_name}/#{id}"
-    end
-
     private
+
+    def url
+      prefix = "/n/#{@namespace}" if @namespace
+      @_api.url_for_path("#{prefix}/#{@model_class.collection_name}")
+    end
 
     def get_model(id)
       model = nil
-      url = @_api.url_for_path(path(id))
 
-      RestClient.get(url){ |response,request,result|
+      RestClient.get("#{url}/#{id}"){ |response,request,result|
         json = Inbox.interpret_response(result, response, {:expected_class => Object})
         if @model_class < RestfulModel
-          model = @model_class.new(self)
+          model = @model_class.new(@_api)
           model.inflate(json)
         else
           model = @model_class.new(json)
@@ -109,13 +115,12 @@ module Inbox
     end
 
     def get_model_collection(offset = 0, limit = 50)
-      filters = @model_filters.clone
+      filters = @filters.clone
       filters[:offset] = offset
       filters[:limit] = limit
-
-      url = @_api.url_for_path("#{path}?#{filters.to_query}")
       models = []
-      RestClient.get(url){ |response,request,result|
+
+      RestClient.get("#{url}?#{filters.to_query}"){ |response,request,result|
         items = Inbox.interpret_response(result, response, {:expected_class => Array})
         models = inflate_collection(items)
       }

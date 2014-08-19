@@ -2,15 +2,17 @@ module Inbox
   class RestfulModel
 
     attr_accessor :id
+    attr_accessor :namespace
     attr_accessor :created_at
 
     def self.collection_name
       "#{self.to_s.downcase}s".split('::').last
     end
 
-    def initialize(parent)
-      @_parent = parent
-      @_api = parent.instance_variable_get :@_api
+    def initialize(api, namespace = nil)
+      raise StandardError.new unless api.class <= Inbox::API
+      @namespace = namespace
+      @_api = api
     end
 
     def ==(comparison_object)
@@ -33,6 +35,11 @@ module Inbox
       end
     end
 
+    def url(action = "")
+      action = "/#{action}" unless action.empty?
+      @_api.url_for_path("/n/#{@namespace}/#{self.class.collection_name}/#{id}#{action}")
+    end
+
     def as_json(options = {})
       hash = {}
       setters = methods.grep(/^\w+=$/)
@@ -51,9 +58,8 @@ module Inbox
 
     def update(http_method, action, data = {})
       http_method = http_method.downcase
-      action_url = @_api.url_for_path(path(action))
 
-      ::RestClient.send(http_method, action_url, data) do |response, request, result|
+      ::RestClient.send(http_method, self.url(action), data.to_json, :content_type => :json) do |response, request, result|
         unless http_method == 'delete'
           json = Inbox.interpret_response(result, response, :expected_class => Object)
           inflate(json)
@@ -65,13 +71,6 @@ module Inbox
     def destroy
       update('DELETE', '')
     end
-
-    def path(action = "")
-      action = "/#{action}" unless action.empty?
-      prefix = @_parent ? @_parent.path : ''
-      "#{prefix}#{id}#{action}"
-    end
-
 
   end
 end

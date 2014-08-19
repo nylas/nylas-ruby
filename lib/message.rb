@@ -10,13 +10,27 @@ module Inbox
     attr_accessor :cc
     attr_accessor :bcc
     attr_accessor :date
-    attr_accessor :thread
-    attr_accessor :files
+    attr_accessor :thread_id
+    attr_accessor :file_ids
     attr_accessor :body
-    attr_accessor :namespace
+
+    def inflate(json)
+      super
+      @thread_id = json[:thread]
+      @file_ids = json[:files] || []
+      @to ||= []
+      @cc ||= []
+      @bcc ||= []
+    end
+
+    def as_json()
+      json = super
+      json[:files] = json[:file_ids]
+      json
+    end
 
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, {:message=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, @namespace, {:message=>@id})
     end
 
   end

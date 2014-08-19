@@ -24,27 +24,27 @@ module Inbox
     end
 
     def threads
-      @threads ||= RestfulModelCollection.new(Thread, @_api, self)
+      @threads ||= RestfulModelCollection.new(Thread, @_api, @id)
     end
 
     def tags
-      @tags ||= RestfulModelCollection.new(Tag, @_api, self)
+      @tags ||= RestfulModelCollection.new(Tag, @_api, @id)
     end
 
     def messages
-      @messages ||= RestfulModelCollection.new(Message, @_api, self)
+      @messages ||= RestfulModelCollection.new(Message, @_api, @id)
     end
 
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, self)
+      @files ||= RestfulModelCollection.new(File, @_api, @id)
     end
 
     def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, @_api, self)
+      @drafts ||= RestfulModelCollection.new(Draft, @_api, @id)
     end
 
     def contacts
-      @contacts ||= RestfulModelCollection.new(Contact, @_api, self)
+      @contacts ||= RestfulModelCollection.new(Contact, @_api, @id)
     end
 
   end
