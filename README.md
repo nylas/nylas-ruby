@@ -22,7 +22,7 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 - rest-client, json
 
 
-## Example
+## Example Rails App
 
 A small example Rails app is included in the `example` directory. You can run the sample app to see how an authentication flow might be implemented. 
 
@@ -36,7 +36,10 @@ A small example Rails app is included in the `example` directory. You can run th
 
 ### App ID and Secret
 
-Before you can interact with the Inbox API, you need to register for the Inbox developer program at [http://www.inboxapp.com/](http://www.inboxapp.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+Before you can interact with the Inbox API, you need to register for the Inbox Developer Program at [http://www.inboxapp.com/](http://www.inboxapp.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+
+Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
+
 
 ### Authentication
 
@@ -186,6 +189,15 @@ draft.save!
 # Send the draft. This method returns immediately and queues the message
 # with Inbox for delivery through the user's SMTP gateway.
 draft.send!
+```
+
+## Open-Source Sync Engine
+
+The [Inbox Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide nil for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+
+```ruby
+require 'inbox'
+inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
 ```
 
 
