@@ -43,7 +43,7 @@ Generally, you should store your App ID and Secret into environment variables to
 
 ### Authentication
 
-The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides a convenience methods that simplify the OAuth process. For more information about authenticating with Inbox, visit the [Developer Documentation](https://www.inboxapp.com/docs/gettingstarted-hosted#authenticating).
+The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Inbox, visit the [Developer Documentation](https://www.inboxapp.com/docs/gettingstarted-hosted#authenticating).
 
 **Step 1: Redirect the user to Inbox:**
 
