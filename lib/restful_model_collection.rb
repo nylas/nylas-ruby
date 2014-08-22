@@ -120,7 +120,7 @@ module Inbox
       filters[:limit] = limit
       models = []
 
-      RestClient.get("#{url}?#{filters.to_query}"){ |response,request,result|
+      RestClient.get(url, :params => filters){ |response,request,result|
         items = Inbox.interpret_response(result, response, {:expected_class => Array})
         models = inflate_collection(items)
       }
