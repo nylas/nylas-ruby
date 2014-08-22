@@ -42,6 +42,7 @@ class ApplicationController < ActionController::Base
 
     # List messages on the first thread
     text += "<br><br>"
+    thread = namespace.threads.first
     thread.messages.each do |message|
         text += "#{message.subject}<br>";
     end
