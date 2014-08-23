@@ -62,7 +62,7 @@ module Inbox
     end
 
     def url_for_authentication(redirect_uri, login_hint = '')
-      "https://beta.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+      "https://api.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
     def set_auth_token(token)
