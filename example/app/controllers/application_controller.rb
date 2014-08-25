@@ -3,7 +3,7 @@ require 'inbox'
 class ApplicationController < ActionController::Base
 
   # Add a before filter that configures Inbox using the App ID,
-  # App Secret, and any available auth token in the current session.
+  # App Secret, and any available access token in the current session.
   before_action :setup_inbox
   def setup_inbox
     config = Rails.configuration
@@ -23,8 +23,8 @@ class ApplicationController < ActionController::Base
   end
 
   def index
-    # Redirect to login if Inbox doesn't have an auth token
-    return redirect_to action: 'login' unless @inbox.auth_token
+    # Redirect to login if Inbox doesn't have an access token
+    return redirect_to action: 'login' unless @inbox.access_token
 
     # Get the first namespace
     namespace = @inbox.namespaces.first

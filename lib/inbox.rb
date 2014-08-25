@@ -39,14 +39,14 @@ module Inbox
 
   class API
     attr_accessor :api_server
-    attr_reader :auth_token
+    attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
 
-    def initialize(app_id, app_secret, auth_token = nil, api_server = 'https://api.inboxapp.com')
+    def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.inboxapp.com')
       raise "When overriding the Inbox API server address, you must include https://" unless api_server.include?('://')
       @api_server = api_server
-      @auth_token = auth_token
+      @access_token = access_token
       @app_secret = app_secret
       @app_id = app_id
 
@@ -56,17 +56,17 @@ module Inbox
     end
 
     def url_for_path(path)
-      raise NoAuthToken.new if @auth_token == nil
+      raise NoAuthToken.new if @access_token == nil
       protocol, domain = @api_server.split('//')
-      "#{protocol}//#{@auth_token}:@#{domain}#{path}"
+      "#{protocol}//#{@access_token}:@#{domain}#{path}"
     end
 
     def url_for_authentication(redirect_uri, login_hint = '')
       "https://api.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
-    def set_auth_token(token)
-      @auth_token = token
+    def set_access_token(token)
+      @access_token = token
     end
 
     def token_for_code(code)

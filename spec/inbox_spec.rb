@@ -5,13 +5,13 @@ describe 'Inbox' do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
-    @auth_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret, @auth_token)
+    @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
+    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#url_for_path" do
     it "should return the url for a provided path" do
-      expect(@inbox.url_for_path('/wobble')).to eq("https://#{@inbox.auth_token}:@api.inboxapp.com/wobble")
+      expect(@inbox.url_for_path('/wobble')).to eq("https://#{@inbox.access_token}:@api.inboxapp.com/wobble")
     end
 
     it "should return an error if you have not provided an auth token" do
