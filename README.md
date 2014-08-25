@@ -67,7 +67,7 @@ end
 ```ruby
 def login_callback 
     inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
-    inbox_token = inbox.auth_token_for_code(params[:code])
+    inbox_token = inbox.token_for_code(params[:code])
 
     # Save the inbox_token to the current session, save it to the user model, etc.
 end

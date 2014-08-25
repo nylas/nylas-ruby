@@ -69,7 +69,7 @@ module Inbox
       @auth_token = token
     end
 
-    def auth_token_for_code(code)
+    def token_for_code(code)
       data = {
           'client_id' => app_id,
           'client_secret' => app_secret,

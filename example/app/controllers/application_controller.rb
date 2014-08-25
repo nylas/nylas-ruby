@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
 
   def login_callback
     # Store the Inbox API token in the session
-    session[:inbox_token] = @inbox.auth_token_for_code(params[:code])
+    session[:inbox_token] = @inbox.token_for_code(params[:code])
     redirect_to action: 'index'
   end
 
