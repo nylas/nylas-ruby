@@ -135,7 +135,7 @@ thread.archive!
 # Add or remove arbitrary tags
 tagsToAdd = ['inbox', 'cfa1233ef123acd12']
 tagsToRemove = []
-thread.update_tags!(tagsToAd, tagsToRemove)
+thread.update_tags!(tagsToAdd, tagsToRemove)
 
 # List messages
 thread.messages.each do |message|
