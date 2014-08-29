@@ -36,7 +36,8 @@ module Inbox
 
     def where(filters)
       collection = self.clone
-      collection.filters = filters
+      collection.filters ||= {}
+      collection.filters.merge!(filters)
       collection
     end
 
