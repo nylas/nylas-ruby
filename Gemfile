@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'rest-client', '~> 1.6.8'
-gem 'activesupport', '~> 4.1.4'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
