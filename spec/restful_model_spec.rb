@@ -9,9 +9,10 @@ describe 'RestfulModel' do
   describe "#as_json" do
     it "should return a hash with the attr_accessor properties" do
       r = Inbox::RestfulModel.new(@api)
-      r._id = '1'
+      r.id = '1'
+      r.namespace_id = '123';
       r.created_at = Time.new
-      expect(r.as_json).to eq({"_id" => "1", "created_at" => r.created_at})
+      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at})
     end
   end
 

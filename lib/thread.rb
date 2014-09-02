@@ -12,12 +12,6 @@ module Inbox
     attr_accessor :message_ids
     attr_accessor :draft_ids
 
-    def inflate(json)
-      super
-      message_ids = json[:messages]
-      draft_ids = json[:drafts]
-    end
-
     def messages
       @messages ||= RestfulModelCollection.new(Message, @_api, @namespace, {:thread_id=>@id})
     end

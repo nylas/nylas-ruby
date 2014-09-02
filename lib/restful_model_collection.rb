@@ -5,11 +5,11 @@ module Inbox
 
     attr_accessor :filters
     
-    def initialize(model_class, api, namespace, filters = {})
+    def initialize(model_class, api, namespace_id, filters = {})
       raise StandardError.new unless api.class <= Inbox::API
       @model_class = model_class
       @filters = filters
-      @namespace = namespace
+      @namespace_id = namespace_id
       @_api = api
     end
 
@@ -72,7 +72,7 @@ module Inbox
       for key in args.keys
         args[key.to_s] = args[key] 
       end
-      model = @model_class.new(@_api, @namespace)
+      model = @model_class.new(@_api, @namespace_id)
       model.inflate(args)
       model
     end
@@ -96,7 +96,7 @@ module Inbox
     private
 
     def url
-      prefix = "/n/#{@namespace}" if @namespace
+      prefix = "/n/#{@namespace_id}" if @namespace_id
       @_api.url_for_path("#{prefix}/#{@model_class.collection_name}")
     end
 

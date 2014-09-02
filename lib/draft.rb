@@ -3,7 +3,7 @@ require 'restful_model'
 module Inbox
   class Draft < Message
 
-    attr_accessor :reply_to_thread
+    attr_accessor :thread_id
     attr_accessor :state
 
     def attach(file)
@@ -14,7 +14,7 @@ module Inbox
     def send!
       save! unless @id
 
-      url = @_api.url_for_path("/n/#{@namespace}/send")
+      url = @_api.url_for_path("/n/#{@namespace_id}/send")
       data = {:draft_id => @id}
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|

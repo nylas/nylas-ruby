@@ -2,16 +2,16 @@ module Inbox
   class RestfulModel
 
     attr_accessor :id
-    attr_accessor :namespace
+    attr_accessor :namespace_id
     attr_accessor :created_at
 
     def self.collection_name
       "#{self.to_s.downcase}s".split('::').last
     end
 
-    def initialize(api, namespace = nil)
+    def initialize(api, namespace_id = nil)
       raise StandardError.new unless api.class <= Inbox::API
-      @namespace = namespace
+      @namespace_id = namespace_id
       @_api = api
     end
 
@@ -37,7 +37,7 @@ module Inbox
 
     def url(action = "")
       action = "/#{action}" unless action.empty?
-      @_api.url_for_path("/n/#{@namespace}/#{self.class.collection_name}/#{id}#{action}")
+      @_api.url_for_path("/n/#{@namespace_id}/#{self.class.collection_name}/#{id}#{action}")
     end
 
     def as_json(options = {})
