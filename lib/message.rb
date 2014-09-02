@@ -23,7 +23,7 @@ module Inbox
     end
 
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, @namespace, {:message_id=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, @namespace_id, {:message_id=>@id})
     end
 
   end
