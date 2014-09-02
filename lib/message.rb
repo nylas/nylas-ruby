@@ -16,21 +16,14 @@ module Inbox
 
     def inflate(json)
       super
-      @thread_id = json[:thread]
-      @file_ids = json[:files] || []
+      @file_ids ||= []
       @to ||= []
       @cc ||= []
       @bcc ||= []
     end
 
-    def as_json()
-      json = super
-      json[:files] = json[:file_ids]
-      json
-    end
-
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, @namespace, {:message=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, @namespace, {:message_id=>@id})
     end
 
   end

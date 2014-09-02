@@ -19,11 +19,11 @@ module Inbox
     end
 
     def messages
-      @messages ||= RestfulModelCollection.new(Message, @_api, @namespace, {:thread=>@id})
+      @messages ||= RestfulModelCollection.new(Message, @_api, @namespace, {:thread_id=>@id})
     end
 
     def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, @_api, @namespace, {:thread=>@id})
+      @drafts ||= RestfulModelCollection.new(Draft, @_api, @namespace, {:thread_id=>@id})
     end
 
     def update_tags!(tags_to_add = [], tags_to_remove = [])
