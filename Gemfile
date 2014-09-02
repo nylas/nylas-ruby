@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 gemspec
 
-gem 'rest-client', '~> 1.6.8'
+gem 'rest-client', '~> 1.6'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
