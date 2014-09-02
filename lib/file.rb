@@ -7,7 +7,7 @@ module Inbox
     attr_accessor :filename
     attr_accessor :content_type
     attr_accessor :is_embedded
-    attr_accessor :message
+    attr_accessor :message_id
 
     # For uploading the file
     attr_accessor :file
