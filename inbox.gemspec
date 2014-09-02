@@ -27,6 +27,8 @@ Gem::Specification.new do |s|
     "lib/contact.rb",
     "lib/draft.rb",
     "lib/file.rb",
+    "lib/calendar.rb",
+    "lib/event.rb",
     "lib/inbox.rb",
     "lib/message.rb",
     "lib/namespace.rb",
