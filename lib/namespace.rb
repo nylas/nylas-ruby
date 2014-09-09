@@ -4,6 +4,8 @@ require 'message'
 require 'draft'
 require 'contact'
 require 'file'
+require 'calendar'
+require 'event'
 
 # Rather than saying require 'thread', we need to explicitly force
 # the thread model to load. Otherwise, we can't reference it below.
@@ -45,6 +47,14 @@ module Inbox
 
     def contacts
       @contacts ||= RestfulModelCollection.new(Contact, @_api, @id)
+    end
+
+    def calendars
+      @calendars ||= RestfulModelCollection.new(Calendar, @_api, @id)
+    end
+
+    def events
+      @events ||= RestfulModelCollection.new(Event, @_api, @id)
     end
 
   end
