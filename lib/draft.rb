@@ -4,6 +4,7 @@ module Inbox
   class Draft < Message
 
     attr_accessor :thread_id
+    attr_accessor :version
     attr_accessor :state
 
     def attach(file)
@@ -15,7 +16,7 @@ module Inbox
       save! unless @id
 
       url = @_api.url_for_path("/n/#{@namespace_id}/send")
-      data = {:draft_id => @id}
+      data = {:draft_id => @id, :version => @version}
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
         Inbox.interpret_response(result, response, :expected_class => Object)
