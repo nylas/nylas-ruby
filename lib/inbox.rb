@@ -62,7 +62,7 @@ module Inbox
     end
 
     def url_for_authentication(redirect_uri, login_hint = '')
-      "https://api.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+      "https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
     def set_access_token(token)
@@ -77,7 +77,7 @@ module Inbox
           'code' => code
       }
 
-      ::RestClient.get("#{@api_server}/oauth/token", {:params => data}) do |response, request, result|
+      ::RestClient.get("https://www.inboxapp.com/oauth/token", {:params => data}) do |response, request, result|
         json = Inbox.interpret_response(result, response, :expected_class => Object)
         return json['access_token']
       end
