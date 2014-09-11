@@ -207,12 +207,16 @@ We'd love your help making the Inbox ruby gem better. Join the Google Group for 
 
 Please sign the Contributor License Agreement before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
-The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. When you're ready to release a new version, do something like this:
-
-    rake version:bump:minor
-    rake release
-
 Tests can be run with:
 
     rspec spec
 
+
+## Deployment 
+
+The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, do something like this:
+
+    rake version:bump:minor (or :major or :patch)
+    rake release
+
+If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Inbox team can find that by doing `fetch-password rubygems`.
