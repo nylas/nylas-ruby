@@ -1,9 +1,12 @@
+require 'time_attr_accessor'
+
 module Inbox
   class RestfulModel
+    extend Inbox::TimeAttrAccessor
 
     attr_accessor :id
     attr_accessor :namespace_id
-    attr_accessor :created_at
+    time_attr_accessor :created_at
 
     def self.collection_name
       "#{self.to_s.downcase}s".split('::').last
