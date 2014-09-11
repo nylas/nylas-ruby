@@ -15,14 +15,15 @@ module Inbox
 
     def each
       offset = 0
+      chunk_size = 50
       finished = false
       while (!finished) do
-        items = get_model_collection(offset)
-        break if items.length == 0
-        items.each { |item|
+        results = get_model_collection(offset, chunk_size)
+        results.each { |item|
           yield item
         }
-        offset += items.length
+        offset += results.length
+        finished = results.length < chunk_size
       end
     end
 
