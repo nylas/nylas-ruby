@@ -21,8 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Gem for interacting with the Inbox API that allows you to create and publish one-page websites, subscribe to web hooks and receive events when those pages are interacted with. Visit http://www.populr.me/ for more information. }
   gem.email = "ben@inboxapp.com"
   gem.authors = ["Ben Gotow"]
-  gem.files.exclude 'example/**/.keep'
-  gem.files.exclude 'example/**/*'
+  gem.files = Dir.glob('lib/**/*.rb')
 end
 Jeweler::RubygemsDotOrgTasks.new
 

@@ -17,13 +17,6 @@ Gem::Specification.new do |s|
     "README.md"
   ]
   s.files = [
-    "Gemfile",
-    "LICENSE.txt",
-    "README.md",
-    "Rakefile",
-    "VERSION",
-    "example/.gitignore",
-    "inbox.gemspec",
     "lib/calendar.rb",
     "lib/contact.rb",
     "lib/draft.rb",
@@ -37,11 +30,7 @@ Gem::Specification.new do |s|
     "lib/tag.rb",
     "lib/thread.rb",
     "lib/time_attr_accessor.rb",
-    "lib/version.rb",
-    "spec/inbox_spec.rb",
-    "spec/restful_model_spec.rb",
-    "spec/spec_helper.rb",
-    "tasks/rspec.rake"
+    "lib/version.rb"
   ]
   s.homepage = "http://github.com/inboxapp/inbox-ruby"
   s.licenses = ["MIT"]
@@ -53,7 +42,6 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<inbox>, [">= 0"])
       s.add_runtime_dependency(%q<rest-client>, ["~> 1.6"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
@@ -63,25 +51,8 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<pry-nav>, [">= 0"])
       s.add_development_dependency(%q<pry-stack_explorer>, [">= 0"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
-      s.add_development_dependency(%q<bundler>, [">= 1.3.5"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
-      s.add_development_dependency(%q<pry>, [">= 0"])
-      s.add_development_dependency(%q<pry-nav>, [">= 0"])
-      s.add_development_dependency(%q<pry-stack_explorer>, [">= 0"])
     else
-      s.add_dependency(%q<inbox>, [">= 0"])
       s.add_dependency(%q<rest-client>, ["~> 1.6"])
-      s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<rdoc>, ["~> 3.12"])
-      s.add_dependency(%q<bundler>, [">= 1.3.5"])
-      s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
-      s.add_dependency(%q<pry>, [">= 0"])
-      s.add_dependency(%q<pry-nav>, [">= 0"])
-      s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
@@ -92,16 +63,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
     end
   else
-    s.add_dependency(%q<inbox>, [">= 0"])
     s.add_dependency(%q<rest-client>, ["~> 1.6"])
-    s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<rdoc>, ["~> 3.12"])
-    s.add_dependency(%q<bundler>, [">= 1.3.5"])
-    s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
-    s.add_dependency(%q<pry>, [">= 0"])
-    s.add_dependency(%q<pry-nav>, [">= 0"])
-    s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
