@@ -9,6 +9,7 @@ module Inbox
   class AccessDenied < StandardError; end
   class ResourceNotFound < StandardError; end
   class NoAuthToken < StandardError; end
+  class UnexpectedAccountAction < StandardError; end
   class UnexpectedResponse < StandardError; end
   class APIError < StandardError
     attr_accessor :error_type
@@ -90,6 +91,28 @@ module Inbox
       @namespaces
     end
 
-  end
+    # Billing Methods
 
+    def _perform_account_action!(action)
+      raise UnexpectedAccountAction.new unless action == "upgrade" || action == "downgrade"
+
+      protocol, domain = @api_server.split('//')
+      account_ids = namespaces.all.collect {|n| n.account_id }.uniq
+      account_ids.each do | id |
+        ::RestClient.post("#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/#{id}/#{action}",{}) do |response, request, result|
+          # Throw any exceptions
+          json = Inbox.interpret_response(result, response, :expected_class => Object)
+        end
+      end
+    end
+
+    def upgrade_account!
+      _perform_account_action!('upgrade')
+    end
+
+    def downgrade_account!
+      _perform_account_action!('downgrade')
+    end
+
+  end
 end

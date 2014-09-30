@@ -5,6 +5,7 @@ module Inbox
   class Message < RestfulModel
 
     attr_accessor :subject
+    attr_accessor :snippet
     attr_accessor :from
     attr_accessor :to
     attr_accessor :cc

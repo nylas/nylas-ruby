@@ -73,6 +73,28 @@ def login_callback
 end
 ```
 
+### Managing Billing
+
+If you're using the open-source version of the Inbox API or have fewer than 100 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. Accounts initially start in a "trial" state and sync slowly at a rate of one message per minute so users can try out your app. After 30 days, you need to upgrade accounts (and start paying for them) or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+
+**Upgrading an Account**
+
+```ruby
+  # Initialize an Inbox object with your app ID and secret, and the API token
+  # for the user account you'd like to upgrade.
+  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
+  inbox.upgrade_account!
+```
+
+**Cancelling an Account**
+
+```ruby
+  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
+  inbox.downgrade_account!
+
+  # Your Inbox API token will be revoked, you will not be charged
+```
+
 ### Fetching Namespaces
 
 ```ruby

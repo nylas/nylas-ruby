@@ -15,7 +15,7 @@ module Inbox
 
     def each
       offset = 0
-      chunk_size = 50
+      chunk_size = 1000
       finished = false
       while (!finished) do
         results = get_model_collection(offset, chunk_size)
@@ -42,10 +42,10 @@ module Inbox
       collection
     end
 
-    def range(offset = 0, limit = 50)
+    def range(offset = 0, limit = 1000)
       accumulated = []
       finished = false
-      chunk_size = 50
+      chunk_size = 1000
 
       while (!finished && accumulated.length < limit) do
         results = get_model_collection(offset + accumulated.length, chunk_size)
@@ -116,7 +116,7 @@ module Inbox
       model
     end
 
-    def get_model_collection(offset = 0, limit = 50)
+    def get_model_collection(offset = 0, limit = 1000)
       filters = @filters.clone
       filters[:offset] = offset
       filters[:limit] = limit
