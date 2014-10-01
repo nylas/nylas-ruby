@@ -13,10 +13,12 @@ module Inbox
     end
 
     def send!
-      save! unless @id
-
       url = @_api.url_for_path("/n/#{@namespace_id}/send")
-      data = {:draft_id => @id, :version => @version}
+      if @id
+        data = {:draft_id => @id, :version => @version}
+      else
+        data = as_json()
+      end
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
         Inbox.interpret_response(result, response, :expected_class => Object)
