@@ -239,6 +239,10 @@ Tests can be run with:
 The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, do something like this:
 
     rake version:bump:minor (or :major or :patch)
+    rake build
+
+Test your new version (found in `pkg/`) locally, and then release with:
+
     rake release
 
 If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Inbox team can find that by doing `fetch-password rubygems`.
