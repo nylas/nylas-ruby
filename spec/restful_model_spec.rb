@@ -7,7 +7,7 @@ describe 'RestfulModel' do
   end
 
   describe "#as_json" do
-    it "should return a hash with the attr_accessor properties" do
+    it "should return a hash with the parameter properties" do
       r = Inbox::RestfulModel.new(@api)
       r.id = '1'
       r.namespace_id = '123';
