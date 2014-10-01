@@ -14,6 +14,17 @@ describe 'RestfulModel' do
       r.created_at = Time.new
       expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at})
     end
+
+    it "should ignore arbitrary setters" do
+      model_subclass = Class.new(Inbox::RestfulModel) do
+        def foo=(bar); end
+      end
+      r = model_subclass.new(@api)
+      r.id = '1'
+      r.namespace_id = '123';
+      r.created_at = Time.new
+      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at})
+    end
   end
 
 end

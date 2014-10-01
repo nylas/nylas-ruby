@@ -3,14 +3,14 @@ require 'restful_model'
 module Inbox
   class File < RestfulModel
 
-    attr_accessor :size
-    attr_accessor :filename
-    attr_accessor :content_type
-    attr_accessor :is_embedded
-    attr_accessor :message_id
+    parameter :size
+    parameter :filename
+    parameter :content_type
+    parameter :is_embedded
+    parameter :message_id
 
     # For uploading the file
-    attr_accessor :file
+    parameter :file
 
     def inflate(json)
       super

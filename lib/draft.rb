@@ -3,9 +3,9 @@ require 'restful_model'
 module Inbox
   class Draft < Message
 
-    attr_accessor :thread_id
-    attr_accessor :version
-    attr_accessor :state
+    parameter :thread_id
+    parameter :version
+    parameter :state
 
     def attach(file)
       file.save! unless file.id
