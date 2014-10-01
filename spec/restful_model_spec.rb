@@ -27,4 +27,25 @@ describe 'RestfulModel' do
     end
   end
 
+  describe "#inflate" do
+    it "should set the values provided in the hash on the instance" do
+      now = Time.new
+      r = Inbox::RestfulModel.new(@api)
+      r.inflate({"id" => "1", "namespace_id" => "123", "created_at" => now})
+
+      expect(r.id).to eq('1')
+      expect(r.namespace_id).to eq('123')
+      expect(r.created_at).to eq(now)
+    end
+
+    it "should ignore arbitrary json values" do
+      model_subclass = Class.new(Inbox::RestfulModel) do
+        attr_accessor :foo
+      end
+
+      r = model_subclass.new(@api)
+      r.inflate({"foo" => "bar"})
+      expect(r.foo).to be_nil
+    end
+  end
 end

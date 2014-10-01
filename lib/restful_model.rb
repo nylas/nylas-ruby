@@ -25,10 +25,8 @@ module Inbox
     end
 
     def inflate(json)
-      setters = methods.grep(/^\w+=$/)
-      setters.each do |setter|
-        property_name = setter.to_s.sub('=', '')
-        send(setter, json[property_name]) if json.has_key?(property_name)
+      parameters.each do |property_name|
+        send("#{property_name}=", json[property_name]) if json.has_key?(property_name)
       end
     end
 
