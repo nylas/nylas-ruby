@@ -18,6 +18,7 @@ module Inbox
   class Namespace < RestfulModel
 
     parameter :account_id
+    parameter :name
     parameter :email_address
     parameter :provider
 
