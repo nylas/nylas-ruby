@@ -17,9 +17,9 @@ module Inbox
 
   class Namespace < RestfulModel
 
-    attr_accessor :account_id
-    attr_accessor :email_address
-    attr_accessor :provider
+    parameter :account_id
+    parameter :email_address
+    parameter :provider
 
     def self.collection_name
       "n"

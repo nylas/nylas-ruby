@@ -5,12 +5,12 @@ module Inbox
   class Thread < RestfulModel
     extend TimeAttrAccessor
 
-    attr_accessor :subject
-    attr_accessor :participants
-    attr_accessor :snippet
-    attr_accessor :tags
-    attr_accessor :message_ids
-    attr_accessor :draft_ids
+    parameter :subject
+    parameter :participants
+    parameter :snippet
+    parameter :tags
+    parameter :message_ids
+    parameter :draft_ids
     time_attr_accessor :last_message_timestamp
     time_attr_accessor :first_message_timestamp
 

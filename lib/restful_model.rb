@@ -1,11 +1,13 @@
 require 'time_attr_accessor'
+require 'parameters'
 
 module Inbox
   class RestfulModel
     extend Inbox::TimeAttrAccessor
+    include Inbox::Parameters
 
-    attr_accessor :id
-    attr_accessor :namespace_id
+    parameter :id
+    parameter :namespace_id
     time_attr_accessor :created_at
 
     def self.collection_name
@@ -23,10 +25,8 @@ module Inbox
     end
 
     def inflate(json)
-      setters = methods.grep(/^\w+=$/)
-      setters.each do |setter|
-        property_name = setter.to_s.sub('=', '')
-        send(setter, json[property_name]) if json.has_key?(property_name)
+      parameters.each do |property_name|
+        send("#{property_name}=", json[property_name]) if json.has_key?(property_name)
       end
     end
 
@@ -45,9 +45,7 @@ module Inbox
 
     def as_json(options = {})
       hash = {}
-      setters = methods.grep(/^\w+=$/)
-      setters.each do |setter|
-        getter = setter.to_s.sub('=', '')
+      parameters.each do |getter|
         unless options[:except] && options[:except].include?(getter)
           value = send(getter)
           unless value.is_a?(RestfulModelCollection)

@@ -4,16 +4,16 @@ require 'file'
 module Inbox
   class Message < RestfulModel
 
-    attr_accessor :subject
-    attr_accessor :snippet
-    attr_accessor :from
-    attr_accessor :to
-    attr_accessor :cc
-    attr_accessor :bcc
-    attr_accessor :date
-    attr_accessor :thread_id
-    attr_accessor :file_ids
-    attr_accessor :body
+    parameter :subject
+    parameter :snippet
+    parameter :from
+    parameter :to
+    parameter :cc
+    parameter :bcc
+    parameter :date
+    parameter :thread_id
+    parameter :file_ids
+    parameter :body
 
     def inflate(json)
       super

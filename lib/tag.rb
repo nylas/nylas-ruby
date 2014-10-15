@@ -3,7 +3,7 @@ require 'restful_model'
 module Inbox
   class Tag < RestfulModel
 
-    attr_accessor :name
+    parameter :name
 
   end
 end
