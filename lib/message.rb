@@ -14,6 +14,7 @@ module Inbox
     parameter :thread_id
     parameter :file_ids
     parameter :body
+    parameter :unread
 
     def inflate(json)
       super
