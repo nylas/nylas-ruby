@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "inbox"
-  s.version = "0.8.1"
+  s.version = "0.9.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Gotow"]
-  s.date = "2014-10-31"
+  s.date = "2014-11-07"
   s.description = "Gem for interacting with the Inbox API that allows you to create and publish one-page websites, subscribe to web hooks and receive events when those pages are interacted with. Visit http://www.populr.me/ for more information. "
   s.email = "ben@inboxapp.com"
   s.extra_rdoc_files = [
