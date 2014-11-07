@@ -62,8 +62,12 @@ module Inbox
       "#{protocol}//#{@access_token}:@#{domain}#{path}"
     end
 
-    def url_for_authentication(redirect_uri, login_hint = '')
-      "https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+    def url_for_authentication(redirect_uri, login_hint = '', options = {})
+      trialString = 'false'
+      if options[:trial] == true
+        trialString = 'true'
+      end
+      "https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
     def set_access_token(token)

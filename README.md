@@ -75,7 +75,16 @@ end
 
 ### Managing Billing
 
-If you're using the open-source version of the Inbox API or have fewer than 100 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. Accounts initially start in a "trial" state and sync slowly at a rate of one message per minute so users can try out your app. After 30 days, you need to upgrade accounts (and start paying for them) or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+If you're using the open-source version of the Inbox API or have fewer than 100 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+
+**Starting an Account in Trial Mode**
+
+When you're redirecting the user to Inbox to authenticate with their email provider,
+pass the additional `trial: true` option to start their account in trial mode.
+
+```ruby
+  redirect_to inbox.url_for_authentication(callback_url, user_email, {trial: true})
+```
 
 **Upgrading an Account**
 
