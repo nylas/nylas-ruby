@@ -75,7 +75,7 @@ end
 
 ### Managing Billing
 
-If you're using the open-source version of the Inbox API or have fewer than 100 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+If you're using the open-source version of the Inbox API or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
 
 **Starting an Account in Trial Mode**
 
@@ -197,6 +197,15 @@ messages = namespace.messages.where(:to => 'ben@inboxapp.com`).all
 ```
 
 The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.inboxapp.com/docs/api#filters). 
+
+### Getting the raw contents of a message
+
+It's possible to access the unprocessed contents of a message using the raw method:
+
+```ruby
+raw_contents = message.raw.rfc2822
+```
+
 
 ### Creating and Sending Drafts
 

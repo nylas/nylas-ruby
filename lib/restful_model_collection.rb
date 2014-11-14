@@ -94,12 +94,12 @@ module Inbox
       models
     end
 
-    private
-
     def url
       prefix = "/n/#{@namespace_id}" if @namespace_id
       @_api.url_for_path("#{prefix}/#{@model_class.collection_name}")
     end
+
+    private
 
     def get_model(id)
       model = nil

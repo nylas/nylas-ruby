@@ -17,3 +17,6 @@ test/version_tmp
 tmp
 .DS_Store
 spec/.DS_Store
+tags
+TAGS
+*.swp

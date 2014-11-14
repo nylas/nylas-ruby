@@ -57,7 +57,7 @@ module Inbox
     end
 
     def url_for_path(path)
-      raise NoAuthToken.new if @access_token == nil
+      raise NoAuthToken.new if @access_token == nil and (@app_secret != nil or @app_id != nil)
       protocol, domain = @api_server.split('//')
       "#{protocol}//#{@access_token}:@#{domain}#{path}"
     end
