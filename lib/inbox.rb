@@ -51,8 +51,10 @@ module Inbox
       @app_secret = app_secret
       @app_id = app_id
 
-      ::RestClient.add_before_execution_proc do |req, params|
-        req.add_field('X-Inbox-API-Wrapper', 'ruby')
+      if ::RestClient.before_execution_procs.empty?
+        ::RestClient.add_before_execution_proc do |req, params|
+          req.add_field('X-Inbox-API-Wrapper', 'ruby')
+        end
       end
     end
 

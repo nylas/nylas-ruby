@@ -6,10 +6,26 @@ describe 'Inbox' do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
   end
 
+  describe "initialize" do
+    it "should add the 'before_execution_proc' to the RestClient to set the header" do
+      expect(::RestClient.before_execution_procs.empty?).to eq(true)
+      @inbox = Inbox::API.new(@app_id, @app_secret)
+      expect(::RestClient.before_execution_procs.empty?).to eq(false)
+    end
+
+    it "should not do this multiple times if multiple copies of the Inbox::API are initialized" do
+      @inbox = Inbox::API.new(@app_id, @app_secret)
+      @inbox = Inbox::API.new(@app_id, @app_secret)
+      expect(::RestClient.before_execution_procs.count).to eq(1)
+    end
+  end
   describe "#url_for_path" do
+    before (:each) do
+      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    end
+
     it "should return the url for a provided path" do
       expect(@inbox.url_for_path('/wobble')).to eq("https://#{@inbox.access_token}:@api.inboxapp.com/wobble")
     end
@@ -23,6 +39,10 @@ describe 'Inbox' do
   end
 
   describe "#url_for_authentication" do
+    before (:each) do
+      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    end
+
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
       url = @inbox.url_for_authentication('http://redirect.uri')
       expect(url).to eq("https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
@@ -41,6 +61,7 @@ describe 'Inbox' do
 
   describe "#self.interpret_response" do
     before (:each) do
+      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
       @result = double('result')
       allow(@result).to receive(:code).and_return(200)
     end
