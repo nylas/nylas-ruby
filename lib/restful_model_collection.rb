@@ -4,7 +4,7 @@ module Inbox
   class RestfulModelCollection
 
     attr_accessor :filters
-    
+
     def initialize(model_class, api, namespace_id, filters = {})
       raise StandardError.new unless api.class <= Inbox::API
       @model_class = model_class

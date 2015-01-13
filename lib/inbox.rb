@@ -3,6 +3,7 @@ require 'rest-client'
 require 'restful_model_collection'
 require 'json'
 require 'namespace'
+require 'account'
 
 module Inbox
 
@@ -120,5 +121,20 @@ module Inbox
       _perform_account_action!('downgrade')
     end
 
+    def accounts
+      protocol, domain = @api_server.split('//')
+      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/"
+
+      RestClient.get(accounts_path) do |response, request, result|
+        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        puts json
+        json.map do |account_json|
+           Account.new({ :account_id => account_json.fetch('account_id', ''),
+                         :trial => account_json.fetch('trial', ''),
+                         :trial_expires => account_json.fetch('trial_expires', nil),
+                         :sync_state => account_json.fetch('sync_state', '')})
+        end
+      end
+    end
   end
 end
