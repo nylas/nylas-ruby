@@ -240,6 +240,23 @@ draft.save!
 draft.send!
 ```
 
+### Creating an event
+
+````ruby
+# Every event is attached to a calendar -- get the id of the first calendar
+calendar_id = inbox.namespaces.first.calendars.first.id
+new_event = inbox.namespaces.first.events.build(:calendar_id => calendar_id, :title => 'Coffee?')
+
+# Modify attributes as necessary
+new_event.location = "L'excelsior"
+
+# Dates are expressed by the Inbox API as UTC timestamps
+new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
+
+# Persist the event --- it's automatically synced back to the Google or Exchange calendar
+new_event.save!
+```
+
 ## Open-Source Sync Engine
 
 The [Inbox Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide nil for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
