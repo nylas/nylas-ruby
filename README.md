@@ -110,7 +110,7 @@ pass the additional `trial: true` option to start their account in trial mode.
   # Query the status of every account linked to the app
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
   accounts = inbox.accounts
-  accounts.map { |a| a.account_id, a.sync_state } # Available fields are: account_id, sync_state, trial and trial_expires. See lib/account.rb for more details.
+  accounts.map { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial and trial_expires. See lib/account.rb for more details.
 ```
 
 ### Fetching Namespaces
