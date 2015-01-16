@@ -1,0 +1,14 @@
+[
+    {
+        "account_id": "awa6ltos76vz5hvphkp8k17nt",
+        "trial": true,
+        "trial_expires": 1414449156,
+        "sync_state": "running"
+    },
+    {
+        "account_id": "c5zc216uat483slypx67mu8i3",
+        "trial": false,
+        "trial_expires": false,
+        "sync_state": "running"
+    }
+]

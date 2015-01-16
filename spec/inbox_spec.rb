@@ -10,9 +10,10 @@ describe 'Inbox' do
 
   describe "initialize" do
     it "should add the 'before_execution_proc' to the RestClient to set the header" do
-      expect(::RestClient.before_execution_procs.empty?).to eq(true)
-      @inbox = Inbox::API.new(@app_id, @app_secret)
-      expect(::RestClient.before_execution_procs.empty?).to eq(false)
+      if ::RestClient.before_execution_procs.empty?
+        @inbox = Inbox::API.new(@app_id, @app_secret)
+        expect(::RestClient.before_execution_procs.empty?).to eq(false)
+      end
     end
 
     it "should not do this multiple times if multiple copies of the Inbox::API are initialized" do
@@ -21,6 +22,7 @@ describe 'Inbox' do
       expect(::RestClient.before_execution_procs.count).to eq(1)
     end
   end
+
   describe "#url_for_path" do
     before (:each) do
       @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
@@ -112,6 +114,31 @@ describe 'Inbox' do
       end
     end
 
+    describe "#accounts" do
+      before (:each) do
+        stub_request(:get, "https://#{@app_secret}:@api.inboxapp.com/a/#{@app_id}/accounts/").to_return(
+          :status => 200,
+          :body => File.read('spec/fixtures/accounts_endpoint.txt'),
+          :headers => {"Content-Type" => "application/json"})
+        @inbox = Inbox::API.new(@app_id, @app_secret)
+      end
+
+      it "should auth with the app_secret" do
+        expect(@inbox.accounts).to_not be_nil
+      end
+
+      it "should return a list of account objects" do
+        expect(@inbox.accounts[0]).to be_an Inbox::Account
+      end
+
+      it "should return an object corresponding to the mocked values" do
+      require 'pry' ; binding.pry
+        account = @inbox.accounts[0]
+        expect(account.trial).to be true
+        expect(account.sync_state).to eq('running')
+      end
+
+    end
   end
 
 end

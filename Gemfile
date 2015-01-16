@@ -13,4 +13,5 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'pry-stack_explorer'
+  gem 'webmock'
 end
