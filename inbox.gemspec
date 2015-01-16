@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "inbox"
-  s.version = "0.12.0"
+  s.version = "0.13.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Gotow"]
-  s.date = "2015-01-15"
+  s.date = "2015-01-16"
   s.description = "Gem for interacting with the Inbox API that allows you to create and publish one-page websites, subscribe to web hooks and receive events when those pages are interacted with. Visit http://www.populr.me/ for more information. "
   s.email = "ben@inboxapp.com"
   s.extra_rdoc_files = [
@@ -54,6 +54,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<pry>, [">= 0"])
       s.add_development_dependency(%q<pry-nav>, [">= 0"])
       s.add_development_dependency(%q<pry-stack_explorer>, [">= 0"])
+      s.add_development_dependency(%q<webmock>, [">= 0"])
     else
       s.add_dependency(%q<rest-client>, ["~> 1.7"])
       s.add_dependency(%q<rspec>, [">= 0"])
@@ -64,6 +65,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<pry>, [">= 0"])
       s.add_dependency(%q<pry-nav>, [">= 0"])
       s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
+      s.add_dependency(%q<webmock>, [">= 0"])
     end
   else
     s.add_dependency(%q<rest-client>, ["~> 1.7"])
@@ -75,6 +77,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<pry>, [">= 0"])
     s.add_dependency(%q<pry-nav>, [">= 0"])
     s.add_dependency(%q<pry-stack_explorer>, [">= 0"])
+    s.add_dependency(%q<webmock>, [">= 0"])
   end
 end
 
