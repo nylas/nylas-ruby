@@ -20,6 +20,9 @@ describe Inbox::Event do
   describe "#send!" do
     it "does return a fully-formed draft object after sending it" do
       draft = Inbox::Draft.new(@inbox, @namespace_id)
+      expect(draft.state).to_not eq('sending')
+      expect(draft.id).to be nil
+
       result = draft.send!
       expect(result.state).to eq('sending')
       expect(result.id).to_not be nil
