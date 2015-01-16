@@ -1,0 +1,28 @@
+{
+    "bcc": [],
+    "body": "That's how they test stuff, I hear.",
+    "cc": [],
+    "date": 1421417645,
+    "files": [],
+    "from": [
+        {
+            "email": "inbox.apptest2@inboxapp.onmicrosoft.com",
+            "name": ""
+        }
+    ],
+    "id": "6qhd1hftqsntnwrzl04tg6445",
+    "namespace_id": "8yk3f2gkifamwawjgab9kixnd",
+    "object": "draft",
+    "snippet": "That's how they test stuff, I hear.",
+    "state": "sending",
+    "subject": "Boom boom tcha",
+    "thread_id": "92s7bd0dv91lboc2vvxc8y1et",
+    "to": [
+        {
+            "email": "karim@nilas.com",
+            "name": "Karim Hamidou"
+        }
+    ],
+    "unread": false,
+    "version": "4djmo5iwtx5ny79qxkfqmdtvb"
+}

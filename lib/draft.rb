@@ -21,7 +21,8 @@ module Inbox
       end
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
-        Inbox.interpret_response(result, response, :expected_class => Object)
+        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        self.inflate(json)
       end
 
       self

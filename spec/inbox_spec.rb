@@ -132,7 +132,6 @@ describe 'Inbox' do
       end
 
       it "should return an object corresponding to the mocked values" do
-      require 'pry' ; binding.pry
         account = @inbox.accounts[0]
         expect(account.trial).to be true
         expect(account.sync_state).to eq('running')
