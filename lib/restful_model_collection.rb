@@ -28,8 +28,10 @@ module Inbox
     end
 
     def count
-      resp = RestClient.get(url, params: @filters.merge(view: 'count'))
-      JSON.parse(resp)['count']
+      RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
+        json = Inbox.interpret_response(result, response)
+        return json['count']
+      }
     end
 
     def first
