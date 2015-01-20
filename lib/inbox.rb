@@ -45,12 +45,14 @@ module Inbox
     attr_reader :app_id
     attr_reader :app_secret
 
-    def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.inboxapp.com')
+    def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.inboxapp.com',
+                   service_domain = 'www.inboxapp.com')
       raise "When overriding the Inbox API server address, you must include https://" unless api_server.include?('://')
       @api_server = api_server
       @access_token = access_token
       @app_secret = app_secret
       @app_id = app_id
+      @service_domain = service_domain
 
       if ::RestClient.before_execution_procs.empty?
         ::RestClient.add_before_execution_proc do |req, params|
@@ -70,7 +72,7 @@ module Inbox
       if options[:trial] == true
         trialString = 'true'
       end
-      "https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
     def url_for_management
@@ -90,7 +92,7 @@ module Inbox
           'code' => code
       }
 
-      ::RestClient.get("https://www.inboxapp.com/oauth/token", {:params => data}) do |response, request, result|
+      ::RestClient.get("https://#{@service_domain}/oauth/token", {:params => data}) do |response, request, result|
         json = Inbox.interpret_response(result, response, :expected_class => Object)
         return json['access_token']
       end
