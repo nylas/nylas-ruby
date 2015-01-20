@@ -116,7 +116,8 @@ describe 'Inbox' do
 
     describe "#accounts" do
       before (:each) do
-        stub_request(:get, "https://#{@app_secret}:@api.inboxapp.com/a/#{@app_id}/accounts/").to_return(
+        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.inboxapp.com/a/#{@app_id}/accounts/{?limit,offset}"
+        stub_request(:get, uri_template).to_return(
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
           :headers => {"Content-Type" => "application/json"})
@@ -128,11 +129,11 @@ describe 'Inbox' do
       end
 
       it "should return a list of account objects" do
-        expect(@inbox.accounts[0]).to be_an Inbox::Account
+        expect(@inbox.accounts.first).to be_an Inbox::Account
       end
 
       it "should return an object corresponding to the mocked values" do
-        account = @inbox.accounts[0]
+        account = @inbox.accounts.first
         expect(account.trial).to be true
         expect(account.sync_state).to eq('running')
       end

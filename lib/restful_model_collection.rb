@@ -130,4 +130,13 @@ module Inbox
     end
 
   end
+
+  # a ManagementModelCollection is similar to a RestfulModelCollection except
+  # it's used by models under the /a/<app_id> namespace (mostly account status
+  # and billing methods).
+  class ManagementModelCollection < RestfulModelCollection
+    def url
+      @_api.url_for_management
+    end
+  end
 end

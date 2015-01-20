@@ -3,17 +3,31 @@ require 'restful_model'
 module Inbox
   class Account < RestfulModel
 
-    attr_accessor :account_id
-    attr_accessor :trial
-    attr_accessor :trial_expires
-    attr_accessor :sync_state
+    parameter :account_id
+    parameter :trial
+    parameter :trial_expires
+    parameter :sync_state
+    parameter :billing_state
 
-    def initialize(params = {})
-      @account_id = params.fetch(:account_id, '')
-      @trial = params.fetch(:trial, '')
-      @trial_expires = params.fetch(:trial_expires, '')
-      @sync_state = params.fetch(:sync_state, '')
+    def _perform_account_action!(action)
+      raise UnexpectedAccountAction.new unless action == "upgrade" || action == "downgrade"
+
+      collection = ManagementModelCollection.new(Account, @_api, @namespace_id, {:account_id=>@account_id})
+      "#{collection.url}/#{@account_id}/#{action}"
+      ::RestClient.post("#{collection.url}#{@account_id}/#{action}",{}) do |response, request, result|
+          # Throw any exceptions
+        json = Inbox.interpret_response(result, response, :expected_class => Object)
+      end
     end
+
+    def upgrade!
+      _perform_account_action!('upgrade')
+    end
+
+    def downgrade!
+      _perform_account_action!('downgrade')
+    end
+
 
   end
 end

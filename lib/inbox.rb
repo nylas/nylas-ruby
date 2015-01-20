@@ -73,6 +73,11 @@ module Inbox
       "https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
     end
 
+    def url_for_management
+      protocol, domain = @api_server.split('//')
+      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/"
+    end
+
     def set_access_token(token)
       @access_token = token
     end
@@ -100,40 +105,9 @@ module Inbox
 
     # Billing Methods
 
-    def _perform_account_action!(action)
-      raise UnexpectedAccountAction.new unless action == "upgrade" || action == "downgrade"
-
-      protocol, domain = @api_server.split('//')
-      account_ids = namespaces.all.collect {|n| n.account_id }.uniq
-      account_ids.each do | id |
-        ::RestClient.post("#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/#{id}/#{action}",{}) do |response, request, result|
-          # Throw any exceptions
-          json = Inbox.interpret_response(result, response, :expected_class => Object)
-        end
-      end
-    end
-
-    def upgrade_account!
-      _perform_account_action!('upgrade')
-    end
-
-    def downgrade_account!
-      _perform_account_action!('downgrade')
-    end
-
     def accounts
-      protocol, domain = @api_server.split('//')
-      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/"
-
-      RestClient.get(accounts_path) do |response, request, result|
-        json = Inbox.interpret_response(result, response, :expected_class => Object)
-        return json.map do |account_json|
-           Account.new({ :account_id => account_json.fetch('account_id', ''),
-                         :trial => account_json.fetch('trial', ''),
-                         :trial_expires => account_json.fetch('trial_expires', nil),
-                         :sync_state => account_json.fetch('sync_state', '')})
-        end
-      end
+      @accounts ||= ManagementModelCollection.new(Account, self, nil)
+      @accounts
     end
   end
 end
