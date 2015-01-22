@@ -53,10 +53,12 @@ module Inbox
       @app_secret = app_secret
       @app_id = app_id
       @service_domain = service_domain
+      @version = Inbox::VERSION
 
       if ::RestClient.before_execution_procs.empty?
         ::RestClient.add_before_execution_proc do |req, params|
           req.add_field('X-Inbox-API-Wrapper', 'ruby')
+          req['User-Agent'] = "Ruby SDK #{@version}"
         end
       end
     end
@@ -73,6 +75,11 @@ module Inbox
         trialString = 'true'
       end
       "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+    end
+
+    def url_for_management
+      protocol, domain = @api_server.split('//')
+      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts/"
     end
 
     def url_for_management

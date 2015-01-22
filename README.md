@@ -271,7 +271,7 @@ inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
 
 We'd love your help making the Inbox ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `##inbox` on [irc.freenode.net](http://irc.freenode.net), or you can email [help@inboxapp.com](mailto:help@inboxapp.com).
 
-Please sign the Contributor License Agreement before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
+Please sign the [Contributor License Agreement](https://www.inboxapp.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
 Tests can be run with:
 
@@ -280,9 +280,8 @@ Tests can be run with:
 
 ## Deployment 
 
-The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, do something like this:
+The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
 
-    rake version:bump:minor (or :major or :patch)
     rake build
 
 Test your new version (found in `pkg/`) locally, and then release with:

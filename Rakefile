@@ -12,6 +12,7 @@ end
 require 'rake'
 
 require 'jeweler'
+require './lib/version.rb'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "inbox"
@@ -22,6 +23,7 @@ Jeweler::Tasks.new do |gem|
   gem.email = "ben@inboxapp.com"
   gem.authors = ["Ben Gotow"]
   gem.files = Dir.glob('lib/**/*.rb')
+  gem.version = Inbox::VERSION
 end
 Jeweler::RubygemsDotOrgTasks.new
 
@@ -35,7 +37,7 @@ end
 
 require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  version = Inbox::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "inbox #{version}"
