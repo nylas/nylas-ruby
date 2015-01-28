@@ -1,4 +1,4 @@
-# Inbox Ruby bindings
+# Nilas REST API Ruby bindings
 
 ## Installation
 
@@ -36,16 +36,16 @@ A small example Rails app is included in the `example` directory. You can run th
 
 ### App ID and Secret
 
-Before you can interact with the Inbox API, you need to register for the Inbox Developer Program at [https://www.nilas.com/](https://www.nilas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+Before you can interact with the Inbox API, you need to register for the Nilas Developer Program at [https://www.nilas.com/](https://www.nilas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
 
 Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
 
 
 ### Authentication
 
-The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Inbox, visit the [Developer Documentation](https://www.nilas.com/docs/gettingstarted-hosted#authenticating).
+The Nilas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nilas, visit the [Developer Documentation](https://www.nilas.com/docs/gettingstarted-hosted#authenticating).
 
-**Step 1: Redirect the user to Inbox:**
+**Step 1: Redirect the user to Nilas:**
 
 ```ruby
 require 'inbox'
@@ -75,11 +75,11 @@ end
 
 ### Managing Billing
 
-If you're using the open-source version of the Inbox API or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Inbox API, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+If you're using the open-source version of the Nilas Sync Engine or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Sync Engine, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
 
 **Starting an Account in Trial Mode**
 
-When you're redirecting the user to Inbox to authenticate with their email provider,
+When you're redirecting the user to Nilas to authenticate with their email provider,
 pass the additional `trial: true` option to start their account in trial mode.
 
 ```ruby
@@ -259,7 +259,7 @@ new_event.save!
 
 ## Open-Source Sync Engine
 
-The [Inbox Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide nil for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+The [Nilas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide nil for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
 require 'inbox'
@@ -269,7 +269,7 @@ inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
 
 ## Contributing
 
-We'd love your help making the Inbox ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `##inbox` on [irc.freenode.net](http://irc.freenode.net), or you can email [help@nilas.com](mailto:help@nilas.com).
+We'd love your help making the Nilas ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `#nilas` on [irc.freenode.net](http://irc.freenode.net), or you can email [support@nilas.com](mailto:support@nilas.com).
 
 Please sign the [Contributor License Agreement](https://www.nilas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
@@ -280,7 +280,7 @@ Tests can be run with:
 
 ## Deployment 
 
-The Inbox ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
+The Nilas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
 
     rake build
 
@@ -288,4 +288,4 @@ Test your new version (found in `pkg/`) locally, and then release with:
 
     rake release
 
-If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Inbox team can find that by doing `fetch-password rubygems`.
+If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Nilas team can find that by doing `fetch-password rubygems`.
