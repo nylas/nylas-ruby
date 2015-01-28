@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.authors = ["Ben Gotow"]
   s.date = "2015-01-16"
   s.description = "Gem for interacting with the Inbox API that allows you to create and publish one-page websites, subscribe to web hooks and receive events when those pages are interacted with. Visit http://www.populr.me/ for more information. "
-  s.email = "ben@inboxapp.com"
+  s.email = "ben@nilas.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.md"

@@ -29,7 +29,7 @@ describe 'Inbox' do
     end
 
     it "should return the url for a provided path" do
-      expect(@inbox.url_for_path('/wobble')).to eq("https://#{@inbox.access_token}:@api.inboxapp.com/wobble")
+      expect(@inbox.url_for_path('/wobble')).to eq("https://#{@inbox.access_token}:@api.nilas.com/wobble")
     end
 
     it "should return an error if you have not provided an auth token" do
@@ -47,17 +47,17 @@ describe 'Inbox' do
 
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
       url = @inbox.url_for_authentication('http://redirect.uri')
-      expect(url).to eq("https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
+      expect(url).to eq("https://www.nilas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
     end
 
     it "should include the login_hint if one is provided" do
-      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@inboxapp.com')
-      expect(url).to eq("https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben@inboxapp.com&redirect_uri=http://redirect.uri")
+      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nilas.com')
+      expect(url).to eq("https://www.nilas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben@nilas.com&redirect_uri=http://redirect.uri")
     end
 
     it "should use trial=true if the trial flag is passed" do
-      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@inboxapp.com', {trial: true})
-      expect(url).to eq("https://www.inboxapp.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben@inboxapp.com&redirect_uri=http://redirect.uri")
+      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nilas.com', {trial: true})
+      expect(url).to eq("https://www.nilas.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben@nilas.com&redirect_uri=http://redirect.uri")
     end
   end
 
@@ -116,7 +116,7 @@ describe 'Inbox' do
 
     describe "#accounts" do
       before (:each) do
-        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.inboxapp.com/a/#{@app_id}/accounts/{?limit,offset}"
+        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.nilas.com/a/#{@app_id}/accounts/{?limit,offset}"
         stub_request(:get, uri_template).to_return(
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),

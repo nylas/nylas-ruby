@@ -11,7 +11,7 @@ describe Inbox::Event do
     @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:post, "https://#{@access_token}:@api.inboxapp.com/n/#{@namespace_id}/send").to_return(
+    stub_request(:post, "https://#{@access_token}:@api.nilas.com/n/#{@namespace_id}/send").to_return(
              :status => 200,
              :body => File.read('spec/fixtures/send_endpoint.txt'),
              :headers => {"Content-Type" => "application/json"})

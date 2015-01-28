@@ -36,14 +36,14 @@ A small example Rails app is included in the `example` directory. You can run th
 
 ### App ID and Secret
 
-Before you can interact with the Inbox API, you need to register for the Inbox Developer Program at [http://www.inboxapp.com/](http://www.inboxapp.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+Before you can interact with the Inbox API, you need to register for the Inbox Developer Program at [https://www.nilas.com/](https://www.nilas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
 
 Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
 
 
 ### Authentication
 
-The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Inbox, visit the [Developer Documentation](https://www.inboxapp.com/docs/gettingstarted-hosted#authenticating).
+The Inbox API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Inbox, visit the [Developer Documentation](https://www.nilas.com/docs/gettingstarted-hosted#authenticating).
 
 **Step 1: Redirect the user to Inbox:**
 
@@ -53,7 +53,7 @@ require 'inbox'
 def login
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   # The email address of the user you want to authenticate
-  user_email = 'ben@inboxapp.com'
+  user_email = 'ben@nilas.com'
 
   # This URL must be registered with your application in the developer portal
   callback_url = url_for(:action => 'login_callback')
@@ -147,14 +147,14 @@ namespace.threads.where(:tag => 'unread').range(0,4).each do |thread|
   puts thread.subject
 end    
 
-# List all threads with 'ben@inboxapp.com'
-namespace.threads.where(:any_email => 'ben@inboxapp.com').each do |thread|
+# List all threads with 'ben@nilas.com'
+namespace.threads.where(:any_email => 'ben@nilas.com').each do |thread|
   puts thread.subject
 end    
 
-# Collect all threads with 'ben@inboxapp.com' into an array.
+# Collect all threads with 'ben@nilas.com' into an array.
 # Note: for large numbers of threads, this is not advised.
-threads = namespace.threads.where(:any_email => 'ben@inboxapp.com').all
+threads = namespace.threads.where(:any_email => 'ben@nilas.com').all
 ```
 
 
@@ -202,10 +202,10 @@ file.save!
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
 ```ruby
-messages = namespace.messages.where(:to => 'ben@inboxapp.com`).all
+messages = namespace.messages.where(:to => 'ben@nilas.com`).all
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.inboxapp.com/docs/api#filters). 
+The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nilas.com/docs/api#filters). 
 
 ### Getting the raw contents of a message
 
@@ -221,13 +221,13 @@ raw_contents = message.raw.rfc2822
 ```ruby
 # Create a new draft
 draft = namespace.drafts.build(
-  :to => [{:name => 'Ben Gotow', :email => 'ben@inboxapp.com'}],
+  :to => [{:name => 'Ben Gotow', :email => 'ben@nilas.com'}],
   :subject => "Sent by Ruby",
   :body => "Hi there!<strong>This is HTML</strong>"
 )
 
 # Modify attributes as necessary
-draft.cc = [{:name => 'Michael', :email => 'mg@inboxapp.com'}]
+draft.cc = [{:name => 'Michael', :email => 'mg@nilas.com'}]
 
 # Add the file we uploaded as an attachment
 draft.attach(file)
@@ -269,9 +269,9 @@ inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
 
 ## Contributing
 
-We'd love your help making the Inbox ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `##inbox` on [irc.freenode.net](http://irc.freenode.net), or you can email [help@inboxapp.com](mailto:help@inboxapp.com).
+We'd love your help making the Inbox ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `##inbox` on [irc.freenode.net](http://irc.freenode.net), or you can email [help@nilas.com](mailto:help@nilas.com).
 
-Please sign the [Contributor License Agreement](https://www.inboxapp.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
+Please sign the [Contributor License Agreement](https://www.nilas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
 Tests can be run with:
 
