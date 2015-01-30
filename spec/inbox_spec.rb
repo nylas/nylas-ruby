@@ -87,6 +87,24 @@ describe 'Inbox' do
       end
     end
 
+    context "when the server responds with a 400" do
+      it "should raise InvalidRequest" do
+        allow(@result).to receive(:code).and_return(400)
+        expect {
+          Inbox.interpret_response(@result, '{"type": "invalid_request_error", "message": "Check your syntax, bro!"}')
+        }.to raise_error(Inbox::InvalidRequest)
+      end
+    end
+
+    context "when the server responds with a 402" do
+      it "should raise MessageRejected" do
+        allow(@result).to receive(:code).and_return(402)
+        expect {
+          Inbox.interpret_response(@result, '{"type": "api_error", "message": "Sending to all recipients failed"}')
+        }.to raise_error(Inbox::MessageRejected)
+      end
+    end
+
     context "when the server responds with a 403" do
       it "should raise AccessDenied" do
         allow(@result).to receive(:code).and_return(403)
@@ -102,6 +120,24 @@ describe 'Inbox' do
         expect {
           Inbox.interpret_response(@result, '')
         }.to raise_error(Inbox::ResourceNotFound)
+      end
+    end
+
+    context "when the server responds with a 429" do
+      it "should raise SendingQuotaExceeded" do
+        allow(@result).to receive(:code).and_return(429)
+        expect {
+          Inbox.interpret_response(@result, '{"type": "api_error", "message": "Daily sending quota exceeded"}')
+        }.to raise_error(Inbox::SendingQuotaExceeded)
+      end
+    end
+
+    context "when the server responds with a 503" do
+      it "should raise SendingQuotaExceeded" do
+        allow(@result).to receive(:code).and_return(503)
+        expect {
+          Inbox.interpret_response(@result, '{"type": "api_error", "message": "The server unexpectedly closed the connection"}')
+        }.to raise_error(Inbox::ServiceUnavailable)
       end
     end
 

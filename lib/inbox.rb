@@ -19,6 +19,10 @@ module Inbox
       self.error_type = type
     end
   end
+  class InvalidRequest < APIError; end
+  class MessageRejected < APIError; end
+  class SendingQuotaExceeded < APIError; end
+  class ServiceUnavailable < APIError; end
 
   def self.interpret_response(result, result_content, options = {})
     # Handle HTTP errors and RestClient errors
@@ -28,7 +32,20 @@ module Inbox
     # Handle content expectation errors
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
     json = JSON.parse(result_content)
-    raise APIError.new(json['type'], json['message']) if json.is_a?(Hash) && json['type'] == 'api_error'
+    if json.is_a?(Hash) && (json['type'] == 'api_error' or json['type'] == 'invalid_request_error')
+      if result.code.to_i == 400
+        exc = InvalidRequest
+      elsif result.code.to_i == 402
+        exc = MessageRejected
+      elsif result.code.to_i == 429
+        exc = SendingQuotaExceeded
+      elsif result.code.to_i == 503
+        exc = ServiceUnavailable
+      else
+        exc = APIError
+      end
+      raise exc.new(json['type'], json['message'])
+    end
     raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
     raise UnexpectedResponse.new if options[:expected_class] && !json.is_a?(options[:expected_class])
     json
