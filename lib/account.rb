@@ -14,7 +14,7 @@ module Inbox
 
       collection = ManagementModelCollection.new(Account, @_api, @namespace_id, {:account_id=>@account_id})
       "#{collection.url}/#{@account_id}/#{action}"
-      ::RestClient.post("#{collection.url}#{@account_id}/#{action}",{}) do |response, request, result|
+      ::RestClient.post("#{collection.url}/#{@account_id}/#{action}",{}) do |response, request, result|
           # Throw any exceptions
         json = Inbox.interpret_response(result, response, :expected_class => Object)
       end
