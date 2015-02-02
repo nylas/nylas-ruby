@@ -24,7 +24,7 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 
 ## Example Rails App
 
-A small example Rails app is included in the `example` directory. You can run the sample app to see how an authentication flow might be implemented. 
+A small example Rails app is included in the `example` directory. You can run the sample app to see how an authentication flow might be implemented.
 
 `cd example`
 
@@ -91,7 +91,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 ```ruby
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   account = inbox.accounts.find(account_id)
-  inbox.upgrade_account!
+  account.upgrade!
 ```
 
 **Cancelling an Account**
@@ -99,7 +99,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 ```ruby
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   account = inbox.accounts.find(account_id)
-  inbox.downgrade_account!
+  account.downgrade!
 
   # Your Inbox API token will be revoked, you will not be charged
 ```
@@ -211,7 +211,7 @@ Each of the primary collections (contacts, messages, etc.) behave the same way a
 messages = namespace.messages.where(:to => 'ben@nilas.com`).all
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nilas.com/docs/api#filters). 
+The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nilas.com/docs/api#filters).
 
 ### Getting the raw contents of a message
 

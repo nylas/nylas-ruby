@@ -152,7 +152,7 @@ describe 'Inbox' do
 
     describe "#accounts" do
       before (:each) do
-        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.nilas.com/a/#{@app_id}/accounts/{?limit,offset}"
+        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.nilas.com/a/#{@app_id}/accounts{?limit,offset}"
         stub_request(:get, uri_template).to_return(
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
