@@ -27,6 +27,13 @@ module Inbox
       end
     end
 
+    def count
+      RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
+        json = Inbox.interpret_response(result, response)
+        return json['count']
+      }
+    end
+
     def first
       get_model_collection.first
     end
@@ -71,7 +78,7 @@ module Inbox
 
     def build(args)
       for key in args.keys
-        args[key.to_s] = args[key] 
+        args[key.to_s] = args[key]
       end
       model = @model_class.new(@_api, @namespace_id)
       model.inflate(args)
