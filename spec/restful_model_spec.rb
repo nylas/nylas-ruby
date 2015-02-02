@@ -47,5 +47,15 @@ describe 'RestfulModel' do
       r.inflate({"foo" => "bar"})
       expect(r.foo).to be_nil
     end
+
+    it "should issue a DELETE when calling delete" do
+      url = 'http://localhost:5555/n/1/messages/1'
+      message_url = stub_request(:delete, url)
+      r = Inbox::RestfulModel.new(@api)
+      r.stub(:url) { url }
+
+      r.destroy
+      assert_requested :delete, url
+    end
   end
 end

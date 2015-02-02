@@ -24,10 +24,15 @@ module Inbox
   class SendingQuotaExceeded < APIError; end
   class ServiceUnavailable < APIError; end
 
-  def self.interpret_response(result, result_content, options = {})
+  def self.interpret_http_status(result)
     # Handle HTTP errors and RestClient errors
     raise ResourceNotFound.new if result.code.to_i == 404
     raise AccessDenied.new if result.code.to_i == 403
+  end
+
+  def self.interpret_response(result, result_content, options = {})
+    # Handle HTTP errors
+    Inbox.interpret_http_status(result)
 
     # Handle content expectation errors
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?

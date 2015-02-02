@@ -70,7 +70,9 @@ module Inbox
     end
 
     def destroy
-      update('DELETE', '')
+      ::RestClient.send('delete', self.url) do |response, request|
+        Inbox.interpret_http_status(response)
+      end
     end
 
   end
