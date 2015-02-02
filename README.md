@@ -57,7 +57,7 @@ def login
 
   # This URL must be registered with your application in the developer portal
   callback_url = url_for(:action => 'login_callback')
-  
+
   redirect_to inbox.url_for_authentication(callback_url, user_email)
 end
 ```
@@ -65,7 +65,7 @@ end
 **Step 2: Handle the Authentication Response:**
 
 ```ruby
-def login_callback 
+def login_callback
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   inbox_token = inbox.token_for_code(params[:code])
 
@@ -140,17 +140,23 @@ thread = namespace.threads.find('ac123acd123ef123')
 # (paginating 50 at a time until no more are returned.)
 namespace.threads.where(:tag => 'inbox').each do |thread|
   puts thread.subject
-end    
+end
 
 # List the 5 most recent unread threads
 namespace.threads.where(:tag => 'unread').range(0,4).each do |thread|
   puts thread.subject
-end    
+end
 
 # List all threads with 'ben@nilas.com'
 namespace.threads.where(:any_email => 'ben@nilas.com').each do |thread|
   puts thread.subject
-end    
+end
+
+# Get number of all threads
+count = namespace.threads.count
+
+# Get number of threads with 'ben@inboxapp.com'
+count = namespace.threads.where(:any_email => 'ben@inboxapp.com').count
 
 # Collect all threads with 'ben@nilas.com' into an array.
 # Note: for large numbers of threads, this is not advised.
@@ -278,7 +284,7 @@ Tests can be run with:
     rspec spec
 
 
-## Deployment 
+## Deployment
 
 The Nilas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
 

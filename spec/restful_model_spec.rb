@@ -52,7 +52,7 @@ describe 'RestfulModel' do
       url = 'http://localhost:5555/n/1/messages/1'
       message_url = stub_request(:delete, url)
       r = Inbox::RestfulModel.new(@api)
-      r.stub(:url) { url }
+      allow(r).to receive_messages(:url => url)
 
       r.destroy
       assert_requested :delete, url

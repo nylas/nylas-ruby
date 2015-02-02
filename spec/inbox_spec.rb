@@ -133,7 +133,7 @@ describe 'Inbox' do
     end
 
     context "when the server responds with a 503" do
-      it "should raise SendingQuotaExceeded" do
+      it "should raise ServiceUnavailable" do
         allow(@result).to receive(:code).and_return(503)
         expect {
           Inbox.interpret_response(@result, '{"type": "api_error", "message": "The server unexpectedly closed the connection"}')
