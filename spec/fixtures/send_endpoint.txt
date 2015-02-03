@@ -14,7 +14,6 @@
     "namespace_id": "8yk3f2gkifamwawjgab9kixnd",
     "object": "draft",
     "snippet": "That's how they test stuff, I hear.",
-    "state": "sending",
     "subject": "Boom boom tcha",
     "thread_id": "92s7bd0dv91lboc2vvxc8y1et",
     "to": [

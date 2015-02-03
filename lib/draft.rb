@@ -5,7 +5,6 @@ module Inbox
 
     parameter :thread_id
     parameter :version
-    parameter :state
 
     def attach(file)
       file.save! unless file.id

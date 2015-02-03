@@ -241,8 +241,7 @@ draft.attach(file)
 # Save the draft
 draft.save!
 
-# Send the draft. This method returns immediately and queues the message
-# with Inbox for delivery through the user's SMTP gateway.
+# Send the draft.
 draft.send!
 ```
 
@@ -263,9 +262,29 @@ new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
 new_event.save!
 ```
 
+### Handling Errors
+The Nilas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
+
+Code | Error Type | Description
+--- | --- | ---
+400 | InvalidRequest | Your request has invalid parameters.
+403 | AccessDenied | You don't have authorization to access the requested resource or perform the requested action. You may need to re-authenticate the user.
+404 | ResourceNotFound | The requested resource doesn't exist.
+500 | APIError | There was an internal error with the Nilas server.
+
+A few additional exceptions are raised by the `draft.send!` method if your draft couldn't be sent.
+
+Code | Error Type | Description
+--- | --- | ---
+402 | MessageRejected| The message was syntactically valid, but rejected for delivery by the mail server.
+429 | SendingQuotaExceeded | The user has exceeded their daily sending quota.
+503 | ServiceUnavailable | There was a temporary error establishing a connection to the user's mail server.
+
+
+
 ## Open-Source Sync Engine
 
-The [Nilas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide nil for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+The [Nilas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
 require 'inbox'
