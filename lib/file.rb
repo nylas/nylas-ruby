@@ -26,6 +26,9 @@ module Inbox
       self
     end
 
+    def download
+      RestClient.get(url + '/download')
+    end
   end
 end
 
