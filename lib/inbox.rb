@@ -80,8 +80,7 @@ module Inbox
       if ::RestClient.before_execution_procs.empty?
         ::RestClient.add_before_execution_proc do |req, params|
           req.add_field('X-Inbox-API-Wrapper', 'ruby')
-          req.add_field('X-Inbox-Ruby-Version', "#{RUBY_VERSION}")
-          req['User-Agent'] = "Ruby SDK #{@version}"
+          req['User-Agent'] = "Ruby SDK #{@version} - #{RUBY_VERSION}"
         end
       end
     end
