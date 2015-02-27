@@ -13,13 +13,11 @@ module Inbox
     parameter :bcc
     parameter :date
     parameter :thread_id
-    parameter :file_ids
     parameter :body
     parameter :unread
 
     def inflate(json)
       super
-      @file_ids ||= []
       @to ||= []
       @cc ||= []
       @bcc ||= []
