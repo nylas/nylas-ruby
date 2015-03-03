@@ -262,6 +262,50 @@ new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
 new_event.save!
 ```
 
+### Using the Delta sync API
+
+The delta sync API allows fetching all the changes that occured since a specified time. [Read this](https://nilas.com/docs/api#sync-protocol) for more details about the API.
+
+````ruby
+# Get all the messages starting from timestamp
+#
+# we first need to get a cursor object a cursor is simply the id of
+# an individual change.
+cursor = inbox.namespaces.first.get_cursor(1407543195)
+
+last_cursor = nil
+inbox.namespaces.first.deltas(cursor) do |event, object|
+    if event == "create" or event == "modify"
+        if object.is_a?(Inbox::Contact)
+            puts "#{object.name} - #{object.email}"
+        elsif object.is_a?(Inbox::Event)
+            puts "Event!"
+        end
+    elsif event == "delete"
+        # In the case of a deletion, the API only returns the ID of the object.
+        # In this case, the Ruby SDK returns a dummy object with only the id field
+        # set.
+        puts "Deleting from collection #{object.class.name}, id: #{object}"
+    end
+    last_cursor = object.cursor
+end
+
+# Don't forget to save the last cursor so that we can pick up changes
+# from where we left.
+save_to_db(last_cursor)
+```
+
+# Exclude changes from a specific type --- get only messages
+inbox.namespaces.first.deltas(cursor, exclude=[Inbox::Contact,
+                                               Inbox::Event,
+                                               Inbox::File,
+                                               Inbox::Tag,
+                                               Inbox::Thread]) do |event, object|
+if event == 'create' or event == 'modify"
+        puts object.subject
+    end
+end
+
 ### Handling Errors
 The Nilas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
 
