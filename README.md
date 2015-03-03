@@ -43,7 +43,7 @@ Generally, you should store your App ID and Secret into environment variables to
 
 ### Authentication
 
-The Nilas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nilas, visit the [Developer Documentation](https://www.nilas.com/docs/gettingstarted-hosted#authenticating).
+The Nilas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nilas, visit the [Developer Documentation](https://www.nilas.com/docs/knowledgebase#authentication).
 
 **Step 1: Redirect the user to Nilas:**
 
