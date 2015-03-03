@@ -262,7 +262,7 @@ new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
 new_event.save!
 ```
 
-### Using the Delta sync API
+## Using the Delta sync API
 
 The delta sync API allows fetching all the changes that occured since a specified time. [Read this](https://nilas.com/docs/api#sync-protocol) for more details about the API.
 
@@ -295,7 +295,7 @@ end
 save_to_db(last_cursor)
 ```
 
-# Exclude changes from a specific type --- get only messages
+### Exclude changes from a specific type --- get only messages
 inbox.namespaces.first.deltas(cursor, exclude=[Inbox::Contact,
                                                Inbox::Event,
                                                Inbox::File,
