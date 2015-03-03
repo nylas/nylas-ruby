@@ -8,6 +8,7 @@ module Inbox
 
     parameter :id
     parameter :namespace_id
+    parameter :cursor  # Only used by the delta sync API
     time_attr_accessor :created_at
 
     def self.collection_name

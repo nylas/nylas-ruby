@@ -12,7 +12,7 @@ describe 'RestfulModel' do
       r.id = '1'
       r.namespace_id = '123';
       r.created_at = Time.new
-      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at})
+      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at, "cursor" => nil})
     end
 
     it "should ignore arbitrary setters" do
@@ -23,7 +23,7 @@ describe 'RestfulModel' do
       r.id = '1'
       r.namespace_id = '123';
       r.created_at = Time.new
-      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at})
+      expect(r.as_json).to eq({"id" => "1", "namespace_id" => "123", "created_at" => r.created_at, "cursor" => nil})
     end
   end
 
