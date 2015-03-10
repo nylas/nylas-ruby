@@ -79,16 +79,12 @@ module Inbox
       "calendar" => Inbox::Calendar,
       "draft" => Inbox::Draft,
       "thread" => Inbox::Thread,
-      "account" => Inbox::Account,
-      "calendar" => Inbox::Calendar,
       "contact" => Inbox::Contact,
-      "draft" => Inbox::Draft,
       "event" => Inbox::Event,
       "file" => Inbox::File,
       "message" => Inbox::Message,
       "namespace" => Inbox::Namespace,
       "tag" => Inbox::Tag,
-      "thread" => Inbox::Thread
     }
 
     def deltas(cursor, exclude_types=[])
