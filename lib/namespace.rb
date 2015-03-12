@@ -61,7 +61,7 @@ module Inbox
 
     def get_cursor(timestamp)
       # Get the cursor corresponding to a specific timestamp.
-      path = @_api.url_for_path("n/#{@namespace_id}/delta/generate_cursor")
+      path = @_api.url_for_path("/n/#{@namespace_id}/delta/generate_cursor")
       data = { :start => timestamp }
 
       cursor = nil
@@ -71,7 +71,7 @@ module Inbox
         cursor = json["cursor"]
       end
 
-      return cursor
+      cursor
     end
 
     OBJECTS_TABLE = {
@@ -88,9 +88,10 @@ module Inbox
     }
 
     def deltas(cursor, exclude_types=[])
+      raise 'Please provide a block for receiving the delta objects' if !block_given?
       exclude_string = ""
 
-      if not exclude_types.empty?
+      if exclude_types.any?
         exclude_string = "&exclude_types="
 
         exclude_types.each do |value|
@@ -106,7 +107,7 @@ module Inbox
 
       # loop and yield deltas until we've come to the end.
       loop do
-        path = @_api.url_for_path("n/#{@namespace_id}/delta?cursor=#{cursor}#{exclude_string}")
+        path = @_api.url_for_path("/n/#{@namespace_id}/delta?cursor=#{cursor}#{exclude_string}")
         json = nil
 
         RestClient.get(path) do |response,request,result|
