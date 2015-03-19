@@ -296,15 +296,18 @@ save_to_db(last_cursor)
 ```
 
 ### Exclude changes from a specific type --- get only messages
+````ruby
 inbox.namespaces.first.deltas(cursor, exclude=[Inbox::Contact,
                                                Inbox::Event,
                                                Inbox::File,
                                                Inbox::Tag,
                                                Inbox::Thread]) do |event, object|
-if event == 'create' or event == 'modify"
+if event == 'create' or event == 'modify'
         puts object.subject
     end
 end
+```
+
 
 ### Handling Errors
 The Nilas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
