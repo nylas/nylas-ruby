@@ -6,7 +6,6 @@ module Inbox
 
     parameter :name
     parameter :description
-    parameter :event_ids
 
     def events
       @events ||= RestfulModelCollection.new(Event, @_api, @namespace, {:calendar_id=>@id})

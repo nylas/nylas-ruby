@@ -11,6 +11,10 @@ module Inbox
     parameter :when
     parameter :calendar_id
     parameter :namespace_id
+    parameter :recurrence
+    parameter :cancelled
+    parameter :master_event_id
+    parameter :original_start_time
 
     def as_json(options = {})
       hash = super(options)
