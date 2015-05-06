@@ -12,13 +12,13 @@ describe 'Delta sync API wrapper' do
     @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nilas.com/n/nnnnnnn/delta/generate_cursor").
+    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/generate_cursor").
          to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nilas.com/n/nnnnnnn/delta?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=0").
          to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nilas.com/n/nnnnnnn/delta?cursor=a9vtneydekzye7uwfumdd4iu3").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=a9vtneydekzye7uwfumdd4iu3").
          to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
 
   end

@@ -1,4 +1,4 @@
-# Nilas REST API Ruby bindings
+# Nyƒlas REST API Ruby bindings
 
 ## Installation
 
@@ -36,16 +36,16 @@ A small example Rails app is included in the `example` directory. You can run th
 
 ### App ID and Secret
 
-Before you can interact with the Inbox API, you need to register for the Nilas Developer Program at [https://www.nilas.com/](https://www.nilas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+Before you can interact with the Inbox API, you need to register for the Nylas Developer Program at [https://www.nylas.com/](https://www.nylas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
 
 Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
 
 
 ### Authentication
 
-The Nilas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nilas, visit the [Developer Documentation](https://www.nilas.com/docs/knowledgebase#authentication).
+The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nylas, visit the [Developer Documentation](https://www.nylas.com/docs/knowledgebase#authentication).
 
-**Step 1: Redirect the user to Nilas:**
+**Step 1: Redirect the user to Nylas:**
 
 ```ruby
 require 'inbox'
@@ -53,7 +53,7 @@ require 'inbox'
 def login
   inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   # The email address of the user you want to authenticate
-  user_email = 'ben@nilas.com'
+  user_email = 'ben@nylas.com'
 
   # This URL must be registered with your application in the developer portal
   callback_url = url_for(:action => 'login_callback')
@@ -75,11 +75,11 @@ end
 
 ### Managing Billing
 
-If you're using the open-source version of the Nilas Sync Engine or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Sync Engine, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
+If you're using the open-source version of the Nylas Sync Engine or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Sync Engine, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
 
 **Starting an Account in Trial Mode**
 
-When you're redirecting the user to Nilas to authenticate with their email provider,
+When you're redirecting the user to Nylas to authenticate with their email provider,
 pass the additional `trial: true` option to start their account in trial mode.
 
 ```ruby
@@ -147,8 +147,8 @@ namespace.threads.where(:tag => 'unread').range(0,4).each do |thread|
   puts thread.subject
 end
 
-# List all threads with 'ben@nilas.com'
-namespace.threads.where(:any_email => 'ben@nilas.com').each do |thread|
+# List all threads with 'ben@nylas.com'
+namespace.threads.where(:any_email => 'ben@nylas.com').each do |thread|
   puts thread.subject
 end
 
@@ -158,9 +158,9 @@ count = namespace.threads.count
 # Get number of threads with 'ben@inboxapp.com'
 count = namespace.threads.where(:any_email => 'ben@inboxapp.com').count
 
-# Collect all threads with 'ben@nilas.com' into an array.
+# Collect all threads with 'ben@nylas.com' into an array.
 # Note: for large numbers of threads, this is not advised.
-threads = namespace.threads.where(:any_email => 'ben@nilas.com').all
+threads = namespace.threads.where(:any_email => 'ben@nylas.com').all
 ```
 
 
@@ -208,10 +208,10 @@ file.save!
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
 ```ruby
-messages = namespace.messages.where(:to => 'ben@nilas.com`).all
+messages = namespace.messages.where(:to => 'ben@nylas.com`).all
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nilas.com/docs/api#filters).
+The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nylas.com/docs/api#filters).
 
 ### Getting the raw contents of a message
 
@@ -227,13 +227,13 @@ raw_contents = message.raw.rfc2822
 ```ruby
 # Create a new draft
 draft = namespace.drafts.build(
-  :to => [{:name => 'Ben Gotow', :email => 'ben@nilas.com'}],
+  :to => [{:name => 'Ben Gotow', :email => 'ben@nylas.com'}],
   :subject => "Sent by Ruby",
   :body => "Hi there!<strong>This is HTML</strong>"
 )
 
 # Modify attributes as necessary
-draft.cc = [{:name => 'Michael', :email => 'mg@nilas.com'}]
+draft.cc = [{:name => 'Michael', :email => 'mg@nylas.com'}]
 
 # Add the file we uploaded as an attachment
 draft.attach(file)
@@ -264,7 +264,7 @@ new_event.save!
 
 ## Using the Delta sync API
 
-The delta sync API allows fetching all the changes that occured since a specified time. [Read this](https://nilas.com/docs/api#sync-protocol) for more details about the API.
+The delta sync API allows fetching all the changes that occured since a specified time. [Read this](https://nylas.com/docs/api#sync-protocol) for more details about the API.
 
 ````ruby
 # Get all the messages starting from timestamp
@@ -310,14 +310,14 @@ end
 
 
 ### Handling Errors
-The Nilas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
+The Nylas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
 
 Code | Error Type | Description
 --- | --- | ---
 400 | InvalidRequest | Your request has invalid parameters.
 403 | AccessDenied | You don't have authorization to access the requested resource or perform the requested action. You may need to re-authenticate the user.
 404 | ResourceNotFound | The requested resource doesn't exist.
-500 | APIError | There was an internal error with the Nilas server.
+500 | APIError | There was an internal error with the Nylas server.
 
 A few additional exceptions are raised by the `draft.send!` method if your draft couldn't be sent.
 
@@ -331,7 +331,7 @@ Code | Error Type | Description
 
 ## Open-Source Sync Engine
 
-The [Nilas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+The [Nylas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
 require 'inbox'
@@ -341,9 +341,9 @@ inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
 
 ## Contributing
 
-We'd love your help making the Nilas ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `#nilas` on [irc.freenode.net](http://irc.freenode.net), or you can email [support@nilas.com](mailto:support@nilas.com).
+We'd love your help making the Nylas ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `#Nylas` on [irc.freenode.net](http://irc.freenode.net), or you can email [support@nylas.com](mailto:support@nylas.com).
 
-Please sign the [Contributor License Agreement](https://www.nilas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
+Please sign the [Contributor License Agreement](https://www.nylas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
 Tests can be run with:
 
@@ -352,7 +352,7 @@ Tests can be run with:
 
 ## Deployment
 
-The Nilas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
+The Nylas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
 
     rake build
 
@@ -360,4 +360,4 @@ Test your new version (found in `pkg/`) locally, and then release with:
 
     rake release
 
-If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Nilas team can find that by doing `fetch-password rubygems`.
+If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.

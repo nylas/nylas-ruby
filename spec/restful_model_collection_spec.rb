@@ -12,7 +12,7 @@ describe 'RestfulModelCollection' do
 
   describe '#count' do
     it 'should return number of entities' do
-      stub_request(:get, "https://#{@access_token}:@api.nilas.com/n/#{@namespace_id}/threads?view=count").to_return(
+      stub_request(:get, "https://#{@access_token}:@api.nylas.com/n/#{@namespace_id}/threads?view=count").to_return(
                :status => 200,
                :body => File.read('spec/fixtures/threads_count.txt'),
                :headers => {"Content-Type" => "application/json"})
@@ -23,7 +23,7 @@ describe 'RestfulModelCollection' do
     end
 
     it 'should raise an error when the API raises an error' do
-      stub_request(:get, "https://#{@access_token}:@api.nilas.com/n/#{@namespace_id}/threads?view=count").to_return(
+      stub_request(:get, "https://#{@access_token}:@api.nylas.com/n/#{@namespace_id}/threads?view=count").to_return(
                    :status => 403)
 
       n = Inbox::Namespace.new(@api)
