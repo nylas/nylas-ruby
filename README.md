@@ -1,4 +1,4 @@
-# Nyƒlas REST API Ruby bindings
+# Nylas REST API Ruby bindings
 
 ## Installation
 
