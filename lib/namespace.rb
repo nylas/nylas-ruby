@@ -119,7 +119,7 @@ module Inbox
         json["deltas"].each do |delta|
           object = if delta['object'] == 'message'
                      # Drafts are messages underneath
-                     delta['attributes']['object']
+                     delta.has_key?('attributes') ? delta['attributes']['object'] : 'message'
                    else
                      delta['object']
                    end

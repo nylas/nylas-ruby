@@ -39,12 +39,16 @@ describe 'Delta sync API wrapper' do
       elsif event == 'create' or event == 'modify'
         expect(object).to be_a Inbox::Message
       elsif event == 'delete'
-        expect(object).to be_a Inbox::Event
+        if object.respond_to? :subject
+          expect(object).to be_a Inbox::Message
+        else
+          expect(object).to be_a Inbox::Event
+        end
       end
       count += 1
     end
 
-    expect(count).to eq(4)
+    expect(count).to eq(5)
   end
 end
 

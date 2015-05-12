@@ -77,6 +77,13 @@
            "event": "create",
            "id": "b6quap82wul210vuk4rlmobwz",
            "object": "message"
+        },
+
+        {
+            "cursor": "379xgtj0ltcnu7rq4sokou2df",
+            "event": "delete",
+            "id": "qm0isjj19ezsmvdq055lxp7dk",
+            "object": "message"
         }
     ]
 }
