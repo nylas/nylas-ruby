@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rest-client', '~> 1.7'
+gem 'yajl-ruby'
+gem 'em-http-request'
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.

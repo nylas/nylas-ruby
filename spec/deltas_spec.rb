@@ -46,3 +46,33 @@ describe 'Delta sync API wrapper' do
   end
 end
 
+describe 'Delta sync streaming API wrapper' do
+  before (:each) do
+    @app_id = 'ABC'
+    @app_secret = '123'
+    @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
+    @namespace_id = 'nnnnnnn'
+    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/streaming?cursor=0").
+      to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+  end
+
+  it "should continuously query the delta sync API" do
+    count = 0
+    ns = Inbox::Namespace.new(@inbox, @namespace_id)
+    ns.delta_stream(0, []) do |event, object|
+
+      expect(object.cursor).to_not be_nil
+      if event == 'create' or event == 'modify'
+        expect(object).to be_a Inbox::Message
+      elsif event == 'delete'
+        expect(object).to be_a Inbox::Event
+      end
+      count += 1
+      break if count == 3
+    end
+
+    expect(count).to eq(3)
+  end
+end
