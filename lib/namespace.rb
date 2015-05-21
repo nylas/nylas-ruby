@@ -146,7 +146,7 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, exclude_types=[])
+    def delta_stream(cursor, exclude_types=[], timeout=0)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
       exclude_string = ""
 
@@ -186,7 +186,7 @@ module Inbox
       end
 
       EventMachine.run do
-        http = EventMachine::HttpRequest.new(path, :connection_timeout => 0, :inactivity_timeout => 0).get(:keepalive => true, :timeout => 0)
+        http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
         http.stream do |chunk|
           parser << chunk
         end
