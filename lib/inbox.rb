@@ -68,7 +68,7 @@ module Inbox
     attr_reader :app_secret
 
     def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.nylas.com',
-                   service_domain = 'www.nylas.com')
+                   service_domain = 'api.nylas.com')
       raise "When overriding the Inbox API server address, you must include https://" unless api_server.include?('://')
       @api_server = api_server
       @access_token = access_token
