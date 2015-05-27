@@ -116,7 +116,7 @@ module Inbox
           'code' => code
       }
 
-      ::RestClient.get("https://#{@service_domain}/oauth/token", {:params => data}) do |response, request, result|
+      ::RestClient.post("https://#{@service_domain}/oauth/token", data) do |response, request, result|
         json = Inbox.interpret_response(result, response, :expected_class => Object)
         return json['access_token']
       end
@@ -137,3 +137,5 @@ module Inbox
     end
   end
 end
+
+Nylas = Inbox.clone

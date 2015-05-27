@@ -19,12 +19,26 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/nylas/inbox-ruby"
   gem.license = "MIT"
   gem.summary = %Q{Gem for interacting with the Inbox API}
-  gem.description = %Q{Gem for interacting with the Inbox API that allows you to create and publish one-page websites, subscribe to web hooks and receive events when those pages are interacted with. Visit http://www.populr.me/ for more information. }
+  gem.description = %Q{Gem for interacting with the Inbox API.}
   gem.email = "ben@nylas.com"
-  gem.authors = ["Ben Gotow"]
+  gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
   gem.files = Dir.glob('lib/**/*.rb')
   gem.version = Inbox::VERSION
 end
+
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "nylas"
+  gem.homepage = "http://github.com/nylas/inbox-ruby"
+  gem.license = "MIT"
+  gem.summary = %Q{Gem for interacting with the Inbox API}
+  gem.description = %Q{Gem for interacting with the Inbox API.}
+  gem.email = "ben@nylas.com"
+  gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
+  gem.files = Dir.glob('lib/**/*.rb')
+  gem.version = Inbox::VERSION
+end
+
 Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'

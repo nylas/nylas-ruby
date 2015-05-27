@@ -51,7 +51,7 @@ The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provi
 require 'inbox'
 
 def login
-  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
+  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   # The email address of the user you want to authenticate
   user_email = 'ben@nylas.com'
 
@@ -66,7 +66,7 @@ end
 
 ```ruby
 def login_callback
-  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
+  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   inbox_token = inbox.token_for_code(params[:code])
 
   # Save the inbox_token to the current session, save it to the user model, etc.
@@ -89,7 +89,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 **Upgrading an Account**
 
 ```ruby
-  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
+  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   account = inbox.accounts.find(account_id)
   account.upgrade!
 ```
@@ -97,7 +97,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 **Cancelling an Account**
 
 ```ruby
-  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
+  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
   account = inbox.accounts.find(account_id)
   account.downgrade!
 
@@ -108,7 +108,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 
 ````ruby
   # Query the status of every account linked to the app
-  inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
+  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
   accounts = inbox.accounts
   accounts.each { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial, trial_expires, billing_state and namespace_id. See lib/account.rb for more details.
 ```
@@ -116,7 +116,7 @@ pass the additional `trial: true` option to start their account in trial mode.
 ### Fetching Namespaces
 
 ```ruby
-inbox = Inbox::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
+inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
 
 # Get the first namespace
 namespace = inbox.namespaces.first
@@ -276,9 +276,9 @@ cursor = inbox.namespaces.first.get_cursor(1407543195)
 last_cursor = nil
 inbox.namespaces.first.deltas(cursor) do |event, object|
     if event == "create" or event == "modify"
-        if object.is_a?(Inbox::Contact)
+        if object.is_a?(Nylas::Contact)
             puts "#{object.name} - #{object.email}"
-        elsif object.is_a?(Inbox::Event)
+        elsif object.is_a?(Nylas::Event)
             puts "Event!"
         end
     elsif event == "delete"
@@ -297,11 +297,11 @@ save_to_db(last_cursor)
 
 ### Exclude changes from a specific type --- get only messages
 ````ruby
-inbox.namespaces.first.deltas(cursor, exclude=[Inbox::Contact,
-                                               Inbox::Event,
-                                               Inbox::File,
-                                               Inbox::Tag,
-                                               Inbox::Thread]) do |event, object|
+inbox.namespaces.first.deltas(cursor, exclude=[Nylas::Contact,
+                                               Nylas::Event,
+                                               Nylas::File,
+                                               Nylas::Tag,
+                                               Nylas::Thread]) do |event, object|
 if event == 'create' or event == 'modify'
         puts object.subject
     end
@@ -335,7 +335,7 @@ The [Nylas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and yo
 
 ```ruby
 require 'inbox'
-inbox = Inbox::API.new(nil, nil, nil, 'http://localhost:5555/')
+inbox = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
 ```
 
 

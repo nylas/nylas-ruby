@@ -12,7 +12,7 @@ require 'event'
 # the thread model to load. Otherwise, we can't reference it below.
 # Thread still refers to the built-in Thread type, and Inbox::Thread
 # is undefined.
-load "thread.rb"
+load "api_thread.rb"
 
 module Inbox
 
