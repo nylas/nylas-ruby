@@ -12,7 +12,7 @@ module Inbox
     parameter :calendar_id
     parameter :namespace_id
     parameter :recurrence
-    parameter :cancelled
+    parameter :status
     parameter :master_event_id
     parameter :original_start_time
 
