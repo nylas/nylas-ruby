@@ -358,9 +358,10 @@ The Nylas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) f
 
 Test your new version (found in `pkg/`) locally, and then release with:
 
-    rake release
+    rake nylas
+    rake inbox
 
-If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
+If it's your first time updating the ruby gems, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
 
 ## OAuth self-test
 
