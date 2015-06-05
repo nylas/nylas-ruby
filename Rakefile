@@ -37,6 +37,8 @@ Jeweler::Tasks.new do |gem|
   gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
   gem.files = Dir.glob('lib/**/*.rb')
   gem.version = Inbox::VERSION
+
+  puts "\033[94mDid you run the OAuth self-test before releasing the gem?\033[0m"
 end
 
 Jeweler::RubygemsDotOrgTasks.new

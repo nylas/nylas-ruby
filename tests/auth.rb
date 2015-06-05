@@ -5,6 +5,8 @@ require 'sinatra/base'
 require 'inbox'
 require 'rest-client'
 
+$:.unshift File.join(File.dirname(__FILE__))
+
 begin
   load 'credentials.rb'
 rescue LoadError

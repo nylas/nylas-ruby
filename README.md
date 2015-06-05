@@ -361,3 +361,11 @@ Test your new version (found in `pkg/`) locally, and then release with:
     rake release
 
 If it's your first time updating the ruby gem, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
+
+## OAuth self-test
+
+Because it's very important that we don't break OAuth, we require releasers to run the OAuth self-test before releasing a version of the gem. The self-test is a small sinatra program which will ask you to click on a couple URLs. You need to make sure that following the URLs return a working token.
+
+To set up the program, you need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
+
+You can then run the program using `ruby -I./lib tests/auth.rb`
