@@ -45,6 +45,7 @@ task :nylas do
   end
 
   Jeweler::RubygemsDotOrgTasks.new
+  Rake::Task["release"].invoke
 end
 
 require 'rake/testtask'
