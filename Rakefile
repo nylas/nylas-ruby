@@ -13,20 +13,25 @@ require 'rake'
 
 require 'jeweler'
 require './lib/version.rb'
-Jeweler::Tasks.new do |gem|
-   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-   gem.name = "inbox"
-   gem.homepage = "http://github.com/nylas/inbox-ruby"
-   gem.license = "MIT"
-   gem.summary = %Q{Gem for interacting with the Inbox API}
-   gem.description = %Q{Gem for interacting with the Inbox API.}
-   gem.email = "ben@nylas.com"
-   gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
-   gem.files = Dir.glob('lib/**/*.rb')
-   gem.version = Inbox::VERSION
-end
 
-Jeweler::RubygemsDotOrgTasks.new
+
+task :inbox do
+  Jeweler::Tasks.new do |gem|
+     # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+     gem.name = "inbox"
+     gem.homepage = "http://github.com/nylas/inbox-ruby"
+     gem.license = "MIT"
+     gem.summary = %Q{Gem for interacting with the Inbox API}
+     gem.description = %Q{Gem for interacting with the Inbox API.}
+     gem.email = "ben@nylas.com"
+     gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
+     gem.files = Dir.glob('lib/**/*.rb')
+     gem.version = Inbox::VERSION
+  end
+
+  Jeweler::RubygemsDotOrgTasks.new
+  Rake::Task["release"].invoke
+end
 
 task :nylas do
   Jeweler::Tasks.new do |gem|
