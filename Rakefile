@@ -28,22 +28,24 @@ end
 
 Jeweler::RubygemsDotOrgTasks.new
 
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.name = "nylas"
-  gem.homepage = "http://github.com/nylas/inbox-ruby"
-  gem.license = "MIT"
-  gem.summary = %Q{Gem for interacting with the Nylas API}
-  gem.description = %Q{Gem for interacting with the Nylas API.}
-  gem.email = "ben@nylas.com"
-  gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
-  gem.files = Dir.glob('lib/**/*.rb')
-  gem.version = Inbox::VERSION
+task :nylas do
+  Jeweler::Tasks.new do |gem|
+    # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+    gem.name = "nylas"
+    gem.homepage = "http://github.com/nylas/inbox-ruby"
+    gem.license = "MIT"
+    gem.summary = %Q{Gem for interacting with the Nylas API}
+    gem.description = %Q{Gem for interacting with the Nylas API.}
+    gem.email = "ben@nylas.com"
+    gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
+    gem.files = Dir.glob('lib/**/*.rb')
+    gem.version = Inbox::VERSION
 
-  puts "\033[94mDid you run the OAuth self-test before releasing the gem?\033[0m"
+    puts "\033[94mDid you run the OAuth self-test before releasing the gem?\033[0m"
+  end
+
+  Jeweler::RubygemsDotOrgTasks.new
 end
-
-Jeweler::RubygemsDotOrgTasks.new
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
