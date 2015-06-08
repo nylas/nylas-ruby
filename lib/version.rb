@@ -1,3 +1,3 @@
 module Inbox
-  VERSION = "0.15.7d"
+  VERSION = "0.15.8"
 end
