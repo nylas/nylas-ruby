@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
     "lib/inbox.rb",
     "lib/message.rb",
     "lib/namespace.rb",
+    "lib/nylas.rb",
     "lib/parameters.rb",
     "lib/restful_model.rb",
     "lib/restful_model_collection.rb",
@@ -37,7 +38,7 @@ Gem::Specification.new do |s|
     "lib/time_attr_accessor.rb",
     "lib/version.rb"
   ]
-  s.homepage = "http://github.com/nylas/inbox-ruby"
+  s.homepage = "http://github.com/nylas/nylas-ruby"
   s.licenses = ["MIT"]
   s.rubygems_version = "2.2.2"
   s.summary = "Gem for interacting with the Nylas API"
