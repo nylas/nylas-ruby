@@ -4,7 +4,7 @@
 
 Add this line to your application's Gemfile:
 
-    gem 'inbox'
+    gem 'nylas'
 
 And then execute:
 
@@ -12,7 +12,7 @@ And then execute:
 
 You don't need to use this repo unless you're planning to modify the gem. If you just want to use the Inbox SDK with Ruby bindings, you should run:
 
-    gem install inbox
+    gem install nylas
 
 
 ##Requirements
@@ -30,13 +30,13 @@ A small example Rails app is included in the `example` directory. You can run th
 
 `RESTCLIENT_LOG=stdout rails s`
 
-*Note that you will need to replace the Inbox App ID and Secret in `config/environments/development.rb` to use the sample app.*
+*Note that you will need to replace the Nylas App ID and Secret in `config/environments/development.rb` to use the sample app.*
 
 ## Usage
 
 ### App ID and Secret
 
-Before you can interact with the Inbox API, you need to register for the Nylas Developer Program at [https://www.nylas.com/](https://www.nylas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
+Before you can interact with the Nylas API, you need to register for the Nylas Developer Program at [https://www.nylas.com/](https://www.nylas.com/). After you've created a developer account, you can create a new application to generate an App ID / Secret pair.
 
 Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
 
@@ -48,17 +48,17 @@ The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provi
 **Step 1: Redirect the user to Nylas:**
 
 ```ruby
-require 'inbox'
+require 'nylas'
 
 def login
-  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
+  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
   # The email address of the user you want to authenticate
   user_email = 'ben@nylas.com'
 
   # This URL must be registered with your application in the developer portal
   callback_url = url_for(:action => 'login_callback')
 
-  redirect_to inbox.url_for_authentication(callback_url, user_email)
+  redirect_to nylas.url_for_authentication(callback_url, user_email)
 end
 ```
 
@@ -66,60 +66,43 @@ end
 
 ```ruby
 def login_callback
-  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
-  inbox_token = inbox.token_for_code(params[:code])
+  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
+  nylas_token = nylas.token_for_code(params[:code])
 
-  # Save the inbox_token to the current session, save it to the user model, etc.
+  # Save the nylas_token to the current session, save it to the user model, etc.
 end
 ```
 
 ### Managing Billing
 
-If you're using the open-source version of the Nylas Sync Engine or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Sync Engine, you are billed monthly based on the number of email accounts you've connected to Inbox. You can choose to start accounts in "trial" state and sync slowly at a rate of one message per minute so users can try out your app. If you use trial mode, you need to upgrade accounts (and start paying for them) within 30 days or they will automatically expire. You may wish to upgrade accounts earlier to dramatically speed up the mail sync progress depending on your app's needs.
-
-**Starting an Account in Trial Mode**
-
-When you're redirecting the user to Nylas to authenticate with their email provider,
-pass the additional `trial: true` option to start their account in trial mode.
-
-```ruby
-  redirect_to inbox.url_for_authentication(callback_url, user_email, {trial: true})
-```
-
-**Upgrading an Account**
-
-```ruby
-  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
-  account = inbox.accounts.find(account_id)
-  account.upgrade!
-```
+If you're using the open-source version of the Nylas Sync Engine or have fewer than 10 accounts associated with your developer app, you don't need to worry about billing. However, if you've requested production access to the Sync Engine, you are billed monthly based on the number of email accounts you've connected to Nylas.
 
 **Cancelling an Account**
 
 ```ruby
-  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, nil)
-  account = inbox.accounts.find(account_id)
+  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
+  account = nylas.accounts.find(account_id)
   account.downgrade!
 
-  # Your Inbox API token will be revoked, you will not be charged
+  # Your Nylas API token will be revoked, you will not be charged
 ```
 
 ### Account Status
 
 ````ruby
   # Query the status of every account linked to the app
-  inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
-  accounts = inbox.accounts
+  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
+  accounts = nylas.accounts
   accounts.each { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial, trial_expires, billing_state and namespace_id. See lib/account.rb for more details.
 ```
 
 ### Fetching Namespaces
 
 ```ruby
-inbox = Nylas::API.new(config.inbox_app_id, config.inbox_app_secret, inbox_token)
+nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
 
 # Get the first namespace
-namespace = inbox.namespaces.first
+namespace = nylas.namespaces.first
 
 # Print out the email address and provider (Gmail, Exchange)
 puts namespace.email_address
@@ -211,7 +194,7 @@ Each of the primary collections (contacts, messages, etc.) behave the same way a
 messages = namespace.messages.where(:to => 'ben@nylas.com`).all
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Inbox Filters Documentation](https://www.nylas.com/docs/api#filters).
+The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://www.nylas.com/docs/api#filters).
 
 ### Getting the raw contents of a message
 
@@ -271,10 +254,10 @@ The delta sync API allows fetching all the changes that occured since a specifie
 #
 # we first need to get a cursor object a cursor is simply the id of
 # an individual change.
-cursor = inbox.namespaces.first.get_cursor(1407543195)
+cursor = nylas.namespaces.first.get_cursor(1407543195)
 
 last_cursor = nil
-inbox.namespaces.first.deltas(cursor) do |event, object|
+nylas.namespaces.first.deltas(cursor) do |event, object|
     if event == "create" or event == "modify"
         if object.is_a?(Nylas::Contact)
             puts "#{object.name} - #{object.email}"
@@ -297,7 +280,7 @@ save_to_db(last_cursor)
 
 ### Exclude changes from a specific type --- get only messages
 ````ruby
-inbox.namespaces.first.deltas(cursor, exclude=[Nylas::Contact,
+nylas.namespaces.first.deltas(cursor, exclude=[Nylas::Contact,
                                                Nylas::Event,
                                                Nylas::File,
                                                Nylas::Tag,
@@ -331,7 +314,7 @@ Code | Error Type | Description
 
 ## Open-Source Sync Engine
 
-The [Nylas Sync Engine](http://github.com/inboxapp/inbox) is open-source, and you can also use the Ruby gem with the open-source API. Since the open-source API provides no authentication or security, connecting to it is simple. When you instantiate the Inbox object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+The [Nylas Sync Engine](http://github.com/nylas/sync-engine) is open source, and you can also use the Ruby gem with the open source API. Since the open source API provides no authentication or security, connecting to it is simple. When you instantiate the Nylas object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
 require 'inbox'
@@ -341,7 +324,7 @@ inbox = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
 
 ## Contributing
 
-We'd love your help making the Nylas ruby gem better. Join the Google Group for project updates and feature discussion. We also hang out in `#Nylas` on [irc.freenode.net](http://irc.freenode.net), or you can email [support@nylas.com](mailto:support@nylas.com).
+We'd love your help making the Nylas ruby gem better. Join the Google Group for project updates and feature discussion. We also have a [Slack community](nylas-slack-invite.heroku.com) where we provide support, or you can email [support@nylas.com](mailto:support@nylas.com).
 
 Please sign the [Contributor License Agreement](https://www.nylas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 

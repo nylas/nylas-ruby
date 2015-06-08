@@ -19,10 +19,10 @@ task :inbox do
   Jeweler::Tasks.new do |gem|
      # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
      gem.name = "inbox"
-     gem.homepage = "http://github.com/nylas/inbox-ruby"
+     gem.homepage = "http://github.com/nylas/nylas-ruby"
      gem.license = "MIT"
-     gem.summary = %Q{Gem for interacting with the Inbox API}
-     gem.description = %Q{Gem for interacting with the Inbox API.}
+     gem.summary = %Q{Gem for interacting with the Nylas API}
+     gem.description = %Q{Gem for interacting with the Nylas API.}
      gem.email = "ben@nylas.com"
      gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
      gem.files = Dir.glob('lib/**/*.rb')
@@ -37,7 +37,7 @@ task :nylas do
   Jeweler::Tasks.new do |gem|
     # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
     gem.name = "nylas"
-    gem.homepage = "http://github.com/nylas/inbox-ruby"
+    gem.homepage = "http://github.com/nylas/nylas-ruby"
     gem.license = "MIT"
     gem.summary = %Q{Gem for interacting with the Nylas API}
     gem.description = %Q{Gem for interacting with the Nylas API.}

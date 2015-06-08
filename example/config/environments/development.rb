@@ -1,7 +1,7 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.inbox_app_id = 'YOUR_APP_ID'
-  config.inbox_app_secret = 'YOUR_APP_SECRET'
+  config.nylas_app_id = 'YOUR_APP_ID'
+  config.nylas_app_secret = 'YOUR_APP_SECRET'
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
