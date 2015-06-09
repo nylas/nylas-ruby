@@ -337,12 +337,13 @@ Tests can be run with:
 
 The Nylas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
 
-    rake build
+    rake inbox_build
+    rake nylas_build
 
 Test your new version (found in `pkg/`) locally, and then release with:
 
-    rake nylas
-    rake inbox
+    rake inbox_release
+    rake nylas_release
 
 If it's your first time updating the ruby gems, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
 
