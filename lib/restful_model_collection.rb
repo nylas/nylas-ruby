@@ -44,7 +44,16 @@ module Inbox
 
     def where(filters)
       collection = self.clone
-      collection.filters ||= {}
+
+      # deep copy the object, otherwise filter is shared among all
+      # the instances of the collection, which leads to confusing behaviour.
+      # - karim
+      if collection.filters == nil
+        collection.filters = {}
+      else
+        collection.filters = Marshal.load(Marshal.dump(collection.filters))
+      end
+
       collection.filters.merge!(filters)
       collection
     end
