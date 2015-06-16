@@ -13,13 +13,13 @@ describe 'Delta sync API wrapper' do
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
     stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/generate_cursor").
-         to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
+        to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
 
     stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=0").
-         to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
+        to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => { 'Content-Type' => 'application/json' })
 
     stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=a9vtneydekzye7uwfumdd4iu3").
-         to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
+        to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
 
   end
 
@@ -34,15 +34,21 @@ describe 'Delta sync API wrapper' do
     ns.deltas(timestamp=0) do |event, object|
 
       expect(object.cursor).to_not be_nil
-      if event == 'create' or event == 'modify'
+      if object.respond_to?(:version)
+        expect(object).to be_a Inbox::Draft
+      elsif event == 'create' or event == 'modify'
         expect(object).to be_a Inbox::Message
       elsif event == 'delete'
-        expect(object).to be_a Inbox::Event
+        if object.respond_to? :subject
+          expect(object).to be_a Inbox::Message
+        else
+          expect(object).to be_a Inbox::Event
+        end
       end
       count += 1
     end
 
-    expect(count).to eq(3)
+    expect(count).to eq(5)
   end
 end
 

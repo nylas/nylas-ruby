@@ -66,8 +66,8 @@ module Inbox
 
       cursor = nil
 
-      RestClient.post(path, data.to_json, :content_type => :json) do |response,request,result|
-        json = Inbox.interpret_response(result, response, {:expected_class => Object})
+      RestClient.post(path, data.to_json, :content_type => :json) do |response, request, result|
+        json = Inbox.interpret_response(result, response, { :expected_class => Object })
         cursor = json["cursor"]
       end
 
@@ -75,16 +75,16 @@ module Inbox
     end
 
     OBJECTS_TABLE = {
-      "account" => Inbox::Account,
-      "calendar" => Inbox::Calendar,
-      "draft" => Inbox::Draft,
-      "thread" => Inbox::Thread,
-      "contact" => Inbox::Contact,
-      "event" => Inbox::Event,
-      "file" => Inbox::File,
-      "message" => Inbox::Message,
-      "namespace" => Inbox::Namespace,
-      "tag" => Inbox::Tag,
+        "account" => Inbox::Account,
+        "calendar" => Inbox::Calendar,
+        "draft" => Inbox::Draft,
+        "thread" => Inbox::Thread,
+        "contact" => Inbox::Contact,
+        "event" => Inbox::Event,
+        "file" => Inbox::File,
+        "message" => Inbox::Message,
+        "namespace" => Inbox::Namespace,
+        "tag" => Inbox::Tag,
     }
 
     def deltas(cursor, exclude_types=[])
@@ -95,7 +95,6 @@ module Inbox
         exclude_string = "&exclude_types="
 
         exclude_types.each do |value|
-          count = 0
           if OBJECTS_TABLE.has_value?(value)
             param_name = OBJECTS_TABLE.key(value)
             exclude_string += "#{param_name},"
@@ -110,28 +109,30 @@ module Inbox
         path = @_api.url_for_path("/n/#{@namespace_id}/delta?cursor=#{cursor}#{exclude_string}")
         json = nil
 
-        RestClient.get(path) do |response,request,result|
-          json = Inbox.interpret_response(result, response, {:expected_class => Object})
+        RestClient.get(path) do |response, request, result|
+          json = Inbox.interpret_response(result, response, { :expected_class => Object })
         end
 
         start_cursor = json["cursor_start"]
         end_cursor = json["cursor_end"]
 
         json["deltas"].each do |delta|
-          object = delta['object']
-          if object == 'message'
-              # Drafts are messages underneath
-              object = delta['attributes']['object']
-          end
+          object = if delta['object'] == 'message'
+                     # Drafts are messages underneath
+                     delta.has_key?('attributes') ? delta['attributes']['object'] : 'message'
+                   else
+                     delta['object']
+                   end
+
           cls = OBJECTS_TABLE[object]
           obj = cls.new(@_api, @namespace_id)
 
           case delta["event"]
-          when 'create', 'modify'
+            when 'create', 'modify'
               obj.inflate(delta['attributes'])
               obj.cursor = delta["cursor"]
               yield delta["event"], obj
-          when 'delete'
+            when 'delete'
               obj.id = delta["id"]
               obj.cursor = delta["cursor"]
               yield delta["event"], obj

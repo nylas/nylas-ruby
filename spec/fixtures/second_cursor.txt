@@ -40,6 +40,50 @@
             "event": "delete",
             "id": "db0isjjvqez51vdjeq5lx37dk",
             "object": "event"
+        },
+
+        {
+           "attributes": {
+              "bcc": [],
+              "body": "<div dir=\"ltr\">hey it is a draft !!</div>",
+              "cc": [],
+              "date": 1431104767,
+              "events": [],
+              "files": [],
+              "from": [
+                 {
+                    "email":"karim@nilas.com",
+                    "name":"Karim Hamidou"
+                 }
+              ],
+              "id": "b6qucu82wul213vuk4rlmobwz",
+              "namespace_id": "4y7lh2wvugxx0gfazlz7adhnf",
+              "object": "draft",
+              "reply_to": [],
+              "reply_to_message_id": null,
+              "snippet": "hey it is a draft !!",
+              "subject": "t",
+              "thread_id": "61b853u3659ngir1z6hgp7nga",
+              "to": [
+                 {
+                    "email":"test@example.com",
+                    "name":"testing"
+                 }
+              ],
+              "unread": false,
+              "version": 0
+           },
+           "cursor": "9sta9simvpf1apkopm1sd2ilv",
+           "event": "create",
+           "id": "b6quap82wul210vuk4rlmobwz",
+           "object": "message"
+        },
+
+        {
+            "cursor": "379xgtj0ltcnu7rq4sokou2df",
+            "event": "delete",
+            "id": "qm0isjj19ezsmvdq055lxp7dk",
+            "object": "message"
         }
     ]
 }
