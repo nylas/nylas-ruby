@@ -19,7 +19,7 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 
 - Ruby 1.8.7 or above. (Ruby 1.8.6 may work if you load ActiveSupport.)
 
-- rest-client, json
+- rest-client, json, yajl-ruby, em-http-request
 
 
 ## Example Rails App
@@ -277,6 +277,39 @@ end
 # from where we left.
 save_to_db(last_cursor)
 ```
+
+### Using the Delta sync streaming API
+
+The streaming API will receive deltas in real time, without needing to repeatedly poll. It uses EventMachine for async IO.
+
+````ruby
+# Get all the messages starting from timestamp
+#
+# we first need to get a cursor object a cursor is simply the id of
+# an individual change.
+cursor = inbox.namespaces.first.get_cursor(1407543195)
+
+last_cursor = nil
+inbox.namespaces.first.delta_stream(cursor) do |event, object|
+    if event == "create" or event == "modify"
+        if object.is_a?(Inbox::Contact)
+            puts "#{object.name} - #{object.email}"
+        elsif object.is_a?(Inbox::Event)
+            puts "Event!"
+        end
+    elsif event == "delete"
+        # In the case of a deletion, the API only returns the ID of the object.
+        # In this case, the Ruby SDK returns a dummy object with only the id field
+        # set.
+        puts "Deleting from collection #{object.class.name}, id: #{object}"
+    end
+    last_cursor = object.cursor
+
+    # This will loop indefintely
+end
+
+```
+
 
 ### Exclude changes from a specific type --- get only messages
 ````ruby

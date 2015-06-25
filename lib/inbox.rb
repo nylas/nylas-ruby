@@ -36,7 +36,7 @@ module Inbox
 
     # Handle content expectation errors
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
-    json = JSON.parse(result_content)
+    json = options[:result_parsed]? result_content : JSON.parse(result_content)
     if json.is_a?(Hash) && (json['type'] == 'api_error' or json['type'] == 'invalid_request_error')
       if result.code.to_i == 400
         exc = InvalidRequest
