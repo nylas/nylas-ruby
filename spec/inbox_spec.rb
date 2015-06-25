@@ -47,17 +47,17 @@ describe 'Inbox' do
 
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
       url = @inbox.url_for_authentication('http://redirect.uri')
-      expect(url).to eq("https://www.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
+      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
     end
 
     it "should include the login_hint if one is provided" do
       url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com')
-      expect(url).to eq("https://www.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
+      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
     end
 
     it "should use trial=true if the trial flag is passed" do
       url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', {trial: true})
-      expect(url).to eq("https://www.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
+      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
     end
   end
 

@@ -90,23 +90,27 @@ module Inbox
       "tag" => Inbox::Tag,
     }
 
+    def _build_exclude_types(exclude_types)
+      exclude_string = "&exclude_types="
+
+      exclude_types.each do |value|
+        count = 0
+        if OBJECTS_TABLE.has_value?(value)
+          param_name = OBJECTS_TABLE.key(value)
+          exclude_string += "#{param_name},"
+        end
+      end
+
+      exclude_string = exclude_string[0..-2]
+    end
+
     def deltas(cursor, exclude_types=[])
       raise 'Please provide a block for receiving the delta objects' if !block_given?
       exclude_string = ""
 
       if exclude_types.any?
-        exclude_string = "&exclude_types="
-
-        exclude_types.each do |value|
-          count = 0
-          if OBJECTS_TABLE.has_value?(value)
-            param_name = OBJECTS_TABLE.key(value)
-            exclude_string += "#{param_name},"
-          end
-        end
+        exclude_string = _build_exclude_types(exclude_types)
       end
-
-      exclude_string = exclude_string[0..-2]
 
       # loop and yield deltas until we've come to the end.
       loop do
@@ -146,22 +150,14 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, exclude_types=[])
+    def delta_stream(cursor, exclude_types=[], timeout=0)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
+
       exclude_string = ""
 
       if exclude_types.any?
-        exclude_string = "&exclude_types="
-
-        exclude_types.each do |value|
-          if OBJECTS_TABLE.has_value?(value)
-            param_name = OBJECTS_TABLE.key(value)
-            exclude_string += "#{param_name},"
-          end
-        end
+        exclude_string = _build_exclude_types(exclude_types)
       end
-
-      exclude_string = exclude_string[0..-2]
 
       # loop and yield deltas indefinitely.
       path = @_api.url_for_path("/n/#{@namespace_id}/delta/streaming?cursor=#{cursor}#{exclude_string}")
@@ -186,7 +182,7 @@ module Inbox
       end
 
       EventMachine.run do
-        http = EventMachine::HttpRequest.new(path, :connection_timeout => 0, :inactivity_timeout => 0).get(:keepalive => true, :timeout => 0)
+        http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
         http.stream do |chunk|
           parser << chunk
         end

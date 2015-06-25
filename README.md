@@ -297,7 +297,7 @@ save_to_db(last_cursor)
 
 ### Using the Delta sync streaming API
 
-The streaming API will receive deltas in real time, without needing to repeatedly poll.
+The streaming API will receive deltas in real time, without needing to repeatedly poll. It uses EventMachine for async IO.
 
 ````ruby
 # Get all the messages starting from timestamp
@@ -326,6 +326,7 @@ inbox.namespaces.first.delta_stream(cursor) do |event, object|
 end
 
 ```
+
 
 ### Exclude changes from a specific type --- get only messages
 ````ruby
