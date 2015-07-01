@@ -63,6 +63,10 @@ module Inbox
       finished = false
       chunk_size = 100
 
+      if limit < chunk_size
+        chunk_size = limit
+      end
+
       while (!finished && accumulated.length < limit) do
         results = get_model_collection(offset + accumulated.length, chunk_size)
         accumulated = accumulated.concat(results)
