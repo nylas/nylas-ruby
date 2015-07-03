@@ -24,6 +24,15 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 
 ## Examples
 
+### Sinatra App
+
+A small example of a Sintra app is included in the `example/sinatra` directory. You can check-out the `README.md` in the sinatra folder to learn more about the example
+
+```
+cd example/sinatra
+ruby index.rb
+```
+
 ### Rails App
 
 A small example Rails app is included in the `example/rails` directory. You can run the sample app to see how an authentication flow might be implemented.
