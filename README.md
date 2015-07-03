@@ -22,15 +22,18 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 - rest-client, json, yajl-ruby, em-http-request
 
 
-## Example Rails App
+## Examples
 
-A small example Rails app is included in the `example` directory. You can run the sample app to see how an authentication flow might be implemented.
+### Rails App
 
-`cd example`
+A small example Rails app is included in the `example/rails` directory. You can run the sample app to see how an authentication flow might be implemented.
 
-`RESTCLIENT_LOG=stdout rails s`
+```
+cd example/rails
+RESTCLIENT_LOG=stdout rails s
+```
 
-*Note that you will need to replace the Nylas App ID and Secret in `config/environments/development.rb` to use the sample app.*
+**Note:** *You will need to replace the Nylas App ID and Secret in `config/environments/development.rb` to use the sample app.*
 
 ## Usage
 
