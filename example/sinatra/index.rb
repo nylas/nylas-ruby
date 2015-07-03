@@ -51,7 +51,7 @@ get '/' do
     end
 
     # List messages on the first thread
-    body = "Hello #{namespace.name}, here are you last 5 emails:\n<br><br>"
+    body = "Hello #{namespace.name}, here are your last 5 emails:\n<br><br>"
     body += "#{recent_emails.join('<br>')}"
 
     body
