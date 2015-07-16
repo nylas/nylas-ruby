@@ -125,12 +125,7 @@ module Inbox
         end_cursor = json["cursor_end"]
 
         json["deltas"].each do |delta|
-          object = delta['object']
-          if object == 'message'
-              # Drafts are messages underneath
-              object = delta['attributes']['object']
-          end
-          cls = OBJECTS_TABLE[object]
+          cls = OBJECTS_TABLE[delta['object']]
           obj = cls.new(@_api, @namespace_id)
 
           case delta["event"]
