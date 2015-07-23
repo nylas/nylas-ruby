@@ -7,7 +7,6 @@ require 'contact'
 require 'file'
 require 'calendar'
 require 'event'
-require 'folder'
 require 'yajl'
 require 'em-http'
 require 'ostruct'
@@ -63,14 +62,6 @@ module Inbox
       @events ||= RestfulModelCollection.new(Event, @_api, @id)
     end
 
-    def folders
-      @folders ||= RestfulModelCollection.new(Folder, @_api, @id)
-    end
-
-    def labels
-      @labels ||= RestfulModelCollection.new(Label, @_api, @id)
-    end
-
     def get_cursor(timestamp)
       # Get the cursor corresponding to a specific timestamp.
       path = @_api.url_for_path("/n/#{@namespace_id}/delta/generate_cursor")
@@ -97,8 +88,6 @@ module Inbox
       "message" => Inbox::Message,
       "namespace" => Inbox::Namespace,
       "tag" => Inbox::Tag,
-      "folder" => Inbox::Folder,
-      "label" => Inbox::Label,
     }
 
     def _build_exclude_types(exclude_types)

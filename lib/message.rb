@@ -15,57 +15,12 @@ module Inbox
     parameter :thread_id
     parameter :body
     parameter :unread
-    parameter :starred
-    parameter :folder
-    parameter :labels
 
     def inflate(json)
       super
       @to ||= []
       @cc ||= []
       @bcc ||= []
-      @labels ||= []
-      @folder ||= nil
-
-      # This is a special case --- we receive label data from the API
-      # as JSON but we want it to behave like an API object.
-      @labels.map! do |label_json|
-       label = Label.new(@_api)
-       label.inflate(label_json)
-       label
-      end
-
-      if not folder.nil?
-       folder = folder.new(@_api)
-       folder.inflate(@folder)
-       @folder = folder
-      end
-    end
-
-    def as_json(options = {})
-      hash = {}
-
-      # unread, starred and labels/folder are the only attribute
-      # you can modify.
-      if not @unread.nil?
-        hash["unread"] = @unread
-      end
-
-      if not @starred.nil?
-        hash["starred"] = @starred
-      end
-
-      if not @labels.nil? and @labels != []
-        hash["labels"] = @labels.map do |label|
-          label.id
-        end
-      end
-
-      if not @folder.nil?
-        hash["folder"] = @folder.id
-      end
-
-      hash
     end
 
     def files

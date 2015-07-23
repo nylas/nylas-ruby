@@ -173,23 +173,10 @@ thread.mark_as_read!
 # Archive
 thread.archive!
 
-# Add or remove arbitrary tags (DEPRECATED --- you should use the new labels and folders API)
+# Add or remove arbitrary tags
 tagsToAdd = ['inbox', 'cfa1233ef123acd12']
 tagsToRemove = []
 thread.update_tags!(tagsToAdd, tagsToRemove)
-
-# Add a new label to a message
-
-important = nil
-ns.labels.each do |label|
-  if label.display_name == 'Important'
-    important = label
-  end
-end
-
-thread = ns.threads.where(:from => "helena@nylas.com").first
-thread.labels.push(important)
-thread.save!
 
 # List messages
 thread.messages.each do |message|
@@ -209,37 +196,6 @@ end
 # Create a new file
 file = namespace.files.build(:file => File.new("./public/favicon.ico", 'rb'))
 file.save!
-```
-
-### Working with Labels/Folder
-
-The new folders and labels API replaces the now deprecated Tags API. It allows you to apply Gmail labels to whole threads or individual messages and, for providers other than Gmail, to move threads and messages between folders.
-
-```ruby
-
-# List labels
-namespace.labels.each do |label|
-  puts label.display_name, label.id
-end
-
-# Create a label
-label = ns.folders.build(:display_name => 'Test label', :name => 'test name')
-label.save!
-
-# Create a folder
-#
-# Note that Folders and Labels are absolutely identical from the standpoint of the SDK.
-# The only difference is that a message can have many labels but only a single folder.
-fld = ns.folders.build(:display_name => 'Test folder', :name => 'test name')
-fld.save!
-
-# Rename a folder
-#
-# Note that you can not rename folders like INBOX, Trash, etc.
-fld = ns.folders.first
-fld.display_name = 'Renamed folder'
-fld.save!
-
 ```
 
 ### Working with Messages, Contacts, etc.
