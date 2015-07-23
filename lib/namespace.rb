@@ -125,6 +125,10 @@ module Inbox
         end_cursor = json["cursor_end"]
 
         json["deltas"].each do |delta|
+          if not OBJECTS_TABLE.has_key?(delta['object'])
+            next
+          end
+
           cls = OBJECTS_TABLE[delta['object']]
           obj = cls.new(@_api, @namespace_id)
 
@@ -160,6 +164,10 @@ module Inbox
       parser = Yajl::Parser.new(:symbolize_keys => false)
       parser.on_parse_complete = proc do |data|
         delta = Inbox.interpret_response(OpenStruct.new(:code => '200'), data, {:expected_class => Object, :result_parsed => true})
+
+        if not OBJECTS_TABLE.has_key?(delta['object'])
+          next
+        end
 
         cls = OBJECTS_TABLE[delta['object']]
         obj = cls.new(@_api, @namespace_id)

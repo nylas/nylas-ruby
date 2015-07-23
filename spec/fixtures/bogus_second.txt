@@ -1,0 +1,89 @@
+{
+    "cursor_end": "a9vtneydekzye7uwfumdd4iu3",
+    "cursor_start": "a9vtneydekzye7uwfumdd4iu3",
+    "deltas": [
+        {
+            "attributes": {
+                "bcc": [],
+                "body": "<div dir=\"ltr\">test again<br></div>",
+                "cc": [],
+                "date": 1424913199,
+                "files": [],
+                "from": [
+                    {
+                        "email": "karim@nilas.com",
+                        "name": "Karim Hamidou"
+                    }
+                ],
+                "id": "c7mllq7iag2ivlp6fxf7dhg9i",
+                "namespace_id": "5qmatk6w4v19dg3t24r1t69mm",
+                "object": "message",
+                "snippet": "Hewlett again",
+                "subject": "test moar",
+                "thread_id": "1xaax5p901bmy3yzy4ikk3ujz",
+                "to": [
+                    {
+                        "email": "inboxapptest.french@gmail.com",
+                        "name": "Inbox Apptest"
+                    }
+                ],
+                "unread": false
+            },
+            "cursor": "baublqvs9fi1amx9ibwmoua09",
+            "event": "create",
+            "id": "c7mllq7iag2ivlp6fxf7dhg9i",
+            "object": "message"
+        },
+        {
+            "cursor": "379xgtj0ltcnu7rq4sokou2df",
+            "event": "delete",
+            "id": "db0isjjvqez51vdjeq5lx37dk",
+            "object": "event"
+        },
+        {
+            "cursor": "379xgtj0ltcnu7rq4sokou2df",
+            "event": "delete",
+            "id": "db0isjjvqez51vdjeq5lx37dk",
+            "object": "bogus_event"
+        },
+        {
+            "attributes": {
+                "bcc": [],
+                "body": "<div dir=\"ltr\">test again<br></div>",
+                "cc": [],
+                "date": 1424913199,
+                "files": [],
+                "from": [
+                    {
+                        "email": "karim@nilas.com",
+                        "name": "Karim Hamidou"
+                    }
+                ],
+                "id": "c7mllq7iag2ivlp6fxf7dhg9i",
+                "namespace_id": "5qmatk6w4v19dg3t24r1t69mm",
+                "object": "message",
+                "snippet": "Hewlett again",
+                "subject": "test moar",
+                "thread_id": "1xaax5p901bmy3yzy4ikk3ujz",
+                "to": [
+                    {
+                        "email": "inboxapptest.french@gmail.com",
+                        "name": "Inbox Apptest"
+                    }
+                ],
+                "unread": false
+            },
+            "cursor": "baublqvs9fi1amx9ibwmoua09",
+            "event": "create",
+            "id": "c7mllq7iag2ivlp6fxf7dhg9i",
+            "object": "message"
+        },
+
+        {
+            "cursor": "379xgtj0ltcnu7rq4sokou2df",
+            "event": "delete",
+            "id": "db0isjjvqez51vdjeq5lx37dk",
+            "object": "bogus_event"
+        }
+    ]
+}
