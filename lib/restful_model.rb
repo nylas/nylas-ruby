@@ -31,11 +31,11 @@ module Inbox
       end
     end
 
-    def save!
+    def save!(params={})
       if id
-        update('PUT', '', as_json())
+        update('PUT', '', as_json(), params)
       else
-        update('POST', '', as_json())
+        update('POST', '', as_json(), params)
       end
     end
 
@@ -58,10 +58,10 @@ module Inbox
       hash
     end
 
-    def update(http_method, action, data = {})
+    def update(http_method, action, data = {}, params = {})
       http_method = http_method.downcase
 
-      ::RestClient.send(http_method, self.url(action), data.to_json, :content_type => :json) do |response, request, result|
+      ::RestClient.send(http_method, self.url(action), data.to_json, :content_type => :json, :params => params) do |response, request, result|
         unless http_method == 'delete'
           json = Inbox.interpret_response(result, response, :expected_class => Object)
           inflate(json)

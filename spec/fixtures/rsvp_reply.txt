@@ -1,0 +1,27 @@
+{
+    "busy": true,
+    "calendar_id": "9l0speowhv7o2mkw52xxoxbcf",
+    "description": "Affichez votre \u00e9v\u00e9nement sur la page google.",
+    "id": "30xunbe3033d44kip9bnau5ph",
+    "location": "",
+    "message_id": "146p57iuk8waievk7xq45vpr2",
+    "namespace_id": "1qqlrm3m82toh86nevz0o1l24",
+    "object": "event",
+    "owner": "inbox.apptest <inboxapptest@gmail.com>",
+    "participants": [
+        {
+            "comment": "I will not come.",
+            "email": "inboxapptest.french@gmail.com",
+            "name": "inboxapptest.french@gmail.com",
+            "status": "yes"
+        }
+    ],
+    "read_only": true,
+    "status": "confirmed",
+    "title": "It's a kind of magic",
+    "when": {
+        "end_time": 1437755400,
+        "object": "timespan",
+        "start_time": 1437751800
+    }
+}

@@ -299,6 +299,13 @@ new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
 
 # Persist the event --- it's automatically synced back to the Google or Exchange calendar
 new_event.save!
+
+# Send an invite/update message to the participants
+new_event.save!(:notify_participants => true)
+
+# RSVP to an invite (Note: this only works for the events in the 'Emailed events' calendar)
+# possible statuses are 'yes', 'no' and 'maybe'.
+emailed_invite.rsvp!(status='yes', comment='I will come')
 ```
 
 ## Using the Delta sync API

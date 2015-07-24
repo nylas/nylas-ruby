@@ -2,13 +2,15 @@
 $LOAD_PATH << './lib'
 require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'event'
+require 'webmock/rspec'
 
 describe Inbox::Event do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret)
+    @namespace_id = 'nnnnnnn'
+    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#as_json" do
@@ -31,4 +33,19 @@ describe Inbox::Event do
       expect(dict['when'].has_key?('object')).to be false
     end
   end
+
+  describe "#rsvp!" do
+    it "does a request to /send-rsvp" do
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/send-rsvp"
+      stub = stub_request(:post, url).
+           to_return(:status => 200, :body => File.read('spec/fixtures/rsvp_reply.txt'), :headers => {})
+
+      ev = Inbox::Event.new(@inbox, @namespace_id)
+      ev.id = 'public_id'
+      ev.rsvp!('yes', 'I will come.')
+
+      expect(a_request(:post, url).
+        with(:body => '{"event_id":"public_id","status":"yes","comment":"I will come."}')).to have_been_made.once
+      end
+    end
 end
