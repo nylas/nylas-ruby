@@ -12,6 +12,15 @@ module Inbox
       @file_ids.push(file.id)
     end
 
+    def as_json(options = {})
+      # FIXME @karim: this is a bit of a hack --- Draft inherits Message
+      # was okay until we overrode Message#as_json to allow updating folders/labels.
+      # This broke draft sending, which relies on RestfulModel::as_json to work.
+      grandparent = self.class.superclass.superclass
+      meth = grandparent.instance_method(:as_json)
+      meth.bind(self).call
+    end
+
     def send!
       url = @_api.url_for_path("/n/#{@namespace_id}/send")
       if @id
