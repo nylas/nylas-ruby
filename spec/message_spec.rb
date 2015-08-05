@@ -1,6 +1,7 @@
 ::ENV['RACK_ENV'] = 'test'
 $LOAD_PATH << './lib'
 require File.join(File.dirname(__FILE__), 'spec_helper')
+require 'webmock/rspec'
 require 'message'
 require 'folder'
 
@@ -9,13 +10,13 @@ describe Inbox::Message do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret)
+    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#as_json" do
     it "only includes starred, unread and labels/folder info" do
       msg = Inbox::Message.new(@inbox, nil)
-      msg.subject = 'Test event'
+      msg.subject = 'Test message'
       msg.unread = true
       msg.starred = false
 
@@ -42,6 +43,19 @@ describe Inbox::Message do
       expect(dict['labels']).to eq(nil)
       expect(dict['folder']).to eq('test label')
 
+    end
+  end
+
+  describe "#raw" do
+    it "requests the raw contents by setting an Accept header" do
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/").
+       with(:headers => {'Accept'=>'message/rfc822'}).
+         to_return(:status => 200, :body => "Raw body", :headers => {})
+
+      msg = Inbox::Message.new(@inbox, nil)
+      msg.subject = 'Test message'
+      msg.id = 2
+      expect(msg.raw).to eq('Raw body')
     end
   end
 end

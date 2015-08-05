@@ -1,6 +1,5 @@
 require 'restful_model'
 require 'file'
-require 'rfc2882'
 
 module Inbox
   class Message < RestfulModel
@@ -36,7 +35,7 @@ module Inbox
       end
 
       if not folder.nil?
-       folder = folder.new(@_api)
+       folder = Folder.new(@_api)
        folder.inflate(@folder)
        @folder = folder
       end
@@ -75,12 +74,9 @@ module Inbox
     def raw
       model = nil
       collection = RestfulModelCollection.new(Message, @_api, @namespace_id, {:message_id=>@id})
-      RestClient.get("#{collection.url}/#{id}/rfc2822"){ |response,request,result|
-        json = Inbox.interpret_response(result, response, {:expected_class => Object})
-        model = Rfc2822.new(@_api)
-        model.inflate(json)
+      RestClient.get("#{collection.url}/#{id}/", :accept => 'message/rfc822'){ |response,request,result|
+        response
       }
-      model
     end
   end
 end

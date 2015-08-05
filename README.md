@@ -257,7 +257,7 @@ The `where` method accepts a hash of filters, as documented in the [Filters Docu
 It's possible to access the unprocessed contents of a message using the raw method:
 
 ```ruby
-raw_contents = message.raw.rfc2822
+raw_contents = message.raw
 ```
 
 
