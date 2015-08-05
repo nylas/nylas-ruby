@@ -48,14 +48,17 @@ describe Inbox::Message do
 
   describe "#raw" do
     it "requests the raw contents by setting an Accept header" do
-      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/").
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/messages/2/"
+      stub_request(:get, url).
        with(:headers => {'Accept'=>'message/rfc822'}).
          to_return(:status => 200, :body => "Raw body", :headers => {})
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.subject = 'Test message'
+      msg.namespace_id = 'nnnnnnn'
       msg.id = 2
       expect(msg.raw).to eq('Raw body')
+      expect(a_request(:get, url)).to have_been_made.once
     end
   end
 end
