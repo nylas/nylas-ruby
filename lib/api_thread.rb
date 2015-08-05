@@ -30,7 +30,7 @@ module Inbox
       end
 
       if not folder.nil?
-       folder = folder.new(@_api)
+       folder = Folder.new(@_api)
        folder.inflate(@folder)
        @folder = folder
       end
