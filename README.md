@@ -445,7 +445,7 @@ If it's your first time updating the ruby gems, you may be prompted for the user
 
 ## OAuth self-test
 
-Because it's very important that we don't break OAuth, we require releasers to run the OAuth self-test before releasing a version of the gem. The self-test is a small sinatra program which will ask you to click on a couple URLs. You need to make sure that following the URLs return a working token.
+Because it's very important that we don't break OAuth, we require releasers to run the OAuth self-test before releasing a version of the gem. The self-test is a small sinatra program which will ask you to click on a couple URLs. You need to make sure that following the URLs returns a working token.
 
 To set up the program, you need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
 
