@@ -70,7 +70,7 @@ task :nylas_release do
   Jeweler::Tasks.new do |gem|
     # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
     setup_nylas_gem(gem)
-    puts "\033[94mDid you run the OAuth self-test before releasing the gem?\033[0m"
+    puts "\033[94mDid you run the self-test programs before releasing the gem?\033[0m"
   end
 
   Jeweler::RubygemsDotOrgTasks.new

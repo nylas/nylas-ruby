@@ -9,30 +9,26 @@ describe 'Delta sync API wrapper' do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/generate_cursor").
+    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/generate_cursor").
          to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0").
          to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=a9vtneydekzye7uwfumdd4iu3").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=a9vtneydekzye7uwfumdd4iu3").
          to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
 
   end
 
   it "should get the initial cursor" do
-    ns = Inbox::Namespace.new(@inbox, @namespace_id)
-    ns.get_cursor(timestamp=0)
+    @inbox.get_cursor(timestamp=0)
   end
 
   it "should continuously query the delta sync API" do
     count = 0
-    ns = Inbox::Namespace.new(@inbox, @namespace_id)
-    ns.deltas(timestamp=0) do |event, object|
-
+    @inbox.deltas(timestamp=0) do |event, object|
       expect(object.cursor).to_not be_nil
       if event == 'create' or event == 'modify'
         expect(object).to be_a Inbox::Message
@@ -51,17 +47,15 @@ describe 'Delta sync streaming API wrapper' do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/streaming?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0").
       to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
   end
 
   it "should continuously query the delta sync API" do
     count = 0
-    ns = Inbox::Namespace.new(@inbox, @namespace_id)
-    ns.delta_stream(0, []) do |event, object|
+    @inbox.delta_stream(0, []) do |event, object|
 
       expect(object.cursor).to_not be_nil
       if event == 'create' or event == 'modify'
@@ -82,23 +76,21 @@ describe 'Delta sync bogus requests' do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/generate_cursor").
+    stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/generate_cursor").
          to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0").
          to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/delta/streaming?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0").
       to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
   end
 
   it "delta sync should skip bogus requests" do
     count = 0
-    ns = Inbox::Namespace.new(@inbox, @namespace_id)
-    ns.deltas(timestamp=0, []) do |event, object|
+    @inbox.deltas(timestamp=0, []) do |event, object|
       expect(object.cursor).to_not be_nil
       if event == 'create' or event == 'modify'
         expect(object).to be_a Inbox::Message
@@ -114,8 +106,7 @@ describe 'Delta sync bogus requests' do
 
   it "delta stream should skip bogus requests" do
     count = 0
-    ns = Inbox::Namespace.new(@inbox, @namespace_id)
-    ns.delta_stream(0, []) do |event, object|
+    @inbox.delta_stream(0, []) do |event, object|
       expect(object.cursor).to_not be_nil
       if event == 'create' or event == 'modify'
         expect(object).to be_a Inbox::Message

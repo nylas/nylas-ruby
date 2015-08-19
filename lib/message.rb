@@ -68,12 +68,12 @@ module Inbox
     end
 
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, @namespace_id, {:message_id=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=>@id})
     end
 
     def raw
       model = nil
-      collection = RestfulModelCollection.new(Message, @_api, @namespace_id, {:message_id=>@id})
+      collection = RestfulModelCollection.new(Message, @_api, {:message_id=>@id})
       RestClient.get("#{collection.url}/#{id}/", :accept => 'message/rfc822'){ |response,request,result|
         response
       }

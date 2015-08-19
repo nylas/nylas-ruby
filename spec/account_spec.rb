@@ -8,7 +8,6 @@ describe Inbox::Account do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @namespace_id = 'nnnnnnn'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
     uri_template = Addressable::Template.new "https://#{@app_secret}:@api.nylas.com/a/#{@app_id}/accounts{?limit,offset}"

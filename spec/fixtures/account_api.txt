@@ -1,0 +1,9 @@
+{
+    "account_id": "1c8kqn1bxbvdtwshkhcz4uxy5",
+    "email_address": "inbox.apptest2@inboxapp.onmicrosoft.com",
+    "id": "1c8kqn1bxbvdtwshkhcz4uxy5",
+    "name": "",
+    "object": "account",
+    "organization_unit": "folder",
+    "provider": "eas"
+}

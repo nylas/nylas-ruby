@@ -31,7 +31,7 @@ module Inbox
     end
 
     def rsvp!(status, comment)
-      url = @_api.url_for_path("/n/#{@namespace_id}/send-rsvp")
+      url = @_api.url_for_path("/send-rsvp")
       data = {:event_id => @id, :status => status, :comment => comment}
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|

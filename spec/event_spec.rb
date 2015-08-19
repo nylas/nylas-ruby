@@ -15,7 +15,7 @@ describe Inbox::Event do
 
   describe "#as_json" do
     it "doesn't include nil values" do
-      ev = Inbox::Event.new(@inbox, nil)
+      ev = Inbox::Event.new(@inbox)
       ev.title = 'Test event'
       ev.description = nil
       dict = ev.as_json
@@ -24,7 +24,7 @@ describe Inbox::Event do
     end
 
     it "does remove object: timespan fields from 'when' blocks" do
-      ev = Inbox::Event.new(@inbox, nil)
+      ev = Inbox::Event.new(@inbox)
       ev.title = 'Test event'
       ev.when = {'start_time' => 12345675, 'end_time' => 2345678, 'object' => 'timespan'}
       dict = ev.as_json
@@ -36,11 +36,11 @@ describe Inbox::Event do
 
   describe "#rsvp!" do
     it "does a request to /send-rsvp" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/send-rsvp"
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send-rsvp"
       stub = stub_request(:post, url).
            to_return(:status => 200, :body => File.read('spec/fixtures/rsvp_reply.txt'), :headers => {})
 
-      ev = Inbox::Event.new(@inbox, @namespace_id)
+      ev = Inbox::Event.new(@inbox)
       ev.id = 'public_id'
       ev.rsvp!('yes', 'I will come.')
 

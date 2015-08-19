@@ -22,7 +22,7 @@ module Inbox
     end
 
     def send!
-      url = @_api.url_for_path("/n/#{@namespace_id}/send")
+      url = @_api.url_for_path("/send")
       if @id
         data = {:draft_id => @id, :version => @version}
       else

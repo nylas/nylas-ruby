@@ -113,12 +113,9 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 ```ruby
 nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
 
-# Get the first namespace
-namespace = nylas.namespaces.first
-
 # Print out the email address and provider (Gmail, Exchange)
-puts namespace.email_address
-puts namespace.provider
+puts nylas.account.email_address
+puts nylas.account.provider
 ```
 
 
@@ -126,36 +123,36 @@ puts namespace.provider
 
 ```ruby
 # Fetch the first thread
-thread = namespace.threads.first
+thread = nylas.threads.first
 
 # Fetch a specific thread
-thread = namespace.threads.find('ac123acd123ef123')
+thread = nylas.threads.find('ac123acd123ef123')
 
 # List all threads tagged `inbox`
 # (paginating 50 at a time until no more are returned.)
-namespace.threads.where(:tag => 'inbox').each do |thread|
+nylas.threads.where(:tag => 'inbox').each do |thread|
   puts thread.subject
 end
 
 # List the 5 most recent unread threads
-namespace.threads.where(:tag => 'unread').range(0,4).each do |thread|
+nylas.threads.where(:tag => 'unread').range(0,4).each do |thread|
   puts thread.subject
 end
 
 # List all threads with 'ben@nylas.com'
-namespace.threads.where(:any_email => 'ben@nylas.com').each do |thread|
+nylas.threads.where(:any_email => 'ben@nylas.com').each do |thread|
   puts thread.subject
 end
 
 # Get number of all threads
-count = namespace.threads.count
+count = nylas.threads.count
 
 # Get number of threads with 'ben@inboxapp.com'
-count = namespace.threads.where(:any_email => 'ben@inboxapp.com').count
+count = nylas.threads.where(:any_email => 'ben@inboxapp.com').count
 
 # Collect all threads with 'ben@nylas.com' into an array.
 # Note: for large numbers of threads, this is not advised.
-threads = namespace.threads.where(:any_email => 'ben@nylas.com').all
+threads = nylas.threads.where(:any_email => 'ben@nylas.com').all
 ```
 
 
@@ -181,13 +178,13 @@ thread.update_tags!(tagsToAdd, tagsToRemove)
 # Add a new label to a message
 
 important = nil
-ns.labels.each do |label|
+nylas.labels.each do |label|
   if label.display_name == 'Important'
     important = label
   end
 end
 
-thread = ns.threads.where(:from => "helena@nylas.com").first
+thread = nylas.threads.where(:from => "helena@nylas.com").first
 thread.labels.push(important)
 thread.save!
 
@@ -202,41 +199,41 @@ end
 
 ```ruby
 # List files
-namespace.files.each do |file|
+nylas.files.each do |file|
   puts file.filename
 end
 
 # Create a new file
-file = namespace.files.build(:file => File.new("./public/favicon.ico", 'rb'))
+file = nylas.files.build(:file => File.new("./public/favicon.ico", 'rb'))
 file.save!
 ```
 
-### Working with Labels/Folder
+### Working with Labels/Folders
 
 The new folders and labels API replaces the now deprecated Tags API. It allows you to apply Gmail labels to whole threads or individual messages and, for providers other than Gmail, to move threads and messages between folders.
 
 ```ruby
 
 # List labels
-namespace.labels.each do |label|
+nylas.labels.each do |label|
   puts label.display_name, label.id
 end
 
 # Create a label
-label = ns.folders.build(:display_name => 'Test label', :name => 'test name')
+label = nylas.folders.build(:display_name => 'Test label', :name => 'test name')
 label.save!
 
 # Create a folder
 #
 # Note that Folders and Labels are absolutely identical from the standpoint of the SDK.
 # The only difference is that a message can have many labels but only a single folder.
-fld = ns.folders.build(:display_name => 'Test folder', :name => 'test name')
+fld = nylas.folders.build(:display_name => 'Test folder', :name => 'test name')
 fld.save!
 
 # Rename a folder
 #
 # Note that you can not rename folders like INBOX, Trash, etc.
-fld = ns.folders.first
+fld = nylas.folders.first
 fld.display_name = 'Renamed folder'
 fld.save!
 
@@ -247,7 +244,7 @@ fld.save!
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
 ```ruby
-messages = namespace.messages.where(:to => 'ben@nylas.com`).all
+messages = nylas.messages.where(:to => 'ben@nylas.com`).all
 ```
 
 The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://www.nylas.com/docs/api#filters).
@@ -265,7 +262,7 @@ raw_contents = message.raw
 
 ```ruby
 # Create a new draft
-draft = namespace.drafts.build(
+draft = nylas.drafts.build(
   :to => [{:name => 'Ben Gotow', :email => 'ben@nylas.com'}],
   :subject => "Sent by Ruby",
   :body => "Hi there!<strong>This is HTML</strong>"
@@ -288,8 +285,8 @@ draft.send!
 
 ````ruby
 # Every event is attached to a calendar -- get the id of the first calendar
-calendar_id = inbox.namespaces.first.calendars.first.id
-new_event = inbox.namespaces.first.events.build(:calendar_id => calendar_id, :title => 'Coffee?')
+calendar_id = nylas.calendars.first.id
+new_event = nylas.events.build(:calendar_id => calendar_id, :title => 'Coffee?')
 
 # Modify attributes as necessary
 new_event.location = "L'excelsior"
@@ -317,10 +314,10 @@ The delta sync API allows fetching all the changes that occured since a specifie
 #
 # we first need to get a cursor object a cursor is simply the id of
 # an individual change.
-cursor = nylas.namespaces.first.get_cursor(1407543195)
+cursor = nylas.get_cursor(1407543195)
 
 last_cursor = nil
-nylas.namespaces.first.deltas(cursor) do |event, object|
+nylas.deltas(cursor) do |event, object|
     if event == "create" or event == "modify"
         if object.is_a?(Nylas::Contact)
             puts "#{object.name} - #{object.email}"
@@ -350,10 +347,10 @@ The streaming API will receive deltas in real time, without needing to repeatedl
 #
 # we first need to get a cursor object a cursor is simply the id of
 # an individual change.
-cursor = inbox.namespaces.first.get_cursor(1407543195)
+cursor = nylas.get_cursor(1407543195)
 
 last_cursor = nil
-inbox.namespaces.first.delta_stream(cursor) do |event, object|
+nylas.delta_stream(cursor) do |event, object|
     if event == "create" or event == "modify"
         if object.is_a?(Inbox::Contact)
             puts "#{object.name} - #{object.email}"
@@ -376,11 +373,11 @@ end
 
 ### Exclude changes from a specific type --- get only messages
 ````ruby
-nylas.namespaces.first.deltas(cursor, exclude=[Nylas::Contact,
-                                               Nylas::Event,
-                                               Nylas::File,
-                                               Nylas::Tag,
-                                               Nylas::Thread]) do |event, object|
+nylas.deltas(cursor, exclude=[Nylas::Contact,
+                              Nylas::Event,
+                              Nylas::File,
+                              Nylas::Tag,
+                              Nylas::Thread]) do |event, object|
 if event == 'create' or event == 'modify'
         puts object.subject
     end
@@ -413,8 +410,8 @@ Code | Error Type | Description
 The [Nylas Sync Engine](http://github.com/nylas/sync-engine) is open source, and you can also use the Ruby gem with the open source API. Since the open source API provides no authentication or security, connecting to it is simple. When you instantiate the Nylas object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
-require 'inbox'
-inbox = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
+require 'nylas'
+nylas = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
 ```
 
 
@@ -443,10 +440,10 @@ Test your new version (found in `pkg/`) locally, and then release with:
 
 If it's your first time updating the ruby gems, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
 
-## OAuth self-test
+## API self-tests
 
-Because it's very important that we don't break OAuth, we require releasers to run the OAuth self-test before releasing a version of the gem. The self-test is a small sinatra program which will ask you to click on a couple URLs. You need to make sure that following the URLs returns a working token.
+Because it's critical that we don't break the SDK for our customers, we require releasers to run some tests before releasing a new version of the gem. The test programs are located in the test/ directory. To set up them up, you'll need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
 
-To set up the program, you need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
-
-You can then run the program using `cd tests && ruby -I../lib auth.rb`
+You can run the programs like this:
+`cd tests && ruby -I../lib auth.rb`
+`cd tests && ruby -I../lib system.rb`

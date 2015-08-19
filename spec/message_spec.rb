@@ -15,14 +15,14 @@ describe Inbox::Message do
 
   describe "#as_json" do
     it "only includes starred, unread and labels/folder info" do
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Inbox::Message.new(@inbox)
       msg.subject = 'Test message'
       msg.unread = true
       msg.starred = false
 
       labels = ['test label', 'label 2']
       labels.map! do |label|
-        l = Inbox::Label.new(@inbox, nil)
+        l = Inbox::Label.new(@inbox)
         l.id = label
         l
       end
@@ -35,7 +35,7 @@ describe Inbox::Message do
       expect(dict['labels']).to eq(['test label', 'label 2'])
 
       # Now check that we do the same if @folder is set.
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Inbox::Message.new(@inbox)
       msg.subject = 'Test event'
       msg.folder = labels[0]
       dict = msg.as_json
@@ -48,14 +48,13 @@ describe Inbox::Message do
 
   describe "#raw" do
     it "requests the raw contents by setting an Accept header" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/n/nnnnnnn/messages/2/"
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/"
       stub_request(:get, url).
        with(:headers => {'Accept'=>'message/rfc822'}).
          to_return(:status => 200, :body => "Raw body", :headers => {})
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.subject = 'Test message'
-      msg.namespace_id = 'nnnnnnn'
       msg.id = 2
       expect(msg.raw).to eq('Raw body')
       expect(a_request(:get, url)).to have_been_made.once

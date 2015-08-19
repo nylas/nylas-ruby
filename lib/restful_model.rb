@@ -7,7 +7,7 @@ module Inbox
     include Inbox::Parameters
 
     parameter :id
-    parameter :namespace_id
+    parameter :account_id
     parameter :cursor  # Only used by the delta sync API
     time_attr_accessor :created_at
 
@@ -15,9 +15,9 @@ module Inbox
       "#{self.to_s.downcase}s".split('::').last
     end
 
-    def initialize(api, namespace_id = nil)
+    def initialize(api, account_id = nil)
       raise StandardError.new unless api.class <= Inbox::API
-      @namespace_id = namespace_id
+      @account_id = account_id
       @_api = api
     end
 
@@ -41,7 +41,7 @@ module Inbox
 
     def url(action = "")
       action = "/#{action}" unless action.empty?
-      @_api.url_for_path("/n/#{@namespace_id}/#{self.class.collection_name}/#{id}#{action}")
+      @_api.url_for_path("/#{self.class.collection_name}/#{id}#{action}")
     end
 
     def as_json(options = {})

@@ -1,9 +1,26 @@
-require 'version'
-require 'rest-client'
-require 'restful_model_collection'
 require 'json'
-require 'namespace'
+require 'rest-client'
+require 'yajl'
+require 'em-http'
+require 'ostruct'
+
 require 'account'
+require 'api_account'
+require 'api_thread'
+require 'calendar'
+require 'account'
+require 'tag'
+require 'message'
+require 'draft'
+require 'contact'
+require 'file'
+require 'calendar'
+require 'event'
+require 'folder'
+require 'restful_model'
+require 'restful_model_collection'
+require 'version'
+
 
 module Inbox
 
@@ -122,19 +139,201 @@ module Inbox
       end
     end
 
-    # Convenience Methods
-
-    def namespaces
-      @namespaces ||= RestfulModelCollection.new(Namespace, self, nil)
-      @namespaces
-    end
-
     # Billing Methods
 
     def accounts
-      @accounts ||= ManagementModelCollection.new(Account, self, nil)
+      @accounts ||= ManagementModelCollection.new(Account, self)
       @accounts
     end
+
+    # API Methods
+
+    def threads
+      @threads ||= RestfulModelCollection.new(Thread, self)
+    end
+
+    def tags
+      @tags ||= RestfulModelCollection.new(Tag, self)
+    end
+
+    def messages
+      @messages ||= RestfulModelCollection.new(Message, self)
+    end
+
+    def files
+      @files ||= RestfulModelCollection.new(File, self)
+    end
+
+    def drafts
+      @drafts ||= RestfulModelCollection.new(Draft, self)
+    end
+
+    def contacts
+      @contacts ||= RestfulModelCollection.new(Contact, self)
+    end
+
+    def calendars
+      @calendars ||= RestfulModelCollection.new(Calendar, self)
+    end
+
+    def events
+      @events ||= RestfulModelCollection.new(Event, self)
+    end
+
+    def folders
+      @folders ||= RestfulModelCollection.new(Folder, self)
+    end
+
+    def labels
+      @labels ||= RestfulModelCollection.new(Label, self)
+    end
+
+    def account
+      path = self.url_for_path("/account")
+
+      RestClient.get(path, {}) do |response,request,result|
+        json = Inbox.interpret_response(result, response, {:expected_class => Object})
+        model = APIAccount.new(self)
+        model.inflate(json)
+        model
+      end
+    end
+
+    def get_cursor(timestamp)
+      # Get the cursor corresponding to a specific timestamp.
+      path = self.url_for_path("/delta/generate_cursor")
+      data = { :start => timestamp }
+
+      cursor = nil
+
+      RestClient.post(path, data.to_json, :content_type => :json) do |response,request,result|
+        json = Inbox.interpret_response(result, response, {:expected_class => Object})
+        cursor = json["cursor"]
+      end
+
+      cursor
+    end
+
+    OBJECTS_TABLE = {
+      "account" => Inbox::Account,
+      "calendar" => Inbox::Calendar,
+      "draft" => Inbox::Draft,
+      "thread" => Inbox::Thread,
+      "contact" => Inbox::Contact,
+      "event" => Inbox::Event,
+      "file" => Inbox::File,
+      "message" => Inbox::Message,
+      "tag" => Inbox::Tag,
+      "folder" => Inbox::Folder,
+      "label" => Inbox::Label,
+    }
+
+    def _build_exclude_types(exclude_types)
+      exclude_string = "&exclude_types="
+
+      exclude_types.each do |value|
+        count = 0
+        if OBJECTS_TABLE.has_value?(value)
+          param_name = OBJECTS_TABLE.key(value)
+          exclude_string += "#{param_name},"
+        end
+      end
+
+      exclude_string = exclude_string[0..-2]
+    end
+
+    def deltas(cursor, exclude_types=[])
+      raise 'Please provide a block for receiving the delta objects' if !block_given?
+      exclude_string = ""
+
+      if exclude_types.any?
+        exclude_string = _build_exclude_types(exclude_types)
+      end
+
+      # loop and yield deltas until we've come to the end.
+      loop do
+        path = self.url_for_path("/delta?cursor=#{cursor}#{exclude_string}")
+        json = nil
+
+        RestClient.get(path) do |response,request,result|
+          json = Inbox.interpret_response(result, response, {:expected_class => Object})
+        end
+
+        start_cursor = json["cursor_start"]
+        end_cursor = json["cursor_end"]
+
+        json["deltas"].each do |delta|
+          if not OBJECTS_TABLE.has_key?(delta['object'])
+            next
+          end
+
+          cls = OBJECTS_TABLE[delta['object']]
+          obj = cls.new(self)
+
+          case delta["event"]
+          when 'create', 'modify'
+              obj.inflate(delta['attributes'])
+              obj.cursor = delta["cursor"]
+              yield delta["event"], obj
+          when 'delete'
+              obj.id = delta["id"]
+              obj.cursor = delta["cursor"]
+              yield delta["event"], obj
+          end
+        end
+
+        break if start_cursor == end_cursor
+        cursor = end_cursor
+      end
+    end
+
+    def delta_stream(cursor, exclude_types=[], timeout=0)
+      raise 'Please provide a block for receiving the delta objects' if !block_given?
+
+      exclude_string = ""
+
+      if exclude_types.any?
+        exclude_string = _build_exclude_types(exclude_types)
+      end
+
+      # loop and yield deltas indefinitely.
+      path = self.url_for_path("/delta/streaming?cursor=#{cursor}#{exclude_string}")
+
+      parser = Yajl::Parser.new(:symbolize_keys => false)
+      parser.on_parse_complete = proc do |data|
+        delta = Inbox.interpret_response(OpenStruct.new(:code => '200'), data, {:expected_class => Object, :result_parsed => true})
+
+        if not OBJECTS_TABLE.has_key?(delta['object'])
+          next
+        end
+
+        cls = OBJECTS_TABLE[delta['object']]
+        obj = cls.new(self)
+
+        case delta["event"]
+          when 'create', 'modify'
+            obj.inflate(delta['attributes'])
+            obj.cursor = delta["cursor"]
+            yield delta["event"], obj
+          when 'delete'
+            obj.id = delta["id"]
+            obj.cursor = delta["cursor"]
+            yield delta["event"], obj
+        end
+      end
+
+      EventMachine.run do
+        http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
+        http.stream do |chunk|
+          parser << chunk
+        end
+        http.errback do
+          raise UnexpectedResponse.new http.error
+        end
+      end
+    end
+
+
   end
 end
 
