@@ -93,6 +93,11 @@ elsif account.provider == 'gmail'
 end
 
 cursor = inbox.get_cursor(0)
+color_print "Do you see a cursor (Y/N)? #{cursor}"
+
+cursor = inbox.latest_cursor
+color_print "Do you see another cursor (Y/N)? #{cursor}"
+
 puts "Getting events from the delta stream (this hangs eventually, feel free to Ctrl-C)"
 inbox.delta_stream(cursor, exclude=[Inbox::Tag]) do |event, obj|
   if obj.is_a?(Inbox::Event)

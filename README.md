@@ -55,7 +55,7 @@ Generally, you should store your App ID and Secret into environment variables to
 
 ### Authentication
 
-The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nylas, visit the [Developer Documentation](https://www.nylas.com/docs/knowledgebase#authentication).
+The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nylas, visit the [Developer Documentation](https://nylas.com/docs/platform#authentication).
 
 **Step 1: Redirect the user to Nylas:**
 
@@ -247,7 +247,7 @@ Each of the primary collections (contacts, messages, etc.) behave the same way a
 messages = nylas.messages.where(:to => 'ben@nylas.com`).all
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://www.nylas.com/docs/api#filters).
+The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
 
 ### Getting the raw contents of a message
 
@@ -307,14 +307,13 @@ emailed_invite.rsvp!(status='yes', comment='I will come')
 
 ## Using the Delta sync API
 
-The delta sync API allows fetching all the changes that occured since a specified time. [Read this](https://nylas.com/docs/api#sync-protocol) for more details about the API.
+The delta sync API allows fetching all the changes that occured after a specific time. [Read this](https://nylas.com/docs/platform/#deltas) for more details about the API.
 
 ````ruby
-# Get all the messages starting from timestamp
-#
-# we first need to get a cursor object a cursor is simply the id of
-# an individual change.
-cursor = nylas.get_cursor(1407543195)
+# Get an API cursor. Cursors are API objects identifying an individual change.
+# The latest cursor is the id of the latest change which was applied
+# to an API object (e.g: a message got read, an event got created, etc.)
+cursor = nylas.latest_cursor
 
 last_cursor = nil
 nylas.deltas(cursor) do |event, object|
@@ -343,11 +342,7 @@ save_to_db(last_cursor)
 The streaming API will receive deltas in real time, without needing to repeatedly poll. It uses EventMachine for async IO.
 
 ````ruby
-# Get all the messages starting from timestamp
-#
-# we first need to get a cursor object a cursor is simply the id of
-# an individual change.
-cursor = nylas.get_cursor(1407543195)
+cursor = nylas.latest_cursor
 
 last_cursor = nil
 nylas.delta_stream(cursor) do |event, object|
