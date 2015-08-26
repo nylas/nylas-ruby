@@ -17,9 +17,7 @@ end
 print APP_ID
 
 ENDPOINTS = [
-  {:api_path => "https://api.inboxapp.com", :login_domain => "www.inboxapp.com"},
-  {:api_path => "https://api.nilas.com", :login_domain => "www.nilas.com"},
-  {:api_path => "https://api.nylas.com", :login_domain => "www.nylas.com"},
+  {:api_path => "https://api.nylas.com", :login_domain => "api.nylas.com"},
 ]
 
 class App < Sinatra::Base
