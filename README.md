@@ -402,11 +402,19 @@ Code | Error Type | Description
 
 ## Open-Source Sync Engine
 
-The [Nylas Sync Engine](http://github.com/nylas/sync-engine) is open source, and you can also use the Ruby gem with the open source API. Since the open source API provides no authentication or security, connecting to it is simple. When you instantiate the Nylas object, provide `nil` for the App ID, App Secret, and API Token, and pass the fully-qualified address to your copy of the sync engine:
+The [Nylas Sync Engine](http://github.com/nylas/sync-engine) is open source, and you can also use the Ruby gem with the open source API. Since the open source API provides no authentication or security, connecting to it is simple. When you instantiate the Nylas object, provide `nil` for the App ID and App Secret, and set the API Token to the id of the account you're going to access. Finally, don't forget to pass the fully-qualified address to your copy of the sync engine:
 
 ```ruby
 require 'nylas'
 nylas = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
+
+# Get the id of the first account -- this is the access token we're
+# going to use.
+account_id = nylas.accounts.first.id
+
+# Display the contents of the first message for the first account
+nylas = Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/')
+puts nylas.messages.first.contents
 ```
 
 

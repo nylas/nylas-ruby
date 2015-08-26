@@ -14,5 +14,8 @@ module Inbox
     parameter :organization_unit
     parameter :provider
 
+    def self.collection_name
+      "accounts"
+    end
   end
 end

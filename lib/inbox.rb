@@ -139,15 +139,7 @@ module Inbox
       end
     end
 
-    # Billing Methods
-
-    def accounts
-      @accounts ||= ManagementModelCollection.new(Account, self)
-      @accounts
-    end
-
     # API Methods
-
     def threads
       @threads ||= RestfulModelCollection.new(Thread, self)
     end
@@ -197,6 +189,18 @@ module Inbox
         model.inflate(json)
         model
       end
+    end
+
+    def using_hosted_api?
+       return !@app_id.nil?
+    end
+
+    def accounts
+          if self.using_hosted_api?
+               @accounts ||= ManagementModelCollection.new(Account, self)
+          else
+               @accounts ||= RestfulModelCollection.new(APIAccount, self)
+          end
     end
 
     def get_cursor(timestamp)
@@ -348,8 +352,6 @@ module Inbox
         end
       end
     end
-
-
   end
 end
 
