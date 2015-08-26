@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "inbox"
-  s.version = "0.18.2"
+  s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees"]
-  s.date = "2015-08-05"
+  s.date = "2015-08-26"
   s.description = "Gem for interacting with the Nylas API."
   s.email = "ben@nylas.com"
   s.extra_rdoc_files = [
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     "lib/account.rb",
+    "lib/api_account.rb",
     "lib/api_thread.rb",
     "lib/calendar.rb",
     "lib/contact.rb",
@@ -28,7 +29,6 @@ Gem::Specification.new do |s|
     "lib/inbox.rb",
     "lib/label.rb",
     "lib/message.rb",
-    "lib/namespace.rb",
     "lib/nylas.rb",
     "lib/parameters.rb",
     "lib/restful_model.rb",
