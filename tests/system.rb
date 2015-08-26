@@ -36,7 +36,7 @@ Could you confirm that the following API functions didn't break?
 
 
 
-inbox = Inbox::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api-staging-experimental.nylas.com')
+inbox = Inbox::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api-staging.nylas.com')
 
 puts "Thread count: #{inbox.threads.count}"
 color_print "Did you see a thread count? (Y/N)"
