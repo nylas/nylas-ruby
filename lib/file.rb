@@ -5,6 +5,7 @@ module Inbox
 
     parameter :size
     parameter :filename
+    parameter :content_id
     parameter :content_type
     parameter :is_embedded
     parameter :message_id
