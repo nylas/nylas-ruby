@@ -16,7 +16,7 @@ describe Inbox::Draft do
     it "does save all the fields of the draft object and only sends the required JSON" do
 
       stub_request(:post, "https://#{@access_token}:@api.nylas.com/drafts/").with(
-        :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null}',).to_return(:status => 200,
+        :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}',).to_return(:status => 200,
             :body => File.read('spec/fixtures/draft_save.txt'),
             :headers => {"Content-Type" => "application/json"})
 
@@ -42,7 +42,7 @@ describe Inbox::Draft do
   describe "#send!" do
     it "sends all the JSON fields when sending directly" do
       stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send").
-         with(:body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null}').to_return(:status => 200,
+         with(:body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}').to_return(:status => 200,
                  :body => File.read('spec/fixtures/send_endpoint.txt'),
                  :headers => {"Content-Type" => "application/json"})
 

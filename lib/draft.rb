@@ -6,9 +6,11 @@ module Inbox
     parameter :thread_id
     parameter :version
     parameter :reply_to_message_id
+    parameter :file_ids
 
     def attach(file)
       file.save! unless file.id
+      @file_ids ||= []
       @file_ids.push(file.id)
     end
 
