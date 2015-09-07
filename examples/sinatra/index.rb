@@ -40,18 +40,16 @@ get '/' do
     # Redirect to login if session doesn't have an access token
     redirect to(login) unless session[:nylas_token]
 
-    # Get the first namespace
     nylas = Nylas::API.new(APP_ID, APP_SECRET, session[:nylas_token])
-    namespace = nylas.namespaces.first
 
-    # Get the first five threads in the namespace
+    # Get the first five threads for the account.
     recent_emails = []
-    namespace.threads.where(:tag => 'unread').range(0,5).each do |thread|
+    nylas.threads.where(:tag => 'unread').range(0,5).each do |thread|
       recent_emails.push(thread.subject)
     end
 
     # List messages on the first thread
-    body = "Hello #{namespace.name}, here are your last 5 emails:\n<br><br>"
+    body = "Hello #{nylas.account.name}, here are your last 5 emails:\n<br><br>"
     body += "#{recent_emails.join('<br>')}"
 
     body
