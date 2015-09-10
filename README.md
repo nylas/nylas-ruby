@@ -206,6 +206,9 @@ end
 # Create a new file
 file = nylas.files.build(:file => File.new("./public/favicon.ico", 'rb'))
 file.save!
+
+# Download a file's contents
+content = file.download
 ```
 
 ### Working with Labels/Folders
