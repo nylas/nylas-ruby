@@ -59,5 +59,19 @@ describe Inbox::Message do
       expect(msg.raw).to eq('Raw body')
       expect(a_request(:get, url)).to have_been_made.once
     end
+
+    it "raises errors" do
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/"
+      stub_request(:get, url).
+       with(:headers => {'Accept'=>'message/rfc822'}).
+         to_return(:status => 404, :body => "Raw body", :headers => {})
+
+      msg = Inbox::Message.new(@inbox, nil)
+      msg.subject = 'Test message'
+      msg.id = 2
+      expect{ msg.raw }.to raise_error
+      expect(a_request(:get, url)).to have_been_made.once
+    end
+
   end
 end
