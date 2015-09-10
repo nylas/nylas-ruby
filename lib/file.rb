@@ -27,6 +27,14 @@ module Inbox
       self
     end
 
+    def download
+      download_url = self.url('download')
+      ::RestClient.get(download_url) do |response, request, result|
+        Inbox.interpret_http_status(result)
+        response
+      end
+    end
+
   end
 end
 

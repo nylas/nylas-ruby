@@ -60,7 +60,7 @@ describe Inbox::Message do
       expect(a_request(:get, url)).to have_been_made.once
     end
 
-    it "raises errors" do
+    it "raises an error when getting an API error" do
       url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/"
       stub_request(:get, url).
        with(:headers => {'Accept'=>'message/rfc822'}).
@@ -72,6 +72,5 @@ describe Inbox::Message do
       expect{ msg.raw }.to raise_error
       expect(a_request(:get, url)).to have_been_made.once
     end
-
   end
 end
