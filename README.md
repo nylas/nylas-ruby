@@ -282,6 +282,14 @@ draft.save!
 
 # Send the draft.
 draft.send!
+
+# Sometimes sending isn't possible --- handle the exception and
+# print the error message returned by the SMTP server:
+begin
+    draft.send!
+rescue Nylas::APIError => e
+    puts "Failed with error: #{e.message}"
+end
 ```
 
 ### Creating an event
