@@ -1,4 +1,3 @@
-::ENV['RACK_ENV'] = 'test'
 require 'event'
 require 'webmock/rspec'
 

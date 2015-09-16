@@ -1,4 +1,3 @@
-::ENV['RACK_ENV'] = 'test'
 require 'draft'
 
 describe Inbox::Draft do

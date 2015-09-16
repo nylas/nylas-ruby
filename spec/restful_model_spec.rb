@@ -1,4 +1,3 @@
-::ENV['RACK_ENV'] = 'test'
 
 describe 'RestfulModel' do
   before (:each) do

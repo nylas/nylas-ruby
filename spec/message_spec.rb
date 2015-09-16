@@ -1,4 +1,3 @@
-::ENV['RACK_ENV'] = 'test'
 require 'webmock/rspec'
 require 'message'
 require 'folder'

@@ -1,4 +1,3 @@
-::ENV['RACK_ENV'] = 'test'
 
 describe 'Inbox' do
   before (:each) do
