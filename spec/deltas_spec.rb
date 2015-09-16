@@ -1,7 +1,6 @@
 ::ENV['RACK_ENV'] = 'test'
 $LOAD_PATH << './lib'
 require File.join(File.dirname(__FILE__), 'spec_helper')
-require 'namespace'
 require 'event'
 
 describe 'Delta sync API wrapper' do
