@@ -69,7 +69,7 @@ describe Inbox::Message do
       msg = Inbox::Message.new(@inbox, nil)
       msg.subject = 'Test message'
       msg.id = 2
-      expect{ msg.raw }.to raise_error
+      expect{ msg.raw }.to raise_error(Inbox::ResourceNotFound)
       expect(a_request(:get, url)).to have_been_made.once
     end
   end

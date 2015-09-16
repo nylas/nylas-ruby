@@ -30,7 +30,7 @@ describe Inbox::File do
 
       file = Inbox::File.new(@inbox, nil)
       file.id = 2
-      expect{ file.download }.to raise_error
+      expect{ file.download }.to raise_error(Inbox::ResourceNotFound)
       expect(a_request(:get, url)).to have_been_made.once
     end
 
