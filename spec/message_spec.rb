@@ -1,4 +1,3 @@
-require 'webmock/rspec'
 require 'message'
 require 'folder'
 

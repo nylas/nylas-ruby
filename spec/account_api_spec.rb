@@ -1,5 +1,4 @@
 require 'event'
-require 'webmock/rspec'
 
 describe Inbox::Event do
   before (:each) do

@@ -1,4 +1,3 @@
-require 'webmock/rspec'
 require 'file'
 require 'folder'
 
