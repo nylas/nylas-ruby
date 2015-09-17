@@ -1,8 +1,4 @@
-::ENV['RACK_ENV'] = 'test'
-$LOAD_PATH << './lib'
-require File.join(File.dirname(__FILE__), 'spec_helper')
 require 'event'
-require 'webmock/rspec'
 
 describe Inbox::Event do
   before (:each) do
