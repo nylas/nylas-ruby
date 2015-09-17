@@ -289,6 +289,9 @@ begin
     draft.send!
 rescue Nylas::APIError => e
     puts "Failed with error: #{e.message}"
+    if not e.server_error.nil?
+        puts "The SMTP server replied: #{e.server_error}"
+    end
 end
 ```
 

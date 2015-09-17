@@ -31,9 +31,12 @@ module Inbox
   class UnexpectedResponse < StandardError; end
   class APIError < StandardError
     attr_accessor :error_type
-    def initialize(type, error)
+    attr_accessor :server_error
+
+    def initialize(type, error, server_error = nil)
       super(error)
       self.error_type = type
+      self.server_error = server_error
     end
   end
   class InvalidRequest < APIError; end
@@ -47,6 +50,26 @@ module Inbox
     raise AccessDenied.new if result.code.to_i == 403
   end
 
+  def self.http_code_to_exception(http_code)
+      if http_code == 400
+        exc = InvalidRequest
+      elsif http_code == 402
+        exc = MessageRejected
+      elsif http_code == 403
+        exc = AccessDenied
+      elsif http_code == 404
+        exc = ResourceNotFound
+      elsif http_code == 429
+        exc = SendingQuotaExceeded
+      elsif http_code == 503
+        exc = ServiceUnavailable
+      else
+        exc = APIError
+      end
+
+      exc
+  end
+
   def self.interpret_response(result, result_content, options = {})
     # Handle HTTP errors
     Inbox.interpret_http_status(result)
@@ -55,17 +78,7 @@ module Inbox
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
     json = options[:result_parsed]? result_content : JSON.parse(result_content)
     if json.is_a?(Hash) && (json['type'] == 'api_error' or json['type'] == 'invalid_request_error')
-      if result.code.to_i == 400
-        exc = InvalidRequest
-      elsif result.code.to_i == 402
-        exc = MessageRejected
-      elsif result.code.to_i == 429
-        exc = SendingQuotaExceeded
-      elsif result.code.to_i == 503
-        exc = ServiceUnavailable
-      else
-        exc = APIError
-      end
+      exc = Inbox.http_code_to_exception(result.code.to_i)
       raise exc.new(json['type'], json['message'])
     end
     raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
