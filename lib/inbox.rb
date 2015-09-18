@@ -261,27 +261,9 @@ module Inbox
       "message" => Inbox::ExpandedMessage,
     }
 
-    def _build_exclude_types(exclude_types)
-      exclude_string = "&exclude_types="
-
-      exclude_types.each do |value|
-        count = 0
-        if OBJECTS_TABLE.has_value?(value)
-          param_name = OBJECTS_TABLE.key(value)
-          exclude_string += "#{param_name},"
-        end
-      end
-
-      exclude_string = exclude_string[0..-2]
-    end
-
     def deltas(cursor, exclude_types=[], expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = build_exclude_types(exclude_types)
 
       # loop and yield deltas until we've come to the end.
       loop do
@@ -330,12 +312,7 @@ module Inbox
 
     def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
-
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = build_exclude_types(exclude_types)
 
       # loop and yield deltas indefinitely.
       path = self.url_for_path("/delta/streaming?cursor=#{cursor}#{exclude_string}")
@@ -380,6 +357,16 @@ module Inbox
         end
       end
     end
+
+    private
+
+    def build_exclude_types(exclude_types)
+      return '' unless exclude_types.any?
+
+      filters = exclude_types.map { |type| OBJECTS_TABLE.key(type) }.compact.join(',')
+      "&exclude_types=#{filters}"
+    end
+
   end
 end
 

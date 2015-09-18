@@ -51,6 +51,16 @@ describe 'Delta sync API wrapper' do
     expect(a_request(:get, @nth_cursor_url)).to have_been_made.once
     expect(count).to eq(3)
   end
+
+  it 'will filter deltas based on the specified exclude types' do
+    stub_request(:get, 'https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=a9vtneydekzye7uwfumdd4iu3&exclude_types=calendar,event,tag').
+      to_return(status: 200, body: File.read('spec/fixtures/second_cursor.txt'), headers: {'Content-Type' => 'application/json'})
+
+    filters = [Inbox::Calendar, Inbox::Event, Inbox::Tag, 'FakeFilter']
+    @inbox.deltas('a9vtneydekzye7uwfumdd4iu3', filters) do |event, object|
+      expect(object.cursor).to_not be_nil
+    end
+  end
 end
 
 describe 'Delta sync streaming API wrapper' do
