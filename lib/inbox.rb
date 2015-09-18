@@ -90,6 +90,20 @@ module Inbox
     attr_reader :app_id
     attr_reader :app_secret
 
+    OBJECTS_TABLE = {
+      'account' => Inbox::Account,
+      'calendar' => Inbox::Calendar,
+      'contact' => Inbox::Contact,
+      'draft' => Inbox::Draft,
+      'event' => Inbox::Event,
+      'file' => Inbox::File,
+      'folder' => Inbox::Folder,
+      'label' => Inbox::Label,
+      'message' => Inbox::Message,
+      'tag' => Inbox::Tag,
+      'thread' => Inbox::Thread,
+    }
+
     def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.nylas.com',
                    service_domain = 'api.nylas.com')
       raise "When overriding the Inbox API server address, you must include https://" unless api_server.include?('://')
@@ -240,20 +254,6 @@ module Inbox
       cursor
     end
 
-    OBJECTS_TABLE = {
-      "account" => Inbox::Account,
-      "calendar" => Inbox::Calendar,
-      "draft" => Inbox::Draft,
-      "thread" => Inbox::Thread,
-      "contact" => Inbox::Contact,
-      "event" => Inbox::Event,
-      "file" => Inbox::File,
-      "message" => Inbox::Message,
-      "tag" => Inbox::Tag,
-      "folder" => Inbox::Folder,
-      "label" => Inbox::Label,
-    }
-
     # It's possible to ask the API to expand objects.
     # In this case, we do the right thing and return
     # an expanded object.
@@ -361,12 +361,8 @@ module Inbox
     private
 
     def build_exclude_types(exclude_types)
-      return '' unless exclude_types.any?
-
-      filters = exclude_types.map { |type| OBJECTS_TABLE.key(type) }.compact.join(',')
-      "&exclude_types=#{filters}"
+      DeltaFilters.build_exclude_types(exclude_types)
     end
-
   end
 end
 
