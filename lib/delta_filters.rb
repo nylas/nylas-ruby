@@ -7,7 +7,7 @@ module Inbox
       new.build_exclude_types(object_types)
     end
 
-    def initialize(filter_map: API::OBJECTS_TABLE)
+    def initialize(filter_map=API::OBJECTS_TABLE)
       @filter_map = filter_map
     end
 
