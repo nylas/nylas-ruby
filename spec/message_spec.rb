@@ -69,4 +69,18 @@ describe Inbox::Message do
       expect(a_request(:get, url)).to have_been_made.once
     end
   end
+
+  describe "#expanded" do
+    it "requests the expanded version of the message" do
+      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/?view=expanded"
+      stub_request(:get, url).to_return(:status => 200,
+                                        :body => File.read('spec/fixtures/expanded_message.txt'), :headers => {})
+
+      msg = Inbox::Message.new(@inbox, nil)
+      msg.id = 2
+      expanded = msg.expanded
+      expect(expanded.message_id).to eq('<55afa28c.c136460a.49ae.ffff80fd@mx.google.com>')
+      expect(expanded.in_reply_to).to be_nil
+    end
+  end
 end

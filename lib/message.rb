@@ -79,5 +79,32 @@ module Inbox
         response
       }
     end
+
+    def expanded
+      expanded_url = url(action='?view=expanded')
+
+      RestClient.get(expanded_url){ |response,request,result|
+        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        expanded_message = Inbox::ExpandedMessage.new(@_api)
+        expanded_message.inflate(json)
+        expanded_message
+      }
+
+    end
+  end
+
+  class ExpandedMessage < Message
+    # override inflate because expanded messages have some special parameters
+    # like In-Reply-To and Message-Id.
+    attr_reader :message_id
+    attr_reader :in_reply_to
+    attr_reader :references
+
+    def inflate(json)
+      super
+      @message_id = json['headers']['Message-Id']
+      @in_reply_to = json['headers']['In-Reply-To']
+      @references = json['headers']['References']
+    end
   end
 end

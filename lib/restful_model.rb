@@ -10,6 +10,7 @@ module Inbox
     parameter :account_id
     parameter :cursor  # Only used by the delta sync API
     time_attr_accessor :created_at
+    attr_reader :raw_json
 
     def self.collection_name
       "#{self.to_s.downcase}s".split('::').last
@@ -26,6 +27,7 @@ module Inbox
     end
 
     def inflate(json)
+      @raw_json = json
       parameters.each do |property_name|
         send("#{property_name}=", json[property_name]) if json.has_key?(property_name)
       end

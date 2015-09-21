@@ -105,10 +105,10 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
   # Query the status of every account linked to the app
   nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
   accounts = nylas.accounts
-  accounts.each { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial, trial_expires, billing_state and namespace_id. See lib/account.rb for more details.
+  accounts.each { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial, trial_expires and billing_state. See lib/account.rb for more details.
 ```
 
-### Fetching Namespaces
+### Fetching Accounts
 
 ```ruby
 nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
@@ -252,6 +252,19 @@ messages = nylas.messages.where(:to => 'ben@nylas.com`).all
 
 The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
 
+### Getting a message's Message-Id, References and In-Reply-To headers
+
+If you've building your own threading solution, you'll probably need access to a handful of headers like
+`Message-Id`, `In-Reply-To` and `References`. Here's how to access them:
+
+```ruby
+msg = nylas.messages.first
+expanded_message = msg.expanded
+puts expanded_message.message_id
+puts expanded_message.references
+puts expanded_message.in_reply_to
+```
+
 ### Getting the raw contents of a message
 
 It's possible to access the unprocessed contents of a message using the raw method:
@@ -393,6 +406,22 @@ if event == 'create' or event == 'modify'
 end
 ```
 
+### Expand Messages from the Delta stream
+
+It's possible to ask the Deltas and delta stream API to return [expanded messages](https://nylas.com/docs/platform#expanded_message_view) directly:
+````ruby
+nylas.deltas(cursor, exclude=[Nylas::Contact,
+                              Nylas::Event,
+                              Nylas::File,
+                              Nylas::Tag,
+                              Nylas::Thread], expanded_view=true) do |event, object|
+if event == 'create' or event == 'modify'
+  if obj.is_a?(Inbox::Message)
+      puts obj.subject
+      puts obj.message_id
+  end
+end
+```
 
 ### Handling Errors
 The Nylas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.

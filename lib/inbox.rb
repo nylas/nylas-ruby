@@ -261,6 +261,13 @@ module Inbox
       "label" => Inbox::Label,
     }
 
+    # It's possible to ask the API to expand objects.
+    # In this case, we do the right thing and return
+    # an expanded object.
+    EXPANDED_OBJECTS_TABLE = {
+      "message" => Inbox::ExpandedMessage,
+    }
+
     def _build_exclude_types(exclude_types)
       exclude_string = "&exclude_types="
 
@@ -275,7 +282,7 @@ module Inbox
       exclude_string = exclude_string[0..-2]
     end
 
-    def deltas(cursor, exclude_types=[])
+    def deltas(cursor, exclude_types=[], expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
       exclude_string = ""
 
@@ -286,6 +293,10 @@ module Inbox
       # loop and yield deltas until we've come to the end.
       loop do
         path = self.url_for_path("/delta?cursor=#{cursor}#{exclude_string}")
+        if expanded_view
+          path += '&view=expanded'
+        end
+
         json = nil
 
         RestClient.get(path) do |response,request,result|
@@ -301,6 +312,10 @@ module Inbox
           end
 
           cls = OBJECTS_TABLE[delta['object']]
+          if EXPANDED_OBJECTS_TABLE.has_key?(delta['object']) and expanded_view
+            cls = EXPANDED_OBJECTS_TABLE[delta['object']]
+          end
+
           obj = cls.new(self)
 
           case delta["event"]
@@ -320,7 +335,7 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, exclude_types=[], timeout=0)
+    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
 
       exclude_string = ""
@@ -331,6 +346,9 @@ module Inbox
 
       # loop and yield deltas indefinitely.
       path = self.url_for_path("/delta/streaming?cursor=#{cursor}#{exclude_string}")
+      if expanded_view
+        path += '&view=expanded'
+      end
 
       parser = Yajl::Parser.new(:symbolize_keys => false)
       parser.on_parse_complete = proc do |data|
@@ -341,6 +359,10 @@ module Inbox
         end
 
         cls = OBJECTS_TABLE[delta['object']]
+        if EXPANDED_OBJECTS_TABLE.has_key?(delta['object']) and expanded_view
+          cls = EXPANDED_OBJECTS_TABLE[delta['object']]
+        end
+
         obj = cls.new(self)
 
         case delta["event"]
