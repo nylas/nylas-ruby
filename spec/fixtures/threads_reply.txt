@@ -1,0 +1,127 @@
+[
+  {
+    "account_id": "7bo9ndmuepsmua0ow8e6lvrd5",
+    "draft_ids": [],
+    "first_message_timestamp": 1440535113,
+    "has_attachments": false,
+    "id": "320yc9ie5rungx75j139dsgao",
+    "labels": [
+      {
+        "display_name": "All Mail",
+        "id": "2zaqdqae4vx7hgfs9l1s7hq3e",
+        "name": "all"
+      },
+      {
+        "display_name": "Inbox",
+        "id": "3zpu817mlap83dxyv4cbc9wxf",
+        "name": "inbox"
+      },
+      {
+        "display_name": "Sent Mail",
+        "id": "4hfq7nxrzfslzcdfhv2f8itc5",
+        "name": "sent"
+      }
+    ],
+    "last_message_received_timestamp": 1440621402,
+    "last_message_timestamp": 1440621402,
+    "message_ids": [
+      "dj6dzvkdanz2jijfn6cisniz2",
+      "cpmezga2syd49ev5jnxdsxl5f",
+      "d42pxkvc9w371l7ywee6z146s"
+    ],
+    "object": "thread",
+    "participants": [
+      {
+        "email": "wally@example.com",
+        "name": "Wally Worker"
+      },
+      {
+        "email": "bob@example.com",
+        "name": "Bob Everyperson"
+      },
+      {
+        "email": "alice@example.com",
+        "name": "Alice Anyperson"
+      }
+    ],
+    "snippet": "Looks like Gmail pushes folks to the `cc:` line? On Wed, Aug 26, 2015 at 4:33 PM, Wally Worker <wally@example.com> wrote: 👍. He’s now the 1st person on the to: line, and Alice is the 2nd",
+    "starred": false,
+    "subject": "The contact is 2nd on the \"to\" list",
+    "tags": [
+      {
+        "id": "all",
+        "name": "all"
+      },
+      {
+        "id": "inbox",
+        "name": "inbox"
+      },
+      {
+        "id": "sent",
+        "name": "sent"
+      }
+    ],
+    "unread": false,
+    "version": 8
+  },
+  {
+    "account_id": "7bo9ndmuepsmua0ow8e6lvrd5",
+    "draft_ids": [],
+    "first_message_timestamp": 1440534651,
+    "has_attachments": false,
+    "id": "vxz6vx6rm2imw0mow9rc1prk",
+    "labels": [
+      {
+        "display_name": "Sent Mail",
+        "id": "4hfq7nxrzfslzcdfhv2f8itc5",
+        "name": "sent"
+      },
+      {
+        "display_name": "All Mail",
+        "id": "2zaqdqae4vx7hgfs9l1s7hq3e",
+        "name": "all"
+      },
+      {
+        "display_name": "Inbox",
+        "id": "3zpu817mlap83dxyv4cbc9wxf",
+        "name": "inbox"
+      }
+    ],
+    "last_message_received_timestamp": 1440534651,
+    "last_message_timestamp": 1440535038,
+    "message_ids": [
+      "6ojai756lx8jh5ja6v72tdgr2",
+      "ci8qb3vbmnculv8gqia3z51bf"
+    ],
+    "object": "thread",
+    "participants": [
+      {
+        "email": "wally@example.com",
+        "name": "Wally Worker"
+      },
+      {
+        "email": "alice@example.com",
+        "name": "Alice Anyperson"
+      }
+    ],
+    "snippet": "Grr! On Tue, Aug 25, 2015 at 4:30 PM, Wally Worker <wally@example.com> wrote: Hi Alice, I’m going to skip out on the team dinner. I guess that means only you and Wally are left. Good luc",
+    "starred": false,
+    "subject": "Skipping the team dinner...",
+    "tags": [
+      {
+        "id": "sent",
+        "name": "sent"
+      },
+      {
+        "id": "all",
+        "name": "all"
+      },
+      {
+        "id": "inbox",
+        "name": "inbox"
+      }
+    ],
+    "unread": false,
+    "version": 2
+  }
+]
