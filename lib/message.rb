@@ -71,6 +71,10 @@ module Inbox
       @files ||= RestfulModelCollection.new(File, @_api, {:message_id=>@id})
     end
 
+    def files?
+      !@raw_json['files'].empty?
+    end
+
     def raw
       model = nil
       collection = RestfulModelCollection.new(Message, @_api, {:message_id=>@id})

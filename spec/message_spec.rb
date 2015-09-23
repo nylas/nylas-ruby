@@ -83,4 +83,18 @@ describe Inbox::Message do
       expect(expanded.in_reply_to).to be_nil
     end
   end
+
+  describe "#files?" do
+    it "returns false when the message has no attached files" do
+      msg = Inbox::Message.new(@inbox)
+      msg.inflate({'files' => []})
+      expect(msg.files?).to be false
+    end
+
+    it "returns true when the message has attached files" do
+      msg = Inbox::Message.new(@inbox)
+      msg.inflate({'files' => ['1', '2']})
+      expect(msg.files?).to be true
+    end
+  end
 end

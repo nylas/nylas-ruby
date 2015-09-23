@@ -247,7 +247,20 @@ fld.save!
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
 ```ruby
-messages = nylas.messages.where(:to => 'ben@nylas.com`).all
+
+# Let's get all the attachments Ben sent me.
+messages = nylas.messages.where(:to => 'ben@nylas.com`)
+
+messages.each do |msg|
+    puts msg.subject
+
+    if msg.files? # => returns true if the message has attachments.
+        # Download them all.
+        msg.files.each |file| do
+            puts file.download
+        end
+    end
+end
 ```
 
 The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
