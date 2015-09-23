@@ -50,29 +50,22 @@ module Inbox
     raise AccessDenied.new if result.code.to_i == 403
   end
 
-  def self.http_code_to_exception(http_code)
-      if http_code == 400
-        exc = InvalidRequest
-      elsif http_code == 402
-        exc = MessageRejected
-      elsif http_code == 403
-        exc = AccessDenied
-      elsif http_code == 404
-        exc = ResourceNotFound
-      elsif http_code == 429
-        exc = SendingQuotaExceeded
-      elsif http_code == 503
-        exc = ServiceUnavailable
-      else
-        exc = APIError
-      end
+  HTTP_CODE_TO_EXCEPTIONS = {
+    400 => InvalidRequest,
+    402 => MessageRejected,
+    403 => AccessDenied,
+    404 => ResourceNotFound,
+    429 => SendingQuotaExceeded,
+    503 => ServiceUnavailable
+  }.freeze
 
-      exc
+  def self.http_code_to_exception(http_code)
+    HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
   end
 
   def self.interpret_response(result, result_content, options = {})
     # Handle HTTP errors
-    Inbox.interpret_http_status(result)
+    self.interpret_http_status(result)
 
     # Handle content expectation errors
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
