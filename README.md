@@ -278,9 +278,9 @@ This allows you to do leverage all that Ruby's `Enumerable` has to offer.
 For example, this is the previous example rewritten to use an `Enumerator`:
 
 ```ruby
-messages_with_files = messages.each.select { |m| m.files? }
-to_download = messages_with_files.flat_map { |m| puts m.files }
-to_download.map { |file| file.download }
+messages_with_files = messages.each.select(&:files?)
+to_download = messages_with_files.flat_map(&:files)
+to_download.map { |file| puts file.download }
 ```
 
 #### Accessing an object's raw JSON
