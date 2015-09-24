@@ -13,6 +13,8 @@ module Inbox
     end
 
     def each
+      return enum_for(:each) unless block_given?
+
       offset = 0
       chunk_size = 100
       finished = false
