@@ -192,6 +192,11 @@ thread.save!
 thread.messages.each do |message|
   puts message.subject
 end
+
+# List all messages sent by Ben where Helena was cc'ed:
+thread.messages.where(:from => 'ben@nylas.com').each.select { |t|
+  t.cc.any? {|p| p['email'] == 'helena@nylas.com' }
+}
 ```
 
 
@@ -244,10 +249,11 @@ fld.save!
 
 ### Working with Messages, Contacts, etc.
 
+#### Filtering
+
 Each of the primary collections (contacts, messages, etc.) behave the same way as `threads`. For example, finding messages with a filter is similar to finding threads:
 
 ```ruby
-
 # Let's get all the attachments Ben sent me.
 messages = nylas.messages.where(:to => 'ben@nylas.com`)
 
@@ -265,7 +271,35 @@ end
 
 The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
 
-### Getting a message's Message-Id, References and In-Reply-To headers
+#### Enumerable methods
+
+Every object API object has an `each` method which returns an `Enumerable` if you don't pass it a block. It allows you to do some pretty nifty
+filtering. For example, this is the previous example rewritten to use Enumerable:
+
+```
+to_download = messages.each.select { |m|
+  m.files?
+}
+
+to_download.map { |file| puts file.download }
+```
+
+#### Accessing an object's raw JSON
+
+Sometimes you really need to access the JSON object the API returned. You can use the `#raw_json` property for this:
+
+```ruby
+>>> puts contact.raw_json
+{
+    "name": "Ben Bitdiddle",
+    "email": "ben.bitdiddle@mit.edu",
+    "id": "8pjz8oj4hkfwgtb46furlh77",
+    "account_id": "aqau8ta87ndh6cwv0o3ajfoo2",
+    "object": "contact"
+}
+```
+
+#### Getting a message's Message-Id, References and In-Reply-To headers
 
 If you've building your own threading solution, you'll probably need access to a handful of headers like
 `Message-Id`, `In-Reply-To` and `References`. Here's how to access them:
@@ -278,7 +312,7 @@ puts expanded_message.references
 puts expanded_message.in_reply_to
 ```
 
-### Getting the raw contents of a message
+#### Getting the raw contents of a message
 
 It's possible to access the unprocessed contents of a message using the raw method:
 
