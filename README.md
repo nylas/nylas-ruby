@@ -271,17 +271,16 @@ end
 
 The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
 
-#### Enumerable methods
+#### Enumerator methods
 
-Every object API object has an `each` method which returns an `Enumerable` if you don't pass it a block. It allows you to do some pretty nifty
-filtering. For example, this is the previous example rewritten to use Enumerable:
+Every object API object has an `each` method which returns an `Enumerator` if you don't pass it a block.
+This allows you to do leverage all that Ruby's `Enumerable` has to offer.
+For example, this is the previous example rewritten to use an `Enumerator`:
 
-```
-to_download = messages.each.select { |m|
-  m.files?
-}
-
-to_download.map { |file| puts file.download }
+```ruby
+messages_with_files = messages.each.select { |m| m.files? }
+to_download = messages_with_files.flat_map { |m| puts m.files }
+to_download.map { |file| file.download }
 ```
 
 #### Accessing an object's raw JSON
