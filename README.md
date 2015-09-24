@@ -105,7 +105,9 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
   # Query the status of every account linked to the app
   nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
   accounts = nylas.accounts
-  accounts.each { |a| [a.account_id, a.sync_state] } # Available fields are: account_id, sync_state, trial, trial_expires and billing_state. See lib/account.rb for more details.
+  accounts.each { |a| [a.account_id, a.sync_state] }
+  # Available fields are: account_id, sync_state, trial, trial_expires and billing_state.
+  # See lib/account.rb for more details.
 ```
 
 ### Fetching Accounts
@@ -117,7 +119,6 @@ nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token
 puts nylas.account.email_address
 puts nylas.account.provider
 ```
-
 
 ### Fetching Threads
 
@@ -154,7 +155,6 @@ count = nylas.threads.where(:any_email => 'ben@inboxapp.com').count
 # Note: for large numbers of threads, this is not advised.
 threads = nylas.threads.where(:any_email => 'ben@nylas.com').all
 ```
-
 
 ### Working with Threads
 
@@ -199,7 +199,6 @@ thread.messages.where(:from => 'ben@nylas.com').each.select { |t|
 }
 ```
 
-
 ### Working with Files
 
 ```ruby
@@ -209,7 +208,7 @@ nylas.files.each do |file|
 end
 
 # Create a new file
-file = nylas.files.build(:file => File.new("./public/favicon.ico", 'rb'))
+file = nylas.files.build(:file => File.new('./public/favicon.ico', 'rb'))
 file.save!
 
 # Download a file's contents
@@ -221,7 +220,6 @@ content = file.download
 The new folders and labels API replaces the now deprecated Tags API. It allows you to apply Gmail labels to whole threads or individual messages and, for providers other than Gmail, to move threads and messages between folders.
 
 ```ruby
-
 # List labels
 nylas.labels.each do |label|
   puts label.display_name, label.id
@@ -244,7 +242,6 @@ fld.save!
 fld = nylas.folders.first
 fld.display_name = 'Renamed folder'
 fld.save!
-
 ```
 
 ### Working with Messages, Contacts, etc.
@@ -255,21 +252,21 @@ Each of the primary collections (contacts, messages, etc.) behave the same way a
 
 ```ruby
 # Let's get all the attachments Ben sent me.
-messages = nylas.messages.where(:to => 'ben@nylas.com`)
+messages = nylas.messages.where(:to => 'ben@nylas.com')
 
 messages.each do |msg|
-    puts msg.subject
+  puts msg.subject
 
-    if msg.files? # => returns true if the message has attachments.
-        # Download them all.
-        msg.files.each |file| do
-            puts file.download
-        end
+  if msg.files? # => returns true if the message has attachments.
+    # Download them all.
+    msg.files.each |file| do
+      puts file.download
     end
+  end
 end
 ```
 
-The `where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
+The `#where` method accepts a hash of filters, as documented in the [Filters Documentation](https://nylas.com/docs/platform#filters).
 
 #### Enumerator methods
 
@@ -288,14 +285,14 @@ to_download.map { |file| puts file.download }
 Sometimes you really need to access the JSON object the API returned. You can use the `#raw_json` property for this:
 
 ```ruby
->>> puts contact.raw_json
-{
-    "name": "Ben Bitdiddle",
-    "email": "ben.bitdiddle@mit.edu",
-    "id": "8pjz8oj4hkfwgtb46furlh77",
-    "account_id": "aqau8ta87ndh6cwv0o3ajfoo2",
-    "object": "contact"
-}
+puts contact.raw_json #=>
+# {
+#   "name": "Ben Bitdiddle",
+#   "email": "ben.bitdiddle@mit.edu",
+#   "id": "8pjz8oj4hkfwgtb46furlh77",
+#   "account_id": "aqau8ta87ndh6cwv0o3ajfoo2",
+#   "object": "contact"
+# }
 ```
 
 #### Getting a message's Message-Id, References and In-Reply-To headers
@@ -319,15 +316,14 @@ It's possible to access the unprocessed contents of a message using the raw meth
 raw_contents = message.raw
 ```
 
-
 ### Creating and Sending Drafts
 
 ```ruby
 # Create a new draft
 draft = nylas.drafts.build(
   :to => [{:name => 'Ben Gotow', :email => 'ben@nylas.com'}],
-  :subject => "Sent by Ruby",
-  :body => "Hi there!<strong>This is HTML</strong>"
+  :subject => 'Sent by Ruby',
+  :body => 'Hi there!<strong>This is HTML</strong>'
 )
 
 # Modify attributes as necessary
@@ -380,7 +376,8 @@ emailed_invite.rsvp!(status='yes', comment='I will come')
 
 ## Using the Delta sync API
 
-The delta sync API allows fetching all the changes that occured after a specific time. [Read this](https://nylas.com/docs/platform/#deltas) for more details about the API.
+The delta sync API allows fetching all the changes that occurred after a specific time.
+[Read this](https://nylas.com/docs/platform/#deltas) for more details about the API.
 
 ```ruby
 # Get an API cursor. Cursors are API objects identifying an individual change.
@@ -390,19 +387,19 @@ cursor = nylas.latest_cursor
 
 last_cursor = nil
 nylas.deltas(cursor) do |event, object|
-    if event == "create" or event == "modify"
-        if object.is_a?(Nylas::Contact)
-            puts "#{object.name} - #{object.email}"
-        elsif object.is_a?(Nylas::Event)
-            puts "Event!"
-        end
-    elsif event == "delete"
-        # In the case of a deletion, the API only returns the ID of the object.
-        # In this case, the Ruby SDK returns a dummy object with only the id field
-        # set.
-        puts "Deleting from collection #{object.class.name}, id: #{object}"
+  if event == "create" or event == "modify"
+    if object.is_a?(Nylas::Contact)
+      puts "#{object.name} - #{object.email}"
+    elsif object.is_a?(Nylas::Event)
+      puts "Event!"
     end
-    last_cursor = object.cursor
+  elsif event == "delete"
+    # In the case of a deletion, the API only returns the ID of the object.
+    # In this case, the Ruby SDK returns a dummy object with only the id field
+    # set.
+    puts "Deleting from collection #{object.class.name}, id: #{object}"
+  end
+  last_cursor = object.cursor
 end
 
 # Don't forget to save the last cursor so that we can pick up changes
@@ -419,25 +416,23 @@ cursor = nylas.latest_cursor
 
 last_cursor = nil
 nylas.delta_stream(cursor) do |event, object|
-    if event == "create" or event == "modify"
-        if object.is_a?(Inbox::Contact)
-            puts "#{object.name} - #{object.email}"
-        elsif object.is_a?(Inbox::Event)
-            puts "Event!"
-        end
-    elsif event == "delete"
-        # In the case of a deletion, the API only returns the ID of the object.
-        # In this case, the Ruby SDK returns a dummy object with only the id field
-        # set.
-        puts "Deleting from collection #{object.class.name}, id: #{object}"
+  if event == "create" or event == "modify"
+    if object.is_a?(Inbox::Contact)
+      puts "#{object.name} - #{object.email}"
+    elsif object.is_a?(Inbox::Event)
+      puts "Event!"
     end
-    last_cursor = object.cursor
+  elsif event == "delete"
+    # In the case of a deletion, the API only returns the ID of the object.
+    # In this case, the Ruby SDK returns a dummy object with only the id field
+    # set.
+    puts "Deleting from collection #{object.class.name}, id: #{object}"
+  end
+  last_cursor = object.cursor
 
-    # This will loop indefintely
+  # This will loop indefintely
 end
-
 ```
-
 
 ### Exclude changes from a specific type --- get only messages
 
@@ -447,9 +442,9 @@ nylas.deltas(cursor, exclude=[Nylas::Contact,
                               Nylas::File,
                               Nylas::Tag,
                               Nylas::Thread]) do |event, object|
-if event == 'create' or event == 'modify'
-        puts object.subject
-    end
+  if ['create', 'modify'].include? event
+    puts object.subject
+  end
 end
 ```
 
@@ -463,10 +458,11 @@ nylas.deltas(cursor, exclude=[Nylas::Contact,
                               Nylas::File,
                               Nylas::Tag,
                               Nylas::Thread], expanded_view=true) do |event, object|
-if event == 'create' or event == 'modify'
-  if obj.is_a?(Inbox::Message)
+  if ['create', 'modify'].include? event
+    if obj.is_a?(Inbox::Message)
       puts obj.subject
       puts obj.message_id
+    end
   end
 end
 ```
@@ -476,20 +472,18 @@ The Nylas API uses conventional HTTP response codes to indicate success or failu
 
 Code | Error Type | Description
 --- | --- | ---
-400 | InvalidRequest | Your request has invalid parameters.
-403 | AccessDenied | You don't have authorization to access the requested resource or perform the requested action. You may need to re-authenticate the user.
-404 | ResourceNotFound | The requested resource doesn't exist.
-500 | APIError | There was an internal error with the Nylas server.
+400 | `InvalidRequest` | Your request has invalid parameters.
+403 | `AccessDenied` | You don't have authorization to access the requested resource or perform the requested action. You may need to re-authenticate the user.
+404 | `ResourceNotFound` | The requested resource doesn't exist.
+500 | `APIError` | There was an internal error with the Nylas server.
 
 A few additional exceptions are raised by the `draft.send!` method if your draft couldn't be sent.
 
 Code | Error Type | Description
 --- | --- | ---
-402 | MessageRejected| The message was syntactically valid, but rejected for delivery by the mail server.
-429 | SendingQuotaExceeded | The user has exceeded their daily sending quota.
-503 | ServiceUnavailable | There was a temporary error establishing a connection to the user's mail server.
-
-
+402 | `MessageRejected` | The message was syntactically valid, but rejected for delivery by the mail server.
+429 | `SendingQuotaExceeded` | The user has exceeded their daily sending quota.
+503 | `ServiceUnavailable` | There was a temporary error establishing a connection to the user's mail server.
 
 ## Open-Source Sync Engine
 
@@ -539,5 +533,9 @@ If it's your first time updating the ruby gems, you may be prompted for the user
 Because it's critical that we don't break the SDK for our customers, we require releasers to run some tests before releasing a new version of the gem. The test programs are located in the test/ directory. To set up them up, you'll need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
 
 You can run the programs like this:
-`cd tests && ruby -I../lib auth.rb`
-`cd tests && ruby -I../lib system.rb`
+
+```shell
+cd tests && ruby -I../lib auth.rb
+cd tests && ruby -I../lib system.rb
+```
+
