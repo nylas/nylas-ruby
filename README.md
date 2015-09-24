@@ -101,7 +101,7 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 
 ### Account Status
 
-````ruby
+```ruby
   # Query the status of every account linked to the app
   nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
   accounts = nylas.accounts
@@ -345,18 +345,18 @@ draft.send!
 # Sometimes sending isn't possible --- handle the exception and
 # print the error message returned by the SMTP server:
 begin
-    draft.send!
+  draft.send!
 rescue Nylas::APIError => e
-    puts "Failed with error: #{e.message}"
-    if not e.server_error.nil?
-        puts "The SMTP server replied: #{e.server_error}"
-    end
+  puts "Failed with error: #{e.message}"
+  if not e.server_error.nil?
+    puts "The SMTP server replied: #{e.server_error}"
+  end
 end
 ```
 
 ### Creating an event
 
-````ruby
+```ruby
 # Every event is attached to a calendar -- get the id of the first calendar
 calendar_id = nylas.calendars.first.id
 new_event = nylas.events.build(:calendar_id => calendar_id, :title => 'Coffee?')
@@ -382,7 +382,7 @@ emailed_invite.rsvp!(status='yes', comment='I will come')
 
 The delta sync API allows fetching all the changes that occured after a specific time. [Read this](https://nylas.com/docs/platform/#deltas) for more details about the API.
 
-````ruby
+```ruby
 # Get an API cursor. Cursors are API objects identifying an individual change.
 # The latest cursor is the id of the latest change which was applied
 # to an API object (e.g: a message got read, an event got created, etc.)
@@ -414,7 +414,7 @@ save_to_db(last_cursor)
 
 The streaming API will receive deltas in real time, without needing to repeatedly poll. It uses EventMachine for async IO.
 
-````ruby
+```ruby
 cursor = nylas.latest_cursor
 
 last_cursor = nil
@@ -440,7 +440,8 @@ end
 
 
 ### Exclude changes from a specific type --- get only messages
-````ruby
+
+```ruby
 nylas.deltas(cursor, exclude=[Nylas::Contact,
                               Nylas::Event,
                               Nylas::File,
@@ -455,7 +456,8 @@ end
 ### Expand Messages from the Delta stream
 
 It's possible to ask the Deltas and delta stream API to return [expanded messages](https://nylas.com/docs/platform#expanded_message_view) directly:
-````ruby
+
+```ruby
 nylas.deltas(cursor, exclude=[Nylas::Contact,
                               Nylas::Event,
                               Nylas::File,
