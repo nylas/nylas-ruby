@@ -285,7 +285,7 @@ module Inbox
 
       # loop and yield deltas until we've come to the end.
       loop do
-        path = self.url_for_path("/delta?cursor=#{cursor}#{exclude_string}")
+        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
         if expanded_view
           path += '&view=expanded'
         end
@@ -338,7 +338,7 @@ module Inbox
       end
 
       # loop and yield deltas indefinitely.
-      path = self.url_for_path("/delta/streaming?cursor=#{cursor}#{exclude_string}")
+      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
       if expanded_view
         path += '&view=expanded'
       end
