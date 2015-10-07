@@ -21,15 +21,14 @@ require 'restful_model'
 require 'restful_model_collection'
 require 'version'
 
-
 module Inbox
-
-  class AccessDenied < StandardError; end
-  class ResourceNotFound < StandardError; end
-  class NoAuthToken < StandardError; end
-  class UnexpectedAccountAction < StandardError; end
-  class UnexpectedResponse < StandardError; end
-  class APIError < StandardError
+  Error = Class.new(::StandardError)
+  AccessDenied = Class.new(Error)
+  ResourceNotFound = Class.new(Error)
+  NoAuthToken = Class.new(Error)
+  UnexpectedAccountAction = Class.new(Error)
+  UnexpectedResponse = Class.new(Error)
+  class APIError < Error
     attr_accessor :error_type
     attr_accessor :server_error
 
@@ -39,10 +38,10 @@ module Inbox
       self.server_error = server_error
     end
   end
-  class InvalidRequest < APIError; end
-  class MessageRejected < APIError; end
-  class SendingQuotaExceeded < APIError; end
-  class ServiceUnavailable < APIError; end
+  InvalidRequest = Class.new(APIError)
+  MessageRejected = Class.new(APIError)
+  SendingQuotaExceeded = Class.new(APIError)
+  ServiceUnavailable = Class.new(APIError)
 
   def self.interpret_http_status(result)
     # Handle HTTP errors and RestClient errors
