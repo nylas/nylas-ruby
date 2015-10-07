@@ -13,6 +13,7 @@ module Inbox
     parameter :object
     parameter :organization_unit
     parameter :provider
+    parameter :sync_state
 
     def self.collection_name
       "accounts"
