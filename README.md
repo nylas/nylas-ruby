@@ -115,9 +115,9 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 ```ruby
 nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
 
-# Print out the email address and provider (Gmail, Exchange)
-puts nylas.account.email_address
-puts nylas.account.provider
+puts nylas.account.email_address #=> 'alice@example.com'
+puts nylas.account.provider      #=> 'gmail'
+puts nylas.account.sync_state    #=> 'running'
 ```
 
 ### Fetching Threads
