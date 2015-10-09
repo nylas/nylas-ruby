@@ -15,11 +15,11 @@ describe 'Delta sync API wrapper' do
     stub_request(:post, @latest_url).
          to_return(:status => 200, :body => File.read('spec/fixtures/latest_cursor.txt'), :headers => {})
 
-    @cursor_zero_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0"
+    @cursor_zero_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0&exclude_folders=false"
     stub_request(:get, @cursor_zero_url).
          to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    @nth_cursor_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=a9vtneydekzye7uwfumdd4iu3"
+    @nth_cursor_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=a9vtneydekzye7uwfumdd4iu3&exclude_folders=false"
     stub_request(:get, @nth_cursor_url).
          to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
 
@@ -60,7 +60,7 @@ describe 'Delta sync streaming API wrapper' do
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
     @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
       to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
   end
 
@@ -92,10 +92,10 @@ describe 'Delta sync bogus requests' do
     stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/generate_cursor").
          to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0&exclude_folders=false").
          to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0").
+    stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
       to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
   end
 
