@@ -1,6 +1,8 @@
 require 'event'
 
 describe 'Delta sync API wrapper' do
+  let(:nth_cursor) { 'a9vtneydekzye7uwfumdd4iu3' }
+
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
@@ -19,7 +21,7 @@ describe 'Delta sync API wrapper' do
     stub_request(:get, @cursor_zero_url).
          to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
 
-    @nth_cursor_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=a9vtneydekzye7uwfumdd4iu3&exclude_folders=false"
+    @nth_cursor_url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=#{nth_cursor}&exclude_folders=false"
     stub_request(:get, @nth_cursor_url).
          to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
 
@@ -33,6 +35,12 @@ describe 'Delta sync API wrapper' do
   it "should get the latest cursor" do
     cursor = @inbox.latest_cursor
     expect(cursor).to eq('cx7ln1akyj2qgdu6o5d5bakuw')
+  end
+
+  it 'returns an external Enumerator when no block is given' do
+    expect(@inbox.deltas(nth_cursor)).to be_a(Enumerator)
+    expect(@inbox.deltas(nth_cursor).map { |e,o| [e, o.id]}).to contain_exactly(
+      ['create', 'c7mllq7iag2ivlp6fxf7dhg9i'], ['delete', 'db0isjjvqez51vdjeq5lx37dk'])
   end
 
   it "should continuously query the delta sync API" do
