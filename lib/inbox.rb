@@ -122,7 +122,7 @@ module Inbox
         scpe: 'email',
         redirect_uri: redirect_uri
       }.merge(options)
-      URI::HTTPS.build(host: @service_domain, query: arguments.to_query).to_s
+      URI::HTTPS.build(host: "#{@service_domain}/oauth/authorize", query: arguments.to_query).to_s
     end
 
     def url_for_management
