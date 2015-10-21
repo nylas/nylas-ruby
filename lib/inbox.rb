@@ -117,7 +117,7 @@ module Inbox
       arguments = {
         trial: false
       }.merge(options)
-      URI::HTTPS.build(host: @service_domain, query: arguments.to_query)
+      URI::HTTPS.build(host: @service_domain, query: arguments.to_query).to_s
     end
 
     def url_for_management
