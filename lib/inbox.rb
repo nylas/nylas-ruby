@@ -115,7 +115,8 @@ module Inbox
 
     def url_for_authentication(redirect_uri, login_hint = '', options = {})
       arguments = {
-        trial: false
+        trial: false,
+        login_hint: login_hint
       }.merge(options)
       URI::HTTPS.build(host: @service_domain, query: arguments.to_query).to_s
     end
