@@ -89,6 +89,20 @@ module Inbox
     attr_reader :app_id
     attr_reader :app_secret
 
+    OBJECTS_TABLE = {
+      'account' => Inbox::Account,
+      'calendar' => Inbox::Calendar,
+      'contact' => Inbox::Contact,
+      'draft' => Inbox::Draft,
+      'event' => Inbox::Event,
+      'file' => Inbox::File,
+      'folder' => Inbox::Folder,
+      'label' => Inbox::Label,
+      'message' => Inbox::Message,
+      'tag' => Inbox::Tag,
+      'thread' => Inbox::Thread,
+    }
+
     def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.nylas.com',
                    service_domain = 'api.nylas.com')
       raise "When overriding the Inbox API server address, you must include https://" unless api_server.include?('://')
@@ -239,20 +253,6 @@ module Inbox
       cursor
     end
 
-    OBJECTS_TABLE = {
-      "account" => Inbox::Account,
-      "calendar" => Inbox::Calendar,
-      "draft" => Inbox::Draft,
-      "thread" => Inbox::Thread,
-      "contact" => Inbox::Contact,
-      "event" => Inbox::Event,
-      "file" => Inbox::File,
-      "message" => Inbox::Message,
-      "tag" => Inbox::Tag,
-      "folder" => Inbox::Folder,
-      "label" => Inbox::Label,
-    }
-
     # It's possible to ask the API to expand objects.
     # In this case, we do the right thing and return
     # an expanded object.
@@ -260,27 +260,9 @@ module Inbox
       "message" => Inbox::ExpandedMessage,
     }
 
-    def _build_exclude_types(exclude_types)
-      exclude_string = "&exclude_types="
-
-      exclude_types.each do |value|
-        count = 0
-        if OBJECTS_TABLE.has_value?(value)
-          param_name = OBJECTS_TABLE.key(value)
-          exclude_string += "#{param_name},"
-        end
-      end
-
-      exclude_string = exclude_string[0..-2]
-    end
-
     def deltas(cursor, exclude_types=[], expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = build_exclude_types(exclude_types)
 
       # loop and yield deltas until we've come to the end.
       loop do
@@ -329,12 +311,7 @@ module Inbox
 
     def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
-
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = build_exclude_types(exclude_types)
 
       # loop and yield deltas indefinitely.
       path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
@@ -378,6 +355,12 @@ module Inbox
           raise UnexpectedResponse.new http.error
         end
       end
+    end
+
+    private
+
+    def build_exclude_types(exclude_types)
+      DeltaFilters.build_exclude_types(exclude_types)
     end
   end
 end
