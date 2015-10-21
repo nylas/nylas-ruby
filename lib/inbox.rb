@@ -275,7 +275,8 @@ module Inbox
     end
 
     def deltas(cursor, exclude_types=[], expanded_view=false)
-      raise 'Please provide a block for receiving the delta objects' if !block_given?
+      return enum_for(:deltas, cursor, exclude_types, expanded_view) unless block_given?
+
       exclude_string = ""
 
       if exclude_types.any?
