@@ -33,25 +33,22 @@ class ApplicationController < ActionController::Base
     # Redirect to login if nylas doesn't have an access token
     return redirect_to action: 'login' unless @nylas.access_token
 
-    # Get the first namespace
-    namespace = @nylas.namespaces.first
-
     # Wait til the sync has successfully started
-    thread = namespace.threads.first
+    thread = @nylas.threads.first
     while thread == nil do
       puts "Sync not started yet. Checking again in 2 seconds."
       sleep 2
-      thread = namespace.threads.first
+      thread = @nylas.threads.first
     end
 
-    # Print out the first five threads in the namespace
+    # Print out the first five threads in the account
     text = ""
-    namespace.threads.range(0,4).each do |thread|
+    @nylas.threads.range(0,4).each do |thread|
         text += "#{thread.subject} - #{thread.id}<br>";
     end
 
     # Print out threads with the subject 'Daily Update'
-    namespace.threads.where(:subject => 'Daily Update').each do |thread|
+    @nylas.threads.where(:subject => 'Daily Update').each do |thread|
         text += "#{thread.subject} - #{thread.id}<br>";
     end
 
@@ -62,7 +59,7 @@ class ApplicationController < ActionController::Base
     end
 
     # Create a new draft
-    # draft = namespace.drafts.build(
+    # draft = @nylas.drafts.build(
     #   :to => [{:name => 'Test Test', :email => 'test-test-test@test.test'}],
     #   :subject => "Sent by Ruby",
     #   :body => "Hi there!<strong>This is HTML</strong>"

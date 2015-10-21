@@ -37,12 +37,16 @@ ruby index.rb
 
 A small example Rails app is included in the `examples/rails` directory. You can run the sample app to see how an authentication flow might be implemented.
 
+**Note:** To use the sample app you will need to
+
+1. Replace the Nylas App ID and Secret in `config/environments/development.rb`
+2. Add the Callback URL `http://localhost:3000/login_callback` to your app in the [developer console](https://developer.nylas.com/console)
+
 ```
 cd examples/rails
+bundle install
 RESTCLIENT_LOG=stdout rails s
 ```
-
-**Note:** *You will need to replace the Nylas App ID and Secret in `config/environments/development.rb` to use the sample app.*
 
 ## Usage
 
