@@ -1,4 +1,4 @@
-# Nylas REST API Ruby bindings
+# Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=master)
 
 ## Installation
 
