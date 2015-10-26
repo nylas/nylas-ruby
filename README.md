@@ -17,7 +17,7 @@ You don't need to use this repo unless you're planning to modify the gem. If you
 
 ##Requirements
 
-- Ruby 1.8.7 or above. (Ruby 1.8.6 may work if you load ActiveSupport.)
+- Ruby 1.9.3 or above.
 
 - rest-client, json, yajl-ruby, em-http-request
 
@@ -542,4 +542,3 @@ You can run the programs like this:
 cd tests && ruby -I../lib auth.rb
 cd tests && ruby -I../lib system.rb
 ```
-
