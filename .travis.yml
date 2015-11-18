@@ -5,3 +5,6 @@ rvm:
  - "2.1.0"
  - "2.2.3"
 script: bundle exec rspec spec
+os:
+ - "linux"
+ - "osx"
