@@ -10,10 +10,19 @@ And then execute:
 
     bundle
 
-You don't need to use this repo unless you're planning to modify the gem. If you just want to use the Inbox SDK with Ruby bindings, you should run:
+You don't need to use this repo unless you're planning to modify the gem. If you just want to use the Nylas SDK with Ruby bindings, you should run:
 
     gem install nylas
 
+### MacOS 10.11 (El Capitan) note
+
+Apple stopped bundling openssl with MacOS 10.11. However, one of the dependencies of this gem (EventMachine) requires it. If you're on El Capitan and are unable to install the gem, try running the following commands in a terminal:
+
+```
+sudo brew install openssl
+sudo brew link openssl --force
+gem install nylas
+```
 
 ##Requirements
 
@@ -364,7 +373,7 @@ new_event = nylas.events.build(:calendar_id => calendar_id, :title => 'Coffee?')
 # Modify attributes as necessary
 new_event.location = "L'excelsior"
 
-# Dates are expressed by the Inbox API as UTC timestamps
+# Dates are expressed by the Nylas API as UTC timestamps
 new_event.when = {:start_time => 1407542195, :end_time => 1407543195}
 
 # Persist the event --- it's automatically synced back to the Google or Exchange calendar
@@ -421,9 +430,9 @@ cursor = nylas.latest_cursor
 last_cursor = nil
 nylas.delta_stream(cursor) do |event, object|
   if event == "create" or event == "modify"
-    if object.is_a?(Inbox::Contact)
+    if object.is_a?(Nylas::Contact)
       puts "#{object.name} - #{object.email}"
-    elsif object.is_a?(Inbox::Event)
+    elsif object.is_a?(Nylas::Event)
       puts "Event!"
     end
   elsif event == "delete"
@@ -463,7 +472,7 @@ nylas.deltas(cursor, exclude=[Nylas::Contact,
                               Nylas::Tag,
                               Nylas::Thread], expanded_view=true) do |event, object|
   if ['create', 'modify'].include? event
-    if obj.is_a?(Inbox::Message)
+    if obj.is_a?(Nylas::Message)
       puts obj.subject
       puts obj.message_id
     end
