@@ -36,7 +36,7 @@ Could you confirm that the following API functions didn't break?
 
 
 
-inbox = Inbox::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api-staging.nylas.com')
+inbox = Inbox::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api.nylas.com')
 
 puts "Thread count: #{inbox.threads.count}"
 color_print "Did you see a thread count? (Y/N)"
@@ -87,16 +87,14 @@ if account.provider == 'eas'
   message.save!
   color_print "Did the first message get the folder #{first_folder.display_name}? (Y/N)"
 elsif account.provider == 'gmail'
+  first_label = inbox.labels.first
   message.labels.push(first_label)
   message.save!
   color_print "Did the first message get the label #{first_label.display_name}? (Y/N)"
 end
 
-cursor = inbox.get_cursor(0)
-color_print "Do you see a cursor (Y/N)? #{cursor}"
-
 cursor = inbox.latest_cursor
-color_print "Do you see another cursor (Y/N)? #{cursor}"
+color_print "Do you see a cursor (Y/N)? #{cursor}"
 
 puts "Getting events from the delta stream (this hangs eventually, feel free to Ctrl-C)"
 inbox.delta_stream(cursor, exclude=[Inbox::Tag]) do |event, obj|
