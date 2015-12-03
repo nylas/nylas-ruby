@@ -13,6 +13,9 @@ module Inbox
     parameter :draft_ids
     parameter :labels
     parameter :folder
+    parameter :starred
+    parameter :unread
+    parameter :has_attachments
     time_attr_accessor :last_message_timestamp
     time_attr_accessor :first_message_timestamp
 
