@@ -97,7 +97,7 @@ cursor = inbox.latest_cursor
 color_print "Do you see a cursor (Y/N)? #{cursor}"
 
 puts "Getting events from the delta stream (this hangs eventually, feel free to Ctrl-C)"
-inbox.delta_stream(cursor, exclude=[Inbox::Tag]) do |event, obj|
+inbox.delta_stream(cursor) do |event, obj|
   if obj.is_a?(Inbox::Event)
     puts obj.title
   end

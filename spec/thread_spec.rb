@@ -6,7 +6,7 @@ describe Inbox::Thread do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret)
+    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#as_json" do
@@ -35,6 +35,32 @@ describe Inbox::Thread do
       expect(dict['labels']).to eq(nil)
       expect(dict['folder']).to eq('test label')
 
+    end
+  end
+
+  describe "#mark_read!" do
+    it "issues a PUT request to update the thread" do
+      url = "https://#{@access_token}:@api.nylas.com/threads/2"
+      stub_request(:put, url).to_return(:status => 200, :body => '{"unread": false}')
+
+      th = Inbox::Thread.new(@inbox, nil)
+      th.id = 2
+      th.mark_as_read!
+      expect(a_request(:put, url)).to have_been_made.once
+      expect(th.unread).to be false
+    end
+  end
+
+  describe "#star!" do
+    it "issues a PUT request to update the thread" do
+      url = "https://#{@access_token}:@api.nylas.com/threads/2"
+      stub_request(:put, url).to_return(:status => 200, :body => '{"starred": true}')
+
+      th = Inbox::Thread.new(@inbox, nil)
+      th.id = 2
+      th.star!
+      expect(a_request(:put, url)).to have_been_made.once
+      expect(th.starred).to be true
     end
   end
 end

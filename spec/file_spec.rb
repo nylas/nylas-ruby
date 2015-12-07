@@ -29,6 +29,5 @@ describe Inbox::File do
       expect{ file.download }.to raise_error(Inbox::ResourceNotFound)
       expect(a_request(:get, url)).to have_been_made.once
     end
-
   end
 end

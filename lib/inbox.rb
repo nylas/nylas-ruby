@@ -9,7 +9,6 @@ require 'api_account'
 require 'api_thread'
 require 'calendar'
 require 'account'
-require 'tag'
 require 'message'
 require 'draft'
 require 'contact'
@@ -149,10 +148,6 @@ module Inbox
       @threads ||= RestfulModelCollection.new(Thread, self)
     end
 
-    def tags
-      @tags ||= RestfulModelCollection.new(Tag, self)
-    end
-
     def messages
       @messages ||= RestfulModelCollection.new(Message, self)
     end
@@ -248,7 +243,6 @@ module Inbox
       "event" => Inbox::Event,
       "file" => Inbox::File,
       "message" => Inbox::Message,
-      "tag" => Inbox::Tag,
       "folder" => Inbox::Folder,
       "label" => Inbox::Label,
     }

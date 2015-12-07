@@ -97,4 +97,30 @@ describe Inbox::Message do
       expect(msg.files?).to be true
     end
   end
+
+  describe "#mark_read!" do
+    it "issues a PUT request to update the thread" do
+      url = "https://#{@access_token}:@api.nylas.com/messages/2"
+      stub_request(:put, url).to_return(:status => 200, :body => '{"unread": false}')
+
+      msg = Inbox::Message.new(@inbox, nil)
+      msg.id = 2
+      msg.mark_as_read!
+      expect(a_request(:put, url)).to have_been_made.once
+      expect(msg.unread).to be false
+    end
+  end
+
+  describe "#star!" do
+    it "issues a PUT request to update the message" do
+      url = "https://#{@access_token}:@api.nylas.com/messages/2"
+      stub_request(:put, url).to_return(:status => 200, :body => '{"starred": true}')
+
+      msg = Inbox::Message.new(@inbox, nil)
+      msg.id = 2
+      msg.star!
+      expect(a_request(:put, url)).to have_been_made.once
+      expect(msg.starred).to be true
+    end
+  end
 end

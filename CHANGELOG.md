@@ -1,3 +1,11 @@
+### 1.3.0 / 2015-12-07
+
+* Deprecate the tags API
+* Remove the archive!/unarchive! methods
+* Expose `starred`, `unread`, `has_attachments` in Nylas::Thread
+
+[full changelog](https://github.com/nylas/nylas-ruby/compare/v1.2.1...v1.3.0)
+
 ### 1.2.0 / 2015-11-19
 
 * Add `Messages#files?` [Issue #40](https://github.com/nylas/nylas-ruby/issues/40)

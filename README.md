@@ -142,14 +142,14 @@ thread = nylas.threads.first
 # Fetch a specific thread
 thread = nylas.threads.find('ac123acd123ef123')
 
-# List all threads tagged `inbox`
+# List all threads in the inbox
 # (paginating 50 at a time until no more are returned.)
-nylas.threads.where(:tag => 'inbox').each do |thread|
+nylas.threads.where(:in => 'inbox').each do |thread|
   puts thread.subject
 end
 
 # List the 5 most recent unread threads
-nylas.threads.where(:tag => 'unread').range(0,4).each do |thread|
+nylas.threads.where(:unread => true).range(0,4).each do |thread|
   puts thread.subject
 end
 
@@ -180,23 +180,35 @@ end
 # Mark as read
 thread.mark_as_read!
 
-# Archive
-thread.archive!
+# Mark as unread
+thread.mark_as_unread!
 
-# Add or remove arbitrary tags (DEPRECATED --- you should use the new labels and folders API)
-tagsToAdd = ['inbox', 'cfa1233ef123acd12']
-tagsToRemove = []
-thread.update_tags!(tagsToAdd, tagsToRemove)
+# Star
+thread.star!
 
-# Add a new label to a message
+# Remove star
+thread.unstar!
 
+# Adding a new label to a thread
+
+# First, find the id of the important label.
+#
+# A note here: all labels have a display_name
+# property, which contains a label's name.
+# Some very specific labels (e.g: Inbox, Trash, etc.)
+# also have a name property, which is a canonical name
+# for the label. This is important because folder names
+# can change depending the user's locale (e.g: "Boîte de réception"
+# means "Inbox" in french). See https://nylas.com/docs/platform#labels
+# for more details.
 important = nil
 nylas.labels.each do |label|
-  if label.display_name == 'Important'
+  if label.name == 'important'
     important = label
   end
 end
 
+# Then, add it to the thread.
 thread = nylas.threads.where(:from => "helena@nylas.com").first
 thread.labels.push(important)
 thread.save!
@@ -257,7 +269,26 @@ fld.display_name = 'Renamed folder'
 fld.save!
 ```
 
-### Working with Messages, Contacts, etc.
+### Working with Messages
+
+```ruby
+puts msg.subject
+puts msg.from
+
+# Mark as read
+msg.mark_as_read!
+
+# Mark as unread
+msg.mark_as_unread!
+
+# Star
+msg.star!
+
+# Remove star
+msg.unstar!
+```
+
+### Working with API Objects
 
 #### Filtering
 
@@ -284,7 +315,7 @@ The `#where` method accepts a hash of filters, as documented in the [Filters Doc
 #### Enumerator methods
 
 Every object API object has an `each` method which returns an `Enumerator` if you don't pass it a block.
-This allows you to do leverage all that Ruby's `Enumerable` has to offer.
+This allows you to leverage all that Ruby's `Enumerable` has to offer.
 For example, this is the previous example rewritten to use an `Enumerator`:
 
 ```ruby

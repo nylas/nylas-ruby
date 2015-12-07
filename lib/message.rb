@@ -1,5 +1,6 @@
 require 'restful_model'
 require 'file'
+require 'mixins'
 
 module Inbox
   class Message < RestfulModel
@@ -17,6 +18,8 @@ module Inbox
     parameter :starred
     parameter :folder
     parameter :labels
+
+    include Inbox::ReadUnreadMethods
 
     def inflate(json)
       super

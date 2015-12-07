@@ -16,7 +16,7 @@ APP_ID = config["nylas_app_id"]
 APP_SECRET = config["nylas_app_secret"]
 
 
-# Check app configuration before starting 
+# Check app configuration before starting
 if APP_ID == 'YOUR_APP_ID' or APP_SECRET == 'YOUR_APP_SECRET'
     raise "You need to configure your app id and secrets in config.yml"
 end
@@ -44,7 +44,7 @@ get '/' do
 
     # Get the first five threads for the account.
     recent_emails = []
-    nylas.threads.where(:tag => 'unread').range(0,5).each do |thread|
+    nylas.threads.where(:unread => true).range(0,5).each do |thread|
       recent_emails.push(thread.subject)
     end
 
