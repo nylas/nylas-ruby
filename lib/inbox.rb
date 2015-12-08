@@ -123,6 +123,9 @@ module Inbox
         'login_hint' => login_hint,
         'redirect_uri' => redirect_uri
       }
+      if state = options[:state]
+        query_params['state'] = state
+      end
       query_params = URI.encode_www_form(query_params)
       "https://#{@service_domain}/oauth/authorize?#{query_params}"
     end

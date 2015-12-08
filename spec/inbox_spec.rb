@@ -57,6 +57,11 @@ describe 'Inbox' do
       url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', {trial: true})
       expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben%40nylas.com&redirect_uri=http%3A%2F%2Fredirect.uri")
     end
+
+    it "should include the state if one is provided" do
+      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', {state: "somestatestring"})
+      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben%40nylas.com&redirect_uri=http%3A%2F%2Fredirect.uri&state=somestatestring")
+    end
   end
 
   describe "#self.interpret_response" do
