@@ -1,3 +1,7 @@
+### Upcoming Release
+
+* Remove get_cursor method that calls deprecated generate_cursor endpoint
+
 ### 1.3.0 / 2015-12-07
 
 * Deprecate the tags API

@@ -13,25 +13,17 @@ describe Inbox::API do
   end
 
   describe 'Delta sync API wrapper' do
-    let(:generate_cursor_url) { api_url('/generate_cursor') }
     let(:latest_cursor_url) { api_url('/latest_cursor') }
     let(:cursor_zero_url) { api_url('?cursor=0&exclude_folders=false') }
     let(:nth_cursor_url) { api_url('?cursor=a9vtneydekzye7uwfumdd4iu3&exclude_folders=false') }
 
     before do
-      stub_request(:post, generate_cursor_url).
-        to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
       stub_request(:post, latest_cursor_url).
         to_return(:status => 200, :body => File.read('spec/fixtures/latest_cursor.txt'), :headers => {})
       stub_request(:get, cursor_zero_url).
         to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
       stub_request(:get, nth_cursor_url).
         to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
-    end
-
-    it 'should get the initial cursor' do
-      inbox.get_cursor(timestamp=0)
-      expect(a_request(:post, generate_cursor_url)).to have_been_made.once
     end
 
     it 'should get the latest cursor' do
@@ -89,8 +81,6 @@ describe Inbox::API do
 
   describe 'Delta sync bogus requests' do
     before do
-      stub_request(:post, api_url('/generate_cursor')).
-        to_return(:status => 200, :body => File.read('spec/fixtures/initial_cursor.txt'), :headers => {})
       stub_request(:get, api_url('?cursor=0&exclude_folders=false')).
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
       stub_request(:get, api_url('/streaming?cursor=0&exclude_folders=false')).

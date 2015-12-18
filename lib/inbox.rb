@@ -203,23 +203,6 @@ module Inbox
           end
     end
 
-    def get_cursor(timestamp)
-      # Get the cursor corresponding to a specific timestamp.
-      warn "Nylas#get_cursor is deprecated. Use Nylas#latest_cursor instead."
-
-      path = self.url_for_path("/delta/generate_cursor")
-      data = { :start => timestamp }
-
-      cursor = nil
-
-      RestClient.post(path, data.to_json, :content_type => :json) do |response,request,result|
-        json = Inbox.interpret_response(result, response, {:expected_class => Object})
-        cursor = json["cursor"]
-      end
-
-      cursor
-    end
-
     def latest_cursor
       # Get the cursor corresponding to a specific timestamp.
       path = self.url_for_path("/delta/latest_cursor")
