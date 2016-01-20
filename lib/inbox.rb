@@ -117,7 +117,7 @@ module Inbox
       if options[:trial] == true
         trialString = 'true'
       end
-      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}&state=#{options[:state]}"
     end
 
     def url_for_management
