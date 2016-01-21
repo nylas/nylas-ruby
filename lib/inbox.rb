@@ -258,13 +258,13 @@ module Inbox
     def _build_types_list(types)
       type_string = ""
       types.each do |value|
-        count = 0
         if OBJECTS_TABLE.has_value?(value)
           param_name = OBJECTS_TABLE.key(value)
           type_string += "#{param_name},"
         end
       end
 
+      # remove the dangling comma on the end of the string
       type_string = type_string[0..-2]
     end
 
@@ -279,10 +279,6 @@ module Inbox
         filter_string = _build_exclude_types(exclude_types)
       elsif include_types.any?
         filter_string = _build_include_types(include_types)
-      end
-
-      if include_types.any?
-        include_string = _build_include_types(include_types)
       end
 
       # loop and yield deltas until we've come to the end.
@@ -339,9 +335,7 @@ module Inbox
 
       if exclude_types.any?
         filter_string = _build_exclude_types(exclude_types)
-      end
-
-      if include_types.any?
+      elsif include_types.any?
         filter_string = _build_include_types(include_types)
       end
 
