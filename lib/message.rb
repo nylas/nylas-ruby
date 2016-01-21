@@ -9,6 +9,7 @@ module Inbox
     parameter :snippet
     parameter :from
     parameter :to
+    parameter :reply_to
     parameter :cc
     parameter :bcc
     parameter :date

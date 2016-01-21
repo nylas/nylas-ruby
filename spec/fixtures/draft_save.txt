@@ -22,6 +22,12 @@
             "name": "Helena Handbasket"
         }
     ],
+    "reply_to": [
+        {
+            "email": "replyto@nylas.com",
+            "name": "Reply To"
+        }
+    ],
     "unread": false,
     "version": 0
 }
