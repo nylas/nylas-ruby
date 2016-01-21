@@ -41,4 +41,51 @@ describe Nylas::RestfulModelCollection do
       expect { api.threads.count }.to raise_error(Inbox::AccessDenied)
     end
   end
+
+  describe '#where' do
+    it 'should be able to limit the returned number of entities' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=2").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:limit => 2)
+    end
+
+    it 'should be able to offset the returned entities' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?offset=2").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:offset => 2)
+    end
+
+    it 'should be able to both limit and offset returned entities' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?offset=3&limit=2").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:limit => 2, :offset => 3)
+    end
+
+    it 'should be able to return messages contained in a specific folder' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?in=inbox").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:in => 'inbox')
+    end
+
+    it 'should be able to return messages sent to a specific address' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?to=someone%40nylas%2ecom").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:to => 'someone@nylas.com')
+    end
+  end
 end

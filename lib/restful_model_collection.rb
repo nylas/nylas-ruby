@@ -138,8 +138,11 @@ module Inbox
 
     def get_model_collection(offset = 0, limit = 100)
       filters = @filters.clone
-      filters[:offset] = offset
-      filters[:limit] = limit
+
+      # If filters have already been set for limit or offset, ignore the
+      # values passed in above. (i.e., the 'where' function has precedence)
+      filters[:limit] = limit unless filters.key?(:limit)
+      filters[:offset] = offset unless filters.key?(:offset)
       models = []
 
       RestClient.get(url, :params => filters){ |response,request,result|
