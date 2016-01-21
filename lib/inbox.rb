@@ -258,13 +258,13 @@ module Inbox
     def _build_types_list(types)
       type_string = ""
       types.each do |value|
+        count = 0
         if OBJECTS_TABLE.has_value?(value)
           param_name = OBJECTS_TABLE.key(value)
           type_string += "#{param_name},"
         end
       end
 
-      # remove the dangling comma on the end of the string
       type_string = type_string[0..-2]
     end
 
@@ -279,6 +279,10 @@ module Inbox
         filter_string = _build_exclude_types(exclude_types)
       elsif include_types.any?
         filter_string = _build_include_types(include_types)
+      end
+
+      if include_types.any?
+        include_string = _build_include_types(include_types)
       end
 
       # loop and yield deltas until we've come to the end.
@@ -326,15 +330,8 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, options={})
+    def delta_stream(cursor, exclude_types=[], include_types=[], timeout=0, expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
-
-      raise 'Options argument must be a hash' unless options.is_a? Hash
-
-      exclude_types = options[:exclude_types] || []
-      include_types = options[:include_types] || []
-      timeout = options[:timeout] || 0
-      expanded_view = options[:expanded_view] || false
 
       if exclude_types.any? and include_types.any?
         raise "Cannot pass both include_types and exclude_types parameters"
@@ -342,7 +339,9 @@ module Inbox
 
       if exclude_types.any?
         filter_string = _build_exclude_types(exclude_types)
-      elsif include_types.any?
+      end
+
+      if include_types.any?
         filter_string = _build_include_types(include_types)
       end
 

@@ -60,10 +60,8 @@ describe Inbox::API do
       stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&exclude_types=thread")).
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
-      EM.run do
-        inbox.delta_stream(cursor, {:exclude_types => [Nylas::Thread]}) do |event, object|
-          EM.stop
-        end
+      inbox.delta_stream(cursor, exclude_types=[Nylas::Thread]) do |event, object|
+        break
       end
     end
 
@@ -73,10 +71,8 @@ describe Inbox::API do
       stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&include_types=thread")).
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
-      EM.run do
-        inbox.delta_stream(cursor, {:exclude_types => [], :include_types => [Nylas::Thread]}) do |event, object|
-          EM.stop
-        end
+      inbox.delta_stream(cursor, exclude_types=[], include_types=[Nylas::Thread]) do |event, object|
+        break
       end
     end
 
@@ -84,7 +80,7 @@ describe Inbox::API do
       cursor = inbox.latest_cursor
 
       expect {
-        inbox.delta_stream(cursor, {:include_types => [Nylas::Thread], :exclude_types => [Nylas::Thread]}) do |event, object|
+        inbox.delta_stream(cursor, include_types=[Nylas::Thread], exclude_types=[Nylas::Thread]) do |event, object|
           break
         end
       }.to raise_error(RuntimeError)
