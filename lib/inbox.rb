@@ -247,32 +247,45 @@ module Inbox
       "message" => Inbox::ExpandedMessage,
     }
 
-    def _build_exclude_types(exclude_types)
-      exclude_string = "&exclude_types="
+    def _build_exclude_types(types)
+      exclude_string = "&exclude_types=" + _build_types_list(types)
+    end
 
-      exclude_types.each do |value|
+    def _build_include_types(types)
+      include_string = "&include_types=" + _build_types_list(types)
+    end
+
+    def _build_types_list(types)
+      type_string = ""
+      types.each do |value|
         count = 0
         if OBJECTS_TABLE.has_value?(value)
           param_name = OBJECTS_TABLE.key(value)
-          exclude_string += "#{param_name},"
+          type_string += "#{param_name},"
         end
       end
 
-      exclude_string = exclude_string[0..-2]
+      type_string = type_string[0..-2]
     end
 
-    def deltas(cursor, exclude_types=[], expanded_view=false)
-      return enum_for(:deltas, cursor, exclude_types, expanded_view) unless block_given?
+    def deltas(cursor, exclude_types=[], include_types=[], expanded_view=false)
+      return enum_for(:deltas, cursor, exclude_types, include_types, expanded_view) unless block_given?
 
-      exclude_string = ""
+      if exclude_types.any? and include_types.any?
+        raise "Cannot pass both include_types and exclude_types parameters"
+      end
 
       if exclude_types.any?
         exclude_string = _build_exclude_types(exclude_types)
       end
 
+      if include_types.any?
+        include_string = _build_include_types(include_types)
+      end
+
       # loop and yield deltas until we've come to the end.
       loop do
-        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
+        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
         if expanded_view
           path += '&view=expanded'
         end
@@ -315,17 +328,23 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false)
+    def delta_stream(cursor, exclude_types=[], include_types=[], timeout=0, expanded_view=false)
       raise 'Please provide a block for receiving the delta objects' if !block_given?
 
-      exclude_string = ""
+      if exclude_types.any? and include_types.any?
+        raise "Cannot pass both include_types and exclude_types parameters"
+      end
 
       if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
+        filter_string = _build_exclude_types(exclude_types)
+      end
+
+      if include_types.any?
+        filter_string = _build_include_types(include_types)
       end
 
       # loop and yield deltas indefinitely.
-      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
+      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{filter_string}")
       if expanded_view
         path += '&view=expanded'
       end

@@ -53,6 +53,38 @@ describe Inbox::API do
       expect(a_request(:get, nth_cursor_url)).to have_been_made.once
       expect(count).to eq(3)
     end
+
+    it 'should be able to exclude object types from the deltas' do
+      cursor = inbox.latest_cursor
+
+      stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&exclude_types=thread")).
+        to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      inbox.delta_stream(cursor, exclude_types=[Nylas::Thread]) do |event, object|
+        break
+      end
+    end
+
+    it 'should be able to include only certain object types in the deltas' do
+      cursor = inbox.latest_cursor
+
+      stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&include_types=thread")).
+        to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      inbox.delta_stream(cursor, exclude_types=[], include_types=[Nylas::Thread]) do |event, object|
+        break
+      end
+    end
+
+    it 'should raise an error if both include and exclude parameters are passed' do
+      cursor = inbox.latest_cursor
+
+      expect {
+        inbox.delta_stream(cursor, include_types=[Nylas::Thread], exclude_types=[Nylas::Thread]) do |event, object|
+          break
+        end
+      }.to raise_error(RuntimeError)
+    end
   end
 
   describe 'Delta sync streaming API wrapper' do
