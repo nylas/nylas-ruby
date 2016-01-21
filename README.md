@@ -541,9 +541,9 @@ nylas = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
 # going to use.
 account_id = nylas.accounts.first.id
 
-# Display the contents of the first message for the first account
+# Display the body of the first message for the first account
 nylas = Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/')
-puts nylas.messages.first.contents
+puts nylas.messages.first.body
 ```
 
 
