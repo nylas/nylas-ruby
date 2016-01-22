@@ -128,4 +128,13 @@ describe Nylas::RestfulModelCollection do
         api.messages.where(:to => 'someone@nylas.com')
     end
   end
+
+  it 'can execute complex queries combining range and where' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=5&to=someone%40nylas%2ecom").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:to => 'someone@nylas.com').range(5, 10)
+  end
 end
