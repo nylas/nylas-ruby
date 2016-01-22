@@ -476,15 +476,10 @@ EventMachine.run do
 end
 ```
 
-In order to receive streams from multiple accounts, simply create multiple API handles (one for each account), then open a `delta_stream` for each of them.
+To receive streams from multiple accounts, call `delta_stream` for each of them inside an `EventMachine.run` block.
 
 ```ruby
-api_handles = []
-nylas.accounts.each {
-  |a|
-  account_id = a.id
-  api_handles.push(Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/'))
-}
+api_handles = [] # a list of Nylas::API objects
 
 EventMachine.run do
   api_handles.each do |a|

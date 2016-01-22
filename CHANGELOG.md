@@ -1,6 +1,7 @@
 ### Upcoming Release
 
 * Remove get_cursor method that calls deprecated generate_cursor endpoint
+* Modify `delta_stream method` to remove built-in `EventMachine.run` block and allow for multiple streams. `delta_stream` must now be called from inside an `EventMachine.run` block
 
 ### 1.3.0 / 2015-12-07
 
