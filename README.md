@@ -458,23 +458,41 @@ The streaming API will receive deltas in real time, without needing to repeatedl
 ```ruby
 cursor = nylas.latest_cursor
 
-last_cursor = nil
-nylas.delta_stream(cursor) do |event, object|
-  if event == "create" or event == "modify"
-    if object.is_a?(Nylas::Contact)
-      puts "#{object.name} - #{object.email}"
-    elsif object.is_a?(Nylas::Event)
-      puts "Event!"
+EventMachine.run do
+  nylas.delta_stream(cursor) do |event, object|
+    if event == "create" or event == "modify"
+      if object.is_a?(Nylas::Contact)
+        puts "#{object.name} - #{object.email}"
+      elsif object.is_a?(Nylas::Event)
+        puts "Event!"
+      end
+    elsif event == "delete"
+      # In the case of a deletion, the API only returns the ID of the object.
+      # In this case, the Ruby SDK returns a dummy object with only the id field
+      # set.
+      puts "Deleting from collection #{object.class.name}, id: #{object}"
     end
-  elsif event == "delete"
-    # In the case of a deletion, the API only returns the ID of the object.
-    # In this case, the Ruby SDK returns a dummy object with only the id field
-    # set.
-    puts "Deleting from collection #{object.class.name}, id: #{object}"
   end
-  last_cursor = object.cursor
+end
+```
 
-  # This will loop indefintely
+In order to receive streams from multiple accounts, simply create multiple API handles (one for each account), then open a `delta_stream` for each of them.
+
+```ruby
+api_handles = []
+nylas.accounts.each {
+  |a|
+  account_id = a.id
+  api_handles.push(Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/'))
+}
+
+EventMachine.run do
+  api_handles.each do |a|
+    cursor = a.latest_cursor()
+    a.delta_stream(cursor) do |event, object|
+      puts object
+    end
+  end
 end
 ```
 

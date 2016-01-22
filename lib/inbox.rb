@@ -347,15 +347,13 @@ module Inbox
         end
       end
 
-      EventMachine.run do
-        http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
-        http.stream do |chunk|
-          parser << chunk
-        end
-        http.errback do
-          raise UnexpectedResponse.new http.error
-        end
+      http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
+
+      # set a callback on the HTTP stream that parses incoming chunks as they come in
+      http.stream do |chunk|
+        parser << chunk
       end
+
     end
   end
 end
