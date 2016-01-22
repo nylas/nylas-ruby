@@ -15,8 +15,8 @@ module Inbox
     def each
       return enum_for(:each) unless block_given?
 
-      @filters[:offset] = 0
-      @filters[:limit] = 100
+      @filters[:offset] = 0 unless @filters.key?(:offset)
+      @filters[:limit] = 100 unless @filters.key?(:limit)
 
       finished = false
       while (!finished) do
@@ -65,16 +65,16 @@ module Inbox
       finished = false
       chunk_size = 100
 
-      if limit < chunk_size
-        chunk_size = limit
-      end
-
       while (!finished && accumulated.length < limit) do
-        #results = get_model_collection(offset + accumulated.length, chunk_size)
         @filters[:offset] = offset + accumulated.length
-        # TODO the below means that if we call range(0, 150) we will make two calls for
-        # 100 elements each, then cut off the last 50. This could be optimized.
+
+        # if the total items we want, minus how many we already have, is fewer than we plan to grab...
+        remaining = limit - accumulated.length
+        if remaining < chunk_size
+          chunk_size = remaining
+        end
         @filters[:limit] = chunk_size
+
         results = get_model_collection()
         accumulated = accumulated.concat(results)
 

@@ -45,6 +45,23 @@ describe Nylas::RestfulModelCollection do
       expect(stub2).to have_been_requested
     end
 
+    it 'requests only the number of items required' do
+      stub1 = stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=100&offset=0").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_100.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      stub2 = stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=50&offset=100").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      api.threads.range(0, 150)
+
+      expect(stub1).to have_been_requested
+      expect(stub2).to have_been_requested
+    end
+
     it 'limits the number of returned items to the requested range' do
       stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=50&offset=0").
         to_return(:status => 200,
@@ -136,5 +153,25 @@ describe Nylas::RestfulModelCollection do
                   :headers => {'Content-Type' => 'application/json'})
 
         api.messages.where(:to => 'someone@nylas.com').range(5, 10)
+  end
+
+  it 'can chain each with range to form complex queries' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=5").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.range(5, 10).each do |a|
+        end
+  end
+
+  it 'can chain each with where to form complex queries' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=5&to=someone%40nylas%2ecom").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+        api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
+        end
   end
 end
