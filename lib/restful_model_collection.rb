@@ -15,16 +15,17 @@ module Inbox
     def each
       return enum_for(:each) unless block_given?
 
-      offset = 0
-      chunk_size = 100
+      @filters[:offset] = 0
+      @filters[:limit] = 100
+
       finished = false
       while (!finished) do
-        results = get_model_collection(offset, chunk_size)
+        results = get_model_collection()
         results.each { |item|
           yield item
         }
-        offset += results.length
-        finished = results.length < chunk_size
+        @filters[:offset] += results.length
+        finished = results.length < @filters[:limit]
       end
     end
 
@@ -69,7 +70,12 @@ module Inbox
       end
 
       while (!finished && accumulated.length < limit) do
-        results = get_model_collection(offset + accumulated.length, chunk_size)
+        #results = get_model_collection(offset + accumulated.length, chunk_size)
+        @filters[:offset] = offset + accumulated.length
+        # TODO the below means that if we call range(0, 150) we will make two calls for
+        # 100 elements each, then cut off the last 50. This could be optimized.
+        @filters[:limit] = chunk_size
+        results = get_model_collection()
         accumulated = accumulated.concat(results)
 
         # we're done if we have more than 'limit' items, or if we asked for 50 and got less than 50...
@@ -136,13 +142,11 @@ module Inbox
       model
     end
 
-    def get_model_collection(offset = 0, limit = 100)
+    def get_model_collection
       filters = @filters.clone
 
       # If filters have already been set for limit or offset, ignore the
       # values passed in above. (i.e., the 'where' function has precedence)
-      filters[:limit] = limit unless filters.key?(:limit)
-      filters[:offset] = offset unless filters.key?(:offset)
       models = []
 
       RestClient.get(url, :params => filters){ |response,request,result|

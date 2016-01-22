@@ -24,6 +24,46 @@ describe Nylas::RestfulModelCollection do
     end
   end
 
+  describe '#range' do
+    before do
+    end
+
+    it 'can make multiple requests to retreive large numbers of items' do
+      stub1 = stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=100&offset=0").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_100.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      stub2 = stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=100&offset=100").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      api.threads.range(0, 200)
+
+      expect(stub1).to have_been_requested
+      expect(stub2).to have_been_requested
+    end
+
+    it 'limits the number of returned items to the requested range' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=50&offset=0").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_100.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      api.threads.range(0, 50)
+    end
+
+    it 'can offset the requested items' do
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=50&offset=20").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_100.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      api.threads.range(20, 50)
+    end
+  end
+
   describe '#count' do
     it 'should return number of entities' do
       stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?view=count").
