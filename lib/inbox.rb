@@ -354,6 +354,10 @@ module Inbox
         parser << chunk
       end
 
+      http.errback do
+        raise UnexpectedResponse.new http.error
+      end
+
     end
   end
 end
