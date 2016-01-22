@@ -3,7 +3,7 @@ require 'rest-client'
 require 'yajl'
 require 'em-http'
 require 'ostruct'
-
+require 'uri'
 require 'account'
 require 'api_account'
 require 'api_thread'
@@ -113,11 +113,15 @@ module Inbox
     end
 
     def url_for_authentication(redirect_uri, login_hint = '', options = {})
-      trialString = 'false'
-      if options[:trial] == true
-        trialString = 'true'
-      end
-      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+      arguments = {
+        trial: false,
+        login_hint: login_hint,
+        client_id: @app_id,
+        response_type: 'code',
+        scpe: 'email',
+        redirect_uri: redirect_uri
+      }.merge(options)
+      URI::HTTPS.build(host: "#{@service_domain}/oauth/authorize", query: arguments.to_query).to_s
     end
 
     def url_for_management
