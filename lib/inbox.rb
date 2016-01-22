@@ -113,11 +113,16 @@ module Inbox
     end
 
     def url_for_authentication(redirect_uri, login_hint = '', options = {})
-      trialString = 'false'
-      if options[:trial] == true
-        trialString = 'true'
-      end
-      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}&state=#{options[:state]}"
+      params = {
+        :client_id     => @app_id,
+        :trial         => options[:trial] ? 'true' : 'false',
+        :response_type => 'code',
+        :scope         => 'email',
+        :login_hint    => login_hint,
+        :redirect_uri  => redirect_uri,
+        :state         => options[:state],
+      }.reject { |_, v| v.nil? || /\A[[:space:]]*\z/ === v }.map { |k, v| "#{k}=#{v}" }.join('&')
+      "https://#{@service_domain}/oauth/authorize?#{params}"
     end
 
     def url_for_management
