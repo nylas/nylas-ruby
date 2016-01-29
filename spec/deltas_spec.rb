@@ -63,16 +63,18 @@ describe Inbox::API do
 
     it 'should continuously query the delta sync API' do
       count = 0
-      inbox.delta_stream(0, []) do |event, object|
+      EM.run do
+        inbox.delta_stream(0, []) do |event, object|
 
-        expect(object.cursor).to_not be_nil
-        if event == 'create' or event == 'modify'
-          expect(object).to be_a Inbox::Message
-        elsif event == 'delete'
-          expect(object).to be_a Inbox::Event
+          expect(object.cursor).to_not be_nil
+          if event == 'create' or event == 'modify'
+            expect(object).to be_a Inbox::Message
+          elsif event == 'delete'
+            expect(object).to be_a Inbox::Event
+          end
+          count += 1
+          EM.stop if count == 3
         end
-        count += 1
-        break if count == 3
       end
 
       expect(count).to eq(3)
@@ -105,16 +107,17 @@ describe Inbox::API do
 
     it 'delta stream should skip bogus requests' do
       count = 0
-      inbox.delta_stream(0, []) do |event, object|
-        expect(object.cursor).to_not be_nil
-        if event == 'create' or event == 'modify'
-          expect(object).to be_a Inbox::Message
-        elsif event == 'delete'
-          expect(object).to be_a Inbox::Event
-          break
+      EventMachine.run do
+        inbox.delta_stream(0, []) do |event, object|
+          expect(object.cursor).to_not be_nil
+          if event == 'create' or event == 'modify'
+            expect(object).to be_a Inbox::Message
+            count += 1
+          elsif event == 'delete'
+            expect(object).to be_a Inbox::Event
+            EM.stop
+          end
         end
-
-        count += 1
       end
 
       expect(count).to eq(1)
