@@ -326,8 +326,15 @@ module Inbox
       end
     end
 
-    def delta_stream(cursor, exclude_types=[], include_types=[], timeout=0, expanded_view=false)
+    def delta_stream(cursor, options={})
       raise 'Please provide a block for receiving the delta objects' if !block_given?
+
+      raise 'Options argument must be a hash' unless options.is_a? Hash
+
+      exclude_types = options[:exclude_types] || []
+      include_types = options[:include_types] || []
+      timeout = options[:timeout] || 0
+      expanded_view = options[:expanded_view] || false
 
       if exclude_types.any? and include_types.any?
         raise "Cannot pass both include_types and exclude_types parameters"

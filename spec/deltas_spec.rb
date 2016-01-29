@@ -60,8 +60,10 @@ describe Inbox::API do
       stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&exclude_types=thread")).
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
-      inbox.delta_stream(cursor, exclude_types=[Nylas::Thread]) do |event, object|
-        break
+      EM.run do
+        inbox.delta_stream(cursor, {:exclude_types => [Nylas::Thread]}) do |event, object|
+          EM.stop
+        end
       end
     end
 
@@ -71,8 +73,10 @@ describe Inbox::API do
       stub_request(:get, api_url("/streaming?cursor=#{cursor}&exclude_folders=false&include_types=thread")).
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
-      inbox.delta_stream(cursor, exclude_types=[], include_types=[Nylas::Thread]) do |event, object|
-        break
+      EM.run do
+        inbox.delta_stream(cursor, {:exclude_types => [], :include_types => [Nylas::Thread]}) do |event, object|
+          EM.stop
+        end
       end
     end
 
@@ -80,7 +84,7 @@ describe Inbox::API do
       cursor = inbox.latest_cursor
 
       expect {
-        inbox.delta_stream(cursor, include_types=[Nylas::Thread], exclude_types=[Nylas::Thread]) do |event, object|
+        inbox.delta_stream(cursor, {:include_types => [Nylas::Thread], :exclude_types => [Nylas::Thread]}) do |event, object|
           break
         end
       }.to raise_error(RuntimeError)
@@ -96,7 +100,7 @@ describe Inbox::API do
     it 'should continuously query the delta sync API' do
       count = 0
       EM.run do
-        inbox.delta_stream(0, []) do |event, object|
+        inbox.delta_stream(0) do |event, object|
 
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
@@ -142,7 +146,7 @@ describe Inbox::API do
     it 'delta stream should skip bogus requests' do
       count = 0
       EventMachine.run do
-        inbox.delta_stream(0, []) do |event, object|
+        inbox.delta_stream(0) do |event, object|
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
             expect(object).to be_a Inbox::Message
