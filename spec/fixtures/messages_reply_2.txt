@@ -1,0 +1,94 @@
+[
+  {
+    "account_id": "agu8c88u9ikf9x1yvt0r4zfrn",
+    "bcc": [],
+    "body": "some string",
+    "cc": [],
+    "date": 1452708475,
+    "events": [],
+    "files": [],
+    "from": [
+      {
+        "email": "hello@nylas.com",
+        "name": "Nylas Team"
+      }
+    ],
+    "id": "2pnmgnlgvgl0szkicp68kzv5",
+    "labels": [
+      {
+        "display_name": "Inbox",
+        "id": "ancobq2c59ig25o92lfwp2afs",
+        "name": "inbox"
+      },
+      {
+        "display_name": "All Mail",
+        "id": "83jicmy7xhqsy6rvy4hmit3tx",
+        "name": "all"
+      }
+    ],
+    "object": "message",
+    "reply_to": [
+      {
+        "email": "hello@nylas.com",
+        "name": "Hello Nylas"
+      }
+    ],
+    "snippet": "This is a short snippet of the message",
+    "starred": false,
+    "subject": "Look sir, droids!",
+    "thread_id": "7uck6d29wqg3gc7coc3cuo58w",
+    "to": [
+      {
+        "email": "someone@nylas.com",
+        "name": "someone@nylas.com"
+      }
+    ],
+    "unread": true
+  },
+  {
+    "account_id": "agu8c88u9ikf9x1yvt0r4zfrn",
+    "bcc": [],
+    "body": "another string",
+    "cc": [],
+    "date": 1452708479,
+    "events": [],
+    "files": [],
+    "from": [
+      {
+        "email": "hello@nylas.com",
+        "name": "Nylas Team"
+      }
+    ],
+    "id": "2pnmgnlgvgl0szkicp68kzv5",
+    "labels": [
+      {
+        "display_name": "Inbox",
+        "id": "ancobq2c59ig25o92lfwp2afs",
+        "name": "inbox"
+      },
+      {
+        "display_name": "All Mail",
+        "id": "83jicmy7xhqsy6rvy4hmit3tx",
+        "name": "all"
+      }
+    ],
+    "object": "message",
+    "reply_to": [
+      {
+        "email": "hello@nylas.com",
+        "name": "Hello Nylas"
+      }
+    ],
+    "snippet": "Another short snippet",
+    "starred": false,
+    "subject": "Snappy subject",
+    "thread_id": "4gm1n96l058c3pyda1saroiz0",
+    "to": [
+      {
+        "email": "someone@nylas.com",
+        "name": "someone@nylas.com"
+      }
+    ],
+    "unread": true
+  }
+]

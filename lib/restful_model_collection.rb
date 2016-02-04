@@ -15,16 +15,17 @@ module Inbox
     def each
       return enum_for(:each) unless block_given?
 
-      offset = 0
-      chunk_size = 100
+      @filters[:offset] = 0 unless @filters.key?(:offset)
+      @filters[:limit] = 100 unless @filters.key?(:limit)
+
       finished = false
       while (!finished) do
-        results = get_model_collection(offset, chunk_size)
+        results = get_model_collection()
         results.each { |item|
           yield item
         }
-        offset += results.length
-        finished = results.length < chunk_size
+        @filters[:offset] += results.length
+        finished = results.length < @filters[:limit]
       end
     end
 
@@ -64,12 +65,17 @@ module Inbox
       finished = false
       chunk_size = 100
 
-      if limit < chunk_size
-        chunk_size = limit
-      end
-
       while (!finished && accumulated.length < limit) do
-        results = get_model_collection(offset + accumulated.length, chunk_size)
+        @filters[:offset] = offset + accumulated.length
+
+        # if the total items we want, minus how many we already have, is fewer than we plan to grab...
+        remaining = limit - accumulated.length
+        if remaining < chunk_size
+          chunk_size = remaining
+        end
+        @filters[:limit] = chunk_size
+
+        results = get_model_collection()
         accumulated = accumulated.concat(results)
 
         # we're done if we have more than 'limit' items, or if we asked for 50 and got less than 50...
@@ -136,10 +142,8 @@ module Inbox
       model
     end
 
-    def get_model_collection(offset = 0, limit = 100)
+    def get_model_collection
       filters = @filters.clone
-      filters[:offset] = offset
-      filters[:limit] = limit
       models = []
 
       RestClient.get(url, :params => filters){ |response,request,result|
