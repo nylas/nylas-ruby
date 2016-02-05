@@ -1,3 +1,5 @@
+require 'uri'
+require 'rack'
 
 describe 'Inbox' do
   before (:each) do
@@ -44,19 +46,58 @@ describe 'Inbox' do
     end
 
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
-      url = @inbox.url_for_authentication('http://redirect.uri')
-      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=&redirect_uri=http://redirect.uri")
+      redirect_uri = 'http://redirect.uri'
+      url = @inbox.url_for_authentication(redirect_uri)
+      params = Rack::Utils.parse_query URI(url).query
+
+      expect(params["client_id"]).to eq(@app_id)
+      expect(params["trial"]).to eq('false')
+      expect(params["response_type"]).to eq('code')
+      expect(params["scope"]).to eq('email')
+      expect(params["login_hint"]).to eq('')
+      expect(params["redirect_uri"]).to eq(redirect_uri)
     end
 
     it "should include the login_hint if one is provided" do
+      redirect_uri = 'http://redirect.uri'
       url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com')
-      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=false&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
+      params = Rack::Utils.parse_query URI(url).query
+
+      expect(params["client_id"]).to eq(@app_id)
+      expect(params["trial"]).to eq('false')
+      expect(params["response_type"]).to eq('code')
+      expect(params["scope"]).to eq('email')
+      expect(params["login_hint"]).to eq('ben@nylas.com')
+      expect(params["redirect_uri"]).to eq(redirect_uri)
     end
 
     it "should use trial=true if the trial flag is passed" do
-      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', {trial: true})
-      expect(url).to eq("https://api.nylas.com/oauth/authorize?client_id=#{@app_id}&trial=true&response_type=code&scope=email&login_hint=ben@nylas.com&redirect_uri=http://redirect.uri")
+      redirect_uri = 'http://redirect.uri'
+      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', :trial => true)
+      params = Rack::Utils.parse_query URI(url).query
+
+      expect(params["client_id"]).to eq(@app_id)
+      expect(params["trial"]).to eq('true')
+      expect(params["response_type"]).to eq('code')
+      expect(params["scope"]).to eq('email')
+      expect(params["login_hint"]).to eq('ben@nylas.com')
+      expect(params["redirect_uri"]).to eq(redirect_uri)
     end
+
+    it "should pass state if defined" do
+      redirect_uri = 'http://redirect.uri'
+      url = @inbox.url_for_authentication('http://redirect.uri', 'ben@nylas.com', {:state => 'empire state'})
+      params = Rack::Utils.parse_query URI(url).query
+
+      expect(params["client_id"]).to eq(@app_id)
+      expect(params["trial"]).to eq('false')
+      expect(params["response_type"]).to eq('code')
+      expect(params["scope"]).to eq('email')
+      expect(params["login_hint"]).to eq('ben@nylas.com')
+      expect(params["redirect_uri"]).to eq(redirect_uri)
+      expect(params["state"]).to eq('empire state')
+    end
+
   end
 
   describe "#self.interpret_response" do

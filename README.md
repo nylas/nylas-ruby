@@ -83,7 +83,9 @@ def login
   # This URL must be registered with your application in the developer portal
   callback_url = url_for(:action => 'login_callback')
 
-  redirect_to nylas.url_for_authentication(callback_url, user_email)
+  # You can also optionally pass state, an optional arbitrary string that
+  # will be passed back to us at the end of the auth flow.
+  redirect_to nylas.url_for_authentication(callback_url, user_email, {:state => 'ben auth'})
 end
 ```
 

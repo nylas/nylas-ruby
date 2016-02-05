@@ -3,6 +3,7 @@ require 'rest-client'
 require 'yajl'
 require 'em-http'
 require 'ostruct'
+require 'active_support/core_ext/hash'
 
 require 'account'
 require 'api_account'
@@ -113,11 +114,20 @@ module Inbox
     end
 
     def url_for_authentication(redirect_uri, login_hint = '', options = {})
-      trialString = 'false'
-      if options[:trial] == true
-        trialString = 'true'
+      params = {
+        :client_id => @app_id,
+        :trial => options.fetch(:trial, false),
+        :response_type => 'code',
+        :scope => 'email',
+        :login_hint => login_hint,
+        :redirect_uri => redirect_uri,
+      }
+
+      if options.has_key?(:state) then
+        params[:state] = options[:state]
       end
-      "https://#{@service_domain}/oauth/authorize?client_id=#{@app_id}&trial=#{trialString}&response_type=code&scope=email&login_hint=#{login_hint}&redirect_uri=#{redirect_uri}"
+
+      "https://#{@service_domain}/oauth/authorize?" + params.to_query
     end
 
     def url_for_management
