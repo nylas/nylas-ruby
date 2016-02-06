@@ -31,7 +31,7 @@ class App < Sinatra::Base
 
     # This URL must be registered with your application in the developer portal
     callback_url = "http://localhost:4567/callback"
-    redirect to(inbox.url_for_authentication(callback_url, nil))
+    redirect to(inbox.url_for_authentication(callback_url, nil, :state => 'blue_state'))
   end
 
   get '/callback' do

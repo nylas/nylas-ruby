@@ -46,6 +46,7 @@ threads = inbox.threads.each do |thread|
 end
 color_print "Did you see a list of thread subjects? (Y/N)"
 
+puts "<<<<<>>>>>"
 threads = inbox.threads.where(:in => 'sent').each do |thread|
   puts thread.subject
 end
@@ -97,9 +98,11 @@ cursor = inbox.latest_cursor
 color_print "Do you see a cursor (Y/N)? #{cursor}"
 
 puts "Getting events from the delta stream (this hangs eventually, feel free to Ctrl-C)"
-inbox.delta_stream(cursor) do |event, obj|
-  if obj.is_a?(Inbox::Event)
-    puts obj.title
+
+EventMachine.run do
+  inbox.delta_stream(cursor) do |event, obj|
+    if obj.is_a?(Inbox::Event)
+      puts obj.title
+    end
   end
 end
-
