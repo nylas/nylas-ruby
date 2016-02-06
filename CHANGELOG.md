@@ -1,7 +1,8 @@
-### Upcoming Release
+### 2.0.0 / 2016-02-05
 
 * Remove get_cursor method that calls deprecated generate_cursor endpoint
 * Modify `delta_stream method` to remove built-in `EventMachine.run` block and allow for multiple streams. `delta_stream` must now be called from inside an `EventMachine.run` block
+* `url_for_authentication` now accepts a `:state` parameter (see https://nylas.com/docs#server_side_explicit_flow for more details)
 
 ### 1.3.0 / 2015-12-07
 
