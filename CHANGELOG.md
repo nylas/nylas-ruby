@@ -1,3 +1,8 @@
+### 2.0.1 / 2016-02-12
+
+* Fix folders and labels updates for threads and messages
+* Revert pull request #71
+
 ### 2.0.0 / 2016-02-05
 
 * Remove get_cursor method that calls deprecated generate_cursor endpoint
