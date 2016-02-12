@@ -24,7 +24,7 @@ describe Inbox::Thread do
       thr.labels = labels
       dict = thr.as_json
       expect(dict.length).to eq(1)
-      expect(dict['labels']).to eq(['test label', 'label 2'])
+      expect(dict['label_ids']).to eq(['test label', 'label 2'])
 
       # Now check that we do the same if @folder is set.
       thr = Inbox::Thread.new(@inbox, nil)
@@ -32,8 +32,8 @@ describe Inbox::Thread do
       thr.folder = labels[0]
       dict = thr.as_json
       expect(dict.length).to eq(1)
-      expect(dict['labels']).to eq(nil)
-      expect(dict['folder']).to eq('test label')
+      expect(dict['label_ids']).to eq(nil)
+      expect(dict['folder_id']).to eq('test label')
 
     end
   end

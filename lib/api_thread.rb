@@ -34,7 +34,7 @@ module Inbox
        label
       end
 
-      if not folder.nil?
+      if not folder.nil? and folder.is_a?(Hash)
        folder = Folder.new(@_api)
        folder.inflate(@folder)
        @folder = folder
