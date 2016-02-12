@@ -52,14 +52,22 @@ module Inbox
     def as_json(options = {})
       hash = {}
 
+      if not @unread.nil?
+        hash["unread"] = @unread
+      end
+
+      if not @starred.nil?
+        hash["starred"] = @starred
+      end
+
       if not @labels.nil? and @labels != []
-        hash["labels"] = @labels.map do |label|
+        hash["label_ids"] = @labels.map do |label|
           label.id
         end
       end
 
       if not @folder.nil?
-        hash["folder"] = @folder.id
+        hash["folder_id"] = @folder.id
       end
 
       hash
