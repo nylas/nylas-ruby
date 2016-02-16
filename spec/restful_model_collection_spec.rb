@@ -1,5 +1,6 @@
 describe Nylas::RestfulModelCollection do
   let(:api) { Inbox::API.new(app_id, app_secret, access_token) }
+  let(:api2) { Inbox::API.new(app_id, app_secret, access_token) }
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
@@ -76,7 +77,7 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:in => 'inbox')
+      api.messages.where(:in => 'inbox')
     end
 
     it 'should be able to return messages sent to a specific address' do
@@ -85,7 +86,7 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:to => 'someone@nylas.com')
+      api.messages.where(:to => 'someone@nylas.com')
     end
   end
 
@@ -95,7 +96,7 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:to => 'someone@nylas.com').range(5, 10)
+      api.messages.where(:to => 'someone@nylas.com').range(5, 10)
   end
 
   it 'can chain each with range to form complex queries' do
@@ -104,8 +105,8 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.range(5, 10).each do |a|
-        end
+      api.messages.range(5, 10).each do |a|
+      end
   end
 
   it 'can chain each with where to form complex queries' do
@@ -114,8 +115,8 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
-        end
+      api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
+      end
   end
 
   it 'can chain first with where, and gives first precedence' do
@@ -124,7 +125,7 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        message = api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).first
+      message = api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).first
   end
 
   it 'can issue multiple filtered requests, each with the correct parameters' do
@@ -133,22 +134,43 @@ describe Nylas::RestfulModelCollection do
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        message = api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).first
+      message = api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).first
 
       stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=5&to=someone%40nylas%2ecom").
         to_return(:status => 200,
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
-        end
+      api.messages.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
+      end
 
       stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=0&to=someone%40nylas%2ecom").
         to_return(:status => 200,
                   :body => File.read('spec/fixtures/messages_reply_2.txt'),
                   :headers => {'Content-Type' => 'application/json'})
 
-        api.messages.where(:to => 'someone@nylas.com', :limit => 10).each do |a|
-        end
+      api.messages.where(:to => 'someone@nylas.com', :limit => 10).each do |a|
+      end
+  end
+
+  it 'does not share state between RestfulModelCollection subclasses' do
+      msgs = api.messages
+
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=10&offset=5&to=someone%40nylas%2ecom").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      msgs.where(:to => 'someone@nylas.com', :limit => 10, :offset => 5).each do |a|
+      end
+
+      stub_request(:get, "https://#{access_token}:@api.nylas.com/messages?limit=100&offset=0&to=someone-else%40nylas%2ecom").
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/messages_reply_2.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+
+      msgs.where(:to => 'someone-else@nylas.com').each do |a|
+      end
+
   end
 end
