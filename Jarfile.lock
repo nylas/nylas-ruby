@@ -1,0 +1,15 @@
+---
+version: 0.14.6
+groups:
+  default:
+    dependencies:
+    - com.googlecode.json-simple:json-simple:jar:1.1.1
+    - com.tobedevoured.json:simplestream:jar:0.0.1
+    - org.slf4j:slf4j-api:jar:1.7.18
+    artifacts:
+    - jar:com.tobedevoured.json:simplestream:jar:0.0.1:
+        transitive:
+          com.googlecode.json-simple:json-simple:jar:1.1.1: {}
+          org.slf4j:slf4j-api:jar:1.7.18: {}
+remote_repositories:
+- http://repo1.maven.org/maven2/
