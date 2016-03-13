@@ -20,8 +20,6 @@ require 'restful_model'
 require 'restful_model_collection'
 require 'version'
 
-require 'naether'
-
 module Inbox
   Error = Class.new(::StandardError)
   AccessDenied = Class.new(Error)
@@ -85,7 +83,7 @@ module Inbox
 
 
   class API
-    if Naether.platform == 'java'
+    if RUBY_PLATFORM[/java/] == 'java'
       require 'nylas/inbox/java'
       include Nylas::Inbox::Java
     else

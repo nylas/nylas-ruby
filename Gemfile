@@ -4,7 +4,7 @@ gem 'rest-client', '~> 1.6'
 gem 'yajl-ruby', platform: :ruby
 gem 'em-http-request'
 gem 'http', platform: :jruby
-gem 'lock_jar'
+gem 'lock_jar', platform: :jruby
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
@@ -25,7 +25,7 @@ end
   begin
     require 'lock_jar/bundler'
     LockJar::Bundler.lock!(::Bundler)
-  rescue
+  rescue LoadError
     # noop
   end
 end
