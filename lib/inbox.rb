@@ -84,11 +84,11 @@ module Inbox
 
   class API
     if RUBY_PLATFORM[/java/] == 'java'
-      require 'nylas/inbox/java'
-      include Nylas::Inbox::Java
+      require 'nylas/java'
+      include Nylas::Java
     else
-      require 'nylas/inbox/ruby'
-      include Nylas::Inbox::Ruby
+      require 'nylas/ruby'
+      include Nylas::Ruby
     end
 
     attr_accessor :api_server
