@@ -6,6 +6,7 @@ java_import 'com.tobedevoured.json.SimpleStream'
 
 module Nylas
   module Java
+    UnexpectedResponse = Class.new(::StandardError)
 
     def stream_activity(path, timeout, &callback)
       parser = SimpleStream.new

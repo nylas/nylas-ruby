@@ -3,6 +3,7 @@ require 'em-http'
 
 module Nylas
   module Ruby
+    UnexpectedResponse = Class.new(::StandardError)
 
     def stream_activity(path, timeout, &callback)
       parser = Yajl::Parser.new(:symbolize_keys => false)
