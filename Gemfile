@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'activesupport'
 gem 'rest-client', '~> 1.6'
 gem 'yajl-ruby', platform: :ruby
-gem 'em-http-request'
+gem 'em-http-request', platform: :ruby
 gem 'http', platform: :jruby
 gem 'lock_jar', platform: :jruby
 
@@ -24,7 +24,7 @@ end
 
 @@check ||= at_exit do
   # JRuby only.Generate Jarfile.lock which is used by LockJar to load jar
-  # dependencies into the classpath. 
+  # dependencies into the classpath.
   if RUBY_PLATFORM[/java/] == 'java'
     require 'lock_jar/bundler'
     LockJar::Bundler.lock!(::Bundler)

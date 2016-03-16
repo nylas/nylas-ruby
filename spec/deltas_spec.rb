@@ -8,6 +8,16 @@ describe Inbox::API do
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
   let(:api_url_template) { 'https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta' }
 
+  def run_on_platform
+    if RUBY_PLATFORM[/java/] == 'java'
+      yield(double(:em).as_null_object)
+    else
+      EventMachine.run do
+        yield(EM)
+      end
+    end
+  end
+
   def api_url(resource)
     "#{api_url_template}#{resource}"
   end
@@ -63,7 +73,7 @@ describe Inbox::API do
 
     it 'should continuously query the delta sync API' do
       count = 0
-      EM.run do
+      run_on_platform do |em|
         inbox.delta_stream(0, []) do |event, object|
 
           expect(object.cursor).to_not be_nil
@@ -73,7 +83,7 @@ describe Inbox::API do
             expect(object).to be_a Inbox::Event
           end
           count += 1
-          EM.stop if count == 3
+          em.stop if count == 3
         end
       end
 
@@ -107,7 +117,7 @@ describe Inbox::API do
 
     it 'delta stream should skip bogus requests' do
       count = 0
-      EventMachine.run do
+      run_on_platform do |em|
         inbox.delta_stream(0, []) do |event, object|
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
@@ -115,7 +125,7 @@ describe Inbox::API do
             count += 1
           elsif event == 'delete'
             expect(object).to be_a Inbox::Event
-            EM.stop
+            em.stop
           end
         end
       end
