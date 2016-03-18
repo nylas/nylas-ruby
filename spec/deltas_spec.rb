@@ -69,6 +69,14 @@ describe Inbox::API do
     before do
       stub_request(:get, api_url('/streaming?cursor=0&exclude_folders=false')).
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        allow(inbox).to receive(:stream_activity) do |path, timeout, &callback|
+          parser = SimpleStream.new
+          parser.setCallback(callback)
+          parser.stream(File.read('spec/fixtures/delta_stream.txt'))
+        end
+      end
     end
 
     it 'should continuously query the delta sync API' do
@@ -97,6 +105,19 @@ describe Inbox::API do
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
       stub_request(:get, api_url('/streaming?cursor=0&exclude_folders=false')).
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        allow(inbox).to receive(:stream_activity) do |path, timeout, &callback|
+          parser = SimpleStream.new
+          parser.setCallback(callback)
+
+          if path.include? '?cursor=0&exclude_folders=false'
+            parser.stream(File.read('spec/fixtures/bogus_second.txt'))
+          elsif path.include? '/streaming?exclude_folders=false&cursor=0'
+            parser.stream(File.read('spec/fixtures/bogus_stream.txt'))
+          end
+        end
+      end
     end
 
     it 'delta sync should skip bogus requests' do
