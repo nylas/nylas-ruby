@@ -83,15 +83,7 @@ module Inbox
 
 
   class API
-    if RUBY_PLATFORM[/java/] == 'java'
-      require 'nylas/java'
-      include Nylas::Java
-    else
-      require 'nylas/ruby'
-      include Nylas::Ruby
-    end
-
-    attr_accessor :api_server
+    attr_accessor :api_server, :stream_handler
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
@@ -105,6 +97,14 @@ module Inbox
       @app_id = app_id
       @service_domain = service_domain
       @version = Inbox::VERSION
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        require 'nylas/stream_handlers/simple_stream'
+        @stream_handler = Nylas::StreamHandlers::SimpleStream.new
+      else
+        require 'nylas/stream_handlers/event_machine'
+        @stream_handler = Nylas::StreamHandlers::EventMachine.new
+      end
 
       if ::RestClient.before_execution_procs.empty?
         ::RestClient.add_before_execution_proc do |req, params|
