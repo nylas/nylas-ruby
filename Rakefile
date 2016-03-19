@@ -50,9 +50,22 @@ end
 task :nylas_build do
   Jeweler::Tasks.new do |gem|
     setup_nylas_gem(gem)
+    gem.platform = 'java'
+    gem.dependencies.clear
+    bundler = Bundler.load
+    bundler.dependencies_for(:default, :runtime).each do |dependency|
+      next unless dependency.current_platform?
+      gem.add_dependency dependency.name, *dependency.requirement.as_list
+    end
+
+    bundler.dependencies_for(:development, :test).each do |dependency|
+      next unless dependency.current_platform?
+      gem.add_development_dependency dependency.name, *dependency.requirement.as_list
+    end
   end
 
   Jeweler::RubygemsDotOrgTasks.new
+  Rake::Task["gemspec"].invoke
   Rake::Task["build"].invoke
 end
 

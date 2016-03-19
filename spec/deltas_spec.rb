@@ -71,7 +71,7 @@ describe Inbox::API do
         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
       if RUBY_PLATFORM[/java/] == 'java'
-        allow(inbox).to receive(:stream_activity) do |path, timeout, &callback|
+        allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
           parser = SimpleStream.new
           parser.setCallback(callback)
           parser.stream(File.read('spec/fixtures/delta_stream.txt'))
@@ -107,7 +107,7 @@ describe Inbox::API do
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
 
       if RUBY_PLATFORM[/java/] == 'java'
-        allow(inbox).to receive(:stream_activity) do |path, timeout, &callback|
+        allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
           parser = SimpleStream.new
           parser.setCallback(callback)
 

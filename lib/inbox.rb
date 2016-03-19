@@ -363,7 +363,7 @@ module Inbox
         end
       end
 
-      stream_activity(path, timeout, &parse_callback)
+      stream_handler.stream_activity(path, timeout, &parse_callback)
     end
   end
 end
