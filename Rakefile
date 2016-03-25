@@ -14,6 +14,12 @@ require 'rake'
 require 'jeweler'
 require './lib/version.rb'
 
+class Jeweler::Commands::ReleaseGemspec
+  def commit_gemspec!
+    # disable commiting the gemspec
+  end
+end
+
 def define_jeweler_task(name)
   Jeweler::Tasks.new do |gem|
     gem.name = name
