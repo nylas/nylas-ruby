@@ -83,7 +83,8 @@ module Inbox
 
 
   class API
-    attr_accessor :api_server, :stream_handler
+    attr_accessor :api_server
+    attr_accessor :stream_handler
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
