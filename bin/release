@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "Switching to MRI 2.2.2"
+export RBENV_VERSION=2.2.2
+bundle exec rake nylas_release || exit 1
+bundle exec rake inbox_release || exit 1
+
+echo
+
+echo "Switching to JRuby 9.0.4.0"
+export RBENV_VERSION=jruby-9.0.4.0
+bundle exec rake nylas_release || exit 1
+bundle exec rake inbox_release
