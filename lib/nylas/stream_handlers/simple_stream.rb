@@ -1,5 +1,5 @@
 require 'lock_jar'
-LockJar.load
+LockJar.load(resolve: true)
 
 java_import 'com.tobedevoured.json.SimpleStream'
 java_import 'org.json.simple.JSONArray'
