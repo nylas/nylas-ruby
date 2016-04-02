@@ -72,9 +72,10 @@ describe Inbox::API do
 
       if RUBY_PLATFORM[/java/] == 'java'
         allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
-          parser = SimpleStream.new
-          parser.setCallback(callback)
+          parser = Sjs::SimpleStream.new
+          parser.apply_callback(&callback)
           parser.stream(File.read('spec/fixtures/delta_stream.txt'))
+          parser.flush!
         end
       end
     end
@@ -83,7 +84,6 @@ describe Inbox::API do
       count = 0
       run_on_platform do |em|
         inbox.delta_stream(0, []) do |event, object|
-
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
             expect(object).to be_a Inbox::Message
@@ -108,14 +108,15 @@ describe Inbox::API do
 
       if RUBY_PLATFORM[/java/] == 'java'
         allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
-          parser = SimpleStream.new
-          parser.setCallback(callback)
-
+          parser = Sjs::SimpleStream.new
+          parser.apply_callback(&callback)
           if path.include? '?cursor=0&exclude_folders=false'
             parser.stream(File.read('spec/fixtures/bogus_second.txt'))
           elsif path.include? '/streaming?exclude_folders=false&cursor=0'
             parser.stream(File.read('spec/fixtures/bogus_stream.txt'))
           end
+
+          parser.flush!
         end
       end
     end

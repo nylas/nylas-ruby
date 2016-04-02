@@ -4,7 +4,7 @@ gem 'activesupport'
 gem 'rest-client', '~> 1.6'
 gem 'yajl-ruby', platform: :ruby
 gem 'em-http-request', platform: :ruby
-gem 'lock_jar', platform: :jruby
+gem 'sjs', '~> 0.2.1', platform: :jruby
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
