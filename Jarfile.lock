@@ -7,7 +7,6 @@ groups:
     dependencies:
     - com.googlecode.json-simple:json-simple:jar:1.1.1
     - com.tobedevoured.json:simplestream:jar:0.0.10
-    - com.tobedevoured.json:simplestream:jar:0.0.8
     - commons-codec:commons-codec:jar:1.9
     - commons-logging:commons-logging:jar:1.2
     - org.apache.httpcomponents:httpclient:jar:4.5.2
@@ -15,8 +14,6 @@ groups:
     - org.slf4j:slf4j-api:jar:1.7.18
     - org.slf4j:slf4j-simple:jar:1.7.18
     artifacts:
-    - jar:org.slf4j:slf4j-simple:jar:1.7.18:
-        transitive: {}
     - jar:com.tobedevoured.json:simplestream:jar:0.0.10:
         transitive:
           com.googlecode.json-simple:json-simple:jar:1.1.1: {}
@@ -25,5 +22,7 @@ groups:
             commons-codec:commons-codec:jar:1.9: {}
             org.apache.httpcomponents:httpcore:jar:4.4.4: {}
             commons-logging:commons-logging:jar:1.2: {}
+    - jar:org.slf4j:slf4j-simple:jar:1.7.18:
+        transitive: {}
 remote_repositories:
 - http://repo1.maven.org/maven2/
