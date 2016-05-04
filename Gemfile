@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gem 'activesupport'
 gem 'rest-client', '~> 1.6'
-gem 'yajl-ruby', platform: :ruby
-gem 'em-http-request', platform: :ruby
+gem 'yajl-ruby', '~> 1.2.1', platform: :ruby
+gem 'em-http-request', '~> 1.1.3', platform: :ruby
 gem 'sjs', '~> 0.2.1', platform: :jruby
 
 # Add dependencies to develop your gem here.
