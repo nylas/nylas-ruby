@@ -6,7 +6,8 @@ describe Nylas::RestfulModelCollection do
 
   describe '#each' do
     before do
-      stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?limit=100&offset=0").
+      stub_request(:get, "https://api.nylas.com/threads?limit=100&offset=0").
+        with(basic_auth: [access_token]).
         to_return(:status => 200,
                   :body => File.read('spec/fixtures/threads_reply.txt'),
                   :headers => {'Content-Type' => 'application/json'})
@@ -26,7 +27,8 @@ describe Nylas::RestfulModelCollection do
 
   describe '#count' do
     it 'should return number of entities' do
-      stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?view=count").
+      stub_request(:get, "https://api.nylas.com/threads?view=count").
+        with(basic_auth: [access_token]).
         to_return(:status => 200,
                   :body => File.read('spec/fixtures/threads_count.txt'),
                   :headers => {'Content-Type' => 'application/json'})
@@ -35,7 +37,8 @@ describe Nylas::RestfulModelCollection do
     end
 
     it 'should raise an error when the API raises an error' do
-      stub_request(:get, "https://#{access_token}:@api.nylas.com/threads?view=count").
+      stub_request(:get, "https://api.nylas.com/threads?view=count").
+        with(basic_auth: [access_token]).
         to_return(:status => 403)
 
       expect { api.threads.count }.to raise_error(Inbox::AccessDenied)

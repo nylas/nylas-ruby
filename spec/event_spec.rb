@@ -32,8 +32,8 @@ describe Inbox::Event do
 
   describe "#rsvp!" do
     it "does a request to /send-rsvp" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send-rsvp"
-      stub = stub_request(:post, url).
+      url = "https://api.nylas.com/send-rsvp"
+      stub_request(:post, url).with(basic_auth: [@access_token]).
            to_return(:status => 200, :body => File.read('spec/fixtures/rsvp_reply.txt'), :headers => {})
 
       ev = Inbox::Event.new(@inbox)

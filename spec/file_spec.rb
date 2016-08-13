@@ -11,8 +11,9 @@ describe Inbox::File do
 
   describe "#download" do
     it "requests the raw contents of a file" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/files/2/download"
-      stub_request(:get, url).to_return(:status => 200, :body => "Raw body")
+      url = "https://api.nylas.com/files/2/download"
+      stub_request(:get, url).with(basic_auth: [@access_token]).
+      to_return(:status => 200, :body => "Raw body")
 
       file = Inbox::File.new(@inbox, nil)
       file.id = 2
@@ -21,8 +22,9 @@ describe Inbox::File do
     end
 
     it "raises an error when getting an API error" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/files/2/download"
-      stub_request(:get, url).to_return(:status => 404, :body => "Raw body")
+      url = "https://api.nylas.com/files/2/download"
+      stub_request(:get, url).with(basic_auth: [@access_token]).
+      to_return(:status => 404, :body => "Raw body")
 
       file = Inbox::File.new(@inbox, nil)
       file.id = 2
