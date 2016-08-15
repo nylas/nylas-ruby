@@ -40,8 +40,10 @@ describe Inbox::Thread do
 
   describe "#mark_read!" do
     it "issues a PUT request to update the thread" do
-      url = "https://#{@access_token}:@api.nylas.com/threads/2"
-      stub_request(:put, url).to_return(:status => 200, :body => '{"unread": false}')
+      url = "https://api.nylas.com/threads/2"
+      stub_request(:put, url).
+        with(basic_auth: [@access_token]).
+        to_return(:status => 200, :body => '{"unread": false}')
 
       th = Inbox::Thread.new(@inbox, nil)
       th.id = 2
@@ -53,8 +55,10 @@ describe Inbox::Thread do
 
   describe "#star!" do
     it "issues a PUT request to update the thread" do
-      url = "https://#{@access_token}:@api.nylas.com/threads/2"
-      stub_request(:put, url).to_return(:status => 200, :body => '{"starred": true}')
+      url = "https://api.nylas.com/threads/2"
+      stub_request(:put, url).
+        with(basic_auth: [@access_token]).
+        to_return(:status => 200, :body => '{"starred": true}')
 
       th = Inbox::Thread.new(@inbox, nil)
       th.id = 2

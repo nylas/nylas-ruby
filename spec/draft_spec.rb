@@ -12,7 +12,8 @@ describe Inbox::Draft do
   describe "#save!" do
     it "does save all the fields of the draft object and only sends the required JSON" do
 
-      stub_request(:post, "https://#{@access_token}:@api.nylas.com/drafts/").with(
+      stub_request(:post, "https://api.nylas.com/drafts/").
+        with(basic_auth: [@access_token], 
         :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}',).to_return(:status => 200,
             :body => File.read('spec/fixtures/draft_save.txt'),
             :headers => {"Content-Type" => "application/json"})
@@ -28,8 +29,8 @@ describe Inbox::Draft do
       expect(result.id).to_not be nil
 
       # Check that calling send! with a saved draft only sends the draft_id and version:
-      stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send").
-         with(:body => '{"draft_id":"2h111aefv8pzwzfykrn7hercj","version":0}').to_return(:status => 200,
+      stub_request(:post, "https://api.nylas.com/send").
+         with(basic_auth: [@access_token], :body => '{"draft_id":"2h111aefv8pzwzfykrn7hercj","version":0}').to_return(:status => 200,
                    :body => File.read('spec/fixtures/send_endpoint.txt'),
                    :headers => {"Content-Type" => "application/json"})
 
@@ -39,8 +40,8 @@ describe Inbox::Draft do
 
   describe "#send!" do
     it "sends all the JSON fields when sending directly" do
-      stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send").
-         with(:body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}').to_return(:status => 200,
+      stub_request(:post, "https://api.nylas.com/send").
+         with(basic_auth: [@access_token], :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}').to_return(:status => 200,
                  :body => File.read('spec/fixtures/send_endpoint.txt'),
                  :headers => {"Content-Type" => "application/json"})
 
@@ -57,7 +58,7 @@ describe Inbox::Draft do
     end
 
     it "when an error occurs, it sets server_error if defined" do
-      stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send").
+      stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
          to_return(:status => 400,
                    :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
                             '  "type": "invalid_request_error", "server_error": "SPAM" }',
@@ -79,7 +80,7 @@ describe Inbox::Draft do
     end
 
     it "it only sets server_error when it's defined" do
-      stub_request(:post, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/send").
+      stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
          to_return(:status => 400,
                    :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
                             '  "type": "invalid_request_error"}',
