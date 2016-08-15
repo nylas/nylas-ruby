@@ -6,7 +6,7 @@ describe Inbox::API do
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
-  let(:api_url_template) { 'https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta' }
+  let(:api_url_template) { 'https://api.nylas.com/delta' }
 
   def api_url(resource)
     "#{api_url_template}#{resource}"
@@ -18,11 +18,11 @@ describe Inbox::API do
     let(:nth_cursor_url) { api_url('?cursor=a9vtneydekzye7uwfumdd4iu3&exclude_folders=false') }
 
     before do
-      stub_request(:post, latest_cursor_url).
+      stub_request(:post, latest_cursor_url).with(basic_auth: [access_token]).
         to_return(:status => 200, :body => File.read('spec/fixtures/latest_cursor.txt'), :headers => {})
-      stub_request(:get, cursor_zero_url).
+      stub_request(:get, cursor_zero_url).with(basic_auth: [access_token]).
         to_return(:status => 200, :body => File.read('spec/fixtures/first_cursor.txt'), :headers => {'Content-Type' => 'application/json'})
-      stub_request(:get, nth_cursor_url).
+      stub_request(:get, nth_cursor_url).with(basic_auth: [access_token]).
         to_return(:status => 200, :body => File.read('spec/fixtures/second_cursor.txt'), :headers => {})
     end
 
@@ -57,8 +57,8 @@ describe Inbox::API do
 
   describe 'Delta sync streaming API wrapper' do
     before do
-      stub_request(:get, api_url('/streaming?cursor=0&exclude_folders=false')).
-        to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
+         to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
     end
 
     it 'should continuously query the delta sync API' do
@@ -83,10 +83,12 @@ describe Inbox::API do
 
   describe 'Delta sync bogus requests' do
     before do
-      stub_request(:get, api_url('?cursor=0&exclude_folders=false')).
-        to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
-      stub_request(:get, api_url('/streaming?cursor=0&exclude_folders=false')).
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+      stub_request(:get, "https://api.nylas.com/delta?cursor=0&exclude_folders=false").
+         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'Basic VVhYTU9DSlctQktTTFBDRkktVVFBUUZXTE86', 'User-Agent'=>'Nylas Ruby SDK 2.0.1 - 2.3.1', 'X-Inbox-Api-Wrapper'=>'ruby'}).
+        to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
+
     end
 
     it 'delta sync should skip bogus requests' do

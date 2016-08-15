@@ -44,8 +44,8 @@ describe Inbox::Message do
 
   describe "#raw" do
     it "requests the raw contents by setting an Accept header" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/"
-      stub_request(:get, url).
+      url = "https://api.nylas.com/messages/2/"
+      stub_request(:get, url).with(basic_auth: [@access_token]).
        with(:headers => {'Accept'=>'message/rfc822'}).
          to_return(:status => 200, :body => "Raw body", :headers => {})
 
@@ -57,8 +57,8 @@ describe Inbox::Message do
     end
 
     it "raises an error when getting an API error" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/"
-      stub_request(:get, url).
+      url = "https://api.nylas.com/messages/2/"
+      stub_request(:get, url).with(basic_auth: [@access_token]).
        with(:headers => {'Accept'=>'message/rfc822'}).
          to_return(:status => 404, :body => "Raw body", :headers => {})
 
@@ -72,9 +72,11 @@ describe Inbox::Message do
 
   describe "#expanded" do
     it "requests the expanded version of the message" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/messages/2/?view=expanded"
-      stub_request(:get, url).to_return(:status => 200,
-                                        :body => File.read('spec/fixtures/expanded_message.txt'), :headers => {})
+      url = "https://api.nylas.com/messages/2/?view=expanded"
+      stub_request(:get, url).with(basic_auth: [@access_token]).
+        to_return(:status  => 200,
+                  :body    => File.read('spec/fixtures/expanded_message.txt'),
+                  :headers => {})
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.id = 2
@@ -100,8 +102,9 @@ describe Inbox::Message do
 
   describe "#mark_read!" do
     it "issues a PUT request to update the thread" do
-      url = "https://#{@access_token}:@api.nylas.com/messages/2"
-      stub_request(:put, url).to_return(:status => 200, :body => '{"unread": false}')
+      url = "https://api.nylas.com/messages/2"
+      stub_request(:put, url).with(basic_auth: [@access_token]).
+        to_return(:status => 200, :body => '{"unread": false}')
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.id = 2
@@ -113,8 +116,9 @@ describe Inbox::Message do
 
   describe "#star!" do
     it "issues a PUT request to update the message" do
-      url = "https://#{@access_token}:@api.nylas.com/messages/2"
-      stub_request(:put, url).to_return(:status => 200, :body => '{"starred": true}')
+      url = "https://api.nylas.com/messages/2"
+      stub_request(:put, url).with(basic_auth: [@access_token]).
+        to_return(:status => 200, :body => '{"starred": true}')
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.id = 2

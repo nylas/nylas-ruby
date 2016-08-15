@@ -191,8 +191,9 @@ describe 'Inbox' do
 
     describe "#accounts" do
       before (:each) do
-        uri_template = Addressable::Template.new "https://#{@app_secret}:@api.nylas.com/a/#{@app_id}/accounts{?limit,offset}"
-        stub_request(:get, uri_template).to_return(
+        stub_request(:get, "https://api.nylas.com/a/ABC/accounts?limit=100&offset=0").
+         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'Basic MTIzOg==', 'User-Agent'=>'Nylas Ruby SDK 2.0.1 - 2.3.1', 'X-Inbox-Api-Wrapper'=>'ruby'}).
+          to_return(
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
           :headers => {"Content-Type" => "application/json"})

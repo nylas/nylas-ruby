@@ -8,8 +8,8 @@ describe Inbox::APIAccount do
 
   describe "Inbox#account" do
     it "does a request to /account" do
-      url = "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/account"
-      stub = stub_request(:get, url).
+      url = "https://api.nylas.com/account"
+      stub = stub_request(:get, url).with(basic_auth: [access_token]).
            to_return(:status => 200, :body => File.read('spec/fixtures/account_api.txt'), :headers => {})
 
       acc = inbox.account
