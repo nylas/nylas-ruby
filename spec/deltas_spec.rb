@@ -8,6 +8,16 @@ describe Inbox::API do
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
   let(:api_url_template) { 'https://api.nylas.com/delta' }
 
+  def run_on_platform
+    if RUBY_PLATFORM[/java/] == 'java'
+      yield(double(:em).as_null_object)
+    else
+      EventMachine.run do
+        yield(EM)
+      end
+    end
+  end
+
   def api_url(resource)
     "#{api_url_template}#{resource}"
   end
@@ -59,13 +69,21 @@ describe Inbox::API do
     before do
       stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
          to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
+          parser = Sjs::SimpleStream.new
+          parser.apply_callback(&callback)
+          parser.stream(File.read('spec/fixtures/delta_stream.txt'))
+          parser.flush!
+        end
+      end
     end
 
     it 'should continuously query the delta sync API' do
       count = 0
-      EM.run do
+      run_on_platform do |em|
         inbox.delta_stream(0, []) do |event, object|
-
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
             expect(object).to be_a Inbox::Message
@@ -73,7 +91,7 @@ describe Inbox::API do
             expect(object).to be_a Inbox::Event
           end
           count += 1
-          EM.stop if count == 3
+          em.stop if count == 3
         end
       end
 
@@ -88,6 +106,20 @@ describe Inbox::API do
       stub_request(:get, "https://api.nylas.com/delta?cursor=0&exclude_folders=false").
          with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'Basic VVhYTU9DSlctQktTTFBDRkktVVFBUUZXTE86', 'User-Agent'=>'Nylas Ruby SDK 2.0.1 - 2.3.1', 'X-Inbox-Api-Wrapper'=>'ruby'}).
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        allow(inbox.stream_handler).to receive(:stream_activity) do |path, timeout, &callback|
+          parser = Sjs::SimpleStream.new
+          parser.apply_callback(&callback)
+          if path.include? '?cursor=0&exclude_folders=false'
+            parser.stream(File.read('spec/fixtures/bogus_second.txt'))
+          elsif path.include? '/streaming?exclude_folders=false&cursor=0'
+            parser.stream(File.read('spec/fixtures/bogus_stream.txt'))
+          end
+
+          parser.flush!
+        end
+      end
 
     end
 
@@ -109,7 +141,7 @@ describe Inbox::API do
 
     it 'delta stream should skip bogus requests' do
       count = 0
-      EventMachine.run do
+      run_on_platform do |em|
         inbox.delta_stream(0, []) do |event, object|
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
@@ -117,7 +149,7 @@ describe Inbox::API do
             count += 1
           elsif event == 'delete'
             expect(object).to be_a Inbox::Event
-            EM.stop
+            em.stop
           end
         end
       end

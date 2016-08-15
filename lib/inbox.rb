@@ -1,7 +1,6 @@
 require 'json'
 require 'rest-client'
-require 'yajl'
-require 'em-http'
+
 require 'ostruct'
 require 'active_support/core_ext/hash'
 
@@ -85,6 +84,7 @@ module Inbox
 
   class API
     attr_accessor :api_server
+    attr_accessor :stream_handler
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
@@ -98,6 +98,14 @@ module Inbox
       @app_id = app_id
       @service_domain = service_domain
       @version = Inbox::VERSION
+
+      if RUBY_PLATFORM[/java/] == 'java'
+        require 'nylas/stream_handlers/simple_stream'
+        @stream_handler = Nylas::StreamHandlers::SimpleStream.new
+      else
+        require 'nylas/stream_handlers/event_machine'
+        @stream_handler = Nylas::StreamHandlers::EventMachine.new
+      end
 
       if ::RestClient.before_execution_procs.empty?
         ::RestClient.add_before_execution_proc do |req, params|
@@ -330,8 +338,7 @@ module Inbox
         path += '&view=expanded'
       end
 
-      parser = Yajl::Parser.new(:symbolize_keys => false)
-      parser.on_parse_complete = proc do |data|
+      parse_callback = proc do |data|
         delta = Inbox.interpret_response(OpenStruct.new(:code => '200'), data, {:expected_class => Object, :result_parsed => true})
 
         if not OBJECTS_TABLE.has_key?(delta['object'])
@@ -357,17 +364,7 @@ module Inbox
         end
       end
 
-      http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
-
-      # set a callback on the HTTP stream that parses incoming chunks as they come in
-      http.stream do |chunk|
-        parser << chunk
-      end
-
-      http.errback do
-        raise UnexpectedResponse.new http.error
-      end
-
+      stream_handler.stream_activity(path, timeout, &parse_callback)
     end
   end
 end

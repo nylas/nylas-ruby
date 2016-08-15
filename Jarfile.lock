@@ -1,0 +1,28 @@
+---
+version: 0.15.0
+merged:
+- gem:sjs:Jarfile.lock
+groups:
+  default:
+    dependencies:
+    - com.googlecode.json-simple:json-simple:jar:1.1.1
+    - com.tobedevoured.json:simplestream:jar:0.0.10
+    - commons-codec:commons-codec:jar:1.9
+    - commons-logging:commons-logging:jar:1.2
+    - org.apache.httpcomponents:httpclient:jar:4.5.2
+    - org.apache.httpcomponents:httpcore:jar:4.4.4
+    - org.slf4j:slf4j-api:jar:1.7.18
+    - org.slf4j:slf4j-simple:jar:1.7.18
+    artifacts:
+    - jar:com.tobedevoured.json:simplestream:jar:0.0.10:
+        transitive:
+          com.googlecode.json-simple:json-simple:jar:1.1.1: {}
+          org.slf4j:slf4j-api:jar:1.7.18: {}
+          org.apache.httpcomponents:httpclient:jar:4.5.2:
+            commons-codec:commons-codec:jar:1.9: {}
+            org.apache.httpcomponents:httpcore:jar:4.4.4: {}
+            commons-logging:commons-logging:jar:1.2: {}
+    - jar:org.slf4j:slf4j-simple:jar:1.7.18:
+        transitive: {}
+remote_repositories:
+- http://repo1.maven.org/maven2/
