@@ -61,6 +61,12 @@ bundle install
 RESTCLIENT_LOG=stdout rails s
 ```
 
+### Authentication App
+
+A small example of a Sinatra app that show how to use Nylas' [native authentication](https://www.nylas.com/docs/platform#native_authentication) flow for Gmail and Exchange accounts.
+
+View the [readme here](https://github.com/nylas/nylas-ruby/tree/master/examples/authentication) to get started.
+
 ## Usage
 
 ### App ID and Secret
