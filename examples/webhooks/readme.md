@@ -33,7 +33,7 @@ ngrok http 1234
 Next, run the sinatra app.
 
 ```bash
-ruby app.py
+ruby app.rb
 ```
 
 Follow the instructions that are printed to the console.
