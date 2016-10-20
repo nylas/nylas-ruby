@@ -41,6 +41,9 @@ module Inbox
   MessageRejected = Class.new(APIError)
   SendingQuotaExceeded = Class.new(APIError)
   ServiceUnavailable = Class.new(APIError)
+  BadGateway = Class.new(APIError)
+  InternalError = Class.new(APIError)
+  MailProviderError = Class.new(APIError)
 
   def self.interpret_http_status(result)
     # Handle HTTP errors and RestClient errors
@@ -53,8 +56,11 @@ module Inbox
     402 => MessageRejected,
     403 => AccessDenied,
     404 => ResourceNotFound,
+    422 => MailProviderError,
     429 => SendingQuotaExceeded,
-    503 => ServiceUnavailable
+    500 => InternalError,
+    502 => BadGateway,
+    503 => ServiceUnavailable,
   }.freeze
 
   def self.http_code_to_exception(http_code)
