@@ -68,11 +68,12 @@ describe Inbox::Draft do
                    [503, Inbox::ServiceUnavailable]]
 
     error_codes.each do |error_code, exception_class|
-      it "when an error occurs, it sets server_error if defined" do
+      it "sets server_error when it is present" do
         stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
            to_return(:status => error_code,
                      :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
-                              '  "type": "invalid_request_error", "server_error": "SPAM" }',
+                              '  "type": "invalid_request_error", ' + 
+                              '  "server_error": "SPAM"}',
                      :headers => {"Content-Type" => "application/json"})
 
         draft = Inbox::Draft.new(@inbox)
@@ -81,7 +82,6 @@ describe Inbox::Draft do
         draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
         expect(draft.id).to be nil
 
-        expect { draft.send! }.to raise_error(exception_class)
         begin
           draft.send!
         rescue exception_class => e
@@ -91,7 +91,7 @@ describe Inbox::Draft do
       end
     end
 
-    it "it only sets server_error when it's defined" do
+    it "sets server_error to nil when it isn't defined" do
       stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
          to_return(:status => 400,
                    :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +

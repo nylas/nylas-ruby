@@ -32,21 +32,8 @@ module Inbox
       end
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
-
-        # This is mostly lifted from Inbox#interpret_response. We're not using the original function
-        # because we need to pass an additional error message to the Exception constructor.
-        Inbox.interpret_http_status(result)
-        json = JSON.parse(response)
-        if json.is_a?(Hash) && (json['type'] == 'api_error' or json['type'] == 'invalid_request_error')
-          exc = Inbox.http_code_to_exception(result.code.to_i)
-          exc_type = json['type']
-          exc_message = json['message']
-          exc_server_error = json['server_error']
-          raise exc.new(exc_type, exc_message, server_error=exc_server_error)
-        end
-        raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
-
-        self.inflate(json)
+        response = Inbox.interpret_response(result, response, {:expected_class => Object})
+        self.inflate(response)
       end
 
       self

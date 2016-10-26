@@ -60,7 +60,10 @@ describe Inbox::Message do
       url = "https://api.nylas.com/messages/2/"
       stub_request(:get, url).with(basic_auth: [@access_token]).
        with(:headers => {'Accept'=>'message/rfc822'}).
-         to_return(:status => 404, :body => "Raw body", :headers => {})
+         to_return(:status => 404,
+                   :body => '{"message": "404: Not Found",' +
+                              '"type": "api_error"}',
+                   :headers => {})
 
       msg = Inbox::Message.new(@inbox, nil)
       msg.subject = 'Test message'

@@ -73,8 +73,8 @@ module Inbox
     end
 
     def destroy(params = {})
-      ::RestClient.send('delete', self.url, :params => params) do |response, request|
-        Inbox.interpret_http_status(response)
+      ::RestClient.send('delete', self.url, :params => params) do |response, request, result|
+        Inbox.interpret_response(result, response, {:raw_response => true})
       end
     end
 

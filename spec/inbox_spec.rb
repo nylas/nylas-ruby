@@ -118,7 +118,7 @@ describe 'Inbox' do
 
       context "when the server responds with JSON that does not represent an array" do
         it "should raise an UnexpectedResponse" do
-          allow(@result).to receive(:code).and_return(500)
+          allow(@result).to receive(:code).and_return(200)
           expect {
             Inbox.interpret_response(@result, "{\"_id\":\"5107089add02dcaecc000003\",\"created_at\":\"2013-01-28T23:24:10Z\",\"domain\":\"generic\",\"name\":\"Untitled\",\"password\":null,\"slug\":\"\",\"tracers\":[{\"_id\":\"5109b5e0dd02dc5976000001\",\"created_at\":\"2013-01-31T00:08:00Z\",\"name\":\"Facebook\"},{\"_id\":\"5109b5f5dd02dc4c43000002\",\"created_at\":\"2013-01-31T00:08:21Z\",\"name\":\"Twitter\"}],\"published_pop_url\":\"http://group3.lvh.me\",\"unpopulated_api_tags\":[],\"unpopulated_api_regions\":[],\"label_names\":[]}", {:expected_class => Array})
           }.to raise_error(Inbox::UnexpectedResponse)
@@ -148,7 +148,8 @@ describe 'Inbox' do
       it "should raise AccessDenied" do
         allow(@result).to receive(:code).and_return(403)
         expect {
-          Inbox.interpret_response(@result, '')
+          Inbox.interpret_response(@result, '{"message": "404: Not Found", "type": "api_error" }')
+                                   
         }.to raise_error(Inbox::AccessDenied)
       end
     end
@@ -157,7 +158,7 @@ describe 'Inbox' do
       it "should raise ResourceNotFound" do
         allow(@result).to receive(:code).and_return(404)
         expect {
-          Inbox.interpret_response(@result, '')
+          Inbox.interpret_response(@result, '{"message": "Could not verify access credential.", "type": "invalid_request_error" }')
         }.to raise_error(Inbox::ResourceNotFound)
       end
     end

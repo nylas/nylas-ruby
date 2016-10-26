@@ -39,7 +39,9 @@ describe Nylas::RestfulModelCollection do
     it 'should raise an error when the API raises an error' do
       stub_request(:get, "https://api.nylas.com/threads?view=count").
         with(basic_auth: [access_token]).
-        to_return(:status => 403)
+        to_return(:status => 403,
+                   :body => '{"message": "Could not verify access credential.",'+
+                            '"type": "invalid_request_error"}')
 
       expect { api.threads.count }.to raise_error(Inbox::AccessDenied)
     end
