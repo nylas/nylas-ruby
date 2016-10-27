@@ -96,7 +96,7 @@ module Inbox
     attr_accessor :api_server
     attr_accessor :stream_handler
     attr_reader :access_token
-    attr_reader :app_id 
+    attr_reader :app_id
     attr_reader :app_secret
 
     def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.nylas.com',

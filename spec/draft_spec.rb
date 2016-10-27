@@ -57,16 +57,7 @@ describe Inbox::Draft do
       expect(result.snippet).to_not be ""
     end
 
-    error_codes = [[400, Inbox::InvalidRequest],
-                   [402, Inbox::MessageRejected],
-                   [403, Inbox::AccessDenied],
-                   [404, Inbox::ResourceNotFound],
-                   [422, Inbox::MailProviderError],
-                   [429, Inbox::SendingQuotaExceeded],
-                   [500, Inbox::InternalError],
-                   [502, Inbox::BadGateway],
-                   [503, Inbox::ServiceUnavailable]]
-
+    error_codes = Inbox::HTTP_CODE_TO_EXCEPTIONS.to_a
     error_codes.each do |error_code, exception_class|
       it "sets server_error when it is present" do
         stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
