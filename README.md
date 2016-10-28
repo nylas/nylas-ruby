@@ -585,13 +585,15 @@ Code | Error Type | Description
 400 | `InvalidRequest` | Your request has invalid parameters.
 403 | `AccessDenied` | You don't have authorization to access the requested resource or perform the requested action. You may need to re-authenticate the user.
 404 | `ResourceNotFound` | The requested resource doesn't exist.
-500 | `APIError` | There was an internal error with the Nylas server.
+500 | `InternalError` | There was an internal error with the Nylas server.
+502 | `BadGateway` | Nylas received an invalid response from the upstream server.
 
 A few additional exceptions are raised by the `draft.send!` method if your draft couldn't be sent.
 
 Code | Error Type | Description
 --- | --- | ---
 402 | `MessageRejected` | The message was syntactically valid, but rejected for delivery by the mail server.
+422 | `MailProviderError` | There was an error with the mail provider when trying to send the message
 429 | `SendingQuotaExceeded` | The user has exceeded their daily sending quota.
 503 | `ServiceUnavailable` | There was a temporary error establishing a connection to the user's mail server.
 
