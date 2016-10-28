@@ -1,6 +1,6 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class File < RestfulModel
 
     parameter :size
@@ -20,7 +20,7 @@ module Inbox
 
     def save!
       ::RestClient.post(url, {:file => @file}) do |response, request, result|
-        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        json = Nylas.interpret_response(result, response, :expected_class => Object)
         json = json[0] if (json.class == Array)
         inflate(json)
       end
@@ -30,7 +30,7 @@ module Inbox
     def download
       download_url = self.url('download')
       ::RestClient.get(download_url) do |response, request, result|
-        Inbox.interpret_response(result, response, {:raw_response => true})
+        Nylas.interpret_response(result, response, {:raw_response => true})
         response
       end
     end

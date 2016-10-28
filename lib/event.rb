@@ -1,6 +1,6 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class Event < RestfulModel
 
     parameter :title
@@ -35,7 +35,7 @@ module Inbox
       data = {:event_id => @id, :status => status, :comment => comment}
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
-        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        json = Nylas.interpret_response(result, response, :expected_class => Object)
         self.inflate(json)
       end
 

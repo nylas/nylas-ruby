@@ -1,7 +1,7 @@
 require 'uri'
 require 'rack'
 
-describe 'Inbox' do
+describe 'Nylas' do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
@@ -11,21 +11,21 @@ describe 'Inbox' do
   describe "initialize" do
     it "should add the 'before_execution_proc' to the RestClient to set the header" do
       if ::RestClient.before_execution_procs.empty?
-        @inbox = Inbox::API.new(@app_id, @app_secret)
+        @inbox = Nylas::API.new(@app_id, @app_secret)
         expect(::RestClient.before_execution_procs.empty?).to eq(false)
       end
     end
 
-    it "should not do this multiple times if multiple copies of the Inbox::API are initialized" do
-      @inbox = Inbox::API.new(@app_id, @app_secret)
-      @inbox = Inbox::API.new(@app_id, @app_secret)
+    it "should not do this multiple times if multiple copies of the Nylas::API are initialized" do
+      @inbox = Nylas::API.new(@app_id, @app_secret)
+      @inbox = Nylas::API.new(@app_id, @app_secret)
       expect(::RestClient.before_execution_procs.count).to eq(1)
     end
   end
 
   describe "#url_for_path" do
     before (:each) do
-      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
     end
 
     it "should return the url for a provided path" do
@@ -33,16 +33,16 @@ describe 'Inbox' do
     end
 
     it "should return an error if you have not provided an auth token" do
-      @inbox = Inbox::API.new(@app_id, @app_secret)
+      @inbox = Nylas::API.new(@app_id, @app_secret)
       expect {
         @inbox.url_for_path('/wobble')
-      }.to raise_error(Inbox::NoAuthToken)
+      }.to raise_error(Nylas::NoAuthToken)
     end
   end
 
   describe "#url_for_authentication" do
     before (:each) do
-      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
     end
 
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
@@ -102,7 +102,7 @@ describe 'Inbox' do
 
   describe "#self.interpret_response" do
     before (:each) do
-      @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
       @result = double('result')
       allow(@result).to receive(:code).and_return(200)
     end
@@ -111,8 +111,8 @@ describe 'Inbox' do
       context "when the server responds with a 200 but unknown, invalid body" do
         it "should raise an UnexpectedResponse" do
           expect {
-            Inbox.interpret_response(@result, "I AM NOT JSON", {:expected_class => Array})
-          }.to raise_error(Inbox::UnexpectedResponse)
+            Nylas.interpret_response(@result, "I AM NOT JSON", {:expected_class => Array})
+          }.to raise_error(Nylas::UnexpectedResponse)
         end
       end
 
@@ -120,8 +120,8 @@ describe 'Inbox' do
         it "should raise an UnexpectedResponse" do
           allow(@result).to receive(:code).and_return(200)
           expect {
-            Inbox.interpret_response(@result, "{'_id':'5107089add02dcaecc000003'}", {:expected_class => Array})
-          }.to raise_error(Inbox::UnexpectedResponse)
+            Nylas.interpret_response(@result, "{'_id':'5107089add02dcaecc000003'}", {:expected_class => Array})
+          }.to raise_error(Nylas::UnexpectedResponse)
         end
       end
     end
@@ -130,8 +130,8 @@ describe 'Inbox' do
       it "should raise InvalidRequest" do
         allow(@result).to receive(:code).and_return(400)
         expect {
-          Inbox.interpret_response(@result, '{"type": "invalid_request_error", "message": "Check your syntax, bro!"}')
-        }.to raise_error(Inbox::InvalidRequest)
+          Nylas.interpret_response(@result, '{"type": "invalid_request_error", "message": "Check your syntax, bro!"}')
+        }.to raise_error(Nylas::InvalidRequest)
       end
     end
 
@@ -139,8 +139,8 @@ describe 'Inbox' do
       it "should raise MessageRejected" do
         allow(@result).to receive(:code).and_return(402)
         expect {
-          Inbox.interpret_response(@result, '{"type": "api_error", "message": "Sending to all recipients failed"}')
-        }.to raise_error(Inbox::MessageRejected)
+          Nylas.interpret_response(@result, '{"type": "api_error", "message": "Sending to all recipients failed"}')
+        }.to raise_error(Nylas::MessageRejected)
       end
     end
 
@@ -148,9 +148,9 @@ describe 'Inbox' do
       it "should raise AccessDenied" do
         allow(@result).to receive(:code).and_return(403)
         expect {
-          Inbox.interpret_response(@result, '{"message": "404: Not Found", "type": "api_error" }')
+          Nylas.interpret_response(@result, '{"message": "404: Not Found", "type": "api_error" }')
                                    
-        }.to raise_error(Inbox::AccessDenied)
+        }.to raise_error(Nylas::AccessDenied)
       end
     end
 
@@ -158,8 +158,8 @@ describe 'Inbox' do
       it "should raise ResourceNotFound" do
         allow(@result).to receive(:code).and_return(404)
         expect {
-          Inbox.interpret_response(@result, '{"message": "Could not verify access credential.", "type": "invalid_request_error" }')
-        }.to raise_error(Inbox::ResourceNotFound)
+          Nylas.interpret_response(@result, '{"message": "Could not verify access credential.", "type": "invalid_request_error" }')
+        }.to raise_error(Nylas::ResourceNotFound)
       end
     end
 
@@ -167,8 +167,8 @@ describe 'Inbox' do
       it "should raise SendingQuotaExceeded" do
         allow(@result).to receive(:code).and_return(429)
         expect {
-          Inbox.interpret_response(@result, '{"type": "api_error", "message": "Daily sending quota exceeded"}')
-        }.to raise_error(Inbox::SendingQuotaExceeded)
+          Nylas.interpret_response(@result, '{"type": "api_error", "message": "Daily sending quota exceeded"}')
+        }.to raise_error(Nylas::SendingQuotaExceeded)
       end
     end
 
@@ -176,8 +176,8 @@ describe 'Inbox' do
       it "should raise ServiceUnavailable" do
         allow(@result).to receive(:code).and_return(503)
         expect {
-          Inbox.interpret_response(@result, '{"type": "api_error", "message": "The server unexpectedly closed the connection"}')
-        }.to raise_error(Inbox::ServiceUnavailable)
+          Nylas.interpret_response(@result, '{"type": "api_error", "message": "The server unexpectedly closed the connection"}')
+        }.to raise_error(Nylas::ServiceUnavailable)
       end
     end
 
@@ -185,8 +185,8 @@ describe 'Inbox' do
       it "should raise an UnexpectedResponse" do
         allow(@result).to receive(:code).and_return(500)
         expect {
-          Inbox.interpret_response(@result, '')
-        }.to raise_error(Inbox::UnexpectedResponse)
+          Nylas.interpret_response(@result, '')
+        }.to raise_error(Nylas::UnexpectedResponse)
       end
     end
 
@@ -198,7 +198,7 @@ describe 'Inbox' do
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
           :headers => {"Content-Type" => "application/json"})
-        @inbox = Inbox::API.new(@app_id, @app_secret)
+        @inbox = Nylas::API.new(@app_id, @app_secret)
       end
 
       it "should auth with the app_secret" do
@@ -206,7 +206,7 @@ describe 'Inbox' do
       end
 
       it "should return a list of account objects" do
-        expect(@inbox.accounts.first).to be_an Inbox::Account
+        expect(@inbox.accounts.first).to be_an Nylas::Account
       end
 
       it "should return an object corresponding to the mocked values" do

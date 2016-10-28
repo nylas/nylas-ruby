@@ -1,6 +1,6 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class Account < RestfulModel
 
     parameter :account_id
@@ -15,7 +15,7 @@ module Inbox
       collection = ManagementModelCollection.new(Account, @_api, {:account_id=>@account_id})
       ::RestClient.post("#{collection.url}/#{@account_id}/#{action}",{}) do |response, request, result|
           # Throw any exceptions
-        json = Inbox.interpret_response(result, response, :expected_class => Object)
+        json = Nylas.interpret_response(result, response, :expected_class => Object)
       end
     end
 

@@ -1,11 +1,11 @@
 require 'event'
 
-describe Inbox::Account do
+describe Nylas::Account do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
 
     uri_template = Addressable::Template.new "https://api.nylas.com/a/#{@app_id}/accounts{?limit,offset}"
     stub_request(:get, uri_template).with(basic_auth: [@app_secret]).to_return(

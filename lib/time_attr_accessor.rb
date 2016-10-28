@@ -1,4 +1,4 @@
-module Inbox
+module Nylas
   module TimeAttrAccessor
     def time_attr_accessor(attr)
       parameter attr

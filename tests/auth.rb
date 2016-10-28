@@ -2,7 +2,7 @@
 # sure there's no breakage.
 
 require 'sinatra/base'
-require 'inbox'
+require 'nylas'
 require 'rest-client'
 
 $:.unshift File.join(File.dirname(__FILE__))

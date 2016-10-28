@@ -1,4 +1,4 @@
-require 'inbox'
+require 'nylas'
 require 'rest-client'
 
 begin
@@ -36,7 +36,7 @@ Could you confirm that the following API functions didn't break?
 
 
 
-inbox = Inbox::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api.nylas.com')
+inbox = Nylas::API.new(APP_ID, APP_SECRET, AUTH_TOKEN, api_path='https://api.nylas.com')
 
 puts "Thread count: #{inbox.threads.count}"
 color_print "Did you see a thread count? (Y/N)"
@@ -101,7 +101,7 @@ puts "Getting events from the delta stream (this hangs eventually, feel free to 
 
 EventMachine.run do
   inbox.delta_stream(cursor) do |event, obj|
-    if obj.is_a?(Inbox::Event)
+    if obj.is_a?(Nylas::Event)
       puts obj.title
     end
   end

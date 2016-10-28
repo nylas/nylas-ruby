@@ -1,5 +1,5 @@
 describe Nylas::RestfulModelCollection do
-  let(:api) { Inbox::API.new(app_id, app_secret, access_token) }
+  let(:api) { Nylas::API.new(app_id, app_secret, access_token) }
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
@@ -43,7 +43,7 @@ describe Nylas::RestfulModelCollection do
                    :body => '{"message": "Could not verify access credential.",'+
                             '"type": "invalid_request_error"}')
 
-      expect { api.threads.count }.to raise_error(Inbox::AccessDenied)
+      expect { api.threads.count }.to raise_error(Nylas::AccessDenied)
     end
   end
 end

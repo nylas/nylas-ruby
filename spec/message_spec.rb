@@ -1,24 +1,24 @@
 require 'message'
 require 'folder'
 
-describe Inbox::Message do
+describe Nylas::Message do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
-    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#as_json" do
     it "only includes starred, unread and labels/folder info" do
-      msg = Inbox::Message.new(@inbox)
+      msg = Nylas::Message.new(@inbox)
       msg.subject = 'Test message'
       msg.unread = true
       msg.starred = false
 
       labels = ['test label', 'label 2']
       labels.map! do |label|
-        l = Inbox::Label.new(@inbox)
+        l = Nylas::Label.new(@inbox)
         l.id = label
         l
       end
@@ -31,7 +31,7 @@ describe Inbox::Message do
       expect(dict['label_ids']).to eq(['test label', 'label 2'])
 
       # Now check that we do the same if @folder is set.
-      msg = Inbox::Message.new(@inbox)
+      msg = Nylas::Message.new(@inbox)
       msg.subject = 'Test event'
       msg.folder = labels[0]
       dict = msg.as_json
@@ -49,7 +49,7 @@ describe Inbox::Message do
        with(:headers => {'Accept'=>'message/rfc822'}).
          to_return(:status => 200, :body => "Raw body", :headers => {})
 
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Nylas::Message.new(@inbox, nil)
       msg.subject = 'Test message'
       msg.id = 2
       expect(msg.raw).to eq('Raw body')
@@ -65,10 +65,10 @@ describe Inbox::Message do
                               '"type": "api_error"}',
                    :headers => {})
 
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Nylas::Message.new(@inbox, nil)
       msg.subject = 'Test message'
       msg.id = 2
-      expect{ msg.raw }.to raise_error(Inbox::ResourceNotFound)
+      expect{ msg.raw }.to raise_error(Nylas::ResourceNotFound)
       expect(a_request(:get, url)).to have_been_made.once
     end
   end
@@ -81,7 +81,7 @@ describe Inbox::Message do
                   :body    => File.read('spec/fixtures/expanded_message.txt'),
                   :headers => {})
 
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Nylas::Message.new(@inbox, nil)
       msg.id = 2
       expanded = msg.expanded
       expect(expanded.message_id).to eq('<55afa28c.c136460a.49ae.ffff80fd@mx.google.com>')
@@ -91,13 +91,13 @@ describe Inbox::Message do
 
   describe "#files?" do
     it "returns false when the message has no attached files" do
-      msg = Inbox::Message.new(@inbox)
+      msg = Nylas::Message.new(@inbox)
       msg.inflate({'files' => []})
       expect(msg.files?).to be false
     end
 
     it "returns true when the message has attached files" do
-      msg = Inbox::Message.new(@inbox)
+      msg = Nylas::Message.new(@inbox)
       msg.inflate({'files' => ['1', '2']})
       expect(msg.files?).to be true
     end
@@ -109,7 +109,7 @@ describe Inbox::Message do
       stub_request(:put, url).with(basic_auth: [@access_token]).
         to_return(:status => 200, :body => '{"unread": false}')
 
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Nylas::Message.new(@inbox, nil)
       msg.id = 2
       msg.mark_as_read!
       expect(a_request(:put, url)).to have_been_made.once
@@ -123,7 +123,7 @@ describe Inbox::Message do
       stub_request(:put, url).with(basic_auth: [@access_token]).
         to_return(:status => 200, :body => '{"starred": true}')
 
-      msg = Inbox::Message.new(@inbox, nil)
+      msg = Nylas::Message.new(@inbox, nil)
       msg.id = 2
       msg.star!
       expect(a_request(:put, url)).to have_been_made.once

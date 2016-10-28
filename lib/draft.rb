@@ -1,6 +1,6 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class Draft < Message
 
     parameter :thread_id
@@ -32,7 +32,7 @@ module Inbox
       end
 
       ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
-        response = Inbox.interpret_response(result, response, {:expected_class => Object})
+        response = Nylas.interpret_response(result, response, {:expected_class => Object})
         self.inflate(response)
       end
 

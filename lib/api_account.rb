@@ -3,7 +3,7 @@
 # account management endpoint.
 require 'restful_model'
 
-module Inbox
+module Nylas
   class APIAccount < RestfulModel
 
     parameter :account_id

@@ -1,4 +1,4 @@
-module Inbox
+module Nylas
   module ReadUnreadMethods
     def update_param!(param, value)
       update('PUT', '', {

@@ -1,5 +1,5 @@
 ::ENV['RACK_ENV'] ||= 'test'
 
-require 'inbox'
+require 'nylas'
 require 'webmock/rspec'
 require 'pry'

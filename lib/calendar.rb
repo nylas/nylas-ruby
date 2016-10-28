@@ -1,7 +1,7 @@
 require 'restful_model'
 require 'event'
 
-module Inbox
+module Nylas
   class Calendar < RestfulModel
 
     parameter :name

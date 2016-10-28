@@ -1,17 +1,17 @@
 require 'event'
 
-describe Inbox::Event do
+describe Nylas::Event do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
     @namespace_id = 'nnnnnnn'
-    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#as_json" do
     it "doesn't include nil values" do
-      ev = Inbox::Event.new(@inbox)
+      ev = Nylas::Event.new(@inbox)
       ev.title = 'Test event'
       ev.description = nil
       dict = ev.as_json
@@ -20,7 +20,7 @@ describe Inbox::Event do
     end
 
     it "does remove object: timespan fields from 'when' blocks" do
-      ev = Inbox::Event.new(@inbox)
+      ev = Nylas::Event.new(@inbox)
       ev.title = 'Test event'
       ev.when = {'start_time' => 12345675, 'end_time' => 2345678, 'object' => 'timespan'}
       dict = ev.as_json
@@ -36,7 +36,7 @@ describe Inbox::Event do
       stub_request(:post, url).with(basic_auth: [@access_token]).
            to_return(:status => 200, :body => File.read('spec/fixtures/rsvp_reply.txt'), :headers => {})
 
-      ev = Inbox::Event.new(@inbox)
+      ev = Nylas::Event.new(@inbox)
       ev.id = 'public_id'
       ev.rsvp!('yes', 'I will come.')
 

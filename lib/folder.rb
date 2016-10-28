@@ -1,6 +1,6 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class Folder < RestfulModel
 
     parameter :display_name

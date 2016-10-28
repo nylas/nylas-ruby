@@ -27,7 +27,7 @@ gem install nylas
 ##Requirements
 
 ### MRI
-- Ruby 1.9.3 or above.
+- Ruby 2.2.2 or above.
 - rest-client, json, yajl-ruby, em-http-request
 
 ### JRuby
@@ -66,6 +66,17 @@ RESTCLIENT_LOG=stdout rails s
 A small example of a Sinatra app that show how to use Nylas' [native authentication](https://www.nylas.com/docs/platform#native_authentication) flow for Gmail and Exchange accounts.
 
 View the [readme here](https://github.com/nylas/nylas-ruby/tree/master/examples/authentication) to get started.
+
+### Webhooks Example App
+
+This tiny sinatra app is a simple example of how to use Nylas' webhooks feature
+with ruby. This app correctly responds to Nylas' challenge request when you add
+a webhook url to the developer dashboard. It also verifies any webhook
+notification POST requests by Nylas and prints out some information about the
+notification.
+
+View the [readme
+here](https://github.com/nylas/nylas-ruby/tree/master/examples/webhooks)
 
 ## Usage
 
@@ -628,16 +639,21 @@ Tests can be run with:
 
 ## Deployment
 
-The Nylas ruby gem uses [Jeweler](https://github.com/technicalpickles/jeweler) for release management. Jeweler should be installed automatically when you call `bundle`, and extends `rake` to include a few more commands. When you're ready to release a new version, edit `lib/version.rb` and then build:
+### Authentication Setup
 
-    rake inbox_build
-    rake nylas_build
+Nylas team members can authenticate with the following:
 
-Test your new version (found in `pkg/`) locally, and then release with:
+```
+curl -u nylas https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
+```
 
-    bin/release
+### Releasing Gems
 
-The `bin/release` script will release the MRI and JRuby gem. If it's your first time updating the ruby gems, you may be prompted for the username/password for rubygems.org. Members of the Nylas team can find that by doing `fetch-password rubygems`.
+When you're ready to release a new version, edit `lib/version.rb` and then run:
+
+    gem build nylas.gemspec
+    gem push nylas-0.0.0.gem # Update the version number
+
 
 ## API self-tests
 

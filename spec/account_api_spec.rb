@@ -1,12 +1,12 @@
 require 'event'
 
-describe Inbox::APIAccount do
-  let(:inbox) { Inbox::API.new(app_id, app_secret, access_token) }
+describe Nylas::APIAccount do
+  let(:inbox) { Nylas::API.new(app_id, app_secret, access_token) }
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
 
-  describe "Inbox#account" do
+  describe "Nylas#account" do
     it "does a request to /account" do
       url = "https://api.nylas.com/account"
       stub = stub_request(:get, url).with(basic_auth: [access_token]).

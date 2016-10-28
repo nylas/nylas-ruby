@@ -7,7 +7,7 @@ gem 'em-http-request', '~> 1.1', '>= 1.1.3', platform: :ruby
 gem 'sjs', '~> 0.2.1', platform: :jruby
 
 # Add dependencies to develop your gem here.
-# Include everything needed to run rake, tests, features, etc.
+# Include everything needed to run tests, features, etc.
 group :development, :test do
   gem 'rspec', '~> 3.5', '>= 3.5.0'
   gem "shoulda", '~> 3.5', '>= 3.4.0'

@@ -1,4 +1,4 @@
-module Inbox
+module Nylas
   module Parameters
     def self.included(base)
       base.extend(ClassMethods)

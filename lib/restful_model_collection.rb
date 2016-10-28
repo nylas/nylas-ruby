@@ -1,12 +1,12 @@
 require 'restful_model'
 
-module Inbox
+module Nylas
   class RestfulModelCollection
 
     attr_accessor :filters
 
     def initialize(model_class, api, filters = {})
-      raise StandardError.new unless api.class <= Inbox::API
+      raise StandardError.new unless api.class <= Nylas::API
       @model_class = model_class
       @filters = filters
       @_api = api
@@ -30,7 +30,7 @@ module Inbox
 
     def count
       RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
-        json = Inbox.interpret_response(result, response)
+        json = Nylas.interpret_response(result, response)
         return json['count']
       }
     end
@@ -125,7 +125,7 @@ module Inbox
       model = nil
 
       RestClient.get("#{url}/#{id}"){ |response,request,result|
-        json = Inbox.interpret_response(result, response, {:expected_class => Object})
+        json = Nylas.interpret_response(result, response, {:expected_class => Object})
         if @model_class < RestfulModel
           model = @model_class.new(@_api)
           model.inflate(json)
@@ -143,7 +143,7 @@ module Inbox
       models = []
 
       RestClient.get(url, :params => filters){ |response,request,result|
-        items = Inbox.interpret_response(result, response, {:expected_class => Array})
+        items = Nylas.interpret_response(result, response, {:expected_class => Array})
         models = inflate_collection(items)
       }
       models

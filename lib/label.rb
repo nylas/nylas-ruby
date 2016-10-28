@@ -1,4 +1,4 @@
 require 'folder'
 
-module Inbox
+module Nylas
 end

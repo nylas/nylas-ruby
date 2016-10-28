@@ -2,7 +2,7 @@ require 'restful_model'
 require 'file'
 require 'mixins'
 
-module Inbox
+module Nylas
   class Message < RestfulModel
 
     parameter :subject
@@ -20,7 +20,7 @@ module Inbox
     parameter :folder
     parameter :labels
 
-    include Inbox::ReadUnreadMethods
+    include Nylas::ReadUnreadMethods
 
     def inflate(json)
       super
@@ -82,7 +82,7 @@ module Inbox
     def raw
       collection = RestfulModelCollection.new(Message, @_api, {:message_id=>@id})
       RestClient.get("#{collection.url}/#{id}/", :accept => 'message/rfc822'){ |response,request,result|
-        Inbox.interpret_response(result, response, {:raw_response => true})
+        Nylas.interpret_response(result, response, {:raw_response => true})
         response
       }
     end
@@ -91,8 +91,8 @@ module Inbox
       expanded_url = url(action='?view=expanded')
 
       RestClient.get(expanded_url){ |response,request,result|
-        json = Inbox.interpret_response(result, response, :expected_class => Object)
-        expanded_message = Inbox::ExpandedMessage.new(@_api)
+        json = Nylas.interpret_response(result, response, :expected_class => Object)
+        expanded_message = Nylas::ExpandedMessage.new(@_api)
         expanded_message.inflate(json)
         expanded_message
       }

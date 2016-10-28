@@ -1,10 +1,10 @@
 require 'time_attr_accessor'
 require 'parameters'
 
-module Inbox
+module Nylas
   class RestfulModel
-    extend Inbox::TimeAttrAccessor
-    include Inbox::Parameters
+    extend Nylas::TimeAttrAccessor
+    include Nylas::Parameters
 
     parameter :id
     parameter :account_id
@@ -17,7 +17,7 @@ module Inbox
     end
 
     def initialize(api, account_id = nil)
-      raise StandardError.new unless api.class <= Inbox::API
+      raise StandardError.new unless api.class <= Nylas::API
       @account_id = account_id
       @_api = api
     end
@@ -65,7 +65,7 @@ module Inbox
 
       ::RestClient.send(http_method, self.url(action), data.to_json, :content_type => :json, :params => params) do |response, request, result|
         unless http_method == 'delete'
-          json = Inbox.interpret_response(result, response, :expected_class => Object)
+          json = Nylas.interpret_response(result, response, :expected_class => Object)
           inflate(json)
         end
       end
@@ -74,7 +74,7 @@ module Inbox
 
     def destroy(params = {})
       ::RestClient.send('delete', self.url, :params => params) do |response, request, result|
-        Inbox.interpret_response(result, response, {:raw_response => true})
+        Nylas.interpret_response(result, response, {:raw_response => true})
       end
     end
 

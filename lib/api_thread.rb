@@ -2,7 +2,7 @@ require 'restful_model'
 require 'time_attr_accessor'
 require 'mixins'
 
-module Inbox
+module Nylas
   class Thread < RestfulModel
     extend TimeAttrAccessor
 

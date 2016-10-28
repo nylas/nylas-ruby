@@ -1,12 +1,12 @@
 require 'draft'
 
-describe Inbox::Draft do
+describe Nylas::Draft do
   before (:each) do
     @app_id = 'ABC'
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
     @account_id = "nnnnnnn"
-    @inbox = Inbox::API.new(@app_id, @app_secret, @access_token)
+    @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
   end
 
   describe "#save!" do
@@ -18,7 +18,7 @@ describe Inbox::Draft do
             :body => File.read('spec/fixtures/draft_save.txt'),
             :headers => {"Content-Type" => "application/json"})
 
-      draft = Inbox::Draft.new(@inbox)
+      draft = Nylas::Draft.new(@inbox)
       draft.subject = 'Test draft'
       draft.account_id = @account_id
       draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
@@ -45,7 +45,7 @@ describe Inbox::Draft do
                  :body => File.read('spec/fixtures/send_endpoint.txt'),
                  :headers => {"Content-Type" => "application/json"})
 
-      draft = Inbox::Draft.new(@inbox)
+      draft = Nylas::Draft.new(@inbox)
       draft.subject = 'Test draft'
       draft.account_id = @account_id
       draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
@@ -57,7 +57,7 @@ describe Inbox::Draft do
       expect(result.snippet).to_not be ""
     end
 
-    error_codes = Inbox::HTTP_CODE_TO_EXCEPTIONS.to_a
+    error_codes = Nylas::HTTP_CODE_TO_EXCEPTIONS.to_a
     error_codes.each do |error_code, exception_class|
       it "sets server_error when it is present" do
         stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
@@ -67,7 +67,7 @@ describe Inbox::Draft do
                               '  "server_error": "SPAM"}',
                      :headers => {"Content-Type" => "application/json"})
 
-        draft = Inbox::Draft.new(@inbox)
+        draft = Nylas::Draft.new(@inbox)
         draft.subject = 'Test draft'
         draft.account_id = @account_id
         draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
@@ -89,16 +89,16 @@ describe Inbox::Draft do
                             '  "type": "invalid_request_error"}',
                    :headers => {"Content-Type" => "application/json"})
 
-      draft = Inbox::Draft.new(@inbox)
+      draft = Nylas::Draft.new(@inbox)
       draft.subject = 'Test draft'
       draft.account_id = @account_id
       draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
       expect(draft.id).to be nil
 
-      expect { draft.send! }.to raise_error(Inbox::InvalidRequest)
+      expect { draft.send! }.to raise_error(Nylas::InvalidRequest)
       begin
         draft.send!
-      rescue Inbox::InvalidRequest => e
+      rescue Nylas::InvalidRequest => e
         expect(e.message).to eq("Invalid recipient address benbitdiddle@gmailcom")
         expect(e.server_error).to eq(nil)
       end

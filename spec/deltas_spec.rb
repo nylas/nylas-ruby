@@ -1,7 +1,7 @@
 require 'event'
 
-describe Inbox::API do
-  subject(:inbox) { Inbox::API.new(app_id, app_secret, access_token) }
+describe Nylas::API do
+  subject(:inbox) { Nylas::API.new(app_id, app_secret, access_token) }
   let(:nth_cursor) { 'a9vtneydekzye7uwfumdd4iu3' }
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
@@ -52,9 +52,9 @@ describe Inbox::API do
       inbox.deltas(timestamp=0) do |event, object|
         expect(object.cursor).to_not be_nil
         if event == 'create' or event == 'modify'
-          expect(object).to be_a Inbox::Message
+          expect(object).to be_a Nylas::Message
         elsif event == 'delete'
-          expect(object).to be_a Inbox::Event
+          expect(object).to be_a Nylas::Event
         end
         count += 1
       end
@@ -86,9 +86,9 @@ describe Inbox::API do
         inbox.delta_stream(0, []) do |event, object|
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
-            expect(object).to be_a Inbox::Message
+            expect(object).to be_a Nylas::Message
           elsif event == 'delete'
-            expect(object).to be_a Inbox::Event
+            expect(object).to be_a Nylas::Event
           end
           count += 1
           em.stop if count == 3
@@ -135,9 +135,9 @@ describe Inbox::API do
       inbox.deltas(timestamp=0, []) do |event, object|
         expect(object.cursor).to_not be_nil
         if event == 'create' or event == 'modify'
-          expect(object).to be_a Inbox::Message
+          expect(object).to be_a Nylas::Message
         elsif event == 'delete'
-          expect(object).to be_a Inbox::Event
+          expect(object).to be_a Nylas::Event
         end
 
         count += 1
@@ -152,10 +152,10 @@ describe Inbox::API do
         inbox.delta_stream(0, []) do |event, object|
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
-            expect(object).to be_a Inbox::Message
+            expect(object).to be_a Nylas::Message
             count += 1
           elsif event == 'delete'
-            expect(object).to be_a Inbox::Event
+            expect(object).to be_a Nylas::Event
             em.stop
           end
         end
