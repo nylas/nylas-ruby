@@ -80,10 +80,9 @@ module Inbox
     end
 
     def raw
-      model = nil
       collection = RestfulModelCollection.new(Message, @_api, {:message_id=>@id})
       RestClient.get("#{collection.url}/#{id}/", :accept => 'message/rfc822'){ |response,request,result|
-        Inbox.interpret_http_status(result)
+        Inbox.interpret_response(result, response, {:raw_response => true})
         response
       }
     end

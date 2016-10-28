@@ -22,39 +22,41 @@ require 'version'
 
 module Inbox
   Error = Class.new(::StandardError)
-  AccessDenied = Class.new(Error)
-  ResourceNotFound = Class.new(Error)
   NoAuthToken = Class.new(Error)
   UnexpectedAccountAction = Class.new(Error)
   UnexpectedResponse = Class.new(Error)
   class APIError < Error
-    attr_accessor :error_type
+    attr_accessor :type
+    attr_accessor :message
     attr_accessor :server_error
 
-    def initialize(type, error, server_error = nil)
-      super(error)
-      self.error_type = type
+    def initialize(type, message, server_error = nil)
+      super(message)
+      self.type = type
+      self.message = message 
       self.server_error = server_error
     end
   end
+  AccessDenied = Class.new(APIError)
+  ResourceNotFound = Class.new(APIError)
   InvalidRequest = Class.new(APIError)
   MessageRejected = Class.new(APIError)
   SendingQuotaExceeded = Class.new(APIError)
   ServiceUnavailable = Class.new(APIError)
-
-  def self.interpret_http_status(result)
-    # Handle HTTP errors and RestClient errors
-    raise ResourceNotFound.new if result.code.to_i == 404
-    raise AccessDenied.new if result.code.to_i == 403
-  end
+  BadGateway = Class.new(APIError)
+  InternalError = Class.new(APIError)
+  MailProviderError = Class.new(APIError)
 
   HTTP_CODE_TO_EXCEPTIONS = {
     400 => InvalidRequest,
     402 => MessageRejected,
     403 => AccessDenied,
     404 => ResourceNotFound,
+    422 => MailProviderError,
     429 => SendingQuotaExceeded,
-    503 => ServiceUnavailable
+    500 => InternalError,
+    502 => BadGateway,
+    503 => ServiceUnavailable,
   }.freeze
 
   def self.http_code_to_exception(http_code)
@@ -62,19 +64,27 @@ module Inbox
   end
 
   def self.interpret_response(result, result_content, options = {})
-    # Handle HTTP errors
-    self.interpret_http_status(result)
 
-    # Handle content expectation errors
+    # We expected a certain kind of object, but the API didn't return anything
     raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
-    json = options[:result_parsed]? result_content : JSON.parse(result_content)
-    if json.is_a?(Hash) && (json['type'] == 'api_error' or json['type'] == 'invalid_request_error')
-      exc = Inbox.http_code_to_exception(result.code.to_i)
-      raise exc.new(json['type'], json['message'])
+
+    # If it's already parsed, or if we've received an actual raw payload on success, don't parse
+    if options[:result_parsed] || (options[:raw_response] && result.code.to_i == 200)
+      response = result_content
+    else
+      response = JSON.parse(result_content)
     end
+
+    if result.code.to_i != 200
+      exc = Inbox.http_code_to_exception(result.code.to_i)
+      if response.is_a?(Hash)
+        raise exc.new(response['type'], response['message'], response.fetch('server_error', nil))
+      end
+    end
+    
     raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
-    raise UnexpectedResponse.new if options[:expected_class] && !json.is_a?(options[:expected_class])
-    json
+    raise UnexpectedResponse.new if options[:expected_class] && !response.is_a?(options[:expected_class])
+    response
 
   rescue JSON::ParserError => e
     # Handle parsing errors

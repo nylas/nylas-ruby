@@ -30,7 +30,7 @@ module Inbox
     def download
       download_url = self.url('download')
       ::RestClient.get(download_url) do |response, request, result|
-        Inbox.interpret_http_status(result)
+        Inbox.interpret_response(result, response, {:raw_response => true})
         response
       end
     end

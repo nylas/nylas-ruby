@@ -57,29 +57,32 @@ describe Inbox::Draft do
       expect(result.snippet).to_not be ""
     end
 
-    it "when an error occurs, it sets server_error if defined" do
-      stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
-         to_return(:status => 400,
-                   :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
-                            '  "type": "invalid_request_error", "server_error": "SPAM" }',
-                   :headers => {"Content-Type" => "application/json"})
+    error_codes = Inbox::HTTP_CODE_TO_EXCEPTIONS.to_a
+    error_codes.each do |error_code, exception_class|
+      it "sets server_error when it is present" do
+        stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
+           to_return(:status => error_code,
+                     :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
+                              '  "type": "invalid_request_error", ' + 
+                              '  "server_error": "SPAM"}',
+                     :headers => {"Content-Type" => "application/json"})
 
-      draft = Inbox::Draft.new(@inbox)
-      draft.subject = 'Test draft'
-      draft.account_id = @account_id
-      draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
-      expect(draft.id).to be nil
+        draft = Inbox::Draft.new(@inbox)
+        draft.subject = 'Test draft'
+        draft.account_id = @account_id
+        draft.to = [{:name => 'Helena Handbasket', :email => 'helena@nylas.com'}]
+        expect(draft.id).to be nil
 
-      expect { draft.send! }.to raise_error(Inbox::InvalidRequest)
-      begin
-        draft.send!
-      rescue Inbox::InvalidRequest => e
-        expect(e.message).to eq("Invalid recipient address benbitdiddle@gmailcom")
-        expect(e.server_error).to eq("SPAM")
+        begin
+          draft.send!
+        rescue exception_class => e
+          expect(e.message).to eq("Invalid recipient address benbitdiddle@gmailcom")
+          expect(e.server_error).to eq("SPAM")
+        end
       end
     end
 
-    it "it only sets server_error when it's defined" do
+    it "sets server_error to nil when it isn't defined" do
       stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
          to_return(:status => 400,
                    :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +

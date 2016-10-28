@@ -24,7 +24,8 @@ describe Inbox::File do
     it "raises an error when getting an API error" do
       url = "https://api.nylas.com/files/2/download"
       stub_request(:get, url).with(basic_auth: [@access_token]).
-      to_return(:status => 404, :body => "Raw body")
+      to_return(:status => 404, :body => '{"message": "Couldn\'t find file fakefile ",' +
+                                         '"type": "invalid_request_error"}')
 
       file = Inbox::File.new(@inbox, nil)
       file.id = 2
