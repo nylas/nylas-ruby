@@ -1,13 +1,27 @@
+### 3.0.0 / 2016-10-28
+
+* JRuby support
+* Removes `interpret_http_status` to be included in `interpret_response`
+* Improve error handling
+* Add native authentication example code
+* Add webhooks example code
+
+[full changelog](https://github.com/nylas/nylas-ruby/compare/v2.0.1...v3.0.0)
+
 ### 2.0.1 / 2016-02-12
 
 * Fix folders and labels updates for threads and messages
 * Revert pull request #71
+
+[full changelog](https://github.com/nylas/nylas-ruby/compare/v2.0.0...v2.0.1)
 
 ### 2.0.0 / 2016-02-05
 
 * Remove get_cursor method that calls deprecated generate_cursor endpoint
 * Modify `delta_stream method` to remove built-in `EventMachine.run` block and allow for multiple streams. `delta_stream` must now be called from inside an `EventMachine.run` block
 * `url_for_authentication` now accepts a `:state` parameter (see https://nylas.com/docs#server_side_explicit_flow for more details)
+
+[full changelog](https://github.com/nylas/nylas-ruby/compare/v1.3.0...v2.0.0)
 
 ### 1.3.0 / 2015-12-07
 
