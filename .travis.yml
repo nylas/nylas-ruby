@@ -2,9 +2,7 @@ sudo: false
 
 language: ruby
 rvm:
- - "1.9.3"
- - "2.0.0"
- - "2.1.0"
+ - "2.2.2"
  - "2.3.0"
 script: bundle exec rspec spec
 os:
@@ -12,10 +10,6 @@ os:
   - "osx"
 
 matrix:
-  allow_failures:
-  # https://github.com/travis-ci/travis-ci/issues/5361
-  - os: osx
-    rvm: 2.3.0
   include:
   - os: linux
     rvm: jruby-9.0.4.0

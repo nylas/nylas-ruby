@@ -101,10 +101,17 @@ describe Inbox::API do
 
   describe 'Delta sync bogus requests' do
     before do
-      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
+      stub_request(:get, "https://api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
+        with(basic_auth: [access_token]).
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
       stub_request(:get, "https://api.nylas.com/delta?cursor=0&exclude_folders=false").
-         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'Basic VVhYTU9DSlctQktTTFBDRkktVVFBUUZXTE86', 'User-Agent'=>'Nylas Ruby SDK 2.0.1 - 2.3.1', 'X-Inbox-Api-Wrapper'=>'ruby'}).
+        with(basic_auth: [access_token]).
+        to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
+
+      # Playing whack-a-mole with webmock :(
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
+        to_return(:status => 200, :body => File.read('spec/fixtures/bogus_stream.txt'), :headers => {'Content-Type' => 'application/json'})
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta?cursor=0&exclude_folders=false").
         to_return(:status => 200, :body => File.read('spec/fixtures/bogus_second.txt'), :headers => {'Content-Type' => 'application/json'})
 
       if RUBY_PLATFORM[/java/] == 'java'

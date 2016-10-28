@@ -193,7 +193,7 @@ describe 'Inbox' do
     describe "#accounts" do
       before (:each) do
         stub_request(:get, "https://api.nylas.com/a/ABC/accounts?limit=100&offset=0").
-         with(:headers => {'Accept'=>'*/*; q=0.5, application/xml', 'Accept-Encoding'=>'gzip, deflate', 'Authorization'=>'Basic MTIzOg==', 'User-Agent'=>'Nylas Ruby SDK 2.0.1 - 2.3.1', 'X-Inbox-Api-Wrapper'=>'ruby'}).
+         with(:headers => {'Authorization'=>'Basic MTIzOg=='}).
           to_return(
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
