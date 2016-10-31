@@ -1,10 +1,10 @@
-### 3.0.0 / 2016-10-28
+### 3.0.0 / 2016-11-04
 
-* JRuby support
 * Removes `interpret_http_status` to be included in `interpret_response`
 * Improve error handling
 * Add native authentication example code
 * Add webhooks example code
+* Removes experimental JRuby support
 
 [full changelog](https://github.com/nylas/nylas-ruby/compare/v2.0.1...v3.0.0)
 

@@ -2,4 +2,3 @@
 
 require 'nylas'
 require 'webmock/rspec'
-require 'pry'

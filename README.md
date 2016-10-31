@@ -26,13 +26,8 @@ gem install nylas
 
 ##Requirements
 
-### MRI
 - Ruby 2.2.2 or above.
 - rest-client, json, yajl-ruby, em-http-request
-
-### JRuby
-- JRuby 1.7 or above.
-- rest-client, lock_jar
 
 
 ## Examples
@@ -476,11 +471,7 @@ save_to_db(last_cursor)
 
 ### Using the Delta sync streaming API
 
-The streaming API will receive deltas in real time, without needing to repeatedly poll.
-
-#### MRI
-
-MRI uses EventMachine for async IO.
+The streaming API will receive deltas in real time, without needing to repeatedly poll. It uses EventMachine for async IO.
 
 ```ruby
 cursor = nylas.latest_cursor
@@ -514,43 +505,6 @@ EventMachine.run do
     a.delta_stream(cursor) do |event, object|
       puts object
     end
-  end
-end
-```
-
-#### JRuby
-
-The JRuby implementation uses the [Simple JSON Streaming gem](https://github.com/mguymon/sjs) instead of
-EventMachine and YAJL. No need for the `EventMachine.run` block.
-
-```ruby
-cursor = nylas.latest_cursor
-
-nylas.delta_stream(cursor) do |event, object|
-  if event == "create" or event == "modify"
-    if object.is_a?(Nylas::Contact)
-      puts "#{object.name} - #{object.email}"
-    elsif object.is_a?(Nylas::Event)
-      puts "Event!"
-    end
-  elsif event == "delete"
-    # In the case of a deletion, the API only returns the ID of the object.
-    # In this case, the Ruby SDK returns a dummy object with only the id field
-    # set.
-    puts "Deleting from collection #{object.class.name}, id: #{object}"
-  end
-end
-```
-
-To receive streams from multiple accounts, call `delta_stream` for each of them inside an `EventMachine.run` block.
-
-```ruby
-api_handles = [] # a list of Nylas::API objects
-
-api_handles.each do |a|
-  cursor = a.latest_cursor()
-  a.delta_stream(cursor) do |event, object|
-    puts object
   end
 end
 ```
