@@ -11,7 +11,7 @@ end
 def color_print(str)
   puts "\033[0m\033[94m"
   print str
-  STDIN.getc
+  gets.chomp
   puts "\033[0m"
 end
 
@@ -46,12 +46,10 @@ threads = inbox.threads.each do |thread|
 end
 color_print "Did you see a list of thread subjects? (Y/N)"
 
-puts "<<<<<>>>>>"
 threads = inbox.threads.where(:in => 'sent').each do |thread|
   puts thread.subject
 end
 color_print "Did you see a list of sent threads? (Y/N)"
-
 
 draft = inbox.drafts.build(:to =>  [{email: DEST_EMAIL}], :body => 'Hey, this is a test').send!
 color_print "Did you receive an email? (Y/N)"
@@ -60,9 +58,12 @@ messages = inbox.messages.where(:in => 'inbox')
 puts messages.first.raw
 color_print "Did you see the contents of a message? (Y/N)"
 
-first_calendar_id = inbox.calendars.first.id
-puts inbox.calendars.find(first_calendar_id).name
-color_print "Did you see the title of the first calendar? (Y/N)"
+calendar = inbox.calendars.first
+if calendar != nil  
+  first_calendar_id = calendar.first.id
+  puts inbox.calendars.find(first_calendar_id).name
+  color_print "Did you see the title of the first calendar? (Y/N)"
+end
 
 account = inbox.account
 puts account.provider
@@ -95,7 +96,7 @@ elsif account.provider == 'gmail'
 end
 
 cursor = inbox.latest_cursor
-color_print "Do you see a cursor (Y/N)? #{cursor}"
+color_print "Do you see a cursor (Y/N)? #{cursor} "
 
 puts "Getting events from the delta stream (this hangs eventually, feel free to Ctrl-C)"
 
