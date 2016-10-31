@@ -32,7 +32,7 @@ GOOGLE_SCOPES = ['https://mail.google.com/',
 # This is the path in your Google application that users are redirected to after
 # they have authenticated with Google, and it must be authorized through
 # Google's developer console
-$redirect_uri = "http://localhost:#{settings.port}"
+$redirect_uri = "http://localhost:#{settings.port}/google/oauth2callback"
 NYLAS_API = 'https://api.nylas.com'
 GOOGLE_OAUTH_TOKEN_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v2/tokeninfo'
 GOOGLE_OAUTH_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
