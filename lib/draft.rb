@@ -39,5 +39,11 @@ module Nylas
       self
     end
 
+    def destroy
+      ::RestClient::Request.execute(method: :delete, url: self.url, payload: ({ :version => self.version }).to_json) do |response, request, result|
+        response = Nylas.interpret_response(result, response, options={:raw_response=>true})
+      end
+    end
+
   end
 end
