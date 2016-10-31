@@ -32,7 +32,7 @@ GOOGLE_SCOPES = ['https://mail.google.com/',
 # This is the path in your Google application that users are redirected to after
 # they have authenticated with Google, and it must be authorized through
 # Google's developer console
-$redirect_uri = '' #Note: this is set automatically through Ngrok initialization
+$redirect_uri = "http://localhost:#{settings.port}"
 NYLAS_API = 'https://api.nylas.com'
 GOOGLE_OAUTH_TOKEN_VALIDATION_URL = 'https://www.googleapis.com/oauth2/v2/tokeninfo'
 GOOGLE_OAUTH_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -214,25 +214,10 @@ def nylas_token(data)
   return json['access_token']
 end
 
-## Setup ngrok settings to ensure everything works locally 
-def init_ngrok()
-  # Make sure ngrok is running
-  begin
-    response = JSON.parse(open('http://localhost:4040/api/tunnels').read)
-    ngrok = URI.join(response['tunnels'][1]['public_url'], '/google/oauth2callback')
-    ngrok.scheme = 'https' # Sometimes the ngrok api will return http, so just force https
-    $redirect_uri = ngrok
-  rescue Errno::ECONNREFUSED
-    abort "It looks like ngrok isn't running! Make sure you've started that first with 'ngrok http 1234'"
-  end
-
-  puts $redirect_uri
-  puts "Have you added the url above as an authorized callback in Google's developer console (y/n)? "
-  s = gets.chomp
-  if s != 'y'
-    puts "You need to set that up first!"
-    abort "See https://support.nylas.com/hc/en-us/articles/222176307-Google-OAuth-Setup-Guide for more information"
-  end
+puts $redirect_uri
+puts "Have you added the url above as an authorized callback in Google's developer console (y/n)? "
+s = gets.chomp
+if s != 'y'
+  puts "You need to set that up first!"
+  abort "See https://support.nylas.com/hc/en-us/articles/222176307-Google-OAuth-Setup-Guide for more information"
 end
-
-init_ngrok()

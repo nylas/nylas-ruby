@@ -23,7 +23,7 @@ Your App                                    Google
 |      +----------------------------------> |     |
 |      |                                    |     |
 |      |      Authorization code            |     |
-|      | <--(localhost)-<-(ngrok)-----------+     |
+|      | <---------(localhost)------<-------+     |
 |      |                                    |     |
 |      |      Request refresh token         |     |
 |      +----------------------------------> |     |
@@ -60,10 +60,6 @@ respective `client_id` and `client_secret`s.  Learn about how to setup the
 Google App to correctly work with Nylas
 [here](https://support.nylas.com/hc/en-us/articles/222176307-Google-OAuth-Setup-Guide).
 
-### ngrok
-
-[ngrok](https://ngrok.com/) makes it really easy to test callback urls that are
-running locally on your computer. 
 
 ## Initial Setup
 
@@ -77,14 +73,7 @@ bundle install
 
 # Running the app
 
-First, make sure ngrok is running with the same port that the local sinatra app is
-running.
-
-```bash
-ngrok http 1234
-```
-
-Next, run the sinatra app.
+Run the sinatra app.
 
 ```bash
 ruby app.rb
