@@ -34,7 +34,7 @@ gem install nylas
 
 ### Sinatra App
 
-A small example of a Sintra app is included in the `examples/sinatra` directory. You can check-out the `README.md` in the sinatra folder to learn more about the example
+A small example of a Sinatra app is included in the `examples/sinatra` directory. You can check-out the `README.md` in the sinatra folder to learn more about the example
 
 ```
 cd examples/sinatra
@@ -236,6 +236,11 @@ thread.messages.each do |message|
   puts message.subject
 end
 
+# List expanded messages (with Message-Id, In-Reply-To and References fields)
+thread.messages(expanded: true).each do |message|
+  puts message.subject
+end
+
 # List all messages sent by Ben where Helena was cc'ed:
 thread.messages.where(:from => 'ben@nylas.com').each.select { |t|
   t.cc.any? {|p| p['email'] == 'helena@nylas.com' }
@@ -306,6 +311,48 @@ msg.star!
 msg.unstar!
 ```
 
+#### Getting a message's Message-Id, References and In-Reply-To headers
+
+If you've building your own threading solution, you'll probably need access to a handful of headers like
+`Message-Id`, `In-Reply-To` and `References`. Here's how to access them:
+
+```ruby
+msg = nylas.messages.first
+expanded_message = msg.expanded
+puts expanded_message.message_id
+puts expanded_message.references
+puts expanded_message.in_reply_to
+```
+
+The better way (because only one http request will be made)
+
+```ruby
+expanded_message = nylas.messages(expanded: true).first
+
+puts expanded_message.message_id
+puts expanded_message.references
+puts expanded_message.in_reply_to
+```
+
+
+#### Getting a collection of the messages with Message-Id, References and In-Reply-To headers
+
+```ruby
+expanded_messages = nylas.messages(expanded: true).each do |message|
+  puts message.message_id
+  puts message.references
+  puts message.in_reply_to
+end
+```
+
+#### Getting the raw contents of a message
+
+It's possible to access the unprocessed contents of a message using the raw method:
+
+```ruby
+raw_contents = message.raw
+```
+
 ### Working with API Objects
 
 #### Filtering
@@ -355,27 +402,6 @@ puts contact.raw_json #=>
 #   "account_id": "aqau8ta87ndh6cwv0o3ajfoo2",
 #   "object": "contact"
 # }
-```
-
-#### Getting a message's Message-Id, References and In-Reply-To headers
-
-If you've building your own threading solution, you'll probably need access to a handful of headers like
-`Message-Id`, `In-Reply-To` and `References`. Here's how to access them:
-
-```ruby
-msg = nylas.messages.first
-expanded_message = msg.expanded
-puts expanded_message.message_id
-puts expanded_message.references
-puts expanded_message.in_reply_to
-```
-
-#### Getting the raw contents of a message
-
-It's possible to access the unprocessed contents of a message using the raw method:
-
-```ruby
-raw_contents = message.raw
 ```
 
 ### Creating and Sending Drafts

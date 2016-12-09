@@ -9,6 +9,32 @@ describe Nylas::Thread do
     @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
   end
 
+  describe '#messages' do
+    let(:thread) { Nylas::Thread.new(@inbox, nil) }
+
+    before do
+      thread.id = 'thread_id'
+    end
+
+    context 'when expanded param is true' do
+      it 'requests expanded messages' do
+        stub_request(:get, "https://api.nylas.com/messages?limit=100&offset=0&thread_id=#{thread.id}&view=expanded")
+          .to_return(status: 200, body: '[]', headers: {})
+
+        thread.messages(expanded: true).all
+      end
+    end
+
+    context 'when expanded param is false' do
+      it 'requests messages' do
+        stub_request(:get, "https://api.nylas.com/messages?limit=100&offset=0&thread_id=#{thread.id}")
+          .to_return(status: 200, body: '[]', headers: {})
+
+        thread.messages.all
+      end
+    end
+  end
+
   describe "#as_json" do
     it "only includes labels/folder info" do
       thr = Nylas::Thread.new(@inbox, nil)

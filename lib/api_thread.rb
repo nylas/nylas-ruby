@@ -41,8 +41,16 @@ module Nylas
       end
     end
 
-    def messages
-      @messages ||= RestfulModelCollection.new(Message, @_api, {:thread_id=>@id})
+    def messages(expanded: false)
+      @messages ||= Hash.new do |h, is_expanded|
+        h[is_expanded] = \
+          if is_expanded
+            RestfulModelCollection.new(ExpandedMessage, @_api, thread_id: @id, view: 'expanded')
+          else
+            RestfulModelCollection.new(Message, @_api, thread_id: @id)
+          end
+      end
+      @messages[expanded]
     end
 
     def drafts
