@@ -13,6 +13,7 @@ require 'api_thread'
 require 'calendar'
 require 'account'
 require 'message'
+require 'expanded_message'
 require 'draft'
 require 'contact'
 require 'file'
@@ -36,7 +37,7 @@ module Nylas
     def initialize(type, message, server_error = nil)
       super(message)
       self.type = type
-      self.message = message 
+      self.message = message
       self.server_error = server_error
     end
   end
@@ -84,7 +85,7 @@ module Nylas
         raise exc.new(response['type'], response['message'], response.fetch('server_error', nil))
       end
     end
-    
+
     raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
     raise UnexpectedResponse.new if options[:expected_class] && !response.is_a?(options[:expected_class])
     response
@@ -170,8 +171,16 @@ module Nylas
       @threads ||= RestfulModelCollection.new(Thread, self)
     end
 
-    def messages
-      @messages ||= RestfulModelCollection.new(Message, self)
+    def messages(expanded: false)
+      @messages ||= Hash.new do |h, is_expanded|
+        h[is_expanded] = \
+          if is_expanded
+            RestfulModelCollection.new(ExpandedMessage, self, view: 'expanded')
+          else
+            RestfulModelCollection.new(Message, self)
+          end
+      end
+      @messages[expanded]
     end
 
     def files
@@ -368,10 +377,10 @@ module Nylas
             yield delta["event"], obj
         end
       end
-      
+
       http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
 
-      # set a callback on the HTTP stream that parses incoming chunks as they come in		
+      # set a callback on the HTTP stream that parses incoming chunks as they come in
       http.stream do |chunk|
         parser << chunk
       end
@@ -379,7 +388,7 @@ module Nylas
       http.errback do
         raise UnexpectedResponse.new http.error
       end
-  
+
     end
   end
 end
