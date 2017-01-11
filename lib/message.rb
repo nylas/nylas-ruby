@@ -19,6 +19,7 @@ module Nylas
     parameter :starred
     parameter :folder
     parameter :labels
+    parameter :tracking
 
     include Nylas::ReadUnreadMethods
 
