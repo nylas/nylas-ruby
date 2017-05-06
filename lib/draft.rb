@@ -7,6 +7,7 @@ module Nylas
     parameter :version
     parameter :reply_to_message_id
     parameter :file_ids
+    parameter :tracking
 
     def attach(file)
       file.save! unless file.id
