@@ -13,8 +13,8 @@ describe Nylas::Draft do
     it "does save all the fields of the draft object and only sends the required JSON" do
 
       stub_request(:post, "https://api.nylas.com/drafts/").
-        with(basic_auth: [@access_token], 
-        :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}',).to_return(:status => 200,
+        with(basic_auth: [@access_token],
+        :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null,"tracking":null}',).to_return(:status => 200,
             :body => File.read('spec/fixtures/draft_save.txt'),
             :headers => {"Content-Type" => "application/json"})
 
@@ -41,7 +41,7 @@ describe Nylas::Draft do
   describe "#send!" do
     it "sends all the JSON fields when sending directly" do
       stub_request(:post, "https://api.nylas.com/send").
-         with(basic_auth: [@access_token], :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null}').to_return(:status => 200,
+         with(basic_auth: [@access_token], :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null,"tracking":null}').to_return(:status => 200,
                  :body => File.read('spec/fixtures/send_endpoint.txt'),
                  :headers => {"Content-Type" => "application/json"})
 
@@ -63,7 +63,7 @@ describe Nylas::Draft do
         stub_request(:post, "https://api.nylas.com/send").with(basic_auth: [@access_token]).
            to_return(:status => error_code,
                      :body => '{ "message": "Invalid recipient address benbitdiddle@gmailcom", ' +
-                              '  "type": "invalid_request_error", ' + 
+                              '  "type": "invalid_request_error", ' +
                               '  "server_error": "SPAM"}',
                      :headers => {"Content-Type" => "application/json"})
 
