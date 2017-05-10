@@ -1,3 +1,6 @@
+### 3.1.0 / 2017-05-10
+* Adds support for message tracking (https://github.com/cberkom)
+
 ### 3.0.0 / 2016-11-04
 
 * Removes `interpret_http_status` to be included in `interpret_response`
