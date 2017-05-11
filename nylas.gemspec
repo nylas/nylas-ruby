@@ -24,11 +24,11 @@ Gem::Specification.new do |gem|
   gem.platform = 'java' if RUBY_PLATFORM[/java/] == 'java'
   gem.dependencies.clear
   bundler = Bundler.load
-  bundler.dependencies_for(:default, :runtime).each do |dependency|
+  bundler.dependencies.select {|d| ([:default, :runtime] & d.groups ).any? }.each do |dependency|
     next unless dependency.current_platform?
     gem.add_runtime_dependency dependency.name, *dependency.requirement.as_list
   end
-  bundler.dependencies_for(:development, :test).each do |dependency|
+  bundler.dependencies.select { |d| ([:development, :test] & d.groups).any? }.each do |dependency|
     next unless dependency.current_platform?
     gem.add_development_dependency dependency.name, *dependency.requirement.as_list
   end
