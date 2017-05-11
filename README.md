@@ -605,14 +605,32 @@ nylas = Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/')
 puts nylas.messages.first.body
 ```
 
+## Development
+
+### Requirements
+
+Install [RubyGems](https://rubygems.org/pages/download) if you don't have it
+
+    gem install bundler
+    gem update --system
+
+### Setup
+
+    bundle install
+
+You can run tests locally using rspec
+
+    rspec spec
+
 
 ## Contributing
 
-We'd love your help making the Nylas ruby gem better. Join the Google Group for project updates and feature discussion. We also have a [Slack community](nylas-slack-invite.heroku.com) where we provide support, or you can email [support@nylas.com](mailto:support@nylas.com).
+We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions or join us at our community Slack channel [here]() 
 
 Please sign the [Contributor License Agreement](https://www.nylas.com/cla.html) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
 
-Tests can be run with:
+Before submitting a pull request please make sure that all tests are passing.
+Furthermore, make sure any new code you are adding is properly tested.
 
     rspec spec
 
