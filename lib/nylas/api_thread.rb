@@ -1,6 +1,6 @@
-require 'restful_model'
-require 'time_attr_accessor'
-require 'mixins'
+require 'nylas/restful_model'
+require 'nylas/time_attr_accessor'
+require 'nylas/mixins'
 
 module Nylas
   class Thread < RestfulModel

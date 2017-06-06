@@ -1,4 +1,4 @@
-require 'restful_model'
+require 'nylas/restful_model'
 
 module Nylas
   class RestfulModelCollection

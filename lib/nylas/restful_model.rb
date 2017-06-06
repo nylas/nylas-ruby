@@ -1,5 +1,5 @@
-require 'time_attr_accessor'
-require 'parameters'
+require 'nylas/time_attr_accessor'
+require 'nylas/parameters'
 
 module Nylas
   class RestfulModel

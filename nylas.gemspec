@@ -9,7 +9,7 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
-require './lib/version.rb'
+require './lib/nylas/version.rb'
 
 Gem::Specification.new do |gem|
   gem.name = 'nylas'
