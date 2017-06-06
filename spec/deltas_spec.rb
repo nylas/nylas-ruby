@@ -1,4 +1,4 @@
-require 'event'
+require 'nylas/event'
 
 describe Nylas::API do
   subject(:inbox) { Nylas::API.new(app_id, app_secret, access_token) }

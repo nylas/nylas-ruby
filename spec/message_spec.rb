@@ -1,5 +1,5 @@
-require 'message'
-require 'folder'
+require 'nylas/message'
+require 'nylas/folder'
 
 describe Nylas::Message do
   before (:each) do

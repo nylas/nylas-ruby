@@ -1,5 +1,5 @@
-require 'restful_model'
-require 'event'
+require 'nylas/restful_model'
+require 'nylas/event'
 
 module Nylas
   class Calendar < RestfulModel
