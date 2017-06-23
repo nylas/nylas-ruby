@@ -46,4 +46,18 @@ describe Nylas::RestfulModelCollection do
       expect { api.threads.count }.to raise_error(Nylas::AccessDenied)
     end
   end
+
+  describe '#delete' do
+    let(:event_id) { 'nylas_event_id' }
+    let(:remove_url) { "https://api.nylas.com/events/#{event_id}" }
+
+    before do
+      stub_request(:delete, remove_url).to_return(status: 200, body: '')
+    end
+
+    it 'sends request to remove event' do
+      api.events.delete(event_id)
+      expect(a_request(:delete, remove_url)).to have_been_made.once
+    end
+  end
 end
