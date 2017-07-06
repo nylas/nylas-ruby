@@ -82,7 +82,7 @@ module Nylas
 
     def delete(item_or_id)
       item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
-      RestClient.delete("#{url}/#{id}")
+      RestClient.delete("#{url}/#{item_or_id}")
     end
 
     def find(id)

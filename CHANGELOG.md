@@ -1,3 +1,6 @@
+### 3.1.1 / 2017-06-23
+* Fix deleting event request (https://github.com/nylas/nylas-ruby/issues/101)
+
 ### 3.1.0 / 2017-05-10
 * Adds support for message tracking (https://github.com/cberkom)
 
