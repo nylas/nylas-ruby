@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rest-client', '~> 1.6'
+gem 'rest-client', '>= 1.6'
 gem 'yajl-ruby', '~> 1.2', '>= 1.2.1', platform: :ruby
 gem 'em-http-request', '~> 1.1', '>= 1.1.3', platform: :ruby
 
