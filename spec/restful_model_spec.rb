@@ -58,7 +58,7 @@ describe 'RestfulModel' do
 
     it "should pass parameters as query parameters when calling delete" do
       url = 'http://localhost:5555/events/1'
-      stubbed_url = 'http://localhost:5555/events/1?param1=&param2=stuff&send_notifications=true'
+      stubbed_url = 'http://localhost:5555/events/1?param1&param2=stuff&send_notifications=true'
       message_url = stub_request(:delete, stubbed_url)
       r = Nylas::RestfulModel.new(@api)
       allow(r).to receive_messages(:url => url)
