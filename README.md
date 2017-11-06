@@ -625,15 +625,7 @@ You can run tests locally using rspec
 
 ## Contributing
 
-We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions or join us at our community Slack channel [here](http://slack-invite.nylas.com) 
-
-Please sign the [Contributor License Agreement](https://goo.gl/forms/lKbET6S6iWsGoBbz2) before submitting pull requests. (It's similar to other projects, like NodeJS or Meteor.)
-
-Before submitting a pull request please make sure that all tests are passing.
-Furthermore, make sure any new code you are adding is properly tested.
-
-    rspec spec
-
+Our guidelines for contributing are in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Deployment
 
