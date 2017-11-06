@@ -2,7 +2,7 @@
 
 set -e
 
-supported_versions=(2.1.10 2.2.8 2.3.5 2.4.2)
+supported_versions=(2.2.8 2.3.5 2.4.2)
 for version in "${supported_versions[@]}" ; do
   rbenv install -s $version
   RBENV_VERSION=$version ruby --version
