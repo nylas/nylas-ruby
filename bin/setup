@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+supported_versions=(2.2.8 2.3.5 2.4.2)
+for version in "${supported_versions[@]}" ; do
+  rbenv install -s $version
+  RBENV_VERSION=$version ruby --version
+  RBENV_VERSION=$version gem install bundler
+  for gemfile in $(ls gemfiles/Gemfile* | grep -v lock); do
+    echo $version $gemfile
+    RBENV_VERSION=$version bundle install --gemfile=$gemfile
+  done
+done
