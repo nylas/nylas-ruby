@@ -10,11 +10,7 @@ The `bin/setup` script installs the different ruby versions we expect the gem to
 
 ### Submitting a Pull Request
 
-Before submitting a pull request please make sure that all tests are passing.
-Furthermore, make sure any new code you are adding is properly tested.
-
-To run tests across all supported ruby versions, run `bin/setup` and then `bin/test`
-
-* Pull requests *should* function across all the supported ruby versions, as defined in [.travis.yml](./.travis.yml)
-* 
+* Pull requests *may* be submitted before they are feature complete, to get feedback and thoughts from the core team.
+* Pull requests *should* pass tests across the supported ruby versions, as defined in [.travis.yml](./.travis.yml). To do so, run `bin/test`
+* Pull requests *should* add new tests to cover the functionality that is added or bug that is fixed.
 
