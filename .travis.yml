@@ -1,12 +1,13 @@
 language: ruby
 rvm:
- - "2.2.8"
- - "2.3.5"
- - "2.4.2"
+ - 2.2.8
+ - 2.3.5
+ - 2.4.2
 gemfile:
   - gemfiles/Gemfile.rails4
   - gemfiles/Gemfile.rails5
 script: bundle exec rspec spec
+osx_image: xcode9.1
 os:
- - "linux"
- - "osx"
+ - linux
+ - osx
