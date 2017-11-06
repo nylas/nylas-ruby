@@ -7,5 +7,8 @@ for version in "${supported_versions[@]}" ; do
   rbenv install -s $version
   RBENV_VERSION=$version ruby --version
   RBENV_VERSION=$version gem install bundler
-  RBENV_VERSION=$version bundle install
+  for gemfile in $(ls gemfiles/Gemfile* | grep -v lock); do
+    echo $version $gemfile
+    RBENV_VERSION=$version bundle install --gemfile=$gemfile
+  done
 done
