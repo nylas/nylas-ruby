@@ -13,7 +13,7 @@ Gem::Specification.new do |gem|
   gem.files = Dir.glob("lib/**/*.rb")
   gem.platform = "ruby"
 
-  gem.add_runtime_dependency "rest-client", "~> 1.6"
+  gem.add_runtime_dependency "rest-client", ">= 1.6"
   gem.add_runtime_dependency "yajl-ruby", "~> 1.2", ">= 1.2.1"
   gem.add_runtime_dependency "em-http-request", "~> 1.1", ">= 1.1.3"
 

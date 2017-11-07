@@ -6,4 +6,6 @@ rvm:
 gemfile:
   - gemfiles/Gemfile.rails4
   - gemfiles/Gemfile.rails5
+  - gemfiles/Gemfile.rest-client.1
+  - gemfiles/Gemfile.rest-client.2
 script: bundle exec rspec spec
