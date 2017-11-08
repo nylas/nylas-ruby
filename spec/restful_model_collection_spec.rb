@@ -5,23 +5,66 @@ describe Nylas::RestfulModelCollection do
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
 
   describe '#each' do
-    before do
+    context 'when there is a single page' do
+      before do
+        stub_request(:get, "https://api.nylas.com/threads?limit=100&offset=0").
+          with(basic_auth: [access_token]).
+          to_return(:status => 200,
+                    :body => File.read('spec/fixtures/threads_reply.txt'),
+                    :headers => {'Content-Type' => 'application/json'})
+      end
+
+      it 'returns an external Enumerator when no block is given' do
+        expect(api.threads.each).to be_a(Enumerator)
+        expect(api.threads.each.map {|t| t.id }).to eq(['320yc9ie5rungx75j139dsgao', 'vxz6vx6rm2imw0mow9rc1prk'])
+      end
+
+      it 'yields the individual threads when a block is given' do
+        thread_ids = []
+        api.threads.each { |t| thread_ids << t.id }
+        expect(thread_ids).to eq(['320yc9ie5rungx75j139dsgao', 'vxz6vx6rm2imw0mow9rc1prk'])
+      end
+    end
+
+    it 'supports limiting' do
+        stub_request(:get, "https://api.nylas.com/threads?limit=10&offset=0").
+          to_return(:status => 200,
+                    :body => File.read('spec/fixtures/threads_reply.txt'),
+                    :headers => {'Content-Type' => 'application/json'})
+
+        api.threads.where(limit: 10).each { :noop }
+
+        assert_requested :get, "https://api.nylas.com/threads?limit=10&offset=0"
+    end
+
+    it 'supports multiple pages of results' do
+      first_page_of_messages = 100.times.map do
+        {
+          "id": SecureRandom.uuid,
+          "account_id": "asdf"
+        }
+      end
+
+      second_page_of_messages = 10.times.map do
+        {
+          "id": SecureRandom.uuid,
+          "account_id": "asdf"
+        }
+      end
+
       stub_request(:get, "https://api.nylas.com/threads?limit=100&offset=0").
-        with(basic_auth: [access_token]).
         to_return(:status => 200,
-                  :body => File.read('spec/fixtures/threads_reply.txt'),
+                  :body => first_page_of_messages.to_json,
                   :headers => {'Content-Type' => 'application/json'})
-    end
+      stub_request(:get, "https://api.nylas.com/threads?limit=100&offset=100").
+        to_return(:status => 200,
+                  :body => second_page_of_messages.to_json,
+                  :headers => {'Content-Type' => 'application/json'})
 
-    it 'returns an external Enumerator when no block is given' do
-      expect(api.threads.each).to be_a(Enumerator)
-      expect(api.threads.each.map {|t| t.id }).to eq(['320yc9ie5rungx75j139dsgao', 'vxz6vx6rm2imw0mow9rc1prk'])
-    end
+      api.threads.where(limit: 500).each { |t| :noop }
 
-    it 'yields the individual threads when a block is given' do
-      thread_ids = []
-      api.threads.each { |t| thread_ids << t.id }
-      expect(thread_ids).to eq(['320yc9ie5rungx75j139dsgao', 'vxz6vx6rm2imw0mow9rc1prk'])
+      assert_requested :get, "https://api.nylas.com/threads?limit=100&offset=0"
+      assert_requested :get, "https://api.nylas.com/threads?limit=100&offset=100"
     end
   end
 

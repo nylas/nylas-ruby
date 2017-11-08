@@ -15,16 +15,10 @@ module Nylas
     def each
       return enum_for(:each) unless block_given?
 
-      offset = 0
-      chunk_size = 100
-      finished = false
-      while (!finished) do
-        results = get_model_collection(offset, chunk_size)
-        results.each { |item|
+      get_model_collection do |items|
+        items.each do |item|
           yield item
-        }
-        offset += results.length
-        finished = results.length < chunk_size
+        end
       end
     end
 
@@ -60,21 +54,8 @@ module Nylas
     end
 
     def range(offset = 0, limit = 100)
-      accumulated = []
-      finished = false
-      chunk_size = 100
 
-      if limit < chunk_size
-        chunk_size = limit
-      end
-
-      while (!finished && accumulated.length < limit) do
-        results = get_model_collection(offset + accumulated.length, chunk_size)
-        accumulated = accumulated.concat(results)
-
-        # we're done if we have more than 'limit' items, or if we asked for 50 and got less than 50...
-        finished = accumulated.length >= limit || results.length == 0 || (results.length % chunk_size != 0)
-      end
+      accumulated = get_model_collection(offset, limit)
 
       accumulated = accumulated[0..limit] if limit < Float::INFINITY
       accumulated
@@ -136,20 +117,37 @@ module Nylas
       model
     end
 
-    def get_model_collection(offset = 0, limit = 100)
+    def get_model_collection(offset = nil, limit = nil, pagination_options = { per_page: 100 })
       filters = @filters.clone
-      filters[:offset] = offset
-      filters[:limit] = limit
-      models = []
+      filters[:offset] = offset || filters[:offset] || 0
+      filters[:limit] = limit || filters[:limit] || 100
 
-      RestClient.get(url, :params => filters){ |response,request,result|
-        items = Nylas.interpret_response(result, response, {:expected_class => Array})
-        models = inflate_collection(items)
-      }
-      models
+      accumulated = []
+
+      finished = false
+
+      current_calls_filters = filters.clone
+      while (!finished) do
+        current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
+        RestClient.get(url, :params => current_calls_filters) do |response, request, result|
+          items = Nylas.interpret_response(result, response, { :expected_class => Array })
+          new_items = inflate_collection(items)
+          yield new_items if block_given?
+          accumulated = accumulated.concat(new_items)
+          finished = no_more_pages?(accumulated, items, filters, pagination_options)
+        end
+
+        current_calls_filters[:offset] += pagination_options[:per_page]
+      end
+
+      accumulated
     end
 
+    def no_more_pages?(accumulated, items, filters, pagination_options)
+      accumulated.length >= filters[:limit] || items.length < pagination_options[:per_page]
+    end
   end
+
 
   # a ManagementModelCollection is similar to a RestfulModelCollection except
   # it's used by models under the /a/<app_id> namespace (mostly account status
