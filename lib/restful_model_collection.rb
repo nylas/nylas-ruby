@@ -15,8 +15,10 @@ module Nylas
     def each
       return enum_for(:each) unless block_given?
 
-      get_model_collection.each do |item|
-        yield item
+      get_model_collection do |items|
+        items.each do |item|
+          yield item
+        end
       end
     end
 
@@ -129,7 +131,9 @@ module Nylas
         current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
         RestClient.get(url, :params => current_calls_filters) do |response, request, result|
           items = Nylas.interpret_response(result, response, { :expected_class => Array })
-          accumulated = accumulated.concat(inflate_collection(items))
+          new_items = inflate_collection(items)
+          yield new_items if block_given?
+          accumulated = accumulated.concat(new_items)
           finished = no_more_pages?(accumulated, items, filters, pagination_options)
         end
 
