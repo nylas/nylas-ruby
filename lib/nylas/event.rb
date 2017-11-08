@@ -23,8 +23,8 @@ module Nylas
       hash.delete_if { |key, value| value.nil? }
 
       # The API doesn't like to receive: "object": "timespan" in the when block.
-      if hash.has_key?('when') and hash['when'].has_key?('object')
-        hash['when'].delete('object')
+      if hash.has_key?(:when) and hash[:when].has_key?('object')
+        hash[:when].delete('object')
       end
 
       return hash
@@ -32,7 +32,7 @@ module Nylas
 
     def rsvp!(status, comment)
       url = @_api.url_for_path("/send-rsvp")
-      data = {:event_id => @id, :status => status, :comment => comment}
+      data = {:event_id => id, :status => status, :comment => comment}
 
       @_api.post(url, data.to_json, content_type: :json) do |response, _request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)

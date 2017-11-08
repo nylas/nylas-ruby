@@ -26,26 +26,25 @@ module Nylas
 
     def inflate(json)
       super
-      @to ||= []
-      @cc ||= []
-      @bcc ||= []
-      @labels ||= []
+      self.to ||= []
+      self.cc ||= []
+      self.bcc ||= []
+      self.labels ||= []
       self.folder ||= nil
-
       self.events = json["events"] if json["events"]
 
       # This is a special case --- we receive label data from the API
       # as JSON but we want it to behave like an API object.
-      @labels.map! do |label_json|
-       label = Label.new(@_api)
-       label.inflate(label_json)
-       label
+      labels.map! do |label_json|
+        label = Label.new(@_api)
+        label.inflate(label_json)
+        label
       end
 
-      if not folder.nil? and folder.is_a?(Hash)
-       folder = Folder.new(@_api)
-       folder.inflate(@folder)
-       @folder = folder
+      unless folder.nil? || !folder.is_a?(Hash)
+        self.folder = Folder.new(@_api)
+        self.folder.inflate(folder)
+        self.folder = folder
       end
     end
 
@@ -54,16 +53,16 @@ module Nylas
 
       # unread, starred and labels/folder are the only attribute
       # you can modify.
-      if not @unread.nil?
-        hash["unread"] = @unread
+      unless unread.nil?
+        hash["unread"] = unread
       end
 
-      if not @starred.nil?
-        hash["starred"] = @starred
+      unless starred.nil?
+        hash["starred"] = starred
       end
 
-      if not @labels.nil? and @labels != []
-        hash["label_ids"] = @labels.map do |label|
+      unless labels.nil? || labels.empty?
+        hash["label_ids"] = labels.map do |label|
           if !label.respond_to?(:id)
             raise TypeError, "label #{label} does not respond to #id"
           end
@@ -75,7 +74,7 @@ module Nylas
         raise TypeError, "folder #{folder} does not respond to #id"
       end
 
-      if !folder.nil? && folder.respond_to?(:id)
+      unless folder.nil?
         hash["folder_id"] = folder.id
       end
 
@@ -89,7 +88,7 @@ module Nylas
 
 
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=> id})
+      model_state[:files] ||= RestfulModelCollection.new(File, @_api, {:message_id=>id})
     end
 
     def files?
@@ -97,7 +96,7 @@ module Nylas
     end
 
     def raw
-      collection = RestfulModelCollection.new(Message, @_api, message_id: @id)
+      collection = RestfulModelCollection.new(Message, @_api, {:message_id=> id})
       url = "#{collection.url}/#{id}/"
       @_api.get(url, accept: 'message/rfc822') do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)

@@ -162,7 +162,7 @@ module Nylas
 
     def url_for_management
       protocol, domain = @api_server.split('//')
-      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts"
+      accounts_path = "#{protocol}//#{app_secret}:@#{domain}/a/#{app_id}/accounts"
     end
 
     def set_access_token(token)

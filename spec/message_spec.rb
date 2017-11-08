@@ -73,7 +73,6 @@ describe Nylas::Message do
       expect(dict.length).to eq(1)
       expect(dict['labels']).to eq(nil)
       expect(dict['folder_id']).to eq('test label')
-
     end
   end
 

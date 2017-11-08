@@ -1,5 +1,6 @@
-require 'nylas/time_attr_accessor'
-require 'nylas/parameters'
+require_relative 'model_state'
+require_relative 'time_attr_accessor'
+require_relative 'parameters'
 
 module Nylas
   class RestfulModel
@@ -11,6 +12,7 @@ module Nylas
     parameter :cursor  # Only used by the delta sync API
     time_attr_accessor :created_at
     attr_reader :raw_json
+    attr_accessor :model_state
 
     def self.collection_name
       "#{self.to_s.downcase}s".split('::').last
@@ -18,6 +20,7 @@ module Nylas
 
     def initialize(api, account_id = nil)
       raise StandardError.new unless api.class <= Nylas::API
+      @model_state = ModelState.new
       @account_id = account_id
       @_api = api
     end
@@ -28,9 +31,11 @@ module Nylas
 
     def inflate(json)
       @raw_json = json
-      parameters.each do |property_name|
-        send("#{property_name}=", json[property_name]) if json.has_key?(property_name)
+      data = parameters.reduce({}) do |real_properties, property_name|
+        real_properties[property_name] = json[property_name] if json.key?(property_name)
+        real_properties
       end
+      self.model_state = ModelState.new(data)
     end
 
     def save!(params={})
@@ -47,17 +52,7 @@ module Nylas
     end
 
     def as_json(options = {})
-      hash = {}
-      parameters.each do |getter|
-        unless options[:except] && options[:except].include?(getter)
-          value = send(getter)
-          unless value.is_a?(RestfulModelCollection)
-            value = value.as_json(options) if value.respond_to?(:as_json)
-            hash[getter] = value
-          end
-        end
-      end
-      hash
+      model_state.as_json(options)
     end
 
     def update(http_method, action, data = {}, params = {})

@@ -19,7 +19,7 @@ module Nylas
     end
 
     def save!
-      @_api.post(url, {:file => @file}) do |response, request, result|
+      @_api.post(url, {:file => file}) do |response, request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)
         json = json[0] if (json.class == Array)
         inflate(json)

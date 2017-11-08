@@ -12,7 +12,13 @@ module Nylas
       def parameter(*params)
         @parameters ||= []
         params.each do |param|
-          attr_accessor param
+          define_method param do
+            model_state[param]
+          end
+
+          define_method :"#{param}=" do |value|
+            model_state[param] = value
+          end
           @parameters << param.to_s
         end
       end

@@ -14,9 +14,8 @@ describe Nylas::Event do
       ev = Nylas::Event.new(@inbox)
       ev.title = 'Test event'
       ev.description = nil
-      dict = ev.as_json
-      expect(dict['title']).to eq('Test event')
-      expect(dict.length).to eq(1)
+      expect(ev.as_json[:title]).to eq('Test event')
+      expect(ev.as_json.length).to eq(1)
     end
 
     it "does remove object: timespan fields from 'when' blocks" do
@@ -25,8 +24,8 @@ describe Nylas::Event do
       ev.when = {'start_time' => 12345675, 'end_time' => 2345678, 'object' => 'timespan'}
       dict = ev.as_json
 
-      expect(dict['when'].length).to eq(2)
-      expect(dict['when'].has_key?('object')).to be false
+      expect(dict[:when].length).to eq(2)
+      expect(dict[:when].has_key?('object')).to be false
     end
   end
 
