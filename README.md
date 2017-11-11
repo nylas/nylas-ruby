@@ -24,7 +24,7 @@ sudo brew link openssl --force
 gem install nylas
 ```
 
-##Requirements
+## Requirements
 
 - Ruby 2.2.2 or above.
 - rest-client, json, yajl-ruby, em-http-request
