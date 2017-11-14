@@ -1,6 +1,6 @@
-require 'restful_model'
-require 'file'
-require 'mixins'
+require 'nylas/restful_model'
+require 'nylas/file'
+require 'nylas/mixins'
 
 module Nylas
   class Message < RestfulModel
