@@ -5,14 +5,10 @@ require 'restful_model'
 
 module Nylas
   class APIAccount < RestfulModel
-
-    parameter :account_id
-    parameter :email_address
-    parameter :id
     parameter :name
-    parameter :object
-    parameter :organization_unit
+    parameter :email_address
     parameter :provider
+    parameter :organization_unit
     parameter :sync_state
 
     def self.collection_name
