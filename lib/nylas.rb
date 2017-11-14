@@ -9,7 +9,7 @@ require 'active_support/core_ext/hash'
 
 require 'account'
 require 'api_account'
-require 'api_thread'
+require_relative 'thread'
 require 'calendar'
 require 'account'
 require 'message'
