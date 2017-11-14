@@ -32,9 +32,12 @@ describe Nylas::API do
     end
 
     it 'returns an external Enumerator when no block is given' do
-      expect(inbox.deltas(nth_cursor)).to be_a(Enumerator)
-      expect(inbox.deltas(nth_cursor).map { |e,o| [e, o.id]}).to contain_exactly(
-        ['create', 'c7mllq7iag2ivlp6fxf7dhg9i'], ['delete', 'db0isjjvqez51vdjeq5lx37dk'])
+      result = inbox.deltas(nth_cursor, [Nylas::File], false, [Nylas::Folder])
+      expect(result).to be_a(Enumerator)
+      events = result.map { |e,o| [e, o.id]}
+      expect(events).to contain_exactly(
+        ['create', 'c7mllq7iag2ivlp6fxf7dhg9i'],
+        ['delete', 'db0isjjvqez51vdjeq5lx37dk'])
     end
 
     it 'should continuously query the delta sync API' do
@@ -57,14 +60,14 @@ describe Nylas::API do
 
   describe 'Delta sync streaming API wrapper' do
     before do
-      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false").
+      stub_request(:get, "https://UXXMOCJW-BKSLPCFI-UQAQFWLO:@api.nylas.com/delta/streaming?cursor=0&exclude_folders=false&exclude_types=folder&include_types=file").
          to_return(:status => 200, :body => File.read('spec/fixtures/delta_stream.txt'), :headers => {'Content-Type' => 'application/json'})
     end
 
     it 'should continuously query the delta sync API' do
       count = 0
       EM.run do
-        inbox.delta_stream(0, []) do |event, object|
+        inbox.delta_stream(0, [Nylas::Folder], 0, false, [Nylas::File]) do |event, object|
 
           expect(object.cursor).to_not be_nil
           if event == 'create' or event == 'modify'
