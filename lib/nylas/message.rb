@@ -71,8 +71,31 @@ module Nylas
       hash
     end
 
+
+    attr_reader :events
+
+    def events?
+      !events.nil? && !events.empty?
+    end
+
+    def events=(events)
+      unless events.respond_to?(:map)
+        raise TypeError, "unable to iterate over #{events}, events must respond to #map"
+      end
+
+      @events = events.map do |event_data|
+        next event_data if event_data.respond_to?(:id)
+        unless event_data.respond_to?(:key)
+          raise TypeError, "unable to cast #{event_data} to an event."
+        end
+        event = Nylas::Event.new(@_api)
+        event.inflate(event_data)
+        event
+      end
+    end
+
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=> id})
     end
 
     def files?

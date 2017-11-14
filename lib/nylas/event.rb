@@ -41,7 +41,5 @@ module Nylas
 
       self
     end
-
-
   end
 end
