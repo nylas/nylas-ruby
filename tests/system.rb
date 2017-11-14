@@ -2,7 +2,7 @@ require 'nylas'
 require 'rest-client'
 
 begin
-  load 'credentials.rb'
+  require_relative 'credentials.rb'
 rescue LoadError
   puts "It seems you didn't create a 'credentials.rb' file. Look at credentials.rb.template for an example."
   exit

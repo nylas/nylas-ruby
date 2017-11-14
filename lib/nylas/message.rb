@@ -45,6 +45,30 @@ module Nylas
       end
     end
 
+
+    # Convenience method to access a Ruby Date version of the `date` parameter
+    # Will replace the string version of`#date` when we move to 4.0
+    def parsed_date
+      if date.kind_of?(Numeric)
+        Time.at(date).to_datetime
+      else
+        DateTime.parse(date)
+      end
+    end
+
+    alias_method :orig_date=, :date=
+    # Ensures when we are setting the date on this instance
+    # that we are storing it to a unix timestamp.
+    def date=date
+      if date.respond_to?(:strftime)
+        self.orig_date = date.strftime("%s").to_i
+      elsif date.kind_of?(String)
+        self.orig_date = DateTime.parse(date).strftime("%s").to_i
+      else
+        self.orig_date = date
+      end
+    end
+
     def as_json(options = {})
       hash = {}
 
