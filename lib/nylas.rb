@@ -227,11 +227,11 @@ module Nylas
     end
 
     def accounts
-          if self.using_hosted_api?
-               @accounts ||= ManagementModelCollection.new(Account, self)
-          else
-               @accounts ||= RestfulModelCollection.new(APIAccount, self)
-          end
+      if self.using_hosted_api?
+        @accounts ||= ManagementModelCollection.new(Account, self)
+      else
+        @accounts ||= RestfulModelCollection.new(APIAccount, self)
+      end
     end
 
     def latest_cursor
