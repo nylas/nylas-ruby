@@ -268,32 +268,30 @@ module Nylas
       "message" => Nylas::ExpandedMessage,
     }
 
-    def _build_exclude_types(exclude_types)
-      exclude_string = "&exclude_types="
+    def _build_types_filter_string(filter, types)
+      return "" if types.empty?
+      query_string = "&#{filter}_types="
 
-      exclude_types.each do |value|
+      types.each do |value|
         count = 0
         if OBJECTS_TABLE.has_value?(value)
           param_name = OBJECTS_TABLE.key(value)
-          exclude_string += "#{param_name},"
+          query_string += "#{param_name},"
         end
       end
 
-      exclude_string = exclude_string[0..-2]
+      query_string = query_string[0..-2]
     end
 
-    def deltas(cursor, exclude_types=[], expanded_view=false)
-      return enum_for(:deltas, cursor, exclude_types, expanded_view) unless block_given?
+    def deltas(cursor, exclude_types=[], expanded_view=false, include_types=[])
+      return enum_for(:deltas, cursor, exclude_types, expanded_view, include_types) unless block_given?
 
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = _build_types_filter_string(:exclude, exclude_types)
+      include_string = _build_types_filter_string(:include, include_types)
 
       # loop and yield deltas until we've come to the end.
       loop do
-        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
+        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
         if expanded_view
           path += '&view=expanded'
         end
@@ -336,17 +334,14 @@ module Nylas
       end
     end
 
-    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false)
+    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false, include_types=[])
       raise 'Please provide a block for receiving the delta objects' if !block_given?
 
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = _build_types_filter_string(:exclude, exclude_types)
+      include_string = _build_types_filter_string(:include, include_types)
 
       # loop and yield deltas indefinitely.
-      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
+      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
       if expanded_view
         path += '&view=expanded'
       end
