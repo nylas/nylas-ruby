@@ -28,7 +28,7 @@ module Nylas
       @cc ||= []
       @bcc ||= []
       @labels ||= []
-      @folder ||= nil
+      self.folder ||= nil
 
       # This is a special case --- we receive label data from the API
       # as JSON but we want it to behave like an API object.
@@ -60,12 +60,19 @@ module Nylas
 
       if not @labels.nil? and @labels != []
         hash["label_ids"] = @labels.map do |label|
+          if !label.respond_to?(:id)
+            raise TypeError, "label #{label} does not respond to #id"
+          end
           label.id
         end
       end
 
-      if not @folder.nil?
-        hash["folder_id"] = @folder.id
+      if !folder.nil? && !folder.respond_to?(:id)
+        raise TypeError, "folder #{folder} does not respond to #id"
+      end
+
+      if !folder.nil? && folder.respond_to?(:id)
+        hash["folder_id"] = folder.id
       end
 
       hash

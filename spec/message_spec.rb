@@ -10,6 +10,41 @@ describe Nylas::Message do
   end
 
   describe "#as_json" do
+    it "doesn't send the the labels ids if the labels are empty" do
+      labels = []
+      message = Nylas::Message.new(@inbox)
+      message.labels = labels
+      expect(message.as_json).not_to have_key("label_ids")
+    end
+
+    it "raises a useful error of the labels are set but don't respond to id" do
+      labels = [double(anything_that_doesnt_respond_to_id: nil)]
+      message = Nylas::Message.new(@inbox)
+      message.labels = labels
+      expect { message.as_json }.to raise_error(TypeError, "label #{labels.first} does not respond to #id")
+    end
+
+    it "doesn't send the folder id when folder is nil" do
+      folder = nil
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect(message.as_json).not_to have_key("folder_id")
+    end
+
+    it "sends the folders id when folder is an object that responds to id" do
+      folder = double(id: :some_id)
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect(message.as_json["folder_id"]).to eql :some_id
+    end
+
+    it "raises a useful error if folder is not nil or it doesn't respond to id" do
+      folder = double(anything_that_doesnt_respond_to_id: nil)
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect { message.as_json }.to raise_error(TypeError, "folder #{folder} does not respond to #id")
+    end
+
     it "only includes starred, unread and labels/folder info" do
       msg = Nylas::Message.new(@inbox)
       msg.subject = 'Test message'
