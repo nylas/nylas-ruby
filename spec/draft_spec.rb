@@ -1,4 +1,4 @@
-require 'draft'
+require 'nylas/draft'
 
 describe Nylas::Draft do
   before (:each) do

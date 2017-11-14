@@ -1,7 +1,7 @@
 # api_account.rb --- functions related to the /account endpoint.
 # not to be confused with account.rb which is used by the hosted API
 # account management endpoint.
-require 'restful_model'
+require 'nylas/restful_model'
 
 module Nylas
   class APIAccount < RestfulModel

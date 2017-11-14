@@ -1,5 +1,5 @@
 require 'thread'
-require 'folder'
+require 'nylas/folder'
 
 describe Nylas::Thread do
   before (:each) do

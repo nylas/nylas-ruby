@@ -1,4 +1,4 @@
-require 'event'
+require 'nylas/event'
 
 describe Nylas::APIAccount do
   before (:each) do

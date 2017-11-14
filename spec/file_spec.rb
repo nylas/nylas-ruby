@@ -1,5 +1,5 @@
-require 'file'
-require 'folder'
+require 'nylas/file'
+require 'nylas/folder'
 
 describe Nylas::File do
   before (:each) do
