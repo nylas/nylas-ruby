@@ -268,6 +268,20 @@ module Nylas
       "message" => Nylas::ExpandedMessage,
     }
 
+    def _build_include_types(include_types)
+      include_string = "&include_types="
+
+      include_types.each do |value|
+        count = 0
+        if OBJECTS_TABLE.has_value?(value)
+          param_name = OBJECTS_TABLE.key(value)
+          include_string += "#{param_name},"
+        end
+      end
+
+      include_string = include_string[0..-2]
+    end
+
     def _build_exclude_types(exclude_types)
       exclude_string = "&exclude_types="
 
@@ -282,18 +296,15 @@ module Nylas
       exclude_string = exclude_string[0..-2]
     end
 
-    def deltas(cursor, exclude_types=[], expanded_view=false)
+    def deltas(cursor, exclude_types=[], expanded_view=false, include_types=[])
       return enum_for(:deltas, cursor, exclude_types, expanded_view) unless block_given?
 
-      exclude_string = ""
-
-      if exclude_types.any?
-        exclude_string = _build_exclude_types(exclude_types)
-      end
+      exclude_string = exclude_types.empty? ? "" : _build_exclude_types(exclude_types)
+      include_string = include_types.empty? ? "" : _build_include_types(include_types)
 
       # loop and yield deltas until we've come to the end.
       loop do
-        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}")
+        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
         if expanded_view
           path += '&view=expanded'
         end
