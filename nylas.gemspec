@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.description = %Q{Gem for interacting with the Nylas API.}
   gem.version = Nylas::VERSION
   gem.email = "support@nylas.com"
-  gem.authors = ["Ben Gotow", "Karim Hamidou", "Jennie Lees", "Michael Pfister"]
+  gem.authors = ["Nylas, Inc."]
   gem.files = Dir.glob("lib/**/*.rb")
   gem.platform = "ruby"
 
