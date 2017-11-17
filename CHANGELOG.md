@@ -1,3 +1,10 @@
+### 3.2.0 / 2017-11-16
+* Add support for Ruby 2.4+
+* Add support for Rails 4+
+* Filters now work correctly for all models
+* `.each` now pages requests
+* Numerous other bug fixes
+
 ### 3.1.1 / 2017-06-23
 * Fix deleting event request (https://github.com/nylas/nylas-ruby/issues/101)
 
