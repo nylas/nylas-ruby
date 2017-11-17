@@ -14,3 +14,12 @@ The `bin/setup` script installs the different ruby versions we expect the gem to
 * Pull requests *should* pass tests across the supported ruby versions, as defined in [.travis.yml](./.travis.yml). To do so, run `bin/test`
 * Pull requests *should* add new tests to cover the functionality that is added or bug that is fixed.
 
+### Releasing Gems
+
+When you're ready to release a new version, edit `lib/version.rb` and then run:
+
+    gem build nylas.gemspec
+    gem push nylas-0.0.0.gem # Update the version number
+
+
+

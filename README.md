@@ -637,14 +637,6 @@ Nylas team members can authenticate with the following:
 curl -u nylas https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
 ```
 
-### Releasing Gems
-
-When you're ready to release a new version, edit `lib/version.rb` and then run:
-
-    gem build nylas.gemspec
-    gem push nylas-0.0.0.gem # Update the version number
-
-
 ## API self-tests
 
 Because it's critical that we don't break the SDK for our customers, we require releasers to run some tests before releasing a new version of the gem. The test programs are located in the test/ directory. To set up them up, you'll need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
