@@ -15,8 +15,11 @@ module Nylas
     parameter :folder
     parameter :starred
     parameter :unread
+    parameter :version
     parameter :has_attachments
     time_attr_accessor :last_message_timestamp
+    time_attr_accessor :last_message_sent_timestamp
+    time_attr_accessor :last_message_received_timestamp
     time_attr_accessor :first_message_timestamp
 
     include ReadUnreadMethods
