@@ -5,6 +5,8 @@ module Nylas
 
     attr_accessor :filters
 
+    SEARCHABLE_COLLECTIONS = [ Nylas::Thread, Nylas::Message ]
+
     def initialize(model_class, api, filters = {})
       raise StandardError.new unless api.class <= Nylas::API
       @model_class = model_class
@@ -13,6 +15,7 @@ module Nylas
     end
 
     def search(query)
+      raise NameError, "Only #{SEARCHABLE_COLLECTIONS} searchable" unless SEARCHABLE_COLLECTIONS.include?(@model_class)
       get_model_collection(search: query)
     end
 
