@@ -2,8 +2,7 @@ require 'restful_model'
 
 module Nylas
   class Account < RestfulModel
-
-    parameter :account_id
+    parameter :email
     parameter :trial
     parameter :trial_expires
     parameter :sync_state
@@ -26,7 +25,5 @@ module Nylas
     def downgrade!
       _perform_account_action!('downgrade')
     end
-
-
   end
 end
