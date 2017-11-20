@@ -18,6 +18,7 @@ The `bin/setup` script installs the different ruby versions we expect the gem to
 
 When you're ready to release a new version, edit `lib/version.rb` and then run:
 
+    bin/test
     gem build nylas.gemspec
     gem push nylas-0.0.0.gem # Update the version number
 
