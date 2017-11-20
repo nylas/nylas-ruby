@@ -12,6 +12,10 @@ module Nylas
       @_api = api
     end
 
+    def search(query)
+      get_model_collection(search: query)
+    end
+
     def each
       return enum_for(:each) unless block_given?
 
@@ -55,7 +59,7 @@ module Nylas
 
     def range(offset = 0, limit = 100)
 
-      accumulated = get_model_collection(offset, limit)
+      accumulated = get_model_collection(offset: offset, limit: limit)
 
       accumulated = accumulated[0..limit] if limit < Float::INFINITY
       accumulated
@@ -100,6 +104,10 @@ module Nylas
       @_api.url_for_path("/#{@model_class.collection_name}")
     end
 
+    def search_url
+      @_api.url_for_path("/#{@model_class.collection_name}/search")
+    end
+
     private
 
     def get_model(id)
@@ -117,10 +125,11 @@ module Nylas
       model
     end
 
-    def get_model_collection(offset = nil, limit = nil, pagination_options = { per_page: 100 })
+    def get_model_collection(search: nil,offset: nil, limit: nil, per_page: 100)
       filters = @filters.clone
       filters[:offset] = offset || filters[:offset] || 0
       filters[:limit] = limit || filters[:limit] || 100
+      filters[:q] = search unless search.nil?
 
       accumulated = []
 
@@ -128,23 +137,24 @@ module Nylas
 
       current_calls_filters = filters.clone
       while (!finished) do
-        current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
-        @_api.get(url, params: current_calls_filters) do |response, _request, result|
-          items = Nylas.interpret_response(result, response, expected_class: Array)
+        current_calls_filters[:limit] = per_page > filters[:limit] ? filters[:limit] : per_page
+        endpoint = filters.key?(:q) ? search_url : url
+        @_api.get(endpoint, params: current_calls_filters) do |response, _request, result|
+          items = Nylas.interpret_response(result, response, { :expected_class => Array })
           new_items = inflate_collection(items)
           yield new_items if block_given?
           accumulated = accumulated.concat(new_items)
-          finished = no_more_pages?(accumulated, items, filters, pagination_options)
+          finished = no_more_pages?(accumulated, items, filters, per_page)
         end
 
-        current_calls_filters[:offset] += pagination_options[:per_page]
+        current_calls_filters[:offset] += per_page
       end
 
       accumulated
     end
 
-    def no_more_pages?(accumulated, items, filters, pagination_options)
-      accumulated.length >= filters[:limit] || items.length < pagination_options[:per_page]
+    def no_more_pages?(accumulated, items, filters, per_page)
+      accumulated.length >= filters[:limit] || items.length < per_page
     end
   end
 
