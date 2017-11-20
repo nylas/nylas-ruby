@@ -90,28 +90,30 @@ describe Nylas::Message do
   end
 
 
-  describe "#events=" do
-    it "casts passed in data to Nylas::Event objects" do
+  describe "#events" do
+    it "casts passed in event data to Nylas::Event objects" do
       msg = Nylas::Message.new(@inbox)
-      msg.events=[{"id" => "12345" }]
+      msg.inflate({ "events" => [{"id" => "12345" }] })
       expect(msg.events.first).to be_a Nylas::Event
       expect(msg.events.first.id).to eql "12345"
     end
 
-    it "raises a friendly error in the data can't be cast to `Nylas::Event`s" do
+    it "raises a friendly error if event data can't be cast to `Nylas::Event`s" do
       msg = Nylas::Message.new(@inbox)
       non_event=double(:something_that_cant_be_cast_to_an_event)
-      expect { msg.events=[non_event] }.to raise_error(TypeError, "unable to cast #{non_event} to an event.")
+      expect { msg.inflate({"events" => [non_event] }) }.to raise_error(TypeError, "unable to cast #{non_event} to an event.")
     end
-    it "raises a friendly error if it can't map over the passed in events" do
+
+    it "raises a friendly error if we can't map over the passed in event data" do
       msg = Nylas::Message.new(@inbox)
       non_enumerable=double(:something_that_cannot_be_mapped)
-      expect { msg.events=non_enumerable }.to raise_error(TypeError, "unable to iterate over #{non_enumerable}, events must respond to #map")
+      expect { msg.inflate({ "events" => non_enumerable })}.to raise_error(TypeError, "unable to iterate over #{non_enumerable}, events must respond to #map")
     end
+
     it "sets the state directly if the passed in data quacks like a collection of Nylas::Event" do
       msg = Nylas::Message.new(@inbox)
       realish_events = [double(id: "I could be considered an event")]
-      msg.events=realish_events
+      msg.inflate({ "events" => realish_events })
 
       expect(msg.events).to eql realish_events
     end
@@ -125,13 +127,13 @@ describe Nylas::Message do
 
     it "is false if an empty set of events are inflated" do
       msg = Nylas::Message.new(@inbox)
-      msg.events=[]
+      msg.inflate({ "events" => [] })
       expect(msg.events?).to be_falsey
     end
 
     it "is true if events are inflated" do
       msg = Nylas::Message.new(@inbox)
-      msg.events=[Nylas::Event.new(@inbox)]
+      msg.inflate({ "events" => [{"id" => "12345" }] })
       expect(msg.events?).to be_truthy
     end
   end
