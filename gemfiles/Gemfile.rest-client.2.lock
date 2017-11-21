@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    nylas (3.2.0)
+    nylas (4.0.0.rc1)
       rest-client (>= 1.6)
 
 GEM
