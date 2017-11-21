@@ -13,6 +13,15 @@ Gem::Specification.new do |gem|
   gem.files = Dir.glob("lib/**/*.rb")
   gem.platform = "ruby"
 
+  gem.metadata = {
+    "bug_tracker_uri"   => "https://github.com/nylas/nylas-ruby/issues",
+    "changelog_uri"     => "https://github.com/nylas/nylas-ruby/blob/master/CHANGELOG.md",
+    "documentation_uri" => "http://www.rubydoc.info/gems/nylas",
+    "homepage_uri"      => "https://www.nylas.com",
+    "source_code_uri"   => "https://github.com/nylas/nylas-ruby",
+    "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki"
+  }
+
   gem.add_runtime_dependency "rest-client", ">= 1.6"
 
   gem.add_development_dependency "rspec", ">= 3.5.0"
