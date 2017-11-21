@@ -11,7 +11,7 @@ end
 def color_print(str)
   puts "\033[0m\033[94m"
   print str
-  STDIN.getc
+  input = gets.chomp
   puts "\033[0m"
 end
 
