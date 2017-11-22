@@ -14,8 +14,6 @@ Gem::Specification.new do |gem|
   gem.platform = "ruby"
 
   gem.add_runtime_dependency "rest-client", ">= 1.6"
-  gem.add_runtime_dependency "yajl-ruby", "~> 1.2", ">= 1.2.1"
-  gem.add_runtime_dependency "em-http-request", "~> 1.1", ">= 1.1.3"
 
   gem.add_development_dependency "rspec", ">= 3.5.0"
   gem.add_development_dependency "shoulda", ">= 3.4.0"
@@ -27,4 +25,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "pry-stack_explorer", ">= 0.4.9.2"
   gem.add_development_dependency "webmock", ">= 2.1.0", ">= 2.1.0"
   gem.add_development_dependency "sinatra", ">= 1.4.7"
+  gem.add_development_dependency "yajl-ruby", "~> 1.2", ">= 1.2.1"
+  gem.add_development_dependency "em-http-request", "~> 1.1", ">= 1.1.3"
 end
