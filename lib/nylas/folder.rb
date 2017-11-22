@@ -7,6 +7,4 @@ module Nylas
     parameter :name
 
   end
-
-  Label = Folder.clone
 end
