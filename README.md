@@ -1,5 +1,7 @@
 # Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=master)
 
+This README is for the Nylas Ruby SDK version 4. For those who are still using Nylas Ruby SDK Version 3, the documentation and source code is located in the [3.X-master branch](https://github.com/nylas/nylas-ruby/tree/3.X-master)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -29,6 +31,9 @@ gem install nylas
 - Ruby 2.2.2 or above.
 - rest-client, json, yajl-ruby, em-http-request
 
+### Supported Rails Versions
+
+We support Rails 4.2 and above. A more detailed compatiblity list can be found in our [list of Gemfiles](gemfiles)
 
 ## Examples
 
