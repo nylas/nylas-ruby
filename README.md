@@ -1,4 +1,4 @@
-# Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=master)
+# Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=3.X-master)
 
 ## Installation
 
@@ -60,7 +60,7 @@ RESTCLIENT_LOG=stdout rails s
 
 A small example of a Sinatra app that show how to use Nylas' [native authentication](https://www.nylas.com/docs/platform#native_authentication) flow for Gmail and Exchange accounts.
 
-View the [readme here](https://github.com/nylas/nylas-ruby/tree/master/examples/authentication) to get started.
+View the [readme here](https://github.com/nylas/nylas-ruby/tree/3.X-master/examples/authentication) to get started.
 
 ### Webhooks Example App
 
@@ -71,7 +71,7 @@ notification POST requests by Nylas and prints out some information about the
 notification.
 
 View the [readme
-here](https://github.com/nylas/nylas-ruby/tree/master/examples/webhooks)
+here](https://github.com/nylas/nylas-ruby/tree/3.X-master/examples/webhooks)
 
 ## Usage
 
