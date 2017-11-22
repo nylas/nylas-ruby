@@ -2,9 +2,7 @@ PATH
   remote: ..
   specs:
     nylas (3.2.0)
-      em-http-request (~> 1.1, >= 1.1.3)
       rest-client (>= 1.6)
-      yajl-ruby (~> 1.2, >= 1.2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -226,6 +224,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (>= 1.3.5)
+  em-http-request (~> 1.1, >= 1.1.3)
   jeweler (>= 2.1.2)
   nylas!
   pry (>= 0.10.4)
@@ -237,6 +236,7 @@ DEPENDENCIES
   shoulda (>= 3.4.0)
   sinatra (>= 1.4.7)
   webmock (>= 2.1.0)
+  yajl-ruby (~> 1.2, >= 1.2.1)
 
 BUNDLED WITH
    1.16.0
