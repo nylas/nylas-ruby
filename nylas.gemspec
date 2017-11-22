@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "./lib/version.rb"
+require "./lib/nylas/version.rb"
 
 Gem::Specification.new do |gem|
   gem.name = "nylas"

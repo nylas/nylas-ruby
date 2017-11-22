@@ -1,4 +1,4 @@
-require 'event'
+require 'nylas/event'
 
 describe Nylas::APIAccount do
   let(:inbox) { Nylas::API.new(app_id, app_secret, access_token) }
