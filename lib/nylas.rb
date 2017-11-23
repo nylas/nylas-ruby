@@ -21,8 +21,20 @@ require 'nylas/label'
 require 'nylas/restful_model'
 require 'nylas/restful_model_collection'
 require 'nylas/version'
+require 'nylas/v2'
 
 module Nylas
+  # @param version [String] Indicates which version of the API you want to use.
+  # @param app_id [String] The application's OAuth Client ID. Can be found on
+  #                        {https://dashboard.nylas.com/applications/ your applications Nylas API Dashboard}
+  # @param app_secret [String] The applications OAuth Client Secret. Can be found on
+  #                            {https://dashboard.nylas.com/applications/ your applications Nylas API
+  #                            Dashboard}
+  # @return [Nylas::V1::SDK, Nylas::V2::SDK]
+  def self.sdk(version: , app_id: , app_secret: , auth_token: )
+    V2::SDK.new(app_id: app_id, app_secret: app_secret, auth_token: auth_token)
+  end
+
   Error = Class.new(::StandardError)
   NoAuthToken = Class.new(Error)
   UnexpectedAccountAction = Class.new(Error)
