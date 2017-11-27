@@ -1,3 +1,4 @@
+require 'nylas/message'
 require 'nylas/restful_model'
 
 module Nylas

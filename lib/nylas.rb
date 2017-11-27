@@ -2,24 +2,24 @@ require 'json'
 require 'rest-client'
 
 require 'ostruct'
-require 'active_support/core_ext/hash'
+
+require 'nylas/http_client'
+require 'nylas/hash_to_query'
 
 require 'nylas/account'
 require 'nylas/api_account'
-require 'nylas/thread'
 require 'nylas/calendar'
-require 'nylas/account'
-require 'nylas/message'
-require 'nylas/expanded_message'
-require 'nylas/draft'
 require 'nylas/contact'
-require 'nylas/file'
-require 'nylas/calendar'
+require 'nylas/draft'
 require 'nylas/event'
+require 'nylas/expanded_message'
+require 'nylas/file'
 require 'nylas/folder'
 require 'nylas/label'
+require 'nylas/message'
 require 'nylas/restful_model'
 require 'nylas/restful_model_collection'
+require 'nylas/thread'
 require 'nylas/version'
 require 'nylas/v2'
 
@@ -150,7 +150,15 @@ module Nylas
         params[:state] = options[:state]
       end
 
-      "https://#{@service_domain}/oauth/authorize?" + params.to_query
+      "https://#{@service_domain}/oauth/authorize?" + to_query(params)
+    end
+
+    def to_query(hash)
+      hash.reduce("") do |query, (key, value)|
+        next query if value.nil?
+        pair = "#{key}=#{URI.escape(value.to_s)}"
+        query.empty? ? "#{query}#{pair}" : "#{query}&#{pair}"
+      end
     end
 
     def url_for_management
