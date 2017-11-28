@@ -4,6 +4,8 @@ require 'rest-client'
 require 'ostruct'
 require_relative 'nylas/to_query'
 
+require_relative 'nylas/types_filter'
+
 require 'nylas/account'
 require 'nylas/api_account'
 require 'nylas/thread'
@@ -23,6 +25,25 @@ require 'nylas/restful_model_collection'
 require 'nylas/version'
 
 module Nylas
+  OBJECTS_TABLE = {
+    "account" => Nylas::Account,
+    "calendar" => Nylas::Calendar,
+    "draft" => Nylas::Draft,
+    "thread" => Nylas::Thread,
+    "contact" => Nylas::Contact,
+    "event" => Nylas::Event,
+    "file" => Nylas::File,
+    "message" => Nylas::Message,
+    "folder" => Nylas::Folder,
+    "label" => Nylas::Label,
+  }
+
+  # It's possible to ask the API to expand objects.
+  # In this case, we do the right thing and return
+  # an expanded object.
+  EXPANDED_OBJECTS_TABLE = {
+    "message" => Nylas::ExpandedMessage,
+  }
   Error = Class.new(::StandardError)
   NoAuthToken = Class.new(Error)
   UnexpectedAccountAction = Class.new(Error)
@@ -265,46 +286,13 @@ module Nylas
       cursor
     end
 
-    OBJECTS_TABLE = {
-      "account" => Nylas::Account,
-      "calendar" => Nylas::Calendar,
-      "draft" => Nylas::Draft,
-      "thread" => Nylas::Thread,
-      "contact" => Nylas::Contact,
-      "event" => Nylas::Event,
-      "file" => Nylas::File,
-      "message" => Nylas::Message,
-      "folder" => Nylas::Folder,
-      "label" => Nylas::Label,
-    }
 
-    # It's possible to ask the API to expand objects.
-    # In this case, we do the right thing and return
-    # an expanded object.
-    EXPANDED_OBJECTS_TABLE = {
-      "message" => Nylas::ExpandedMessage,
-    }
-
-    def _build_types_filter_string(filter, types)
-      return "" if types.empty?
-      query_string = "&#{filter}_types="
-
-      types.each do |value|
-        count = 0
-        if OBJECTS_TABLE.has_value?(value)
-          param_name = OBJECTS_TABLE.key(value)
-          query_string += "#{param_name},"
-        end
-      end
-
-      query_string = query_string[0..-2]
-    end
 
     def deltas(cursor, exclude_types=[], expanded_view=false, include_types=[])
       return enum_for(:deltas, cursor, exclude_types, expanded_view, include_types) unless block_given?
 
-      exclude_string = _build_types_filter_string(:exclude, exclude_types)
-      include_string = _build_types_filter_string(:include, include_types)
+      exclude_string = TypesFilter.new(:exclude, types: exclude_types).to_query_string
+      include_string = TypesFilter.new(:include, types: include_types).to_query_string
 
       # loop and yield deltas until we've come to the end.
       loop do
@@ -351,6 +339,10 @@ module Nylas
       end
     end
 
-    require 'nylas/api/delta_stream'
+    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false, include_types=[], &block)
+      raise NotImplementedError, "the `#delta_stream` method was removed in 4.0 in favor of using the " \
+                                 "`nylas-streming` gem. This reduces the dependency footprint of the core " \
+                                 "nylas gem for those not using the streaming API."
+    end
   end
 end
