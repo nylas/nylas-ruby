@@ -32,8 +32,8 @@ module Nylas
         data = as_json()
       end
 
-      ::RestClient.post(url, data.to_json, :content_type => :json) do |response, request, result|
-        response = Nylas.interpret_response(result, response, {:expected_class => Object})
+      @_api.post(url, data.to_json, :content_type => :json) do |response, request, result|
+        response = Nylas.interpret_response(result, response, expected_class: Object)
         self.inflate(response)
       end
 
@@ -41,10 +41,10 @@ module Nylas
     end
 
     def destroy
-      ::RestClient::Request.execute(method: :delete, url: self.url, payload: ({ :version => self.version }).to_json) do |response, request, result|
-        response = Nylas.interpret_response(result, response, options={:raw_response=>true})
+      payload = { version: version }.to_json
+      @_api.delete(url, payload) do |response, _request, result|
+        Nylas.interpret_response(result, response, raw_response: true)
       end
     end
-
   end
 end

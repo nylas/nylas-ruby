@@ -19,8 +19,8 @@ module Nylas
     end
 
     def save!
-      ::RestClient.post(url, {:file => @file}) do |response, request, result|
-        json = Nylas.interpret_response(result, response, :expected_class => Object)
+      @_api.post(url, {:file => @file}) do |response, request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         json = json[0] if (json.class == Array)
         inflate(json)
       end
@@ -29,12 +29,10 @@ module Nylas
 
     def download
       download_url = self.url('download')
-      ::RestClient.get(download_url) do |response, request, result|
-        Nylas.interpret_response(result, response, {:raw_response => true})
-        response
+      @_api.get(download_url) do |response, _request, result|
+        Nylas.interpret_response(result, response, raw_response: true)
       end
     end
-
   end
 end
 
