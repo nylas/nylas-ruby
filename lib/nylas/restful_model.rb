@@ -61,8 +61,6 @@ module Nylas
     end
 
     def update(http_method, action, data = {}, params = {})
-      http_method = http_method.downcase
-
       @_api.execute(
         http_method,
         url(action),
