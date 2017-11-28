@@ -1,0 +1,166 @@
+require_relative 'restful_model'
+
+module Nylas
+  module V1
+    class RestfulModelCollection
+      extend Forwardable
+      def_delegators :sdk, :client
+
+      private def sdk
+        @_api
+      end
+
+      attr_accessor :filters
+
+      def initialize(model_class, api, filters = {})
+        raise StandardError.new unless api.class <= Nylas::API
+        @model_class = model_class
+        @filters = filters
+        @_api = api
+      end
+
+      def each
+        return enum_for(:each) unless block_given?
+
+        get_model_collection do |items|
+          items.each do |item|
+            yield item
+          end
+        end
+      end
+
+      def count
+        response = client.get("/#{@model_class.collection_name}", query: @filters.merge(view: 'count'))
+        response['count']
+      end
+
+      def first
+        get_model_collection.first
+      end
+
+      def all
+        range(0, Float::INFINITY)
+      end
+
+      def where(filters)
+        collection = self.clone
+
+        # deep copy the object, otherwise filter is shared among all
+        # the instances of the collection, which leads to confusing behaviour.
+        # - karim
+        if collection.filters == nil
+          collection.filters = {}
+        else
+          collection.filters = Marshal.load(Marshal.dump(collection.filters))
+        end
+
+        collection.filters.merge!(filters)
+        collection
+      end
+
+      def range(offset = 0, limit = 100)
+
+        accumulated = get_model_collection(offset, limit)
+
+        accumulated = accumulated[0..limit] if limit < Float::INFINITY
+        accumulated
+      end
+
+      def delete(item_or_id)
+        item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
+        RestClient.delete("#{url}/#{item_or_id}")
+      end
+
+      def find(id)
+        return nil unless id
+        get_model(id)
+      end
+
+      def build(args)
+        for key in args.keys
+          args[key.to_s] = args[key]
+        end
+        model = @model_class.new(@_api)
+        model.inflate(args)
+        model
+      end
+
+      def inflate_collection(items = [])
+        models = []
+
+        return unless items.is_a?(Array)
+        items.each do |json|
+          if @model_class < RestfulModel
+            model = @model_class.new(@_api)
+            model.inflate(json)
+          else
+            model = @model_class.new(json)
+          end
+          models.push(model)
+        end
+        models
+      end
+
+      def url
+        @_api.url_for_path()
+      end
+
+      private
+
+      def get_model(id)
+        model = nil
+
+        RestClient.get("#{url}/#{id}"){ |response,request,result|
+          json = Nylas.interpret_response(result, response, {:expected_class => Object})
+          if @model_class < RestfulModel
+            model = @model_class.new(@_api)
+            model.inflate(json)
+          else
+            model = @model_class.new(json)
+          end
+        }
+        model
+      end
+
+      def get_model_collection(offset = nil, limit = nil, pagination_options = { per_page: 100 })
+        filters = @filters.clone
+        filters[:offset] = offset || filters[:offset] || 0
+        filters[:limit] = limit || filters[:limit] || 100
+
+        accumulated = []
+
+        finished = false
+
+        current_calls_filters = filters.clone
+        while (!finished) do
+          current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
+          RestClient.get(url, :params => current_calls_filters) do |response, request, result|
+            items = Nylas.interpret_response(result, response, { :expected_class => Array })
+            new_items = inflate_collection(items)
+            yield new_items if block_given?
+            accumulated = accumulated.concat(new_items)
+            finished = no_more_pages?(accumulated, items, filters, pagination_options)
+          end
+
+          current_calls_filters[:offset] += pagination_options[:per_page]
+        end
+
+        accumulated
+      end
+
+      def no_more_pages?(accumulated, items, filters, pagination_options)
+        accumulated.length >= filters[:limit] || items.length < pagination_options[:per_page]
+      end
+    end
+
+
+    # a ManagementModelCollection is similar to a RestfulModelCollection except
+    # it's used by models under the /a/<app_id> namespace (mostly account status
+    # and billing methods).
+    class ManagementModelCollection < RestfulModelCollection
+      def url
+        @_api.url_for_management
+      end
+    end
+end
+end
