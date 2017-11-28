@@ -316,7 +316,7 @@ module Nylas
         json = nil
 
         get(path) do |response, _request, result|
-          json = Nylas.interpret_response(result, response, {:expected_class => Object})
+          json = Nylas.interpret_response(result, response, expected_class: Object)
         end
 
         start_cursor = json["cursor_start"]
