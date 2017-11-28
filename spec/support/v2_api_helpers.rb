@@ -5,17 +5,27 @@ module Nylas
       def config
         OpenStruct.new(test_app_id: TestCredentials::APP_ID,
                        test_app_secret: TestCredentials::APP_SECRET,
-                       test_auth_token: TestCredentials::AUTH_TOKEN,)
+                       test_access_token: TestCredentials::ACCESS_TOKEN,)
       end
 
       def v2_sdk
-        @v2_sdk ||= Nylas.sdk(version: "2", app_id: config.test_app_id,
-                              app_secret: config.test_app_secret,
-                              auth_token: config.test_auth_token)
+        @v2_sdk ||= Nylas::V2::SDK.new(client: fake_client)
       end
+
 
       def fixtures
         @fixtures ||= TestFixtures.new
+      end
+
+      def fake_client
+        @fake_client ||= FakeClient.new(fixtures: fixtures)
+      end
+    end
+
+    class FakeClient
+      attr_accessor :fixtures
+      def initialize(fixtures: )
+        self.fixtures = fixtures
       end
     end
 

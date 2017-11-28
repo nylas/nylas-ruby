@@ -2,8 +2,13 @@ require_relative 'v2/model'
 require_relative 'v2/contact'
 module Nylas
   module V2
+    # An ActiveModel and ActiveResource compliant version of the Nylas V2 SDK. Exposes collections of
+    # resources for each endpoint.
     class SDK
-      def initialize(app_id: , app_secret:, auth_token: )
+      attr_accessor :client
+      # @param client [Nylas::HttpClient] Used to send and retrieve data to the API
+      def initialize(client: )
+        self.client = client
       end
 
       def contacts

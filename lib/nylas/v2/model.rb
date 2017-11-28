@@ -18,7 +18,6 @@ module Nylas
       end
 
       def []=(key, value)
-        p key
         registry_data[key] = value
       end
 
@@ -62,7 +61,7 @@ module Nylas
     Types.registry[:date] = DateType.new
 
     class StringType < ValueType
-      # @param [Object] uses `to_s` to cast the passed in object to a string.
+      # @param value [Object] Casts the passed in object to a string using #to_s
       def cast(value)
         value.to_s
       end
