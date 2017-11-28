@@ -3,6 +3,12 @@ require_relative 'restful_model'
 module Nylas
   module V1
     class RestfulModelCollection
+      extend Forwardable
+      def_delegators :sdk, :client
+
+      private def sdk
+        @_api
+      end
 
       attr_accessor :filters
 
@@ -24,10 +30,8 @@ module Nylas
       end
 
       def count
-        RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
-          json = Nylas.interpret_response(result, response)
-          return json['count']
-        }
+        response = client.get("/#{@model_class.collection_name}", query: @filters.merge(view: 'count'))
+        response['count']
       end
 
       def first
@@ -98,7 +102,7 @@ module Nylas
       end
 
       def url
-        @_api.url_for_path("/#{@model_class.collection_name}")
+        @_api.url_for_path()
       end
 
       private

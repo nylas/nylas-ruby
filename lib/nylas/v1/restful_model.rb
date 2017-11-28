@@ -73,23 +73,17 @@ module Nylas
       end
 
       def update(http_method, action, data = {}, params = {})
-        client.request(http_method.downcase.to_sym, path: action_path(action))
-
-        ::RestClient.send(http_method, self.url(action), data.to_json, :content_type => :json, :params => params) do |response, request, result|
-          unless http_method == 'delete'
-            json = Nylas.interpret_response(result, response, :expected_class => Object)
-            inflate(json)
-          end
+        json = client.request(http_method.downcase.to_sym, action_path(action), body: data, query: params)
+        unless http_method == 'delete'
+          inflate(json)
         end
+
         self
       end
 
       def destroy(params = {})
-        ::RestClient.send('delete', self.url, :params => params) do |response, request, result|
-          Nylas.interpret_response(result, response, {:raw_response => true})
-        end
+        client.delete(action_path(action), query: params)
       end
-
     end
   end
 end

@@ -1,5 +1,5 @@
 # encoding: utf-8
-require "./lib/nylas-steraming/version.rb"
+require "./lib/nylas-streaming/version.rb"
 
 Gem::Specification.new do |gem|
   gem.name = "nylas-streaming"
@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.license = "MIT"
   gem.summary = %Q{Gem for interacting with the Nylas API, with Streaming!}
   gem.description = %Q{Gem for interacting with the Nylas API, with Streaming!}
-  gem.version = Nylas::VERSION
+  gem.version = Nylas::Streaming::VERSION
   gem.email = "support@nylas.com"
   gem.authors = ["Nylas, Inc."]
   gem.files = Dir.glob("lib/{nylas-streaming.rb,nylas-streaming/**/*.rb}")

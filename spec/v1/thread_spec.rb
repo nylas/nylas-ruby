@@ -1,6 +1,4 @@
-require 'nylas/v1/thread'
-require 'nylas/v1/folder'
-
+require 'nylas'
 
 describe Nylas::V1::Thread do
   include Nylas::V1
