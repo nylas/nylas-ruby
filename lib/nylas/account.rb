@@ -12,9 +12,10 @@ module Nylas
       raise UnexpectedAccountAction.new unless action == "upgrade" || action == "downgrade"
 
       collection = ManagementModelCollection.new(Account, @_api, {:account_id=>@account_id})
-      ::RestClient.post("#{collection.url}/#{@account_id}/#{action}",{}) do |response, request, result|
+      url = "#{collection.url}/#{@account_id}/#{action}"
+      @_api.post(url,{}) do |response, _request, result|
           # Throw any exceptions
-        json = Nylas.interpret_response(result, response, :expected_class => Object)
+        Nylas.interpret_response(result, response, expected_class: Object)
       end
     end
 

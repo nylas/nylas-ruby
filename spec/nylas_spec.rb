@@ -20,4 +20,20 @@ describe Nylas::API do
       end
     end
   end
+
+  describe 'default headers' do
+    let!(:request) do
+      stub_request(:post, 'https://api.nylas.com/oauth/token')
+        .with(headers: {
+                'X-Nylas-API-Wrapper' => 'ruby',
+                'User-Agent' => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}"
+              })
+        .to_return(status: 200, body: '{"access_token": "456"}', headers: {})
+    end
+
+    it 'adds default headers' do
+      api.token_for_code('123')
+      expect(request).to have_been_made
+    end
+  end
 end

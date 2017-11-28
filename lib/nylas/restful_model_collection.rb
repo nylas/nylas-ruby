@@ -23,10 +23,10 @@ module Nylas
     end
 
     def count
-      RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
-        json = Nylas.interpret_response(result, response)
-        return json['count']
-      }
+      params = @filters.merge(view: 'count')
+      @_api.get(url, params: params) do |response, _request, result|
+        Nylas.interpret_response(result, response)['count']
+      end
     end
 
     def first
@@ -63,7 +63,7 @@ module Nylas
 
     def delete(item_or_id)
       item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
-      RestClient.delete("#{url}/#{item_or_id}")
+      @_api.delete("#{url}/#{item_or_id}")
     end
 
     def find(id)
@@ -105,15 +105,15 @@ module Nylas
     def get_model(id)
       model = nil
 
-      RestClient.get("#{url}/#{id}"){ |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      @_api.get("#{url}/#{id}") do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         if @model_class < RestfulModel
           model = @model_class.new(@_api)
           model.inflate(json)
         else
           model = @model_class.new(json)
         end
-      }
+      end
       model
     end
 
@@ -129,8 +129,8 @@ module Nylas
       current_calls_filters = filters.clone
       while (!finished) do
         current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
-        RestClient.get(url, :params => current_calls_filters) do |response, request, result|
-          items = Nylas.interpret_response(result, response, { :expected_class => Array })
+        @_api.get(url, params: current_calls_filters) do |response, _request, result|
+          items = Nylas.interpret_response(result, response, expected_class: Array)
           new_items = inflate_collection(items)
           yield new_items if block_given?
           accumulated = accumulated.concat(new_items)

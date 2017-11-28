@@ -109,13 +109,32 @@ module Nylas
       @app_id = app_id
       @service_domain = service_domain
       @version = Nylas::VERSION
+      @default_headers = {
+        'X-Nylas-API-Wrapper' => 'ruby',
+        'User-Agent' => "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}"
+      }
+    end
 
-      if ::RestClient.before_execution_procs.empty?
-        ::RestClient.add_before_execution_proc do |req, params|
-          req.add_field('X-Nylas-API-Wrapper', 'ruby')
-          req['User-Agent'] = "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}"
-        end
-      end
+    def get(url, headers = {}, &block)
+      execute(:get, url, headers: headers, &block)
+    end
+
+    def post(url, payload, headers = {}, &block)
+      execute(:post, url, headers: headers, payload: payload, &block)
+    end
+
+    def delete(url, payload = nil, headers = {}, &block)
+      execute(:delete, url, headers: headers, payload: payload, &block)
+    end
+
+    def execute(method, url, headers: nil, payload: nil, &block)
+      ::RestClient::Request.execute(
+        method: method,
+        url: url,
+        payload: payload,
+        headers: @default_headers.merge(headers),
+        &block
+      )
     end
 
     def url_for_path(path)
@@ -158,8 +177,8 @@ module Nylas
           'code' => code
       }
 
-      ::RestClient.post("https://#{@service_domain}/oauth/token", data) do |response, request, result|
-        json = Nylas.interpret_response(result, response, :expected_class => Object)
+      post("https://#{@service_domain}/oauth/token", data) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         return json['access_token']
       end
     end
@@ -212,8 +231,8 @@ module Nylas
     def account
       path = self.url_for_path("/account")
 
-      RestClient.get(path, {}) do |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      get(path) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         model = APIAccount.new(self)
         model.inflate(json)
         model
@@ -238,8 +257,8 @@ module Nylas
 
       cursor = nil
 
-      RestClient.post(path, :content_type => :json) do |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      post(path, content_type: :json) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         cursor = json["cursor"]
       end
 
@@ -296,7 +315,7 @@ module Nylas
 
         json = nil
 
-        RestClient.get(path) do |response,request,result|
+        get(path) do |response, _request, result|
           json = Nylas.interpret_response(result, response, {:expected_class => Object})
         end
 
