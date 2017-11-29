@@ -181,6 +181,12 @@ nylas.threads.where(:any_email => 'ben@nylas.com').each do |thread|
   puts thread.subject
 end
 
+# Get all the threads that match a given query. See
+# https://docs.nylas.com/reference#search for how search queries are structured.
+nylas.threads.search("a query").each do  |thread|
+  puts thread.subject
+end
+
 # Get number of all threads
 count = nylas.threads.count
 
