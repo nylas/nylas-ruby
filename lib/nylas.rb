@@ -2,7 +2,7 @@ require 'json'
 require 'rest-client'
 
 require 'ostruct'
-require 'active_support/core_ext/hash'
+require_relative 'nylas/to_query'
 
 require 'nylas/account'
 require 'nylas/api_account'
@@ -157,7 +157,7 @@ module Nylas
         params[:state] = options[:state]
       end
 
-      "https://#{@service_domain}/oauth/authorize?" + params.to_query
+      "https://#{@service_domain}/oauth/authorize?" + ToQuery.new(params).to_s
     end
 
     def url_for_management
