@@ -3,6 +3,7 @@ rvm:
  - 2.2
  - 2.3
  - 2.4
+cache: bundler
 gemfile:
   - gemfiles/Gemfile.rails4
   - gemfiles/Gemfile.rails5
