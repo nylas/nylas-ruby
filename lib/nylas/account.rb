@@ -15,7 +15,7 @@ module Nylas
       url = "#{collection.url}/#{@account_id}/#{action}"
       @_api.post(url,{}) do |response, _request, result|
           # Throw any exceptions
-        Nylas.interpret_response(result, response, expected_class: Object)
+        API.interpret_response(result, response, expected_class: Object)
       end
     end
 
