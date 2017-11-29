@@ -1,13 +1,15 @@
 module Nylas
   class API
     attr_accessor :api_server
+    attr_accessor :version
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
 
     def initialize(app_id, app_secret, access_token = nil, api_server = 'https://api.nylas.com',
-                   service_domain = 'api.nylas.com')
+                   service_domain = 'api.nylas.com', version: "1")
       raise "When overriding the Nylas API server address, you must include https://" unless api_server.include?('://')
+      self.version = version
       @api_server = api_server
       @access_token = access_token
       @app_secret = app_secret
@@ -114,7 +116,11 @@ module Nylas
     end
 
     def contacts
-      @contacts ||= RestfulModelCollection.new(Contact, self)
+      if version == "2"
+        @contants ||= RestfulModelCollection.new(V2::Contact, self)
+      else
+        @contacts ||= RestfulModelCollection.new(Contact, self)
+      end
     end
 
     def calendars

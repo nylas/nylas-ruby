@@ -24,6 +24,8 @@ require 'nylas/restful_model'
 require 'nylas/restful_model_collection'
 require 'nylas/version'
 
+require 'nylas/v2'
+
 require_relative 'nylas/api'
 
 module Nylas
