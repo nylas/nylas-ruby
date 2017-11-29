@@ -5,6 +5,8 @@ require 'nylas/mixins'
 module Nylas
   class Message < RestfulModel
 
+    attr_reader :events
+
     parameter :subject
     parameter :snippet
     parameter :from
@@ -29,6 +31,8 @@ module Nylas
       @bcc ||= []
       @labels ||= []
       self.folder ||= nil
+
+      self.events = json["events"] if json["events"]
 
       # This is a special case --- we receive label data from the API
       # as JSON but we want it to behave like an API object.
@@ -78,8 +82,14 @@ module Nylas
       hash
     end
 
+
+    def events?
+      !events.nil? && !events.empty?
+    end
+
+
     def files
-      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=>@id})
+      @files ||= RestfulModelCollection.new(File, @_api, {:message_id=> id})
     end
 
     def files?
@@ -100,6 +110,23 @@ module Nylas
         expanded_message = Nylas::ExpandedMessage.new(@_api)
         expanded_message.inflate(json)
         expanded_message
+      end
+    end
+
+
+    private def events=(events)
+      unless events.respond_to?(:map)
+        raise TypeError, "unable to iterate over #{events}, events must respond to #map"
+      end
+
+      @events = events.map do |event_data|
+        next event_data if event_data.respond_to?(:id)
+        unless event_data.respond_to?(:key)
+          raise TypeError, "unable to cast #{event_data} to an event."
+        end
+        event = Nylas::Event.new(@_api)
+        event.inflate(event_data)
+        event
       end
     end
   end

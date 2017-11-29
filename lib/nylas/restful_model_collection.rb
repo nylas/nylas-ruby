@@ -3,7 +3,7 @@ require 'nylas/restful_model'
 module Nylas
   class RestfulModelCollection
 
-    attr_accessor :filters
+    attr_accessor :filters, :_api, :model_class
 
     SEARCHABLE_COLLECTIONS = [ Nylas::Thread, Nylas::Message ]
 
