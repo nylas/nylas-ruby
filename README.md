@@ -239,6 +239,7 @@ thread.save!
 # List messages
 thread.messages.each do |message|
   puts message.subject
+  puts message.events
 end
 
 # List expanded messages (with Message-Id, In-Reply-To and References fields)
@@ -323,6 +324,7 @@ If you've building your own threading solution, you'll probably need access to a
 
 ```ruby
 msg = nylas.messages.first
+puts msg.events
 expanded_message = msg.expanded
 puts expanded_message.message_id
 puts expanded_message.references
