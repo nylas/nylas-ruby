@@ -2,6 +2,7 @@ require 'json'
 require 'rest-client'
 
 require 'ostruct'
+require_relative 'nylas/registry'
 require_relative 'nylas/to_query'
 
 require_relative 'nylas/types_filter'

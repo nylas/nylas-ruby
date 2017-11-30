@@ -3,6 +3,7 @@ module Nylas
     class Contact
       include Model
       attribute :id, :string, exclude_when: [:creating, :updating]
+      attribute :object, :string
       attribute :account_id, :string, exclude_when: [:creating, :updating]
       attribute :given_name, :string
       attribute :middle_name, :string

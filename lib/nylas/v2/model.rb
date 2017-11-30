@@ -1,74 +1,5 @@
 module Nylas
   module V2
-    class Registry
-      attr_accessor :registry_data
-
-      extend Forwardable
-      def_delegators :registry_data, :keys, :each, :reduce
-
-      def initialize(initial_data = {})
-        self.registry_data = initial_data.each.reduce({}) do |registry, (key, value)|
-          registry[key] = value
-          registry
-        end
-      end
-
-      def [](key)
-        registry_data.fetch(key)
-      end
-
-      def []=(key, value)
-        registry_data[key] = value
-      end
-
-      def to_h
-        registry_data
-      end
-    end
-
-    module Types
-      def self.registry
-        @registry ||= Registry.new
-      end
-    end
-
-    class ValueType
-      def cast(object)
-        object
-      end
-
-      # Used to prepare a value for transmission to a storage mechanism, i.e.
-      def serialize(object)
-        object
-      end
-
-      def deseralize(object)
-        object
-      end
-    end
-
-    class DateType < ValueType
-      def cast(value)
-        return nil if value.nil?
-        Date.parse(value)
-      end
-
-      def serialize(value)
-        Date.strftime("%Y-%m-%d")
-      end
-    end
-
-    Types.registry[:date] = DateType.new
-
-    class StringType < ValueType
-      # @param value [Object] Casts the passed in object to a string using #to_s
-      def cast(value)
-        value.to_s
-      end
-    end
-
-    Types.registry[:string] = StringType.new
-
     class ListAttributeDefinition
       attr_accessor :type, :exclude_when
 
@@ -111,7 +42,7 @@ module Nylas
         data[key] = attribute_definitions[key].cast(value)
       end
 
-      def serialize_for(use_case: nil)
+      def to_h
         data.reduce({}) do |serialized_data, (key, value)|
           serialized_data[key] = attribute_definitions[key].cast(value)
           serialized_data
@@ -124,48 +55,70 @@ module Nylas
     end
 
     module Model
+      module Attributable
+        def self.included(model)
+          model.extend(ClassMethods)
+        end
+
+        def initialize(**initial_data)
+          initial_data.each do |attribute_name, value|
+            self.send(:"#{attribute_name}=", value)
+          end
+        end
+
+        def attributes
+          @attributes ||= Attributes.new(self.class.attribute_definitions)
+        end
+
+        module ClassMethods
+          def has_n_of_attribute(name, type, exclude_when: [])
+            attribute_definitions[name] = ListAttributeDefinition.new(type: type, exclude_when: exclude_when)
+            define_accessors(name)
+          end
+
+          def attribute(name, type, exclude_when: [])
+            attribute_definitions[name] = AttributeDefinition.new(type: type, exclude_when: exclude_when)
+            define_accessors(name)
+          end
+
+          def define_accessors(name)
+            define_method :"#{name}" do
+              attributes[name]
+            end
+
+            define_method :"#{name}=" do |value|
+              attributes[name] = value
+            end
+          end
+
+          def attribute_definitions
+            @attribute_definitions ||= Registry.new
+          end
+        end
+      end
+      attr_accessor :api
+
       def self.included(model)
+        model.include(Attributable)
         model.extend(ClassMethods)
       end
 
-      def initialize(**initial_data)
-        initial_data.each do |attribute_name, value|
-          self.send(:"#{attribute_name}=", value)
-        end
+      # @return [Hash] Representation of the model with values serialized into primitives based on their Type
+      def to_h
+        attributes.to_h
       end
 
-      def attributes
-        @attributes ||= Attributes.new(self.class.attribute_definitions)
-      end
-
-      # @return [Hash] JSON representation of the contact. See {http://example.com/ API documentation}
-      def as_json(use_case: nil)
-        attributes.serialize_for(use_case: use_case).to_h
+      # @return [String] JSON String of the model.
+      def to_json
+        JSON.dump(serialize)
       end
 
       module ClassMethods
-        def has_n_of_attribute(name, type, exclude_when: [])
-          attribute_definitions[name] = ListAttributeDefinition.new(type: type, exclude_when: exclude_when)
-          define_accessors(name)
-        end
-
-        def attribute(name, type, exclude_when: [])
-          attribute_definitions[name] = AttributeDefinition.new(type: type, exclude_when: exclude_when)
-          define_accessors(name)
-        end
-
-        def define_accessors(name)
-          define_method :"#{name}" do
-            attributes[name]
-          end
-
-          define_method :"#{name}=" do |value|
-            attributes[name] = value
-          end
-        end
-
-        def attribute_definitions
-          @attribute_definitions ||= Registry.new
+        def from_json(json, api)
+          data = JSON.parse(json, symbolize_names: true)
+          instance = new(**data)
+          instance.api = api
+          instance
         end
       end
     end
