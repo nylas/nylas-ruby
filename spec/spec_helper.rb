@@ -1,4 +1,4 @@
 ::ENV['RACK_ENV'] ||= 'test'
 
-require 'nylas'
+require 'nylas-streaming'
 require 'webmock/rspec'

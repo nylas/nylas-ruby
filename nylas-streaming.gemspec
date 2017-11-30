@@ -2,7 +2,7 @@
 require "./lib/nylas/version.rb"
 
 Gem::Specification.new do |gem|
-  gem.name = "nylas"
+  gem.name = "nylas-streaming"
   gem.homepage = "http://github.com/nylas/nylas-ruby"
   gem.license = "MIT"
   gem.summary = %Q{Gem for interacting with the Nylas API}
@@ -10,8 +10,7 @@ Gem::Specification.new do |gem|
   gem.version = Nylas::VERSION
   gem.email = "support@nylas.com"
   gem.authors = ["Nylas, Inc."]
-  gem.files = Dir.glob("lib/{nylas.rb,nylas/**/*.rb}") + ['CHANGELOG.md', 'LICENSE.txt', 'README.md',
-                                                          __FILE__]
+  gem.files = Dir.glob("lib/{nylas-streaming.rb,nylas-streaming/**/*.rb}")
   gem.platform = "ruby"
 
   gem.metadata = {
@@ -20,13 +19,12 @@ Gem::Specification.new do |gem|
     "documentation_uri" => "http://www.rubydoc.info/gems/nylas",
     "homepage_uri"      => "https://www.nylas.com",
     "source_code_uri"   => "https://github.com/nylas/nylas-ruby",
-    "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki",
-    "yard.run"          => "yri"
+    "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki"
   }
 
-  gem.post_install_message = "Nylas 4.0 includes breaking changes. Review the upgrade guide! " \
-                             "https://github.com/nylas/nylas-ruby/wiki/Upgrading-from-3.X-to-4.0"
-  gem.add_runtime_dependency "rest-client", ">= 1.6"
+  gem.add_runtime_dependency "nylas", ">= 4.0"
+  gem.add_runtime_dependency "yajl-ruby", "~> 1.2", ">= 1.2.1"
+  gem.add_runtime_dependency "em-http-request", "~> 1.1", ">= 1.1.3"
 
   gem.add_development_dependency "yard", ">= 0.9.12"
   gem.add_development_dependency "bundler", ">= 1.3.5"

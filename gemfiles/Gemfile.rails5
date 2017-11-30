@@ -2,4 +2,4 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 5'
 
-gemspec path: ".."
+gemspec path: "..", name: 'nylas-streaming'
