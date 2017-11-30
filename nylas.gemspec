@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.version = Nylas::VERSION
   gem.email = "support@nylas.com"
   gem.authors = ["Nylas, Inc."]
-  gem.files = Dir.glob("lib/**/*.rb")
+  gem.files = Dir.glob("lib/**/*.rb") + ['CHANGELOG.md', 'LICENSE.txt', 'README.md', __FILE__]
   gem.platform = "ruby"
 
   gem.metadata = {
@@ -19,14 +19,15 @@ Gem::Specification.new do |gem|
     "documentation_uri" => "http://www.rubydoc.info/gems/nylas",
     "homepage_uri"      => "https://www.nylas.com",
     "source_code_uri"   => "https://github.com/nylas/nylas-ruby",
-    "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki"
+    "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki",
+    "yard.run"          => "yri"
   }
 
   gem.add_runtime_dependency "rest-client", ">= 1.6"
 
   gem.add_development_dependency "rspec", ">= 3.5.0"
   gem.add_development_dependency "shoulda", ">= 3.4.0"
-  gem.add_development_dependency "rdoc", ">= 3.12"
+  gem.add_development_dependency "yard", ">= 0.9.12"
   gem.add_development_dependency "bundler", ">= 1.3.5"
   gem.add_development_dependency "jeweler", ">= 2.1.2"
   gem.add_development_dependency "pry", ">= 0.10.4"

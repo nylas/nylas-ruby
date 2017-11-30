@@ -141,6 +141,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff
     yajl-ruby (1.3.0)
+    yard (0.9.12)
 
 PLATFORMS
   ruby
@@ -153,13 +154,13 @@ DEPENDENCIES
   pry (>= 0.10.4)
   pry-nav (>= 0.2.4)
   pry-stack_explorer (>= 0.4.9.2)
-  rdoc (>= 3.12)
   rest-client (~> 2.0)
   rspec (>= 3.5.0)
   shoulda (>= 3.4.0)
   sinatra (>= 1.4.7)
   webmock (>= 2.1.0)
   yajl-ruby (~> 1.2, >= 1.2.1)
+  yard (>= 0.9.12)
 
 BUNDLED WITH
    1.16.0
