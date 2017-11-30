@@ -1,7 +1,7 @@
 
 describe 'RestfulModel' do
   before (:each) do
-    @api = Nylas::API.new('app_id', 'app_secret', 'key')
+    @api = Nylas::API.new(app_id: 'app_id', app_secret: 'app_secret', access_token: 'key')
   end
 
   describe "#as_json" do

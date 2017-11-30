@@ -1,5 +1,7 @@
 require_relative 'v2/types'
 require_relative 'v2/model'
+require_relative 'v2/query'
+
 require_relative 'v2/contact'
 
 require_relative 'v2/email_address'

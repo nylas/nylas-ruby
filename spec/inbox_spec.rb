@@ -10,7 +10,7 @@ describe 'Nylas' do
 
   describe "#url_for_path" do
     before (:each) do
-      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret, access_token: @access_token)
     end
 
     it "should return the url for a provided path" do
@@ -18,7 +18,7 @@ describe 'Nylas' do
     end
 
     it "should return an error if you have not provided an auth token" do
-      @inbox = Nylas::API.new(@app_id, @app_secret)
+      @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret)
       expect {
         @inbox.url_for_path('/wobble')
       }.to raise_error(Nylas::NoAuthToken)
@@ -27,7 +27,7 @@ describe 'Nylas' do
 
   describe "#url_for_authentication" do
     before (:each) do
-      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret, access_token: @access_token)
     end
 
     it "should return the OAuth authorize endpoint with the provided redirect_uri" do
@@ -87,7 +87,7 @@ describe 'Nylas' do
 
   describe "#self.interpret_response" do
     before (:each) do
-      @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
+      @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret, access_token: @access_token)
       @result = double('result')
       allow(@result).to receive(:code).and_return(200)
     end
@@ -183,7 +183,7 @@ describe 'Nylas' do
           :status => 200,
           :body => File.read('spec/fixtures/accounts_endpoint.txt'),
           :headers => {"Content-Type" => "application/json"})
-        @inbox = Nylas::API.new(@app_id, @app_secret)
+        @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret)
       end
 
       it "should auth with the app_secret" do

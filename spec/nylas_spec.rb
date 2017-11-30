@@ -1,5 +1,5 @@
 describe Nylas::API do
-  let(:api) { Nylas::API.new('app_id', 'app_secret', 'key') }
+  let(:api) { Nylas::API.new(app_id: 'app_id', app_secret: 'app_secret', access_token: 'key') }
 
   describe '#messages' do
     context 'when expanded param is true' do

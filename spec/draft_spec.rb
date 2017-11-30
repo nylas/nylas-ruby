@@ -6,7 +6,7 @@ describe Nylas::Draft do
     @app_secret = '123'
     @access_token = 'UXXMOCJW-BKSLPCFI-UQAQFWLO'
     @account_id = "nnnnnnn"
-    @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
+    @inbox = Nylas::API.new(app_id: @app_id, app_secret: @app_secret, access_token: @access_token)
   end
 
   describe "#save!" do

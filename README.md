@@ -97,7 +97,7 @@ The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provi
 require 'nylas'
 
 def login
-  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
+  nylas = Nylas::API.new(app_id: config.nylas_app_id, app_secret: config.nylas_app_secret)
   # The email address of the user you want to authenticate
   user_email = 'ben@nylas.com'
 
@@ -114,7 +114,7 @@ end
 
 ```ruby
 def login_callback
-  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
+  nylas = Nylas::API.new(app_id: config.nylas_app_id, app_secret: config.nylas_app_secret)
   nylas_token = nylas.token_for_code(params[:code])
 
   # Save the nylas_token to the current session, save it to the user model, etc.
@@ -128,7 +128,7 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 **Cancelling an Account**
 
 ```ruby
-  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nil)
+  nylas = Nylas::API.new(app_id: config.nylas_app_id, app_secret: config.nylas_app_secret)
   account = nylas.accounts.find(account_id)
   account.downgrade!
 
@@ -139,7 +139,7 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 
 ```ruby
   # Query the status of every account linked to the app
-  nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
+  nylas = Nylas::API.new(app_id: config.nylas_app_id, app_secret: config.nylas_app_secret, access_token: nylas_token)
   accounts = nylas.accounts
   accounts.each { |a| [a.account_id, a.sync_state] }
   # Available fields are: account_id, sync_state, trial, trial_expires and billing_state.
@@ -149,7 +149,7 @@ If you're using the open-source version of the Nylas Sync Engine or have fewer t
 ### Fetching Accounts
 
 ```ruby
-nylas = Nylas::API.new(config.nylas_app_id, config.nylas_app_secret, nylas_token)
+nylas = Nylas::API.new(app_id: config.nylas_app_id, app_secret: config.nylas_app_secret, access_token: nylas_token)
 
 puts nylas.account.email_address #=> 'alice@example.com'
 puts nylas.account.provider      #=> 'gmail'
@@ -607,14 +607,14 @@ The [Nylas Sync Engine](http://github.com/nylas/sync-engine) is open source, and
 
 ```ruby
 require 'nylas'
-nylas = Nylas::API.new(nil, nil, nil, 'http://localhost:5555/')
+nylas = Nylas::API.new(app_id: nil, app_secret: nil, access_token: nil, api_server: 'http://localhost:5555/')
 
 # Get the id of the first account -- this is the access token we're
 # going to use.
 account_id = nylas.accounts.first.id
 
 # Display the body of the first message for the first account
-nylas = Nylas::API.new(nil, nil, account_id, 'http://localhost:5555/')
+nylas = Nylas::API.new(app_id: nil, app_secret: nil, access_token: account_id, api_server: 'http://localhost:5555/')
 puts nylas.messages.first.body
 ```
 
