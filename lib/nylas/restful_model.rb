@@ -41,9 +41,13 @@ module Nylas
       end
     end
 
-    def url(action = "")
+    def path_for(action="")
       action = "/#{action}" unless action.empty?
-      @_api.url_for_path("/#{self.class.collection_name}/#{id}#{action}")
+      "/#{self.class.collection_name}/#{id}#{action}"
+    end
+
+    def url(action = "")
+      @_api.url_for_path(path_for(action))
     end
 
     def as_json(options = {})
@@ -62,8 +66,8 @@ module Nylas
 
     def update(http_method, action, data = {}, params = {})
       @_api.execute(
-        http_method,
-        url(action),
+        method: http_method,
+        url: url(action),
         payload: data.to_json,
         headers: {
           content_type: :json,
@@ -79,7 +83,7 @@ module Nylas
     end
 
     def destroy(params = {})
-      @_api.delete(url, nil, params: params) do |response, _request, result|
+      @_api.delete(url: url, params: params) do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)
       end
     end

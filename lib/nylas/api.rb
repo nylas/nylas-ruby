@@ -32,19 +32,25 @@ module Nylas
       }
     end
 
-    def get(url, headers = {}, &block)
-      execute(:get, url, headers: headers, &block)
+    def get(path: nil, url: nil, headers: {}, params: {}, &block)
+      execute(method: :get, path: path, params: params, url: url, headers: headers, params: params, &block)
     end
 
-    def post(url, payload, headers = {}, &block)
-      execute(:post, url, headers: headers, payload: payload, &block)
+    def post(path: nil, url: nil, payload: nil, headers: {}, params: {}, &block)
+      execute(method: :post, path: path, url: url, headers: headers, params: params, payload: payload, &block)
     end
 
-    def delete(url, payload = nil, headers = {}, &block)
-      execute(:delete, url, headers: headers, payload: payload, &block)
+    def put(path: nil, url: nil, payload: ,headers: {}, params: {}, &block)
+      execute(method: :put, path: path, url: url, headers: headers, params: params, payload: payload, &block)
     end
 
-    def execute(method, url, headers: nil, payload: nil, &block)
+    def delete(path: nil, url: nil, payload: nil, headers: {}, params: {}, &block)
+      execute(method: :delete, path: path, url: url, headers: headers, params: params, &block)
+    end
+
+    def execute(method: , url: nil, path: nil, headers: {}, params: {}, payload: nil, &block)
+      headers[:params] = params
+      url = url || url_for_path(path)
       ::RestClient::Request.execute(
         method: method,
         url: url,
@@ -94,7 +100,7 @@ module Nylas
         'code' => code
       }
 
-      post("https://#{@service_domain}/oauth/token", data) do |response, _request, result|
+      post(url: "https://#{@service_domain}/oauth/token", payload: data) do |response, _request, result|
         json = API.interpret_response(result, response, expected_class: Object)
         return json['access_token']
       end
@@ -150,9 +156,9 @@ module Nylas
     end
 
     def account
-      path = self.url_for_path("/account")
+      url = self.url_for_path("/account")
 
-      get(path) do |response, _request, result|
+      get(url: url) do |response, _request, result|
         json = API.interpret_response(result, response, expected_class: Object)
         model = APIAccount.new(self)
         model.inflate(json)
@@ -178,7 +184,7 @@ module Nylas
 
       cursor = nil
 
-      post(path, content_type: :json) do |response, _request, result|
+      post(url: path, headers: { content_type: :json }) do |response, _request, result|
         json = API.interpret_response(result, response, expected_class: Object)
         cursor = json["cursor"]
       end
@@ -214,14 +220,14 @@ module Nylas
 
       # loop and yield deltas until we've come to the end.
       loop do
-        path = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
+        url = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
         if expanded_view
-          path += '&view=expanded'
+          url += '&view=expanded'
         end
 
         json = nil
 
-        get(path) do |response, _request, result|
+        get(url: url) do |response, _request, result|
           json = API.interpret_response(result, response, expected_class: Object)
         end
 

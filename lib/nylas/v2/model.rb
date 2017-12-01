@@ -12,8 +12,12 @@ module Nylas
         model.extend(ClassMethods)
       end
 
-
       def save
+        if id
+          api.execute(method: :put, body: attributes.to_h, path: resource_path)
+        else
+          api.execute(method: :post, body: attributes.to, path: resources_path)
+        end
       end
 
       def update(**data)
@@ -22,9 +26,12 @@ module Nylas
       end
 
       def resource_path
-        "#{self.class.base_location}/#{id}"
+        "#{resources_path}/#{id}"
       end
 
+      def resources_path
+        "#{self.class.base_location}"
+      end
 
       def destroy
         api.execute(method: :delete, path: resource_path)

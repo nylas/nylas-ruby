@@ -31,7 +31,7 @@ module Nylas
 
     def count
       params = @filters.merge(view: 'count')
-      @_api.get(url, params: params) do |response, _request, result|
+      @_api.get(url: url, params: params) do |response, _request, result|
         Nylas.interpret_response(result, response)['count']
       end
     end
@@ -70,7 +70,7 @@ module Nylas
 
     def delete(item_or_id)
       item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
-      @_api.delete("#{url}/#{item_or_id}")
+      @_api.delete(url: "#{url}/#{item_or_id}")
     end
 
     def find(id)
@@ -116,7 +116,7 @@ module Nylas
     def get_model(id)
       model = nil
 
-      @_api.get("#{url}/#{id}") do |response, _request, result|
+      @_api.get(url: "#{url}/#{id}") do |response, _request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)
         if @model_class < RestfulModel
           model = @model_class.new(@_api)
@@ -142,7 +142,7 @@ module Nylas
       while (!finished) do
         current_calls_filters[:limit] = per_page > filters[:limit] ? filters[:limit] : per_page
         endpoint = filters.key?(:q) ? search_url : url
-        @_api.get(endpoint, params: current_calls_filters) do |response, _request, result|
+        @_api.get(url: endpoint, params: current_calls_filters) do |response, _request, result|
           items = Nylas.interpret_response(result, response, { :expected_class => Array })
           new_items = inflate_collection(items)
           yield new_items if block_given?

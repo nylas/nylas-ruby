@@ -99,13 +99,13 @@ module Nylas
     def raw
       collection = RestfulModelCollection.new(Message, @_api, message_id: @id)
       url = "#{collection.url}/#{id}/"
-      @_api.get(url, accept: 'message/rfc822') do |response, _request, result|
+      @_api.get(url: url, headers: { accept: 'message/rfc822' }) do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)
       end
     end
 
     def expanded
-      @_api.get(url('?view=expanded')) do |response, _request, result|
+      @_api.get(url: url('?view=expanded')) do |response, _request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)
         expanded_message = Nylas::ExpandedMessage.new(@_api)
         expanded_message.inflate(json)

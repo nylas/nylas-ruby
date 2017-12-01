@@ -34,7 +34,7 @@ module Nylas
       url = @_api.url_for_path("/send-rsvp")
       data = {:event_id => @id, :status => status, :comment => comment}
 
-      @_api.post(url, data.to_json, content_type: :json) do |response, _request, result|
+      @_api.post(url: url, payload: data.to_json, headers: { content_type: :json }) do |response, _request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)
         self.inflate(json)
       end
