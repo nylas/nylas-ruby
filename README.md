@@ -87,6 +87,15 @@ Before you can interact with the Nylas API, you need to register for the Nylas D
 Generally, you should store your App ID and Secret into environment variables to avoid adding them to source control. That said, in the example project and code snippets below, the values were added to `config/environments/development.rb` for convenience.
 
 
+### V2
+
+The V2 Nylas API includes support for CRUD operations on Contacts, expands contacts to include more data, and improves contact filtering. It is backwards incompatible with the V1 Contacts API.
+
+The following examples are from [examples/v2.rb](examples/v2.rb)
+
+{include:file:examples/v2.rb}
+
+
 ### Authentication
 
 The Nylas REST API uses server-side (three-legged) OAuth, and the Ruby gem provides convenience methods that simplify the OAuth process. For more information about authenticating with Nylas, visit the [Developer Documentation](https://nylas.com/docs/platform#authentication).
