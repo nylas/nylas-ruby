@@ -2,6 +2,8 @@ module Nylas
   module V2
     class Contact
       include Model
+      self.base_location = "/contacts"
+
       attribute :id, :string, exclude_when: [:creating, :updating]
       attribute :object, :string
       attribute :account_id, :string, exclude_when: [:creating, :updating]

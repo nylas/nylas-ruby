@@ -2,14 +2,16 @@ module Nylas
   module V2
     module Model
       class AttributeDefinition
-        attr_accessor :type, :exclude_when
-        def initialize(type:, exclude_when:)
-          self.type = type
+        extend Forwardable
+        def_delegators :type, :cast, :serialize
+        attr_accessor :type_name, :exclude_when
+        def initialize(type_name:, exclude_when:)
+          self.type_name = type_name
           self.exclude_when = exclude_when
         end
 
-        def cast(value)
-          Types.registry[type].cast(value)
+        private def type
+          Types.registry[type_name]
         end
       end
     end

@@ -7,7 +7,7 @@ module Nylas
 
       class HashType
         def serialize(object)
-          to_h
+          object.to_h
         end
 
         def self.casts_to(model)

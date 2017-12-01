@@ -12,9 +12,22 @@ module Nylas
         model.extend(ClassMethods)
       end
 
-      # @return [Hash] Representation of the model with values serialized into primitives based on their Type
-      def to_h
-        attributes.to_h
+
+      def save
+      end
+
+      def update(**data)
+        attributes.merge(data)
+        api.execute(method: :put, body: attributes.to_h(keys: data.keys), path: resource_path)
+      end
+
+      def resource_path
+        "#{self.class.base_location}/#{id}"
+      end
+
+
+      def destroy
+        api.execute(method: :delete, path: resource_path)
       end
 
       # @return [String] JSON String of the model.
@@ -23,7 +36,9 @@ module Nylas
       end
 
       module ClassMethods
-        def from_json(json, api)
+        attr_accessor :base_location
+
+        def from_json(json, api: api)
           data = JSON.parse(json, symbolize_names: true)
           instance = new(**data)
           instance.api = api

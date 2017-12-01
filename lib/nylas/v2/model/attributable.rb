@@ -16,14 +16,19 @@ module Nylas
           @attributes ||= Attributes.new(self.class.attribute_definitions)
         end
 
+        # @return [Hash] Representation of the model with values serialized into primitives based on their Type
+        def to_h
+          attributes.to_h
+        end
+
         module ClassMethods
-          def has_n_of_attribute(name, type, exclude_when: [])
-            attribute_definitions[name] = ListAttributeDefinition.new(type: type, exclude_when: exclude_when)
+          def has_n_of_attribute(name, type_name, exclude_when: [])
+            attribute_definitions[name] = ListAttributeDefinition.new(type_name: type_name, exclude_when: exclude_when)
             define_accessors(name)
           end
 
-          def attribute(name, type, exclude_when: [])
-            attribute_definitions[name] = AttributeDefinition.new(type: type, exclude_when: exclude_when)
+          def attribute(name, type_name, exclude_when: [])
+            attribute_definitions[name] = AttributeDefinition.new(type_name: type_name, exclude_when: exclude_when)
             define_accessors(name)
           end
 

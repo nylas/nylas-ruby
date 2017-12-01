@@ -17,10 +17,18 @@ module Nylas
           data[key] = attribute_definitions[key].cast(value)
         end
 
-        def to_h
-          data.reduce({}) do |serialized_data, (key, value)|
-            serialized_data[key] = attribute_definitions[key].cast(value)
-            serialized_data
+        # Merges data into the registry while casting input types correctly
+        def merge(new_data)
+          new_data.each do |attribute_name, value|
+            self[attribute_name] = value
+          end
+        end
+
+
+        def to_h(keys: attribute_definitions.keys)
+          keys.reduce({}) do |casted_data, key|
+            casted_data[key] = attribute_definitions[key].serialize(self[key])
+            casted_data
           end
         end
 
