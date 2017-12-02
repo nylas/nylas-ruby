@@ -4,7 +4,7 @@ describe Nylas::V2::Contact do
   let(:full_json) do
     '{ "id": "1234", "object": "contact", "account_id": "12345", ' \
       '"given_name":"given", "middle_name": "middle", "surname": "surname", ' \
-      '"birthday": "1984-01-01", "suffix": "Jr.", "nickname": "nick", ' \
+      '"birthday": { "date": "1984-01-01", "object": "date" }, "suffix": "Jr.", "nickname": "nick", ' \
       '"company_name": "company", "job_title": "title", ' \
       '"manager_name": "manager", "office_location": "the office", ' \
       '"notes": "some notes", "email_addresses": [' \
@@ -42,7 +42,7 @@ describe Nylas::V2::Contact do
       expect(request[:path]).to eql '/contacts/1234'
       expect(request[:payload]).to eql({
         given_name: 'Given',
-        birthday: '2017-01-01',
+        birthday: { object: 'date', 'date': '2017-01-01' },
         email_addresses: [{ type: "work", email:"given@other-job.example.com" },
                           { type: "home", email: "given@other-home.example.com" }]
       })
@@ -100,7 +100,7 @@ describe Nylas::V2::Contact do
           job_title: "title",
           office_location: "the office",
           manager_name: "manager",
-          birthday: "1984-01-01",
+          birthday: { "object": "date", "date": "1984-01-01" },
           company_name: "company",
           notes: "some notes",
           email_addresses: [{type: "work", email: "given@work.example.com"},
