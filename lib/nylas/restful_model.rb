@@ -69,9 +69,9 @@ module Nylas
         method: http_method,
         url: url(action),
         payload: data.to_json,
+        query: params,
         headers: {
-          content_type: :json,
-          params: params
+          content_type: :json
         }
       ) do |response, request, result|
         unless request.method == 'delete'
@@ -83,7 +83,7 @@ module Nylas
     end
 
     def destroy(params = {})
-      @_api.delete(url: url, params: params) do |response, _request, result|
+      @_api.delete(url: url, query: params) do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)
       end
     end

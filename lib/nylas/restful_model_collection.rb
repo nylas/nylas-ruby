@@ -31,7 +31,7 @@ module Nylas
 
     def count
       params = @filters.merge(view: 'count')
-      @_api.get(url: url, params: params) do |response, _request, result|
+      @_api.get(url: url, query: params) do |response, _request, result|
         Nylas.interpret_response(result, response)['count']
       end
     end
@@ -142,7 +142,7 @@ module Nylas
       while (!finished) do
         current_calls_filters[:limit] = per_page > filters[:limit] ? filters[:limit] : per_page
         endpoint = filters.key?(:q) ? search_url : url
-        @_api.get(url: endpoint, params: current_calls_filters) do |response, _request, result|
+        @_api.get(url: endpoint, query: current_calls_filters) do |response, _request, result|
           items = Nylas.interpret_response(result, response, { :expected_class => Array })
           new_items = inflate_collection(items)
           yield new_items if block_given?

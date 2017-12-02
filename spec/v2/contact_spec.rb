@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 class FakeAPI
-  def execute(method:, path:, body: nil)
-    requests.push({ method: method, path: path, body: body })
+  def execute(method:, path:, payload: nil)
+    requests.push({ method: method, path: path, payload: payload })
   end
 
   def requests
@@ -49,7 +49,7 @@ describe Nylas::V2::Contact do
 
       expect(request[:method]).to eql :put
       expect(request[:path]).to eql '/contacts/1234'
-      expect(request[:body]).to eql({
+      expect(request[:payload]).to eql({
         given_name: 'Given',
         birthday: '2017-01-01',
         email_addresses: [{ type: "work", email:"given@other-job.example.com" },

@@ -14,15 +14,15 @@ module Nylas
 
       def save
         if id
-          api.execute(method: :put, body: attributes.to_h, path: resource_path)
+          api.execute(method: :put, payload: attributes.to_h, path: resource_path)
         else
-          api.execute(method: :post, body: attributes.to, path: resources_path)
+          api.execute(method: :post, payload: attributes.to, path: resources_path)
         end
       end
 
       def update(**data)
         attributes.merge(data)
-        api.execute(method: :put, body: attributes.to_h(keys: data.keys), path: resource_path)
+        api.execute(method: :put, payload: attributes.to_h(keys: data.keys), path: resource_path)
       end
 
       def resource_path
