@@ -1,8 +1,8 @@
 require_relative 'v2/types'
+require_relative 'v2/collection'
 require_relative 'v2/model'
 
 require_relative 'v2/constraints'
-require_relative 'v2/query'
 
 require_relative 'v2/contact'
 

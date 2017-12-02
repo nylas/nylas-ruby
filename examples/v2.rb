@@ -22,3 +22,13 @@ demonstrate { search_results.to_be_executed }
 search_results.each do |result|
   demonstrate { result.to_h }
 end
+
+# Instantiating a new contact
+contact = api.contacts.new(given_name: "Rando")
+contact.save
+
+demonstrate { api.contacts.count }
+
+contact.destroy
+
+demonstrate { api.contacts.count }

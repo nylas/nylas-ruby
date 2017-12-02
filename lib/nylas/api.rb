@@ -69,8 +69,9 @@ module Nylas
     def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil, &block)
       headers[:params] = query
       url = url || url_for_path(path)
+      resulting_headers = @default_headers.merge(headers)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: @default_headers.merge(headers)) do |response, request, result|
+                                    headers: resulting_headers) do |response, request, result|
         self.class.raise_exception_for_failed_request(result: result, response: response)
         if block_given?
           yield(response, request, result)
@@ -189,7 +190,7 @@ module Nylas
     # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
     def contacts
       if api_version == "2"
-        @contants ||= V2::Query.new(model: V2::Contact, api:self)
+        @contants ||= V2::Collection.new(model: V2::Contact, api:self)
       else
         @contacts ||= RestfulModelCollection.new(Contact, self)
       end

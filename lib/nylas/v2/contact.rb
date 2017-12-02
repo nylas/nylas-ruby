@@ -5,7 +5,7 @@ module Nylas
       self.resources_path = "/contacts"
 
       attribute :id, :string, exclude_when: [:creating, :updating]
-      attribute :object, :string
+      attribute :object, :string, default: "contact"
       attribute :account_id, :string, exclude_when: [:creating, :updating]
       attribute :given_name, :string
       attribute :middle_name, :string

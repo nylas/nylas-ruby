@@ -1,6 +1,6 @@
 module Nylas
   module V2
-    class Query
+    class Collection
       attr_accessor :model, :api, :scope, :constraints
       def initialize(model: , api: , constraints: nil)
         self.constraints = Constraints.from_constraints(constraints)
@@ -8,13 +8,18 @@ module Nylas
         self.api = api
         self.scope
       end
+      def new(**attributes)
+        instance = model.new(**attributes)
+        instance.api = api
+        instance
+      end
 
       def where(filters)
-        Query.new(model: model, api: api, constraints: constraints.merge(where: filters))
+        self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
       end
 
       def count
-        Query.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
+        self.class.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
       end
 
       # Iterates over a single page of results based upon current pagination settings
@@ -26,11 +31,11 @@ module Nylas
       end
 
       def limit(quantity)
-        Query.new(model: model, api: api, constraints: constraints.merge(limit: quantity))
+        self.class.new(model: model, api: api, constraints: constraints.merge(limit: quantity))
       end
 
       def offset(start)
-        Query.new(model: model, api: api, constraints: constraints.merge(offset: start))
+        self.class.new(model: model, api: api, constraints: constraints.merge(offset: start))
       end
 
       # Iterates over every result, retrieving a page at a time
@@ -41,7 +46,7 @@ module Nylas
       # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
       # consideration other query constraints, such as where clauses.
       def find(id)
-        Query.new(model: model, api: api, constraints: constraints.merge(id: id)).execute.first
+        self.class.new(model: model, api: api, constraints: constraints.merge(id: id)).execute.first
       end
 
       def to_be_executed

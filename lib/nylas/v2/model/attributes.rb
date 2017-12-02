@@ -27,7 +27,8 @@ module Nylas
 
         def to_h(keys: attribute_definitions.keys)
           keys.reduce({}) do |casted_data, key|
-            casted_data[key] = attribute_definitions[key].serialize(self[key])
+            value = attribute_definitions[key].serialize(self[key])
+            casted_data[key] = value unless value.nil? || value.empty?
             casted_data
           end
         end

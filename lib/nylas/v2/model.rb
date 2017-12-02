@@ -16,7 +16,7 @@ module Nylas
         if id
           api.execute(method: :put, payload: attributes.to_h, path: resource_path)
         else
-          api.execute(method: :post, payload: attributes.to, path: resources_path)
+          api.execute(method: :post, payload: attributes.to_h, path: resources_path)
         end
       end
 
