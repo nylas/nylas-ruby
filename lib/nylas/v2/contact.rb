@@ -2,7 +2,7 @@ module Nylas
   module V2
     class Contact
       include Model
-      self.base_location = "/contacts"
+      self.resources_path = "/contacts"
 
       attribute :id, :string, exclude_when: [:creating, :updating]
       attribute :object, :string
@@ -10,7 +10,7 @@ module Nylas
       attribute :given_name, :string
       attribute :middle_name, :string
       attribute :surname, :string
-      attribute :birthday, :date
+      attribute :birthday, :nylas_date
       attribute :suffix, :string
       attribute :nickname, :string
       attribute :company_name, :string
@@ -18,6 +18,8 @@ module Nylas
       attribute :manager_name, :string
       attribute :office_location, :string
       attribute :notes, :string
+      attribute :web_page, :web_page
+
       has_n_of_attribute :email_addresses, :email_address
       has_n_of_attribute :im_addresses, :im_address
       has_n_of_attribute :physical_addresses, :physical_address

@@ -23,6 +23,7 @@ module Nylas
         end
 
         def cast(value)
+          return model.new if value.nil?
           return value if already_cast?(value)
           return model.new(**actual_attributes(value)) if value.respond_to?(:key?)
           raise TypeError, "Unable to cast #{value} to a #{model}"
@@ -67,7 +68,6 @@ module Nylas
           value
         end
       end
-
       Types.registry[:date] = DateType.new
 
       class StringType < ValueType

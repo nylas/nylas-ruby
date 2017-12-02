@@ -1,14 +1,5 @@
 require 'spec_helper'
 
-class FakeAPI
-  def execute(method:, path:, payload: nil)
-    requests.push({ method: method, path: path, payload: payload })
-  end
-
-  def requests
-    @requests ||= []
-  end
-end
 describe Nylas::V2::Contact do
   let(:full_json) do
     '{ "id": "1234", "object": "contact", "account_id": "12345", ' \

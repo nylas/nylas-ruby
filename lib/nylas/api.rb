@@ -72,14 +72,20 @@ module Nylas
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
                                     headers: @default_headers.merge(headers)) do |response, request, result|
         self.class.raise_exception_for_failed_request(result: result, response: response)
-        block_given? ? yield(response, request, result) : response
+        if block_given?
+          yield(response, request, result)
+        elsif method == :delete
+          response
+        else
+          JSON.parse(response, symbolize_names: true)
+        end
       end
     end
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
     def get(path: nil, url: nil, headers: {}, query: {}, &block)
-      execute(method: :get, path: path, query: query, url: url, headers: headers, query: query, &block)
+      execute(method: :get, path: path, query: query, url: url, headers: headers, &block)
     end
 
     # Syntactical sugar for making POST requests via the API.

@@ -26,11 +26,11 @@ module Nylas
       end
 
       def resource_path
-        "#{resources_path}/#{id}"
+        self.class.resource_path(id)
       end
 
       def resources_path
-        "#{self.class.base_location}"
+        self.class.resources_path
       end
 
       def destroy
@@ -43,9 +43,12 @@ module Nylas
       end
 
       module ClassMethods
-        attr_accessor :base_location
+        attr_accessor :resources_path
 
-        def from_json(json, api: api)
+        def resource_path(id)
+          "#{resources_path}/#{id}"
+        end
+        def from_json(json, api:)
           data = JSON.parse(json, symbolize_names: true)
           instance = new(**data)
           instance.api = api

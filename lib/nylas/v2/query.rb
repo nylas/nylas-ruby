@@ -14,13 +14,15 @@ module Nylas
       end
 
       def count
-        execute(query: { view: "count" })
+        Query.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
       end
 
       # Iterates over a single page of results based upon current pagination settings
       def each(&block)
         return enum_for(:each) unless block_given?
-        execute.each(&block)
+        execute.each do |result|
+          yield(model.new(result))
+        end
       end
 
       def limit(quantity)
@@ -39,22 +41,15 @@ module Nylas
       # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
       # consideration other query constraints, such as where clauses.
       def find(id)
-        Query.new(model: model, api: api, constraints: constraints.merge(id: id)).execute
+        Query.new(model: model, api: api, constraints: constraints.merge(id: id)).execute.first
       end
 
-      def execute(action: :list)
-        case action
-        when :show
-          api.get(model.show_path(constraints.id))
-        when :list
-          raise NotImplementedError "Implement :list!"
-        when :create
-          raise NotImplementedError "Implement :create!"
-        when :update
-          raise NotImplementedError "Implement :update!"
-        when :destroy
-          raise NotImplementedError "Implement :destroy!"
-        end
+      def to_be_executed
+        { method: :get, path: model.resources_path, query: constraints.to_query }
+      end
+
+      def execute
+        api.execute(to_be_executed)
       end
     end
   end
