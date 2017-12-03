@@ -40,12 +40,12 @@ describe Nylas::V2::Contact do
 
       expect(request[:method]).to eql :put
       expect(request[:path]).to eql '/contacts/1234'
-      expect(request[:payload]).to eql({
+      expect(request[:payload]).to eql(JSON.dump({
         given_name: 'Given',
         birthday: { object: 'date', 'date': '2017-01-01' },
         email_addresses: [{ type: "work", email:"given@other-job.example.com" },
                           { type: "home", email: "given@other-home.example.com" }]
-      })
+      }))
     end
   end
 

@@ -13,16 +13,17 @@ module Nylas
       end
 
       def save
-        if id
-          api.execute(method: :put, payload: attributes.to_h, path: resource_path)
-        else
-          api.execute(method: :post, payload: attributes.to_h, path: resources_path)
-        end
+        result = if id
+                   api.execute(method: :put, payload: attributes.serialize, path: resource_path)
+                 else
+                   api.execute(method: :post, payload: attributes.serialize, path: resources_path)
+                 end
+        attributes.merge(result)
       end
 
       def update(**data)
         attributes.merge(data)
-        api.execute(method: :put, payload: attributes.to_h(keys: data.keys), path: resource_path)
+        api.execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       end
 
       def resource_path
@@ -48,6 +49,7 @@ module Nylas
         def resource_path(id)
           "#{resources_path}/#{id}"
         end
+
         def from_json(json, api:)
           data = JSON.parse(json, symbolize_names: true)
           instance = new(**data)

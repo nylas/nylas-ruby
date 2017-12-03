@@ -33,6 +33,10 @@ module Nylas
           end
         end
 
+        def serialize(keys: attribute_definitions.keys)
+          JSON.dump(to_h(keys: keys))
+        end
+
         private def default_attributes
           attribute_definitions.keys.zip([]).to_h
         end

@@ -4,6 +4,8 @@ require 'rest-client'
 require 'ostruct'
 require 'forwardable'
 
+require_relative 'nylas/logging'
+
 require_relative 'nylas/registry'
 require_relative 'nylas/to_query'
 

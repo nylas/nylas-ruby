@@ -24,11 +24,18 @@ search_results.each do |result|
 end
 
 # Instantiating a new contact
-contact = api.contacts.new(given_name: "Rando")
-contact.save
+contact = api.contacts.new(given_name: Faker::Name.first_name)
+demonstrate do
+  # Saving a new contact
+  contact.save
+end
 
 demonstrate { api.contacts.count }
 
-contact.destroy
+# Retrieving a contact by ID
+demonstrate { api.contacts.find(contact.id) }
 
+
+#Removing a contact
+demonstrate { contact.destroy }
 demonstrate { api.contacts.count }

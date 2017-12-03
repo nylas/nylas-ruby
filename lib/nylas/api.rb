@@ -5,6 +5,8 @@ module Nylas
   # the get/post/put/execute stuff out into a {Nylas::Client} class that returns only Array's and Hashes. Will
   # figure that out before releasing 4.0 full.
   class API
+    include Logging
+
     attr_accessor :api_server
     attr_accessor :api_version
     attr_accessor :version
@@ -43,7 +45,8 @@ module Nylas
       @version = Nylas::VERSION
       @default_headers = {
         'X-Nylas-API-Wrapper' => 'ruby',
-        'User-Agent' => "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}"
+        'User-Agent' => "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}",
+        'Content-types' => 'application/json'
       }
     end
 
@@ -70,9 +73,9 @@ module Nylas
       headers[:params] = query
       url = url || url_for_path(path)
       resulting_headers = @default_headers.merge(headers)
-      ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: resulting_headers) do |response, request, result|
-        self.class.raise_exception_for_failed_request(result: result, response: response)
+      rest_client_execute(method: method, url: url, payload: payload,
+                          headers: resulting_headers) do |response, request, result|
+        self.class.raise_exception_for_failed_request(result: result, response: response, request: request)
         if block_given?
           yield(response, request, result)
         elsif method == :delete
@@ -82,6 +85,16 @@ module Nylas
         end
       end
     end
+    inform_on :execute, level: :debug,
+      also_log: { result: true, values: [:method, :url, :path, :headers, :query, :payload] }
+
+    private def rest_client_execute(method: , url: , headers: , payload: , &block)
+      ::RestClient::Request.execute(method: method, url: url, payload: payload,
+                                    headers: headers, &block)
+    end
+    inform_on :rest_client_execute, level: :debug,
+      also_log: { result: true, values: [:method, :url, :headers, :payload] }
+
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -337,19 +350,19 @@ module Nylas
     end
 
     # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def self.interpret_response(result, result_content, options = {})
+    def self.interpret_response(result, result_content, result_parsed: nil, expected_class: nil, raw_response: nil, request: nil)
       # We expected a certain kind of object, but the API didn't return anything
-      raise UnexpectedResponse.new if options[:expected_class] && result_content.empty?
+      raise UnexpectedResponse.new if expected_class && result_content.empty?
 
       # If it's already parsed, or if we've received an actual raw payload on success, don't parse
-      if options[:result_parsed] || (options[:raw_response] && result.code.to_i == 200)
+      if result_parsed || (raw_response && result.code.to_i == 200)
         response = result_content
       else
         response = JSON.parse(result_content)
       end
 
-      raise_exception_for_failed_request(result: result, response: response)
-      raise UnexpectedResponse.new if options[:expected_class] && !response.is_a?(options[:expected_class])
+      raise_exception_for_failed_request(result: result, response: response, request: request)
+      raise UnexpectedResponse.new if expected_class && !response.is_a?(expected_class)
       response
 
     rescue JSON::ParserError => e
@@ -363,7 +376,7 @@ module Nylas
     end
 
     # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def self.raise_exception_for_failed_request(result: , response:)
+    def self.raise_exception_for_failed_request(result: , response:, request:)
       response = begin
                    response.kind_of?(Enumerable) ? response : JSON.parse(response)
                  rescue JSON::ParserError

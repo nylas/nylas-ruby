@@ -46,7 +46,7 @@ module Nylas
       # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
       # consideration other query constraints, such as where clauses.
       def find(id)
-        self.class.new(model: model, api: api, constraints: constraints.merge(id: id)).execute.first
+        model.new(api.execute(get: model.resource_path(id)))
       end
 
       def to_be_executed
