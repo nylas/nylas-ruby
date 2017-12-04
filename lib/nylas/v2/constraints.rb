@@ -1,19 +1,25 @@
 module Nylas
   module V2
     class Constraints
-      attr_accessor :where, :limit, :offset, :view
-      def initialize(where: {}, limit: nil, offset: nil, view: nil)
+      attr_accessor :where, :limit, :offset, :view, :per_page
+      def initialize(where: {}, limit: nil, offset: 0, view: nil, per_page: 100)
         self.where = where
         self.limit = limit
         self.offset = offset
         self.view = view
+        self.per_page = per_page
       end
 
-      def merge(where: {}, limit: nil, offset: nil, view: nil)
+      def merge(where: {}, limit: nil, offset: nil, view: nil, per_page: nil)
         Constraints.new(where: where.merge(where),
                         limit: limit || self.limit,
+                        per_page: per_page || self.per_page,
                         offset: offset || self.offset,
                         view: view || self.view)
+      end
+
+      def next_page
+        merge(offset: offset + per_page)
       end
 
       def to_query
@@ -21,7 +27,7 @@ module Nylas
           query[name] = value
           query
         end
-        query[:limit] = limit unless limit.nil?
+        query[:limit] = !limit.nil? && limit < per_page ? limit : per_page 
         query[:offset] = offset unless offset.nil?
         query[:view] = view unless view.nil?
         query

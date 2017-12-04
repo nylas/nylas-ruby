@@ -59,8 +59,32 @@ module Nylas
       end
 
       # Iterates over every result that meets the filters, retrieving a page at a time
-      def find_each
-        raise NotImplementedError, 'Finish this before 4.0.0'
+      def find_each(&block)
+        return enum_for(:find_each) unless block_given?
+        accumulated = []
+        accumulating = true
+        query = self
+        while true
+          results = query.execute.compact
+          results.each do |result|
+            instance = model.from_hash(result, api: api)
+            yield instance
+            accumulated.push(instance)
+          end
+          return accumulated unless more_pages?(accumulated, results)
+          query = query.next_page
+        end
+      end
+
+      def next_page
+        self.class.new(model: model, api: api, constraints: constraints.next_page)
+      end
+
+      def more_pages?(accumulated, current_page)
+        return false if current_page.empty?
+        return false if constraints.limit && accumulated.length >= constraints.limit
+        return false if constraints.per_page && current_page.length < constraints.per_page
+        true
       end
 
       # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
