@@ -9,6 +9,29 @@ describe Nylas::Message do
     @inbox = Nylas::API.new(@app_id, @app_secret, @access_token)
   end
 
+  describe "#date=" do
+    it "casts the date object to a string for backwards compatibility reasons" do
+      msg = Nylas::Message.new(@inbox)
+      msg.date = Date.parse('2017-01-01')
+      expect(msg.date).to eql Date.parse('2017-01-01').strftime('%s').to_i
+    end
+  end
+
+  describe '#parsed_date' do
+    it "exposes the `date` field as a true ruby date object" do
+      msg = Nylas::Message.new(@inbox)
+      msg.date = '2017-01-01 01:00:00Z'
+      expect(msg.parsed_date).to eql DateTime.parse('2017-01-01 01:00:00Z')
+    end
+
+
+    it "supports dates set as unix timestamps" do
+      msg = Nylas::Message.new(@inbox)
+      msg.date = 1511305289
+      expect(msg.parsed_date).to eql Time.at(msg.date).to_datetime
+    end
+  end
+
   describe "#as_json" do
     it "doesn't send the the labels ids if the labels are empty" do
       labels = []
