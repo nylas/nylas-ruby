@@ -5,5 +5,7 @@ require 'faker'
 require 'method_source'
 def demonstrate(&block)
   block.source.display
-  puts "# => #{block.call}"
+  result = block.call
+  puts "# => #{result}"
+  result
 end

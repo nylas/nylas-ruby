@@ -22,12 +22,18 @@ module Nylas
       end
 
       def update(**data)
-        attributes.merge(data)
+        attributes.merge(**data)
         api.execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
+        true
+      end
+
+      def reload
+        attributes.merge(api.execute(method: :get, path: resource_path))
+        true
       end
 
       def resource_path
-        self.class.resource_path(id)
+        "#{resources_path}/#{id}"
       end
 
       def resources_path
@@ -46,12 +52,11 @@ module Nylas
       module ClassMethods
         attr_accessor :resources_path
 
-        def resource_path(id)
-          "#{resources_path}/#{id}"
+        def from_json(json, api:)
+          from_hash(JSON.parse(json, symbolize_names: true), api: api)
         end
 
-        def from_json(json, api:)
-          data = JSON.parse(json, symbolize_names: true)
+        def from_hash(data, api:)
           instance = new(**data)
           instance.api = api
           instance

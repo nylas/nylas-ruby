@@ -39,7 +39,6 @@ module Nylas
             attributes
           end
         end
-
       end
 
       class ValueType
@@ -77,7 +76,6 @@ module Nylas
         end
       end
       Types.registry[:string] = StringType.new
-
     end
   end
 end

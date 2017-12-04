@@ -7,6 +7,7 @@ module Nylas
       attribute :street_address, :string
       attribute :postal_code, :string
       attribute :state, :string
+      attribute :city, :string
       attribute :country, :string
     end
 
