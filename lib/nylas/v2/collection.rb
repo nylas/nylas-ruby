@@ -42,6 +42,10 @@ module Nylas
         end
       end
 
+      def to_a
+        each.to_a
+      end
+
       def map(&block)
         each.map(&block)
       end
