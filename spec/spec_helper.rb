@@ -1,4 +1,6 @@
-::ENV['RACK_ENV'] ||= 'test'
+require 'simplecov'
+SimpleCov.start
+
 
 require 'nylas-streaming'
 require 'webmock/rspec'

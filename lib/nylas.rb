@@ -11,22 +11,6 @@ require_relative 'nylas/to_query'
 
 require_relative 'nylas/types_filter'
 
-require 'nylas/account'
-require 'nylas/api_account'
-require 'nylas/thread'
-require 'nylas/calendar'
-require 'nylas/account'
-require 'nylas/message'
-require 'nylas/expanded_message'
-require 'nylas/draft'
-require 'nylas/contact'
-require 'nylas/file'
-require 'nylas/calendar'
-require 'nylas/event'
-require 'nylas/folder'
-require 'nylas/label'
-require 'nylas/restful_model'
-require 'nylas/restful_model_collection'
 require 'nylas/version'
 
 require 'nylas/v2'
@@ -34,25 +18,6 @@ require 'nylas/v2'
 require_relative 'nylas/api'
 
 module Nylas
-  OBJECTS_TABLE = {
-    "account" => Nylas::Account,
-    "calendar" => Nylas::Calendar,
-    "draft" => Nylas::Draft,
-    "thread" => Nylas::Thread,
-    "contact" => Nylas::Contact,
-    "event" => Nylas::Event,
-    "file" => Nylas::File,
-    "message" => Nylas::Message,
-    "folder" => Nylas::Folder,
-    "label" => Nylas::Label,
-  }
-
-  # It's possible to ask the API to expand objects.
-  # In this case, we do the right thing and return
-  # an expanded object.
-  EXPANDED_OBJECTS_TABLE = {
-    "message" => Nylas::ExpandedMessage,
-  }
   Error = Class.new(::StandardError)
   NoAuthToken = Class.new(Error)
   UnexpectedAccountAction = Class.new(Error)
@@ -90,12 +55,4 @@ module Nylas
     502 => BadGateway,
     503 => ServiceUnavailable,
   }.freeze
-
-  def self.http_code_to_exception(http_code)
-    API.http_code_to_exception(http_code)
-  end
-
-  def self.interpret_response(result, result_content, options = {})
-    return API.interpret_response(result, result_content, options)
-  end
 end

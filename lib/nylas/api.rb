@@ -171,87 +171,11 @@ module Nylas
       end
     end
 
-    # API Methods
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def threads
-      @threads ||= RestfulModelCollection.new(Thread, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def messages(expanded: false)
-      @messages ||= Hash.new do |h, is_expanded|
-        h[is_expanded] = \
-          if is_expanded
-            RestfulModelCollection.new(ExpandedMessage, self, view: 'expanded')
-        else
-          RestfulModelCollection.new(Message, self)
-        end
-      end
-      @messages[expanded]
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def files
-      @files ||= RestfulModelCollection.new(File, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
     def contacts
       if api_version == "2"
         @contants ||= V2::Collection.new(model: V2::Contact, api:self)
       else
-        @contacts ||= RestfulModelCollection.new(Contact, self)
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def calendars
-      @calendars ||= RestfulModelCollection.new(Calendar, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def events
-      @events ||= RestfulModelCollection.new(Event, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def folders
-      @folders ||= RestfulModelCollection.new(Folder, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def labels
-      @labels ||= RestfulModelCollection.new(Label, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def account
-      url = self.url_for_path("/account")
-
-      get(url: url) do |response, _request, result|
-        json = API.interpret_response(result, response, expected_class: Object)
-        model = APIAccount.new(self)
-        model.inflate(json)
-        model
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def using_hosted_api?
-      return !@app_id.nil?
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def accounts
-      if self.using_hosted_api?
-        @accounts ||= ManagementModelCollection.new(Account, self)
-      else
-        @accounts ||= RestfulModelCollection.new(APIAccount, self)
+        @contants ||= V2::Collection.new(model: V1::Contact, api:self)
       end
     end
 
@@ -269,26 +193,6 @@ module Nylas
 
       cursor
     end
-
-    OBJECTS_TABLE = {
-      "account" => Nylas::Account,
-      "calendar" => Nylas::Calendar,
-      "draft" => Nylas::Draft,
-      "thread" => Nylas::Thread,
-      "contact" => Nylas::Contact,
-      "event" => Nylas::Event,
-      "file" => Nylas::File,
-      "message" => Nylas::Message,
-      "folder" => Nylas::Folder,
-      "label" => Nylas::Label,
-    }
-
-    # It's possible to ask the API to expand objects.
-    # In this case, we do the right thing and return
-    # an expanded object.
-    EXPANDED_OBJECTS_TABLE = {
-      "message" => Nylas::ExpandedMessage,
-    }
 
     # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
     def deltas(cursor, exclude_types=[], expanded_view=false, include_types=[])
