@@ -89,6 +89,8 @@ module Nylas
       also_log: { result: true, values: [:method, :url, :headers, :payload] }
 
 
+
+
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
     def get(path: nil, url: nil, headers: {}, query: {})
@@ -113,6 +115,7 @@ module Nylas
       execute(method: :delete, path: path, url: url, headers: headers, query: query)
     end
 
+    # @return [Collection] A collection of Contacts, whose schema is dependent on API version
     def contacts
       if api_version == "2"
         @contants ||= Collection.new(model: V2::Contact, api:self)
@@ -121,7 +124,12 @@ module Nylas
       end
     end
 
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
+    private def url_for_path(path)
+      raise NoAuthToken.new if @access_token == nil and (@app_secret != nil or @app_id != nil)
+      protocol, domain = @api_server.split('//')
+      "#{protocol}//#{@access_token}:@#{domain}#{path}"
+    end
+
     private def handle_failed_response(result: , response:, request:)
       http_code = result.code.to_i
 
