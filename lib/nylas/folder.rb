@@ -1,4 +1,4 @@
-require 'restful_model'
+require 'nylas/restful_model'
 
 module Nylas
   class Folder < RestfulModel
@@ -7,6 +7,4 @@ module Nylas
     parameter :name
 
   end
-
-  Label = Folder.clone
 end

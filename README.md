@@ -1,5 +1,7 @@
 # Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=3.X-master)
 
+This README is for the Nylas Ruby SDK version 4. For those who are still using Nylas Ruby SDK Version 3, the documentation and source code is located in the [3.X-master branch](https://github.com/nylas/nylas-ruby/tree/3.X-master)
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -29,6 +31,9 @@ gem install nylas
 - Ruby 2.2.2 or above.
 - rest-client, json, yajl-ruby, em-http-request
 
+### Supported Rails Versions
+
+We support Rails 4.2 and above. A more detailed compatiblity list can be found in our [list of Gemfiles](gemfiles)
 
 ## Examples
 
@@ -176,6 +181,12 @@ nylas.threads.where(:any_email => 'ben@nylas.com').each do |thread|
   puts thread.subject
 end
 
+# Get all the threads that match a given query. See
+# https://docs.nylas.com/reference#search for how search queries are structured.
+nylas.threads.search("a query").each do  |thread|
+  puts thread.subject
+end
+
 # Get number of all threads
 count = nylas.threads.count
 
@@ -234,6 +245,7 @@ thread.save!
 # List messages
 thread.messages.each do |message|
   puts message.subject
+  puts message.events
 end
 
 # List expanded messages (with Message-Id, In-Reply-To and References fields)
@@ -318,6 +330,7 @@ If you've building your own threading solution, you'll probably need access to a
 
 ```ruby
 msg = nylas.messages.first
+puts msg.events
 expanded_message = msg.expanded
 puts expanded_message.message_id
 puts expanded_message.references

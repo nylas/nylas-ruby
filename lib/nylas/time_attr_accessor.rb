@@ -4,7 +4,7 @@ module Nylas
       parameter attr
       define_method "#{attr}=" do |value|
         if value
-            instance_variable_set "@#{attr}", Time.at(value).utc
+          model_state[attr] = Time.at(value).utc
         end
       end
     end

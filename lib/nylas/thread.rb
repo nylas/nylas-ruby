@@ -1,6 +1,6 @@
-require 'restful_model'
-require 'time_attr_accessor'
-require 'mixins'
+require 'nylas/restful_model'
+require 'nylas/time_attr_accessor'
+require 'nylas/mixins'
 
 module Nylas
   class Thread < RestfulModel
@@ -26,21 +26,21 @@ module Nylas
 
     def inflate(json)
       super
-      @labels ||= []
-      @folder ||= nil
+      self.labels ||= []
+      self.folder ||= nil
 
       # This is a special case --- we receive label data from the API
       # as JSON but we want it to behave like an API object.
-      @labels.map! do |label_json|
+      self.labels.map! do |label_json|
        label = Label.new(@_api)
        label.inflate(label_json)
        label
       end
 
       if not folder.nil? and folder.is_a?(Hash)
-       folder = Folder.new(@_api)
-       folder.inflate(@folder)
-       @folder = folder
+        inflated_folder = Folder.new(@_api)
+        inflated_folter.inflate(folder_hash)
+        self.folder = inflated_folder
       end
     end
 
@@ -48,41 +48,40 @@ module Nylas
       @messages ||= Hash.new do |h, is_expanded|
         h[is_expanded] = \
           if is_expanded
-            RestfulModelCollection.new(ExpandedMessage, @_api, thread_id: @id, view: 'expanded')
+            RestfulModelCollection.new(ExpandedMessage, @_api, thread_id: id, view: 'expanded')
           else
-            RestfulModelCollection.new(Message, @_api, thread_id: @id)
+            RestfulModelCollection.new(Message, @_api, thread_id: id)
           end
       end
       @messages[expanded]
     end
 
     def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, @_api, {:thread_id=>@id})
+      @drafts ||= RestfulModelCollection.new(Draft, @_api, {:thread_id=> id})
     end
 
     def as_json(options = {})
       hash = {}
 
-      if not @unread.nil?
-        hash["unread"] = @unread
+      if not unread.nil?
+        hash["unread"] = unread
       end
 
-      if not @starred.nil?
-        hash["starred"] = @starred
+      if not starred.nil?
+        hash["starred"] = starred
       end
 
-      if not @labels.nil? and @labels != []
-        hash["label_ids"] = @labels.map do |label|
+      if not labels.nil? and !labels.empty?
+        hash["label_ids"] = labels.map do |label|
           label.id
         end
       end
 
-      if not @folder.nil?
-        hash["folder_id"] = @folder.id
+      if not folder.nil?
+        hash["folder_id"] = folder.id
       end
 
       hash
     end
-
   end
 end

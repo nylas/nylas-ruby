@@ -1,4 +1,4 @@
-require 'draft'
+require 'nylas/draft'
 
 describe Nylas::Draft do
   before (:each) do
@@ -12,9 +12,7 @@ describe Nylas::Draft do
   describe "#save!" do
     it "does save all the fields of the draft object and only sends the required JSON" do
 
-      stub_request(:post, "https://api.nylas.com/drafts/").
-        with(basic_auth: [@access_token],
-        :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null,"tracking":null}',).to_return(:status => 200,
+      stub_request(:post, "https://api.nylas.com/drafts/").to_return(:status => 200,
             :body => File.read('spec/fixtures/draft_save.txt'),
             :headers => {"Content-Type" => "application/json"})
 
@@ -26,6 +24,11 @@ describe Nylas::Draft do
       expect(draft.id).to be nil
 
       result = draft.save!
+
+      expect(a_request(:post, "https://api.nylas.com/drafts/").with(
+        body: '{"subject":"Test draft","account_id":"nnnnnnn","to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}]}',
+      )).to have_been_made
+
       expect(result.id).to_not be nil
 
       # Check that calling send! with a saved draft only sends the draft_id and version:
@@ -40,8 +43,8 @@ describe Nylas::Draft do
 
   describe "#send!" do
     it "sends all the JSON fields when sending directly" do
-      stub_request(:post, "https://api.nylas.com/send").
-         with(basic_auth: [@access_token], :body => '{"id":null,"account_id":"nnnnnnn","cursor":null,"created_at":null,"subject":"Test draft","snippet":null,"from":null,"to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}],"cc":null,"bcc":null,"date":null,"thread_id":null,"body":null,"unread":null,"starred":null,"folder":null,"labels":null,"version":null,"reply_to_message_id":null,"file_ids":null,"tracking":null}').to_return(:status => 200,
+      stub_request(:post, "https://api.nylas.com/send").to_return(
+                 :status => 200,
                  :body => File.read('spec/fixtures/send_endpoint.txt'),
                  :headers => {"Content-Type" => "application/json"})
 
@@ -53,6 +56,10 @@ describe Nylas::Draft do
       expect(draft.id).to be nil
 
       result = draft.send!
+      expect(a_request(:post, "https://api.nylas.com/send").with(
+             body: '{"subject":"Test draft","account_id":"nnnnnnn","to":[{"name":"Helena Handbasket","email":"helena@nylas.com"}],"reply_to":[{"name":"Reply To","email":"replyto@nylas.com"}]}'
+            )).to have_been_made
+
       expect(result.id).to_not be nil
       expect(result.snippet).to_not be ""
     end

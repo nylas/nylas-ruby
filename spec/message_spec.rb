@@ -1,5 +1,5 @@
-require 'message'
-require 'folder'
+require 'nylas/message'
+require 'nylas/folder'
 
 describe Nylas::Message do
   before (:each) do
@@ -10,6 +10,41 @@ describe Nylas::Message do
   end
 
   describe "#as_json" do
+    it "doesn't send the the labels ids if the labels are empty" do
+      labels = []
+      message = Nylas::Message.new(@inbox)
+      message.labels = labels
+      expect(message.as_json).not_to have_key("label_ids")
+    end
+
+    it "raises a useful error of the labels are set but don't respond to id" do
+      labels = [double(anything_that_doesnt_respond_to_id: nil)]
+      message = Nylas::Message.new(@inbox)
+      message.labels = labels
+      expect { message.as_json }.to raise_error(TypeError, "label #{labels.first} does not respond to #id")
+    end
+
+    it "doesn't send the folder id when folder is nil" do
+      folder = nil
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect(message.as_json).not_to have_key("folder_id")
+    end
+
+    it "sends the folders id when folder is an object that responds to id" do
+      folder = double(id: :some_id)
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect(message.as_json["folder_id"]).to eql :some_id
+    end
+
+    it "raises a useful error if folder is not nil or it doesn't respond to id" do
+      folder = double(anything_that_doesnt_respond_to_id: nil)
+      message = Nylas::Message.new(@inbox)
+      message.folder = folder
+      expect { message.as_json }.to raise_error(TypeError, "folder #{folder} does not respond to #id")
+    end
+
     it "only includes starred, unread and labels/folder info" do
       msg = Nylas::Message.new(@inbox)
       msg.subject = 'Test message'
@@ -38,7 +73,6 @@ describe Nylas::Message do
       expect(dict.length).to eq(1)
       expect(dict['labels']).to eq(nil)
       expect(dict['folder_id']).to eq('test label')
-
     end
   end
 
@@ -86,6 +120,65 @@ describe Nylas::Message do
       expanded = msg.expanded
       expect(expanded.message_id).to eq('<55afa28c.c136460a.49ae.ffff80fd@mx.google.com>')
       expect(expanded.in_reply_to).to be_nil
+    end
+  end
+
+
+  describe "#events" do
+    it "casts passed in event data to Nylas::Event objects" do
+      msg = Nylas::Message.new(@inbox)
+      msg.inflate({ "events" => [{"id" => "12345" }] })
+      expect(msg.events.first).to be_a Nylas::Event
+      expect(msg.events.first.id).to eql "12345"
+    end
+
+    it "raises a friendly error if event data can't be cast to `Nylas::Event`s" do
+      msg = Nylas::Message.new(@inbox)
+      non_event=double(:something_that_cant_be_cast_to_an_event)
+      expect { msg.inflate({"events" => [non_event] }) }.to raise_error(TypeError, "unable to cast #{non_event} to an event.")
+    end
+
+    it "raises a friendly error if we can't map over the passed in event data" do
+      msg = Nylas::Message.new(@inbox)
+      non_enumerable=double(:something_that_cannot_be_mapped)
+      expect { msg.inflate({ "events" => non_enumerable })}.to raise_error(TypeError, "unable to iterate over #{non_enumerable}, events must respond to #map")
+    end
+
+    it "sets the state directly if the passed in data quacks like a collection of Nylas::Event" do
+      msg = Nylas::Message.new(@inbox)
+      realish_events = [double(id: "I could be considered an event")]
+      msg.inflate({ "events" => realish_events })
+
+      expect(msg.events).to eql realish_events
+    end
+  end
+
+  describe "#events?" do
+    it "is false if no events are inflated" do
+      msg = Nylas::Message.new(@inbox)
+      expect(msg.events?).to be_falsey
+    end
+
+    it "is false if an empty set of events are inflated" do
+      msg = Nylas::Message.new(@inbox)
+      msg.inflate({ "events" => [] })
+      expect(msg.events?).to be_falsey
+    end
+
+    it "is true if events are inflated" do
+      msg = Nylas::Message.new(@inbox)
+      msg.inflate({ "events" => [{"id" => "12345" }] })
+      expect(msg.events?).to be_truthy
+    end
+  end
+
+  describe "#files" do
+    it "is a Restful model collection for retrieving events scoped to the message" do
+      msg = Nylas::Message.new(@inbox)
+      msg.inflate({'id' => '1234', 'files' => ['1', '2']})
+      expect(msg.files.model_class).to eql Nylas::File
+      expect(msg.files.filters).to eql({ message_id: '1234' })
+      expect(msg.files._api).to eql @inbox
     end
   end
 

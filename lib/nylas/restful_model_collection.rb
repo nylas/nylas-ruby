@@ -1,15 +1,22 @@
-require 'restful_model'
+require 'nylas/restful_model'
 
 module Nylas
   class RestfulModelCollection
 
-    attr_accessor :filters
+    attr_accessor :filters, :_api, :model_class
+
+    SEARCHABLE_COLLECTIONS = [ Nylas::Thread, Nylas::Message ]
 
     def initialize(model_class, api, filters = {})
       raise StandardError.new unless api.class <= Nylas::API
       @model_class = model_class
       @filters = filters
       @_api = api
+    end
+
+    def search(query)
+      raise NameError, "Only #{SEARCHABLE_COLLECTIONS} searchable" unless SEARCHABLE_COLLECTIONS.include?(@model_class)
+      get_model_collection(search: query)
     end
 
     def each
@@ -23,10 +30,10 @@ module Nylas
     end
 
     def count
-      RestClient.get(url, params: @filters.merge(view: 'count')) { |response,request,result|
-        json = Nylas.interpret_response(result, response)
-        return json['count']
-      }
+      params = @filters.merge(view: 'count')
+      @_api.get(url, params: params) do |response, _request, result|
+        Nylas.interpret_response(result, response)['count']
+      end
     end
 
     def first
@@ -55,7 +62,7 @@ module Nylas
 
     def range(offset = 0, limit = 100)
 
-      accumulated = get_model_collection(offset, limit)
+      accumulated = get_model_collection(offset: offset, limit: limit)
 
       accumulated = accumulated[0..limit] if limit < Float::INFINITY
       accumulated
@@ -63,7 +70,7 @@ module Nylas
 
     def delete(item_or_id)
       item_or_id = item_or_id.id if item_or_id.is_a?(RestfulModel)
-      RestClient.delete("#{url}/#{item_or_id}")
+      @_api.delete("#{url}/#{item_or_id}")
     end
 
     def find(id)
@@ -100,27 +107,32 @@ module Nylas
       @_api.url_for_path("/#{@model_class.collection_name}")
     end
 
+    def search_url
+      @_api.url_for_path("/#{@model_class.collection_name}/search")
+    end
+
     private
 
     def get_model(id)
       model = nil
 
-      RestClient.get("#{url}/#{id}"){ |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      @_api.get("#{url}/#{id}") do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         if @model_class < RestfulModel
           model = @model_class.new(@_api)
           model.inflate(json)
         else
           model = @model_class.new(json)
         end
-      }
+      end
       model
     end
 
-    def get_model_collection(offset = nil, limit = nil, pagination_options = { per_page: 100 })
+    def get_model_collection(search: nil,offset: nil, limit: nil, per_page: 100)
       filters = @filters.clone
       filters[:offset] = offset || filters[:offset] || 0
       filters[:limit] = limit || filters[:limit] || 100
+      filters[:q] = search unless search.nil?
 
       accumulated = []
 
@@ -128,23 +140,24 @@ module Nylas
 
       current_calls_filters = filters.clone
       while (!finished) do
-        current_calls_filters[:limit] = pagination_options[:per_page] > filters[:limit] ? filters[:limit] : pagination_options[:per_page]
-        RestClient.get(url, :params => current_calls_filters) do |response, request, result|
+        current_calls_filters[:limit] = per_page > filters[:limit] ? filters[:limit] : per_page
+        endpoint = filters.key?(:q) ? search_url : url
+        @_api.get(endpoint, params: current_calls_filters) do |response, _request, result|
           items = Nylas.interpret_response(result, response, { :expected_class => Array })
           new_items = inflate_collection(items)
           yield new_items if block_given?
           accumulated = accumulated.concat(new_items)
-          finished = no_more_pages?(accumulated, items, filters, pagination_options)
+          finished = no_more_pages?(accumulated, items, filters, per_page)
         end
 
-        current_calls_filters[:offset] += pagination_options[:per_page]
+        current_calls_filters[:offset] += per_page
       end
 
       accumulated
     end
 
-    def no_more_pages?(accumulated, items, filters, pagination_options)
-      accumulated.length >= filters[:limit] || items.length < pagination_options[:per_page]
+    def no_more_pages?(accumulated, items, filters, per_page)
+      accumulated.length >= filters[:limit] || items.length < per_page
     end
   end
 

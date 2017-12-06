@@ -4,6 +4,22 @@ describe Nylas::RestfulModelCollection do
   let(:app_secret) { '123' }
   let(:access_token) { 'UXXMOCJW-BKSLPCFI-UQAQFWLO' }
 
+  describe "#search" do
+    it 'retrieves data from the search endpoint for the correct model' do
+      stub_request(:get, /threads\/search/).
+        to_return(:status => 200,
+                  :body => File.read('spec/fixtures/threads_reply.txt'),
+                  :headers => {'Content-Type' => 'application/json'})
+      threads = api.threads.search("that important series of messages")
+
+      assert_requested :get, "https://api.nylas.com/threads/search", query: { limit: 100, offset: 0, q: "that important series of messages" }
+    end
+
+    it 'Lets the user know if the model they they are using doesnt support search' do
+      expect { api.events.search("that amazing party") }.to raise_error(NameError)
+    end
+  end
+
   describe '#each' do
     context 'when there is a single page' do
       before do

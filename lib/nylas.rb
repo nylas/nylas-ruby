@@ -1,28 +1,26 @@
 require 'json'
 require 'rest-client'
-require 'yajl'
-require 'em-http'
-
 
 require 'ostruct'
-require 'active_support/core_ext/hash'
+require_relative 'nylas/to_query'
 
-require 'account'
-require 'api_account'
-require_relative 'thread'
-require 'calendar'
-require 'account'
-require 'message'
-require 'expanded_message'
-require 'draft'
-require 'contact'
-require 'file'
-require 'calendar'
-require 'event'
-require 'folder'
-require 'restful_model'
-require 'restful_model_collection'
-require 'version'
+require 'nylas/account'
+require 'nylas/api_account'
+require 'nylas/thread'
+require 'nylas/calendar'
+require 'nylas/account'
+require 'nylas/message'
+require 'nylas/expanded_message'
+require 'nylas/draft'
+require 'nylas/contact'
+require 'nylas/file'
+require 'nylas/calendar'
+require 'nylas/event'
+require 'nylas/folder'
+require 'nylas/label'
+require 'nylas/restful_model'
+require 'nylas/restful_model_collection'
+require 'nylas/version'
 
 module Nylas
   Error = Class.new(::StandardError)
@@ -111,13 +109,32 @@ module Nylas
       @app_id = app_id
       @service_domain = service_domain
       @version = Nylas::VERSION
+      @default_headers = {
+        'X-Nylas-API-Wrapper' => 'ruby',
+        'User-Agent' => "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}"
+      }
+    end
 
-      if ::RestClient.before_execution_procs.empty?
-        ::RestClient.add_before_execution_proc do |req, params|
-          req.add_field('X-Nylas-API-Wrapper', 'ruby')
-          req['User-Agent'] = "Nylas Ruby SDK #{@version} - #{RUBY_VERSION}"
-        end
-      end
+    def get(url, headers = {}, &block)
+      execute(:get, url, headers: headers, &block)
+    end
+
+    def post(url, payload, headers = {}, &block)
+      execute(:post, url, headers: headers, payload: payload, &block)
+    end
+
+    def delete(url, payload = nil, headers = {}, &block)
+      execute(:delete, url, headers: headers, payload: payload, &block)
+    end
+
+    def execute(method, url, headers: nil, payload: nil, &block)
+      ::RestClient::Request.execute(
+        method: method,
+        url: url,
+        payload: payload,
+        headers: @default_headers.merge(headers),
+        &block
+      )
     end
 
     def url_for_path(path)
@@ -140,12 +157,12 @@ module Nylas
         params[:state] = options[:state]
       end
 
-      "https://#{@service_domain}/oauth/authorize?" + params.to_query
+      "https://#{@service_domain}/oauth/authorize?" + ToQuery.new(params).to_s
     end
 
     def url_for_management
       protocol, domain = @api_server.split('//')
-      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts"
+      accounts_path = "#{protocol}//#{app_secret}:@#{domain}/a/#{app_id}/accounts"
     end
 
     def set_access_token(token)
@@ -160,8 +177,8 @@ module Nylas
           'code' => code
       }
 
-      ::RestClient.post("https://#{@service_domain}/oauth/token", data) do |response, request, result|
-        json = Nylas.interpret_response(result, response, :expected_class => Object)
+      post("https://#{@service_domain}/oauth/token", data) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         return json['access_token']
       end
     end
@@ -214,8 +231,8 @@ module Nylas
     def account
       path = self.url_for_path("/account")
 
-      RestClient.get(path, {}) do |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      get(path) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         model = APIAccount.new(self)
         model.inflate(json)
         model
@@ -240,8 +257,8 @@ module Nylas
 
       cursor = nil
 
-      RestClient.post(path, :content_type => :json) do |response,request,result|
-        json = Nylas.interpret_response(result, response, {:expected_class => Object})
+      post(path, content_type: :json) do |response, _request, result|
+        json = Nylas.interpret_response(result, response, expected_class: Object)
         cursor = json["cursor"]
       end
 
@@ -298,8 +315,8 @@ module Nylas
 
         json = nil
 
-        RestClient.get(path) do |response,request,result|
-          json = Nylas.interpret_response(result, response, {:expected_class => Object})
+        get(path) do |response, _request, result|
+          json = Nylas.interpret_response(result, response, expected_class: Object)
         end
 
         start_cursor = json["cursor_start"]
@@ -334,56 +351,6 @@ module Nylas
       end
     end
 
-    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false, include_types=[])
-      raise 'Please provide a block for receiving the delta objects' if !block_given?
-
-      exclude_string = _build_types_filter_string(:exclude, exclude_types)
-      include_string = _build_types_filter_string(:include, include_types)
-
-      # loop and yield deltas indefinitely.
-      path = self.url_for_path("/delta/streaming?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
-      if expanded_view
-        path += '&view=expanded'
-      end
-
-      parser = Yajl::Parser.new(:symbolize_keys => false)
-      parser.on_parse_complete = proc do |data|
-        delta = Nylas.interpret_response(OpenStruct.new(:code => '200'), data, {:expected_class => Object, :result_parsed => true})
-
-        if not OBJECTS_TABLE.has_key?(delta['object'])
-          next
-        end
-
-        cls = OBJECTS_TABLE[delta['object']]
-        if EXPANDED_OBJECTS_TABLE.has_key?(delta['object']) and expanded_view
-          cls = EXPANDED_OBJECTS_TABLE[delta['object']]
-        end
-
-        obj = cls.new(self)
-
-        case delta["event"]
-          when 'create', 'modify'
-            obj.inflate(delta['attributes'])
-            obj.cursor = delta["cursor"]
-            yield delta["event"], obj
-          when 'delete'
-            obj.id = delta["id"]
-            obj.cursor = delta["cursor"]
-            yield delta["event"], obj
-        end
-      end
-
-      http = EventMachine::HttpRequest.new(path, :connect_timeout => 0, :inactivity_timeout => timeout).get(:keepalive => true)
-
-      # set a callback on the HTTP stream that parses incoming chunks as they come in
-      http.stream do |chunk|
-        parser << chunk
-      end
-
-      http.errback do
-        raise UnexpectedResponse.new http.error
-      end
-
-    end
+    require 'nylas/api/delta_stream'
   end
 end
