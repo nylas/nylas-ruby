@@ -24,13 +24,13 @@ end
 
 
 def login
-    nylas = Nylas::API.new(APP_ID, APP_SECRET, nil)
+    nylas = Nylas::API.new(app_id: APP_ID, app_secret: APP_SECRET)
     nylas.url_for_authentication(CALLBACK_URL, nil)
 end
 
 
 def get_token
-    nylas = Nylas::API.new(APP_ID, APP_SECRET, nil)
+    nylas = Nylas::API.new(app_id: APP_ID, app_secret: APP_SECRET)
     nylas.token_for_code(params[:code])
 end
 
@@ -40,7 +40,7 @@ get '/' do
     # Redirect to login if session doesn't have an access token
     redirect to(login) unless session[:nylas_token]
 
-    nylas = Nylas::API.new(APP_ID, APP_SECRET, session[:nylas_token])
+    nylas = Nylas::API.new(app_id: APP_ID, app_secret: APP_SECRET, access_token: session[:nylas_token])
 
     # Get the first five threads for the account.
     recent_emails = []

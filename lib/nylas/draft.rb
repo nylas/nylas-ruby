@@ -32,7 +32,7 @@ module Nylas
         data = as_json()
       end
 
-      @_api.post(url, data.to_json, :content_type => :json) do |response, request, result|
+      @_api.post(url: url, payload: data.to_json, headers: { content_type: :json }) do |response, request, result|
         response = Nylas.interpret_response(result, response, expected_class: Object)
         self.inflate(response)
       end
@@ -42,7 +42,7 @@ module Nylas
 
     def destroy
       payload = { version: version }.to_json
-      @_api.delete(url, payload) do |response, _request, result|
+      @_api.delete(url: url, payload: payload) do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)
       end
     end

@@ -13,9 +13,9 @@ module Nylas
 
       collection = ManagementModelCollection.new(Account, @_api, {:account_id=>@account_id})
       url = "#{collection.url}/#{@account_id}/#{action}"
-      @_api.post(url,{}) do |response, _request, result|
+      @_api.post(url: url, payload: {}) do |response, _request, result|
           # Throw any exceptions
-        Nylas.interpret_response(result, response, expected_class: Object)
+        API.interpret_response(result, response, expected_class: Object)
       end
     end
 

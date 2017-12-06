@@ -5,6 +5,5 @@ module Nylas
 
     parameter :name
     parameter :email
-
   end
 end

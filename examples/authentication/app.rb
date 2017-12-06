@@ -159,7 +159,7 @@ get  '/' do
   end
 
   # Account has been setup, let's use Nylas' ruby SDK to retrieve an email
-  nylas = Nylas::API.new(NYLAS_CLIENT_ID, NYLAS_CLIENT_SECRET, session[:nylas_access_token])
+  nylas = Nylas::API.new(app_id: NYLAS_CLIENT_ID, app_secret: NYLAS_CLIENT_SECRET, access_token: session[:nylas_access_token])
 
   # Get the first thread for the account.
   recent_emails = []

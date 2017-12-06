@@ -19,7 +19,7 @@ module Nylas
     end
 
     def save!
-      @_api.post(url, {:file => @file}) do |response, request, result|
+      @_api.post(url: url, payload: {:file => @file}) do |response, request, result|
         json = Nylas.interpret_response(result, response, expected_class: Object)
         json = json[0] if (json.class == Array)
         inflate(json)
@@ -29,7 +29,7 @@ module Nylas
 
     def download
       download_url = self.url('download')
-      @_api.get(download_url) do |response, _request, result|
+      @_api.get(url: download_url) do |response, _request, result|
         Nylas.interpret_response(result, response, raw_response: true)
       end
     end

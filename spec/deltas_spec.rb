@@ -1,7 +1,7 @@
 require 'nylas/event'
 
 describe Nylas::API do
-  subject(:inbox) { Nylas::API.new(app_id, app_secret, access_token) }
+  subject(:inbox) { Nylas::API.new(app_id: app_id, app_secret: app_secret, access_token: access_token) }
   let(:nth_cursor) { 'a9vtneydekzye7uwfumdd4iu3' }
   let(:app_id) { 'ABC' }
   let(:app_secret) { '123' }
