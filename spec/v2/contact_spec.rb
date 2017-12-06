@@ -27,7 +27,7 @@ describe Nylas::V2::Contact do
       contact.update(given_name: "Given", birthday: "2017-01-01",
                      email_addresses: [
                        { type: 'work', email: 'given@other-job.example.com' },
-                       Nylas::V2::EmailAddress.new(type: 'home', email: 'given@other-home.example.com')
+                       Nylas::EmailAddress.new(type: 'home', email: 'given@other-home.example.com')
                       ])
       expect(contact.given_name).to eql "Given"
 
