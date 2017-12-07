@@ -62,27 +62,20 @@ module Nylas
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [String Array Hash Nylas::V2::Model Nylas::V2::Collection Nylas::RestfulModel
     #          Nylas::RestfulModelCollection]
-    # @yield (response, request, result) Pass through of {RestClient::Request.execute. See the RestClient
-    #                                    gem's documentation for your particular version for details.
-    # @yieldreturn [Array Hash Nylas::V2::Model Nylas::V2::Collection Nylas::RestfulModel Nylas::RestfulModelCollection]
-    #   This depends on the context of the caller, the legacy SDK will likely return
-    #   {Nylas::RestfulModel} or a {Nylas::RestfulModelCollection}, the modernized SDK will return a
-    #   {Nylas::V2::Model} or a {Nylas::V2::Collection}, while those calling this directly will want likely
-    #   return Array's of Hashes with symbols for keys.
-    def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil, &block)
+    def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil)
       headers[:params] = query
       url = url || url_for_path(path)
       resulting_headers = @default_headers.merge(headers)
       rest_client_execute(method: method, url: url, payload: payload,
                           headers: resulting_headers) do |response, request, result|
-        self.class.raise_exception_for_failed_request(result: result, response: response, request: request)
-        if block_given?
-          yield(response, request, result)
-        elsif method == :delete
-          response
-        else
-          JSON.parse(response, symbolize_names: true)
-        end
+
+        response = begin
+                     response.kind_of?(Enumerable) ? response : JSON.parse(response, symbolize_names: true)
+                   rescue JSON::ParserError
+                     response
+                   end
+        handle_failed_response(result: result, response: response, request: request)
+        response
       end
     end
     inform_on :execute, level: :debug,
@@ -96,294 +89,52 @@ module Nylas
       also_log: { result: true, values: [:method, :url, :headers, :payload] }
 
 
+
+
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
-    def get(path: nil, url: nil, headers: {}, query: {}, &block)
-      execute(method: :get, path: path, query: query, url: url, headers: headers, &block)
+    def get(path: nil, url: nil, headers: {}, query: {})
+      execute(method: :get, path: path, query: query, url: url, headers: headers)
     end
 
     # Syntactical sugar for making POST requests via the API.
     # @see #execute
-    def post(path: nil, url: nil, payload: nil, headers: {}, query: {}, &block)
-      execute(method: :post, path: path, url: url, headers: headers, query: query, payload: payload, &block)
+    def post(path: nil, url: nil, payload: nil, headers: {}, query: {})
+      execute(method: :post, path: path, url: url, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making PUT requests via the API.
     # @see #execute
-    def put(path: nil, url: nil, payload: ,headers: {}, query: {}, &block)
-      execute(method: :put, path: path, url: url, headers: headers, query: query, payload: payload, &block)
+    def put(path: nil, url: nil, payload: ,headers: {}, query: {})
+      execute(method: :put, path: path, url: url, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making DELETE requests via the API.
     # @see #execute
-    def delete(path: nil, url: nil, payload: nil, headers: {}, query: {}, &block)
-      execute(method: :delete, path: path, url: url, headers: headers, query: query, &block)
+    def delete(path: nil, url: nil, payload: nil, headers: {}, query: {})
+      execute(method: :delete, path: path, url: url, headers: headers, query: query)
     end
 
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0.
-    def url_for_path(path)
+    # @return [Collection] A collection of Contacts, whose schema is dependent on API version
+    def contacts
+      if api_version == "2"
+        @contants ||= Collection.new(model: V2::Contact, api:self)
+      else
+        @contants ||= Collection.new(model: V1::Contact, api:self)
+      end
+    end
+
+    private def url_for_path(path)
       raise NoAuthToken.new if @access_token == nil and (@app_secret != nil or @app_id != nil)
       protocol, domain = @api_server.split('//')
       "#{protocol}//#{@access_token}:@#{domain}#{path}"
     end
 
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def url_for_authentication(redirect_uri, login_hint = '', options = {})
-      query = {
-        :client_id => @app_id,
-        :trial => options.fetch(:trial, false),
-        :response_type => 'code',
-        :scope => 'email',
-        :login_hint => login_hint,
-        :redirect_uri => redirect_uri,
-      }
+    private def handle_failed_response(result: , response:, request:)
+      http_code = result.code.to_i
 
-      if options.has_key?(:state) then
-        query[:state] = options[:state]
-      end
-
-      "https://#{@service_domain}/oauth/authorize?" + ToQuery.new(query).to_s
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def url_for_management
-      protocol, domain = @api_server.split('//')
-      accounts_path = "#{protocol}//#{@app_secret}:@#{domain}/a/#{@app_id}/accounts"
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def set_access_token(token)
-      @access_token = token
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def token_for_code(code)
-      data = {
-        'client_id' => app_id,
-        'client_secret' => app_secret,
-        'grant_type' => 'authorization_code',
-        'code' => code
-      }
-
-      post(url: "https://#{@service_domain}/oauth/token", payload: data) do |response, _request, result|
-        json = API.interpret_response(result, response, expected_class: Object)
-        return json['access_token']
-      end
-    end
-
-    # API Methods
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def threads
-      @threads ||= RestfulModelCollection.new(Thread, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def messages(expanded: false)
-      @messages ||= Hash.new do |h, is_expanded|
-        h[is_expanded] = \
-          if is_expanded
-            RestfulModelCollection.new(ExpandedMessage, self, view: 'expanded')
-        else
-          RestfulModelCollection.new(Message, self)
-        end
-      end
-      @messages[expanded]
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def files
-      @files ||= RestfulModelCollection.new(File, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def drafts
-      @drafts ||= RestfulModelCollection.new(Draft, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def contacts
-      if api_version == "2"
-        @contants ||= V2::Collection.new(model: V2::Contact, api:self)
-      else
-        @contacts ||= RestfulModelCollection.new(Contact, self)
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def calendars
-      @calendars ||= RestfulModelCollection.new(Calendar, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def events
-      @events ||= RestfulModelCollection.new(Event, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def folders
-      @folders ||= RestfulModelCollection.new(Folder, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def labels
-      @labels ||= RestfulModelCollection.new(Label, self)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def account
-      url = self.url_for_path("/account")
-
-      get(url: url) do |response, _request, result|
-        json = API.interpret_response(result, response, expected_class: Object)
-        model = APIAccount.new(self)
-        model.inflate(json)
-        model
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def using_hosted_api?
-      return !@app_id.nil?
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def accounts
-      if self.using_hosted_api?
-        @accounts ||= ManagementModelCollection.new(Account, self)
-      else
-        @accounts ||= RestfulModelCollection.new(APIAccount, self)
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def latest_cursor
-      # Get the cursor corresponding to a specific timestamp.
-      path = self.url_for_path("/delta/latest_cursor")
-
-      cursor = nil
-
-      post(url: path, headers: { content_type: :json }) do |response, _request, result|
-        json = API.interpret_response(result, response, expected_class: Object)
-        cursor = json["cursor"]
-      end
-
-      cursor
-    end
-
-    OBJECTS_TABLE = {
-      "account" => Nylas::Account,
-      "calendar" => Nylas::Calendar,
-      "draft" => Nylas::Draft,
-      "thread" => Nylas::Thread,
-      "contact" => Nylas::Contact,
-      "event" => Nylas::Event,
-      "file" => Nylas::File,
-      "message" => Nylas::Message,
-      "folder" => Nylas::Folder,
-      "label" => Nylas::Label,
-    }
-
-    # It's possible to ask the API to expand objects.
-    # In this case, we do the right thing and return
-    # an expanded object.
-    EXPANDED_OBJECTS_TABLE = {
-      "message" => Nylas::ExpandedMessage,
-    }
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def deltas(cursor, exclude_types=[], expanded_view=false, include_types=[])
-      return enum_for(:deltas, cursor, exclude_types, expanded_view, include_types) unless block_given?
-
-      exclude_string = TypesFilter.new(:exclude, types: exclude_types).to_query_string
-      include_string = TypesFilter.new(:include, types: include_types).to_query_string
-
-      # loop and yield deltas until we've come to the end.
-      loop do
-        url = self.url_for_path("/delta?exclude_folders=false&cursor=#{cursor}#{exclude_string}#{include_string}")
-        if expanded_view
-          url += '&view=expanded'
-        end
-
-        json = nil
-
-        get(url: url) do |response, _request, result|
-          json = API.interpret_response(result, response, expected_class: Object)
-        end
-
-        start_cursor = json["cursor_start"]
-        end_cursor = json["cursor_end"]
-
-        json["deltas"].each do |delta|
-          if not OBJECTS_TABLE.has_key?(delta['object'])
-            next
-          end
-
-          cls = OBJECTS_TABLE[delta['object']]
-          if EXPANDED_OBJECTS_TABLE.has_key?(delta['object']) and expanded_view
-            cls = EXPANDED_OBJECTS_TABLE[delta['object']]
-          end
-
-          obj = cls.new(self)
-
-          case delta["event"]
-          when 'create', 'modify'
-            obj.inflate(delta['attributes'])
-            obj.cursor = delta["cursor"]
-            yield delta["event"], obj
-          when 'delete'
-            obj.id = delta["id"]
-            obj.cursor = delta["cursor"]
-            yield delta["event"], obj
-          end
-        end
-
-        break if start_cursor == end_cursor
-        cursor = end_cursor
-      end
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def delta_stream(cursor, exclude_types=[], timeout=0, expanded_view=false, include_types=[], &block)
-      raise NotImplementedError, "the `#delta_stream` method was removed in 4.0 in favor of using the " \
-                                 "`nylas-streming` gem. This reduces the dependency footprint of the core " \
-                                 "nylas gem for those not using the streaming API."
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def self.interpret_response(result, result_content, result_parsed: nil, expected_class: nil, raw_response: nil, request: nil)
-      # We expected a certain kind of object, but the API didn't return anything
-      raise UnexpectedResponse.new if expected_class && result_content.empty?
-
-      # If it's already parsed, or if we've received an actual raw payload on success, don't parse
-      if result_parsed || (raw_response && result.code.to_i == 200)
-        response = result_content
-      else
-        response = JSON.parse(result_content)
-      end
-
-      raise_exception_for_failed_request(result: result, response: response, request: request)
-      raise UnexpectedResponse.new if expected_class && !response.is_a?(expected_class)
-      response
-
-    rescue JSON::ParserError => e
-      # Handle parsing errors
-      raise UnexpectedResponse.new(e.message)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def self.http_code_to_exception(http_code)
-      HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-    end
-
-    # @deprecated Likely to be moved elsewhere in Nylas SDK 5.0
-    def self.raise_exception_for_failed_request(result: , response:, request:)
-      response = begin
-                   response.kind_of?(Enumerable) ? response : JSON.parse(response)
-                 rescue JSON::ParserError
-                   response
-                 end
-      if result.code.to_i != 200
-        exc = http_code_to_exception(result.code.to_i)
+      if http_code != 200
+        HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
         if response.is_a?(Hash)
           raise exc.new(response['type'], response['message'], response.fetch('server_error', nil))
         end
