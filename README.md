@@ -40,7 +40,7 @@ We support Rails 4.2 and above. A more detailed compatiblity list can be found i
 ## Examples
 
 ### Plain Ruby
-The following examples are from [examples/plain_ruby.rb](examples/plain_ruby.rb)
+The following examples are from [examples/plain-ruby.rb](examples/plain-ruby.rb)
 
 {include:file:examples/plain_ruby.rb}
 
