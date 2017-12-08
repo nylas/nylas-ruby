@@ -14,16 +14,6 @@ module Nylas
     attr_reader :app_id
     attr_reader :app_secret
 
-    # Allow our friends with many API instantiations sprinkled throughout their codebase to make a very small
-    # change in each of those places when upgrading to 4.0, while still granting priority to those who want to
-    # dive into keyword args.
-    # @deprecated Will be removed in Nylas 5.0
-    def self.deprecated_new(app_id, app_secret, access_token=nil, api_server='https://api.nylas.com',
-                            service_domain='api.nylas.com')
-      new(app_id: app_id, app_secret: app_secret, access_token: access_token, api_server: api_server,
-          service_domain: service_domain)
-    end
-
     # @param app_id [String] Your application id from the Nylas Dashboard
     # @param app_secret [String] Your application secret from the Nylas Dashboard
     # @param access_token [String] (Optional) Your users access token.
@@ -34,7 +24,7 @@ module Nylas
     #                             the API Version setting in the Nylas Dashboard.
     # @return [Nylas::API]
     def initialize(app_id: , app_secret:, access_token: nil, api_server: 'https://api.nylas.com',
-                   service_domain: 'api.nylas.com', api_version: "1")
+                   service_domain: 'api.nylas.com', api_version: "2")
       raise "When overriding the Nylas API server address, you must include https://" unless api_server.include?('://')
       self.api_version = api_version
       @api_server = api_server
