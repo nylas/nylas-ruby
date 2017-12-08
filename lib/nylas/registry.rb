@@ -1,5 +1,10 @@
 module Nylas
   class Registry
+    class MissingKeyError < StandardError
+      def initialize(key, keys)
+        super("key #{key} not in #{keys}")
+      end
+    end
     attr_accessor :registry_data
 
     extend Forwardable
@@ -14,6 +19,8 @@ module Nylas
 
     def [](key)
       registry_data.fetch(key)
+    rescue KeyError => e
+      raise MissingKeyError.new(key, keys)
     end
 
     def []=(key, value)

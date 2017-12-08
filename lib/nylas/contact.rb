@@ -1,6 +1,4 @@
 module Nylas
-  module V2
-    # Represents the Contact object in Nylas for users who have upgraded their API to V2
     class Contact
       include Model
       self.resources_path = "/contacts"
@@ -26,6 +24,5 @@ module Nylas
       has_n_of_attribute :physical_addresses, :physical_address
       has_n_of_attribute :phone_numbers, :phone_number
       has_n_of_attribute :web_pages, :web_page
-    end
   end
 end

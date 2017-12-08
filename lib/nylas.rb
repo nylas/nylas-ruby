@@ -18,6 +18,7 @@ require_relative 'nylas/model'
 
 
 
+# Attribute types supported by the API
 require_relative 'nylas/email_address'
 require_relative 'nylas/im_address'
 require_relative 'nylas/physical_address'
@@ -26,10 +27,9 @@ require_relative 'nylas/web_page'
 require_relative 'nylas/nylas_date'
 
 
+# Models supported by the API
+require_relative 'nylas/contact'
 
-
-require 'nylas/v1/contact.rb'
-require 'nylas/v2/contact.rb'
 
 require_relative 'nylas/api'
 

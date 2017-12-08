@@ -3,7 +3,6 @@
 
 require 'sinatra/base'
 require 'nylas'
-require 'rest-client'
 
 $:.unshift File.join(File.dirname(__FILE__))
 

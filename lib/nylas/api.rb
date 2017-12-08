@@ -50,8 +50,7 @@ module Nylas
     # @param query [Hash] (Optional, defaults to {}) - Hash of names and values to include in the query
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
-    # @return [String Array Hash Nylas::V2::Model Nylas::V2::Collection Nylas::RestfulModel
-    #          Nylas::RestfulModelCollection]
+    # @return [Array Hash Stringn]
     def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil)
       headers[:params] = query
       url = url || url_for_path(path)
@@ -105,13 +104,9 @@ module Nylas
       execute(method: :delete, path: path, url: url, headers: headers, query: query)
     end
 
-    # @return [Collection] A collection of Contacts, whose schema is dependent on API version
+    # @return [Collection<Contact>] A queryable collection of Contacts
     def contacts
-      if api_version == "2"
-        @contants ||= Collection.new(model: V2::Contact, api:self)
-      else
-        @contants ||= Collection.new(model: V1::Contact, api:self)
-      end
+      @contants ||= Collection.new(model: Contact, api:self)
     end
 
     private def url_for_path(path)

@@ -16,11 +16,19 @@ The `bin/setup` script installs the different ruby versions we expect the gem to
 
 ### Releasing Gems
 
-When you're ready to release a new version, edit `lib/version.rb` and then run:
+#### API self-tests
+
+Because it's critical that we don't break the SDK for our customers, we require releasers to run some tests before releasing a new version of the gem. The test programs are located in the test/ directory. To set up them up, you'll need to copy `tests/credentials.rb.templates` as `test/credentials.rb` and edit the `APP_ID` and `APP_SECRET` with a working Nylas API app id and secret. You also need to set up a `/callback` URL in the Nylas admin panel.
+
+You can run the programs like this:
+
+```shell
+cd tests && ruby -I../lib auth.rb
+cd tests && ruby -I../lib system.rb
+```
+Once those all pass, you're ready to release a new version. Edit `lib/version.rb` and then run:
 
     bin/test
     gem build nylas.gemspec
-    gem push nylas-0.0.0.gem # Update the version number
-
-
+    gem push nylas-M.m.p.gem # Update the version number
 
