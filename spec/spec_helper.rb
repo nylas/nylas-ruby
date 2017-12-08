@@ -25,11 +25,13 @@ class FullModel
   # values that are generated server side.
   attribute :id, :string, exclude_when: [:creating, :updating]
 
-  attribute :string, :string
-  attribute :nylas_date, :nylas_date
+  attribute :date, :date
   attribute :email_address, :email_address
   attribute :im_address, :im_address
+  attribute :nylas_date, :nylas_date
   attribute :phone_number, :phone_number
+  attribute :physical_address, :physical_address
+  attribute :string, :string
   attribute :web_page, :web_page
 
   has_n_of_attribute :web_pages, :web_page
@@ -42,11 +44,13 @@ class ReadOnlyModel
 
   attribute :id, :string, exclude_when: [:creating, :updating]
 
-  attribute :string, :string
-  attribute :nylas_date, :nylas_date
+  attribute :date, :date
   attribute :email_address, :email_address
   attribute :im_address, :im_address
+  attribute :nylas_date, :nylas_date
   attribute :phone_number, :phone_number
+  attribute :physical_address, :physical_address
+  attribute :string, :string
   attribute :web_page, :web_page
 
   has_n_of_attribute :web_pages, :web_page
@@ -59,11 +63,13 @@ class NonSearchableModel < FullModel
 
   attribute :id, :string, exclude_when: [:creating, :updating]
 
-  attribute :string, :string
-  attribute :nylas_date, :nylas_date
+  attribute :date, :date
   attribute :email_address, :email_address
   attribute :im_address, :im_address
+  attribute :nylas_date, :nylas_date
   attribute :phone_number, :phone_number
+  attribute :physical_address, :physical_address
+  attribute :string, :string
   attribute :web_page, :web_page
 
   has_n_of_attribute :web_pages, :web_page
