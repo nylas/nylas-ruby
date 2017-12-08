@@ -32,6 +32,7 @@ require_relative 'nylas/contact'
 require_relative 'nylas/current_account'
 
 
+require_relative 'nylas/http_client'
 require_relative 'nylas/api'
 
 module Nylas

@@ -26,6 +26,16 @@ describe Nylas::CurrentAccount do
     expect(account.sync_state).to eql "running"
 
   end
-  it "can be serialized back into JSON"
+
+  it "can be serialized back into JSON" do
+    api = FakeAPI.new
+    json = '{ "id": "awa6ltos76vz5hvphkp8k17nt", "account_id": "awa6ltos76vz5hvphkp8k17nt", ' \
+           '  "object": "account", "name": "Example Name", "email_address": "example@example.com", ' \
+           '  "provider": "gmail", "organization_unit": "label", "sync_state": "running" }'
+
+    account = described_class.from_json(json, api: api)
+
+    expect(JSON.parse(account.to_json)).to eql(JSON.parse(json))
+  end
 end
 
