@@ -1,4 +1,6 @@
 # Nylas REST API Ruby bindings ![Travis build status](https://travis-ci.org/nylas/nylas-ruby.svg?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/26d5b58447ca8bf213df/maintainability)](https://codeclimate.com/github/nylas/nylas-ruby/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/26d5b58447ca8bf213df/test_coverage)](https://codeclimate.com/github/nylas/nylas-ruby/test_coverage)
 
 This README is for the Nylas Ruby SDK version 4. For those who are still using Nylas Ruby SDK Version 3, the documentation and source code is located in the [3.X-master branch](https://github.com/nylas/nylas-ruby/tree/3.X-master). For those upgrading from 3.X to 4.0, review the [upgrade guide](https://github.com/nylas/nylas-ruby/wiki/Upgrading-from-3.X-to-4.0)
 
