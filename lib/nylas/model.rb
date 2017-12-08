@@ -9,6 +9,7 @@ module Nylas
     def self.included(model)
       model.include(Attributable)
       model.extend(ClassMethods)
+      model.collectionable = true
       model.searchable = true
       model.read_only = false
     end
@@ -57,10 +58,10 @@ module Nylas
     end
 
     module ClassMethods
-      attr_accessor :resources_path, :searchable, :read_only
+      attr_accessor :resources_path, :searchable, :read_only, :collectionable
 
       def read_only?
-        read_only
+        read_only == true
       end
 
       def raise_if_read_only
@@ -68,7 +69,11 @@ module Nylas
       end
 
       def searchable?
-        searchable
+        searchable == true
+      end
+
+      def collectionable?
+        collectionable == true
       end
 
       def from_json(json, api:)
