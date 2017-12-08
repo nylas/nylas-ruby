@@ -28,7 +28,8 @@ require_relative 'nylas/nylas_date'
 
 
 
-require 'nylas/v2'
+require 'nylas/v1/contact.rb'
+require 'nylas/v2/contact.rb'
 
 require_relative 'nylas/api'
 

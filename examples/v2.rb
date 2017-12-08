@@ -1,12 +1,11 @@
 require_relative 'helpers'
 
-# An executable specification that demonstrates how to use the Nylas Ruby SDK to interact with the API
-# It follows the rough structure of the [Nylas API Reference](https://docs.nylas.com/reference).
+# An executable specification that demonstrates how to use the Nylas Ruby SDK to interact with the V2 specific
+# portions of the API. It follows the rough structure of the [Nylas API
+# Reference](https://docs.nylas.com/reference).
 
-# ### V2
-# To create a connection to the Nylas SDK using V2 of the API:
-api = Nylas::API.new(api_version: "2", app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'],
-                     access_token: ENV['NYLAS_ACCESS_TOKEN'])
+api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'], access_token:
+                     ENV['NYLAS_ACCESS_TOKEN'])
 
 # Retrieving a count of contacts
 demonstrate { api.contacts.count }

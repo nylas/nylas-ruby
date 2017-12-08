@@ -1,5 +1,6 @@
 module Nylas
   module V2
+    # Represents the Contact object in Nylas for users who have upgraded their API to V2
     class Contact
       include Model
       self.resources_path = "/contacts"
