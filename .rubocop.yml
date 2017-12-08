@@ -1,0 +1,8 @@
+AllCops:
+  TargetRubyVersion: 2.2
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
