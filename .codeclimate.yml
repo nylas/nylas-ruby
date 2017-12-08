@@ -1,0 +1,4 @@
+plugins:
+  rubocop:
+    enabled: true
+
