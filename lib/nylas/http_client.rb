@@ -2,7 +2,7 @@ module Nylas
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient
     include Logging
-    attr_accessor :api_server
+    attr_accessor :api_server, :default_headers
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
@@ -24,12 +24,8 @@ module Nylas
       @app_secret = app_secret
       @app_id = app_id
       @service_domain = service_domain
-      @default_headers = {
-        'X-Nylas-API-Wrapper' => 'ruby',
-        'User-Agent' => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
-        'Content-types' => 'application/json'
-      }
     end
+
 
     # Sends a request to the Nylas API and rai
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
@@ -89,6 +85,15 @@ module Nylas
     end
     inform_on :rest_client_execute, level: :debug,
       also_log: { result: true, values: [:method, :url, :headers, :payload] }
+
+
+    def default_headers
+      @default_headers ||= {
+        'X-Nylas-API-Wrapper' => 'ruby',
+        'User-Agent' => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
+        'Content-types' => 'application/json'
+      }
+    end
 
     private def parse_response(response)
       begin
