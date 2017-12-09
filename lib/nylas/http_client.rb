@@ -62,7 +62,7 @@ module Nylas
       end
     end
     inform_on :execute, level: :debug,
-                        also_log: { result: true, values: %i[method url path headers query payload] }
+                        also_log: { result: true, values: %i(method url path headers query payload) }
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -93,7 +93,7 @@ module Nylas
                                     headers: headers, &block)
     end
     inform_on :rest_client_execute, level: :debug,
-                                    also_log: { result: true, values: %i[method url headers payload] }
+                                    also_log: { result: true, values: %i(method url headers payload) }
 
     def default_headers
       @default_headers ||= {

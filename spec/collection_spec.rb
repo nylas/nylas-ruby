@@ -42,11 +42,11 @@ describe Nylas::Collection do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).with(method: :get, path: "/collection",
                                            query: { limit: 100, offset: 0 })
-                                     .and_return(100.times.map { example_instance_hash })
+        .and_return(Array.new(100) { example_instance_hash })
 
       allow(api).to receive(:execute).with(method: :get, path: "/collection",
                                            query: { limit: 100, offset: 100 })
-                                     .and_return(50.times.map { example_instance_hash })
+        .and_return(Array.new(50) { example_instance_hash })
 
       expect(collection.find_each.to_a.size).to be 150
     end

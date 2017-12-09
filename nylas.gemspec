@@ -45,7 +45,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "awesome_print", "~> 1.0"
   gem.add_development_dependency "faker", "~> 1.8"
   gem.add_development_dependency "informed", "~> 1.0"
-  gem.add_development_dependency "rubocop", "~> 0.51"
-  gem.add_development_dependency "rubocop-rspec", "~> 1.20"
+  gem.add_development_dependency "rubocop", "~> 0.46.0"
+  gem.add_development_dependency "rubocop-rspec", "~> 1.8.0"
   gem.add_development_dependency "simplecov", "~> 0.15"
 end
