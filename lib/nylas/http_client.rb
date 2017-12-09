@@ -1,6 +1,18 @@
 module Nylas
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient
+    HTTP_CODE_TO_EXCEPTIONS = {
+      400 => InvalidRequest,
+      402 => MessageRejected,
+      403 => AccessDenied,
+      404 => ResourceNotFound,
+      422 => MailProviderError,
+      429 => SendingQuotaExceeded,
+      500 => InternalError,
+      502 => BadGateway,
+      503 => ServiceUnavailable,
+    }.freeze
+
     include Logging
     attr_accessor :api_server, :default_headers
     attr_reader :access_token

@@ -35,16 +35,4 @@ require_relative "nylas/http_client"
 require_relative "nylas/api"
 
 module Nylas
-
-  HTTP_CODE_TO_EXCEPTIONS = {
-    400 => InvalidRequest,
-    402 => MessageRejected,
-    403 => AccessDenied,
-    404 => ResourceNotFound,
-    422 => MailProviderError,
-    429 => SendingQuotaExceeded,
-    500 => InternalError,
-    502 => BadGateway,
-    503 => ServiceUnavailable,
-  }.freeze
 end
