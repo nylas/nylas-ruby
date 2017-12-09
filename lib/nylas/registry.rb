@@ -1,6 +1,6 @@
 module Nylas
   class Registry
-    class MissingKeyError < StandardError
+    class MissingKeyError < Error
       def initialize(key, keys)
         super("key #{key} not in #{keys}")
       end
@@ -19,7 +19,7 @@ module Nylas
 
     def [](key)
       registry_data.fetch(key)
-    rescue KeyError => e
+    rescue KeyError
       raise MissingKeyError.new(key, keys)
     end
 
