@@ -53,7 +53,7 @@ module Nylas
     def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil)
       headers[:params] = query
       url = url || url_for_path(path)
-      resulting_headers = @default_headers.merge(headers)
+      resulting_headers = default_headers.merge(headers)
       rest_client_execute(method: method, url: url, payload: payload,
                           headers: resulting_headers) do |response, request, result|
 
