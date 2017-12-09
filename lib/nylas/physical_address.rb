@@ -16,6 +16,5 @@ module Nylas
   class PhysicalAddressType < Types::HashType
     casts_to PhysicalAddress
   end
-
-  Types.registry[:physical_address] = PhysicalAddressType.new
 end
+Nylas::Types.registry[:physical_address] = PhysicalAddressType.new

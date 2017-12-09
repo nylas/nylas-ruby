@@ -1,4 +1,0 @@
-source "https://rubygems.org"
-
-gem "nylas", path: "../../"
-gem "sinatra", "1.4.5"

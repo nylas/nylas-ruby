@@ -4,8 +4,13 @@ require "rest-client"
 require "ostruct"
 require "forwardable"
 
-require "nylas/version"
-require "nylas/errors"
+# an SDK for interacting with the Nylas API
+# @see https://docs.nylas.com/reference
+module Nylas
+end
+
+require_relative "nylas/version"
+require_relative "nylas/errors"
 
 require_relative "nylas/logging"
 require_relative "nylas/registry"
@@ -29,8 +34,3 @@ require_relative "nylas/current_account"
 
 require_relative "nylas/http_client"
 require_relative "nylas/api"
-
-# an SDK for interacting with the Nylas API
-# @see https://docs.nylas.com/reference
-module Nylas
-end

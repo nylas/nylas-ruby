@@ -11,6 +11,5 @@ module Nylas
   class IMAddressType < Types::HashType
     casts_to IMAddress
   end
-
-  Types.registry[:im_address] = IMAddressType.new
 end
+Nylas::Types.registry[:im_address] = IMAddressType.new

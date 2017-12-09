@@ -17,6 +17,5 @@ module Nylas
       value.is_a?(String) ? super({ object: "date", date: value }) : super
     end
   end
-
-  Types.registry[:nylas_date] = NylasDateType.new
 end
+Nylas::Types.registry[:nylas_date] = NylasDateType.new

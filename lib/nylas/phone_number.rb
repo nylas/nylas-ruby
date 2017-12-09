@@ -11,6 +11,5 @@ module Nylas
   class PhoneNumberType < Types::HashType
     casts_to PhoneNumber
   end
-
-  Types.registry[:phone_number] = PhoneNumberType.new
 end
+Nylas::Types.registry[:phone_number] = PhoneNumberType.new

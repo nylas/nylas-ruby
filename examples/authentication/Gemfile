@@ -1,5 +1,0 @@
-source "https://rubygems.org"
-
-gem "nylas", "2.0.1"
-gem "rest-client"
-gem "sinatra", "1.4.5"

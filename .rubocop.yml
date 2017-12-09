@@ -12,6 +12,10 @@ Style/StringLiterals:
 Metrics/LineLength:
   Max: 110
 
+Style/FileName:
+  Exclude:
+    - "lib/nylas-streaming.rb"
+
 Metrics/BlockLength:
   Exclude:
     - "*.gemspec"

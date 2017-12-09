@@ -11,6 +11,5 @@ module Nylas
   class WebPageType < Types::HashType
     casts_to WebPage
   end
-
-  Types.registry[:web_page] = WebPageType.new
 end
+Nylas::Types.registry[:web_page] = WebPageType.new
