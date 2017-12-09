@@ -12,6 +12,7 @@ describe Nylas::Model do
   let(:api) { FakeAPI.new }
 
   describe "#to_json" do
+    it "dumps all the defined attributes to JSON"
   end
 
   describe "#save" do

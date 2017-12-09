@@ -1,3 +1,4 @@
+require: rubocop-rspec
 AllCops:
   TargetRubyVersion: 2.2
   DisplayCopNames: true
@@ -19,3 +20,10 @@ Metrics/BlockLength:
   Exclude:
     - "*.gemspec"
     - "spec/**/*_spec.rb"
+
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
