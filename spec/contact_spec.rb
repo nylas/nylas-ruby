@@ -21,7 +21,7 @@ describe Nylas::Contact do
   let(:api) { FakeAPI.new }
 
   describe "#update" do
-    it "changes the attributes passed in by type casting them when necessary and sending their serialized version to the server" do
+    it "Sends the serialized version of attributes to the server" do
       contact = described_class.from_json(full_json, api: api)
 
       contact.update(given_name: "Given", birthday: "2017-01-01",
@@ -38,12 +38,15 @@ describe Nylas::Contact do
       expect(contact.email_addresses.last.email).to eql "given@other-home.example.com"
       request = api.requests[0]
 
+      expected_payload = JSON.dump(given_name: "Given",
+                                   birthday: { object: "date", 'date': "2017-01-01" },
+                                   email_addresses: [{ type: "work",
+                                                       email: "given@other-job.example.com" },
+                                                     { type: "home",
+                                                       email: "given@other-home.example.com" }])
       expect(request[:method]).to be :put
       expect(request[:path]).to eql "/contacts/1234"
-      expect(request[:payload]).to eql(JSON.dump(given_name: "Given",
-                                                 birthday: { object: "date", 'date': "2017-01-01" },
-                                                 email_addresses: [{ type: "work", email: "given@other-job.example.com" },
-                                                                   { type: "home", email: "given@other-home.example.com" }]))
+      expect(request[:payload]).to eql(expected_payload)
     end
   end
 
@@ -104,8 +107,10 @@ describe Nylas::Contact do
                                                       { type: "home", email: "given@home.example.com" }],
                                     im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
                                     phone_numbers: [{ type: "mobile", number: "+1234567890" }],
-                                    physical_addresses: [{ format: "structured", type: "work", street_address: "123 N West St",
-                                                           postal_code: "12345+0987", state: "CA", country: "USA" }],
+                                    physical_addresses: [{ format: "structured", type: "work",
+                                                           street_address: "123 N West St",
+                                                           postal_code: "12345+0987", state: "CA",
+                                                           country: "USA" }],
                                     web_pages: [{ type: "profile", url: "http://given.example.com" }])
       end
     end

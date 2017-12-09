@@ -12,4 +12,3 @@ module Nylas
     casts_to PhoneNumber
   end
 end
-Nylas::Types.registry[:phone_number] = PhoneNumberType.new

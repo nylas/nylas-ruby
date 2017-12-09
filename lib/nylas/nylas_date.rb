@@ -18,4 +18,3 @@ module Nylas
     end
   end
 end
-Nylas::Types.registry[:nylas_date] = NylasDateType.new

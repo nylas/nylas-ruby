@@ -12,4 +12,3 @@ module Nylas
     casts_to IMAddress
   end
 end
-Nylas::Types.registry[:im_address] = IMAddressType.new

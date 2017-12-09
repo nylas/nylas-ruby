@@ -17,4 +17,3 @@ module Nylas
     casts_to PhysicalAddress
   end
 end
-Nylas::Types.registry[:physical_address] = PhysicalAddressType.new

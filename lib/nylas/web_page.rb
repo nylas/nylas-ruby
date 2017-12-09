@@ -12,4 +12,3 @@ module Nylas
     casts_to WebPage
   end
 end
-Nylas::Types.registry[:web_page] = WebPageType.new

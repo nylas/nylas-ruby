@@ -12,5 +12,3 @@ module Nylas
     casts_to EmailAddress
   end
 end
-
-Nylas::Types.registry[:email_address] = EmailAddressType.new

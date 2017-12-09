@@ -13,7 +13,9 @@ describe Nylas::Collection do
 
   describe "#each" do
     it "Returns an enumerable for a single page of results, filtered by `offset` and `limit` and `where`" do
-      allow(api).to receive(:execute).with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }).and_return([example_instance_hash])
+      allow(api).to receive(:execute)
+        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 })
+        .and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
 
@@ -23,7 +25,9 @@ describe Nylas::Collection do
     end
 
     it "allows you to use a block directly" do
-      allow(api).to receive(:execute).with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }).and_return([example_instance_hash])
+      allow(api).to receive(:execute)
+        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 })
+        .and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
 
@@ -55,7 +59,8 @@ describe Nylas::Collection do
   describe "#find" do
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
       collection = described_class.new(model: ReadOnlyModel, api: api)
-      allow(api).to receive(:execute).with(method: :get, path: "/read_only_collection/1234").and_return(example_instance_hash)
+      allow(api).to receive(:execute).with(method: :get, path: "/read_only_collection/1234")
+        .and_return(example_instance_hash)
 
       instance = collection.find(1234)
 
