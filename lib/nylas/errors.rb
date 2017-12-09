@@ -11,7 +11,7 @@ module Nylas
   UnexpectedAccountAction = Class.new(Error)
   UnexpectedResponse = Class.new(Error)
 
-  # Base class to inflate the standard errors returned from the Nylas APi
+  # Base class to inflate the standard errors returned from the Nylas API
   class APIError < Error
     attr_accessor :type
     attr_accessor :message

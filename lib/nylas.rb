@@ -9,7 +9,6 @@ require "nylas/errors"
 
 require_relative "nylas/logging"
 require_relative "nylas/registry"
-require_relative "nylas/to_query"
 require_relative "nylas/types"
 require_relative "nylas/constraints"
 
@@ -31,6 +30,7 @@ require_relative "nylas/current_account"
 require_relative "nylas/http_client"
 require_relative "nylas/api"
 
-# Contains code specific to Nylas's Ruby SDK
+# an SDK for interacting with the Nylas API
+# @see https://docs.nylas.com/reference
 module Nylas
 end
