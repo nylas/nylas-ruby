@@ -24,13 +24,19 @@ module Nylas
 
     # @return [Collection<Contact>] A queryable collection of Contacts
     def contacts
-      @contacts ||= Collection.new(model: Contact, api:self)
+      @contacts ||= Collection.new(model: Contact, api: self)
     end
 
     # @return [CurrentAccount] The account details for whomevers access token is set
     def current_account
-
+      prevent_calling_if_missing_access_token(:current_account)
+      CurrentAccount.from_hash(client.execute(method: :get, path: '/account'), api: self)
     end
 
+
+    private def prevent_calling_if_missing_access_token(method_name)
+      return if client.access_token && !client.access_token.empty?
+      raise NoAuthToken, "No access token was provided and the #{method_name} method requires one"
+    end
   end
 end
