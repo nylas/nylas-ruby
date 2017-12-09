@@ -1,4 +1,6 @@
 module Nylas
+  # ActiveModel compliant interface for interacting with the Contacts API
+  # @see https://docs.nylas.com/reference#contacts
   class Contact
     include Model
     self.resources_path = "/contacts"
