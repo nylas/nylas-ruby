@@ -1,11 +1,7 @@
 module Nylas
   module Model
+    # Stores the actual model data to allow for type casting and clean/dirty checking
     class Attributes
-      class UndefinedAttributeError < StandardError
-        def initialize(attribute, attribute_list)
-          super("#{attribute} not in #{attribute_list}")
-        end
-      end
       attr_accessor :data, :attribute_definitions
 
       def initialize(attribute_definitions)
@@ -25,7 +21,6 @@ module Nylas
         attribute_definitions[key].cast(value)
       end
 
-
       # Merges data into the registry while casting input types correctly
       def merge(new_data)
         new_data.each do |attribute_name, value|
@@ -33,12 +28,10 @@ module Nylas
         end
       end
 
-
       def to_h(keys: attribute_definitions.keys)
-        keys.reduce({}) do |casted_data, key|
+        keys.each_with_object({}) do |key, casted_data|
           value = attribute_definitions[key].serialize(self[key])
           casted_data[key] = value unless value.nil? || value.empty?
-          casted_data
         end
       end
 

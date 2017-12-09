@@ -1,5 +1,9 @@
 module Nylas
+  # Used to create a hash-like structure which defaults to raising an exception in the event the key to
+  # retrieve does not exist.
   class Registry
+    # Used to indicate an attempt to retrieve something not yet registered in a registry
+    # Includes the list of keys in the registry for debug purposes.
     class MissingKeyError < Error
       def initialize(key, keys)
         super("key #{key} not in #{keys}")
@@ -11,9 +15,8 @@ module Nylas
     def_delegators :registry_data, :keys, :each, :reduce
 
     def initialize(initial_data = {})
-      self.registry_data = initial_data.each.reduce({}) do |registry, (key, value)|
+      self.registry_data = initial_data.each.each_with_object({}) do |(key, value), registry|
         registry[key] = value
-        registry
       end
     end
 

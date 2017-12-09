@@ -1,8 +1,9 @@
-require_relative 'model/attribute_definition'
-require_relative 'model/list_attribute_definition'
-require_relative 'model/attributable'
-require_relative 'model/attributes'
+require_relative "model/attribute_definition"
+require_relative "model/list_attribute_definition"
+require_relative "model/attributable"
+require_relative "model/attributes"
 module Nylas
+  # Include this to define a class to represent an object returned from the API
   module Model
     attr_accessor :api
 
@@ -57,6 +58,7 @@ module Nylas
       self.class.raise_if_read_only
     end
 
+    # Allows you to narrow in exactly what kind of model you're working with
     module ClassMethods
       attr_accessor :resources_path, :searchable, :read_only, :collectionable
 

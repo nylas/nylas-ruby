@@ -4,7 +4,7 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - examples/plain-ruby.rb
+    - examples/**/*
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -12,6 +12,18 @@ Style/StringLiterals:
 Metrics/LineLength:
   Max: 110
 
+Style/FileName:
+  Exclude:
+    - "lib/nylas-streaming.rb"
+
 Metrics/BlockLength:
   Exclude:
     - "*.gemspec"
+    - "spec/**/*_spec.rb"
+
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false

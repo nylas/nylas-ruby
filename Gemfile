@@ -1,3 +1,3 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gemspec name: 'nylas-streaming'
+gemspec name: "nylas-streaming"

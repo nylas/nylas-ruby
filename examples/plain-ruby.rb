@@ -49,10 +49,10 @@ demonstrate { api.contacts.count }
 
 # Searching!
 # demonstrate { api.contacts.where(email: loaded_contacts[8].email_addresses.first.email).limit(3).map(&:to_h) }
-demonstrate { api.contacts.where(state: loaded_contacts[3].physical_addresses.first&.state).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(country: loaded_contacts[5].physical_addresses.first&.country).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(phone_number: loaded_contacts[12].phone_numbers.first&.number).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(street_address: loaded_contacts[13].physical_addresses.first&.street_address).limit(2).map(&:to_h) }
+demonstrate { api.contacts.where(state: loaded_contacts[3].physical_addresses.first.state).limit(2).map(&:to_h) }
+demonstrate { api.contacts.where(country: loaded_contacts[5].physical_addresses.first.country).limit(2).map(&:to_h) }
+demonstrate { api.contacts.where(phone_number: loaded_contacts[12].phone_numbers.first.number).limit(2).map(&:to_h) }
+demonstrate { api.contacts.where(street_address: loaded_contacts[13].physical_addresses.first.street_address).limit(2).map(&:to_h) }
 
 # Retrieving the first page of contacts
 demonstrate { api.contacts.map(&:to_h) }

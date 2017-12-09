@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Nylas::Contact do
   let(:full_json) do
@@ -16,19 +16,19 @@ describe Nylas::Contact do
         '"country": "USA" }],' \
       '"phone_numbers": [{ "type": "mobile", "number": "+1234567890" }], ' \
       '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }] ' \
-    '}'
+    "}"
   end
   let(:api) { FakeAPI.new }
 
   describe "#update" do
-    it "changes the attributes passed in by type casting them when necessary and sending their serialized version to the server" do
+    it "Sends the serialized version of attributes to the server" do
       contact = described_class.from_json(full_json, api: api)
 
       contact.update(given_name: "Given", birthday: "2017-01-01",
                      email_addresses: [
-                       { type: 'work', email: 'given@other-job.example.com' },
-                       Nylas::EmailAddress.new(type: 'home', email: 'given@other-home.example.com')
-                      ])
+                       { type: "work", email: "given@other-job.example.com" },
+                       Nylas::EmailAddress.new(type: "home", email: "given@other-home.example.com")
+                     ])
       expect(contact.given_name).to eql "Given"
 
       expect(contact.birthday).to eql(Date.parse("2017-01-01"))
@@ -38,14 +38,15 @@ describe Nylas::Contact do
       expect(contact.email_addresses.last.email).to eql "given@other-home.example.com"
       request = api.requests[0]
 
-      expect(request[:method]).to eql :put
-      expect(request[:path]).to eql '/contacts/1234'
-      expect(request[:payload]).to eql(JSON.dump({
-        given_name: 'Given',
-        birthday: { object: 'date', 'date': '2017-01-01' },
-        email_addresses: [{ type: "work", email:"given@other-job.example.com" },
-                          { type: "home", email: "given@other-home.example.com" }]
-      }))
+      expected_payload = JSON.dump(given_name: "Given",
+                                   birthday: { object: "date", 'date': "2017-01-01" },
+                                   email_addresses: [{ type: "work",
+                                                       email: "given@other-job.example.com" },
+                                                     { type: "home",
+                                                       email: "given@other-home.example.com" }])
+      expect(request[:method]).to be :put
+      expect(request[:path]).to eql "/contacts/1234"
+      expect(request[:payload]).to eql(expected_payload)
     end
   end
 
@@ -84,42 +85,40 @@ describe Nylas::Contact do
       expect(contact.web_pages[0].type).to eql("profile")
       expect(contact.web_pages[0].url).to eql("http://given.example.com")
     end
+  end
 
-    describe "#to_h" do
-      it "serializes attributes into a hash of primitives" do
-        contact = described_class.from_json(full_json, api: api)
-        expect(contact.to_h).to eql({
-          id: "1234",
-          object: "contact",
-          account_id: "12345",
-          given_name: "given",
-          middle_name: "middle",
-          surname: "surname",
-          suffix: "Jr.",
-          nickname: "nick",
-          job_title: "title",
-          office_location: "the office",
-          manager_name: "manager",
-          birthday: { "object": "date", "date": "1984-01-01" },
-          company_name: "company",
-          notes: "some notes",
-          email_addresses: [{type: "work", email: "given@work.example.com"},
-                            {type: "home", email: "given@home.example.com"}],
-          im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
-          phone_numbers: [{ type: "mobile", number: "+1234567890"}],
-          physical_addresses: [{ format: "structured", type: "work", street_address: "123 N West St",
-                                 postal_code: "12345+0987", state: "CA", country: "USA"}],
-          web_pages: [{ type: "profile", url: "http://given.example.com"}],
-        })
-
-      end
+  describe "#to_h" do
+    it "serializes attributes into a hash of primitives" do
+      contact = described_class.from_json(full_json, api: api)
+      expect(contact.to_h).to eql(id: "1234",
+                                  object: "contact",
+                                  account_id: "12345",
+                                  given_name: "given",
+                                  middle_name: "middle",
+                                  surname: "surname",
+                                  suffix: "Jr.",
+                                  nickname: "nick",
+                                  job_title: "title",
+                                  office_location: "the office",
+                                  manager_name: "manager",
+                                  birthday: { "object": "date", "date": "1984-01-01" },
+                                  company_name: "company",
+                                  notes: "some notes",
+                                  email_addresses: [{ type: "work", email: "given@work.example.com" },
+                                                    { type: "home", email: "given@home.example.com" }],
+                                  im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
+                                  phone_numbers: [{ type: "mobile", number: "+1234567890" }],
+                                  physical_addresses: [{ format: "structured", type: "work",
+                                                         street_address: "123 N West St",
+                                                         postal_code: "12345+0987", state: "CA",
+                                                         country: "USA" }],
+                                  web_pages: [{ type: "profile", url: "http://given.example.com" }])
     end
-
-    describe "#to_json" do
-      it "returns a string of JSON" do
-        contact = described_class.from_json(full_json, api: api)
-        expect(JSON.parse(contact.to_json)).to eql(JSON.parse(full_json))
-      end
+  end
+  describe "#to_json" do
+    it "returns a string of JSON" do
+      contact = described_class.from_json(full_json, api: api)
+      expect(JSON.parse(contact.to_json)).to eql(JSON.parse(full_json))
     end
   end
 end

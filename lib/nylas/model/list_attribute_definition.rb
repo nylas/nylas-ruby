@@ -1,23 +1,24 @@
 module Nylas
   module Model
+    # Allows models to have an attribute which is a lists of another type of thing
     class ListAttributeDefinition
-      attr_accessor :type_name, :exclude_when
+      attr_accessor :type_name, :exclude_when, :default
 
-      def initialize(type_name:, exclude_when:)
+      def initialize(type_name:, exclude_when:, default:)
         self.type_name = type_name
         self.exclude_when = exclude_when
+        self.default = default
       end
 
       def cast(list)
-        return [] if list.nil? || list.empty?
+        return default if list.nil? || list.empty?
         list.map { |item| type.cast(item) }
       end
 
       def serialize(list)
-        return [] if list.nil? || list.empty?
+        list = default if list.nil? || list.empty?
         list.map { |item| type.serialize(item) }
       end
-
 
       def type
         Types.registry[type_name]

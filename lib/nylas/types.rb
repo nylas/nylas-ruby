@@ -1,9 +1,12 @@
 module Nylas
+  # Collection of attribute types
   module Types
     def self.registry
       @registry ||= Registry.new
     end
 
+    # Type for attributes that are persisted in the API as a hash but exposed in ruby as a particular
+    # structure
     class HashType
       def serialize(object)
         object.to_h
@@ -13,8 +16,8 @@ module Nylas
         @casts_to_model = model
       end
 
-      def self.casts_to_model
-        @casts_to_model
+      class << self
+        attr_reader :casts_to_model
       end
 
       def model
@@ -33,19 +36,18 @@ module Nylas
       end
 
       def actual_attributes(hash)
-        model.attribute_definitions.keys.reduce({}) do |attributes, attribute_name|
+        model.attribute_definitions.keys.each_with_object({}) do |attribute_name, attributes|
           attributes[attribute_name] = hash[attribute_name]
-          attributes
         end
       end
     end
 
+    # Type for attributes that do not require casting/serializing/deserializing.
     class ValueType
       def cast(object)
         object
       end
 
-      # Used to prepare a value for transmission to a storage mechanism, i.e.
       def serialize(object)
         object
       end
@@ -55,6 +57,7 @@ module Nylas
       end
     end
 
+    # Type for attributes represented as an iso8601 dates in the API and Date in Ruby
     class DateType < ValueType
       def cast(value)
         return nil if value.nil?
@@ -68,6 +71,7 @@ module Nylas
     end
     Types.registry[:date] = DateType.new
 
+    # Type for attributes represented as pure strings both within the API and in Ruby
     class StringType < ValueType
       # @param value [Object] Casts the passed in object to a string using #to_s
       def cast(value)
@@ -76,4 +80,4 @@ module Nylas
     end
     Types.registry[:string] = StringType.new
   end
-  end
+end

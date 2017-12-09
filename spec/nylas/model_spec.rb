@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Nylas::Model do
   def example_instance_json
@@ -12,6 +12,7 @@ describe Nylas::Model do
   let(:api) { FakeAPI.new }
 
   describe "#to_json" do
+    it "dumps all the defined attributes to JSON"
   end
 
   describe "#save" do
@@ -40,28 +41,31 @@ describe Nylas::Model do
       expect(instance.date).to eql(Date.parse("2017-01-01"))
     end
     it "supports email address attributes" do
-      instance = FullModel.from_json('{ "email_address": { "type": "home", "email": "test@example.com" } }', api: api)
+      instance = FullModel.from_json('{ "email_address": { "type": "home", "email": "test@example.com" } }',
+                                     api: api)
       expect(instance.email_address.type).to eql "home"
       expect(instance.email_address.email).to eql "test@example.com"
     end
 
     it "supports im address attributes" do
-      instance = FullModel.from_json('{ "im_address": { "type": "gmail", "im_address": "test@example.com" } }', api: api)
+      im_json = '{ "im_address": { "type": "gmail", "im_address": "test@example.com" } }'
+      instance = FullModel.from_json(im_json, api: api)
       expect(instance.im_address.type).to eql "gmail"
       expect(instance.im_address.im_address).to eql "test@example.com"
     end
 
     it "supports nylas date attributes" do
-      instance = FullModel.from_json('{ "nylas_date": { "object": "date", "date": "2017-01-01" } }', api: api)
+      instance = FullModel.from_json('{ "nylas_date": { "object": "date", "date": "2017-01-01" } }',
+                                     api: api)
       expect(instance.nylas_date.object).to eql "date"
       expect(instance.nylas_date.date).to eql Date.parse("2017-01-01")
       expect(instance.nylas_date).to eql Date.parse("2017-01-01")
     end
 
     it "supports physical address attributes" do
-      address_json = JSON.dump({ format: "structured", type: "work", street_address: "123 N West St",
-                                 postal_code: "12345+0987", state: "CA", country: "USA"})
-      instance = FullModel.from_json('{ "physical_address": ' + address_json + ' } ', api: api)
+      address_json = JSON.dump(format: "structured", type: "work", street_address: "123 N West St",
+                               postal_code: "12345+0987", state: "CA", country: "USA")
+      instance = FullModel.from_json('{ "physical_address": ' + address_json + " } ", api: api)
       expect(instance.physical_address.format).to eql "structured"
       expect(instance.physical_address.type).to eql "work"
       expect(instance.physical_address.street_address).to eql("123 N West St")
@@ -71,7 +75,8 @@ describe Nylas::Model do
     end
 
     it "supports phone number attributes" do
-      instance = FullModel.from_json('{ "phone_number": { "type": "mobile", "number": "+1234567890" } }', api: api)
+      instance = FullModel.from_json('{ "phone_number": { "type": "mobile", "number": "+1234567890" } }',
+                                     api: api)
       expect(instance.phone_number.type).to eql "mobile"
       expect(instance.phone_number.number).to eql "+1234567890"
     end
@@ -82,13 +87,15 @@ describe Nylas::Model do
     end
 
     it "supports web page attributes" do
-      instance = FullModel.from_json('{ "web_page": { "type": "profile", "url": "http://example.com"} }', api: api)
+      instance = FullModel.from_json('{ "web_page": { "type": "profile", "url": "http://example.com"} }',
+                                     api: api)
       expect(instance.web_page.type).to eql "profile"
       expect(instance.web_page.url).to eql "http://example.com"
     end
 
     it "supports when there are many of a type in an attribute" do
-      instance = FullModel.from_json('{ "web_pages": [{ "type": "profile", "url": "http://example.com"}] }', api: api)
+      instance = FullModel.from_json('{ "web_pages": [{ "type": "profile", "url": "http://example.com"}] }',
+                                     api: api)
       expect(instance.web_pages.first.type).to eql "profile"
       expect(instance.web_pages.first.url).to eql "http://example.com"
     end

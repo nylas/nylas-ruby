@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Nylas::CurrentAccount do
   it "is not searchable" do
@@ -24,7 +24,6 @@ describe Nylas::CurrentAccount do
     expect(account.provider).to eql "gmail"
     expect(account.organization_unit).to eql "label"
     expect(account.sync_state).to eql "running"
-
   end
 
   it "can be serialized back into JSON" do
@@ -38,4 +37,3 @@ describe Nylas::CurrentAccount do
     expect(JSON.parse(account.to_json)).to eql(JSON.parse(json))
   end
 end
-
