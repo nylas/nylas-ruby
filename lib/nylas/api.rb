@@ -15,12 +15,14 @@ module Nylas
     #                            you're using a self-hosted Nylas instance.
     # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::API]
+    # rubocop:disable Metrics/ParameterLists
     def initialize(client: nil, app_id: nil, app_secret: nil, access_token: nil,
                    api_server: "https://api.nylas.com", service_domain: "api.nylas.com")
       self.client = client || HttpClient.new(app_id: app_id, app_secret: app_secret,
                                              access_token: access_token, api_server: api_server,
                                              service_domain: service_domain)
     end
+    # rubocop:enable Metrics/ParameterLists
 
     # @return [Collection<Contact>] A queryable collection of Contacts
     def contacts

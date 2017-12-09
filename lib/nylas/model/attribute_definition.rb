@@ -1,5 +1,6 @@
 module Nylas
   module Model
+    # Define a particular attribute for a given model
     class AttributeDefinition
       extend Forwardable
       def_delegators :type, :cast, :serialize

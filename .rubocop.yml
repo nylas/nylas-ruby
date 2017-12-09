@@ -4,7 +4,7 @@ AllCops:
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
-    - examples/plain-ruby.rb
+    - examples/**/*
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

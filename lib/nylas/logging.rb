@@ -1,7 +1,11 @@
+# We are explicitely choosing to allow clients to use or not use informed at their discretion
+# rubocop:disable Lint/HandleExceptions
 begin
   require "informed"
 rescue LoadError
 end
+# rubocop:enable Lint/HandleExceptions
+
 module Nylas
   # Exposes a shared logger for debugging purposes
   module Logging

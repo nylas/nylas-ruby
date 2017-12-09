@@ -1,4 +1,6 @@
 module Nylas
+  # Ruby representation of the Nylas /account API
+  # @see https://docs.nylas.com/reference#account
   class CurrentAccount
     include Model
 

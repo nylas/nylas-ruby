@@ -1,5 +1,6 @@
 module Nylas
   module Model
+    # Allows defining of tyypecastable attributes on a model
     module Attributable
       def self.included(model)
         model.extend(ClassMethods)
@@ -20,14 +21,20 @@ module Nylas
         attributes.to_h
       end
 
+      # Methods to call when tweaking Attributable classes
       module ClassMethods
+        # rubocop:disable Style/PredicateName
         def has_n_of_attribute(name, type_name, exclude_when: [], default: [])
-          attribute_definitions[name] = ListAttributeDefinition.new(type_name: type_name, exclude_when: exclude_when)
+          attribute_definitions[name] = ListAttributeDefinition.new(type_name: type_name,
+                                                                    exclude_when: exclude_when,
+                                                                    default: default)
           define_accessors(name)
         end
+        # rubocop:enable Style/PredicateName
 
         def attribute(name, type_name, exclude_when: [], default: nil)
-          attribute_definitions[name] = AttributeDefinition.new(type_name: type_name, exclude_when: exclude_when, default: default)
+          attribute_definitions[name] = AttributeDefinition.new(type_name: type_name,
+                                                                exclude_when: exclude_when, default: default)
           define_accessors(name)
         end
 

@@ -49,6 +49,7 @@ module Nylas
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [Array Hash Stringn]
+    # rubocop:disable Metrics/ParameterLists
     def execute(method:, url: nil, path: nil, headers: {}, query: {}, payload: nil)
       headers[:params] = query
       url ||= url_for_path(path)
@@ -61,6 +62,7 @@ module Nylas
         response
       end
     end
+    # rubocop:enable Metrics/ParameterLists
     inform_on :execute, level: :debug,
                         also_log: { result: true, values: %i(method url path headers query payload) }
 
@@ -87,6 +89,7 @@ module Nylas
     def delete(path: nil, url: nil, payload: nil, headers: {}, query: {})
       execute(method: :delete, path: path, url: url, headers: headers, query: query, payload: payload)
     end
+    # rubocop:enable Metrics/ParameterList
 
     private def rest_client_execute(method:, url:, headers:, payload:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
@@ -123,12 +126,10 @@ module Nylas
     end
 
     private def handle_anticipated_failure_mode(http_code:, response:)
-      if http_code != 200
-        exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-        if response.is_a?(Hash)
-          raise exception.new(response["type"], response["message"], response.fetch("server_error", nil))
-        end
-      end
+      return if http_code == 200
+      return unless response.is_a?(Hash)
+      exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
+      raise exception.new(response["type"], response["message"], response.fetch("server_error", nil))
     end
   end
 end

@@ -1,5 +1,9 @@
 module Nylas
+  # Used to create a hash-like structure which defaults to raising an exception in the event the key to
+  # retrieve does not exist.
   class Registry
+    # Used to indicate an attempt to retrieve something not yet registered in a registry
+    # Includes the list of keys in the registry for debug purposes.
     class MissingKeyError < Error
       def initialize(key, keys)
         super("key #{key} not in #{keys}")

@@ -1,11 +1,7 @@
 module Nylas
   module Model
+    # Stores the actual model data to allow for type casting and clean/dirty checking
     class Attributes
-      class UndefinedAttributeError < StandardError
-        def initialize(attribute, attribute_list)
-          super("#{attribute} not in #{attribute_list}")
-        end
-      end
       attr_accessor :data, :attribute_definitions
 
       def initialize(attribute_definitions)

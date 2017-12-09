@@ -63,13 +63,11 @@ module Nylas
     def find_each
       return enum_for(:find_each) unless block_given?
       accumulated = []
-      accumulating = true
       query = self
       loop do
-        results = query.execute.compact
-        results.each do |result|
-          instance = model.from_hash(result, api: api)
-          yield instance
+        results = query.each.to_a
+        results.each do |instance|
+          yield(instance)
           accumulated.push(instance)
         end
         return accumulated unless more_pages?(accumulated, results)
@@ -86,7 +84,7 @@ module Nylas
       return false if constraints.limit && accumulated.length >= constraints.limit
       return false if constraints.per_page && current_page.length < constraints.per_page
       true
-      end
+    end
 
     # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
     # consideration other query constraints, such as where clauses.
@@ -106,5 +104,5 @@ module Nylas
     def execute
       api.execute(to_be_executed)
     end
-    end
+  end
 end
