@@ -1,7 +1,7 @@
-require "./support"
+require "./gem_config"
 
 Gem::Specification.new do |gem|
-  configure_gem(gem, "nylas-streaming")
+  GemConfig.apply(gem, "nylas-streaming")
   gem.summary = %(Gem for interacting with the Nylas Deltas Streaming API)
   gem.description = %(Gem for interacting with the Nylas Deltas Streaming API.)
 
