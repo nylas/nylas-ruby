@@ -1,4 +1,5 @@
 module Nylas
+  # The constraints a particular GET request will include in their query params
   class Constraints
     attr_accessor :where, :limit, :offset, :view, :per_page
     def initialize(where: {}, limit: nil, offset: 0, view: nil, per_page: 100)
@@ -22,13 +23,17 @@ module Nylas
     end
 
     def to_query
-      query = where.each_with_object({}) do |(name, value), query|
-        query[name] = value
+      query = where.each_with_object({}) do |(name, value), result|
+        result[name] = value
       end
-      query[:limit] = !limit.nil? && limit < per_page ? limit : per_page
+      query[:limit] = limit_for_query
       query[:offset] = offset unless offset.nil?
       query[:view] = view unless view.nil?
       query
+    end
+
+    def limit_for_query
+      !limit.nil? && limit < per_page ? limit : per_page
     end
 
     def self.from_constraints(constraints = Constraints.new)

@@ -1,6 +1,7 @@
 module Nylas
   Error = Class.new(::StandardError)
 
+  # Indicates that a given method needs an access token to work.
   class NoAuthToken < Error
     def initialize(method_name)
       super "No access token was provided and the #{method_name} method requires one"
@@ -9,6 +10,8 @@ module Nylas
 
   UnexpectedAccountAction = Class.new(Error)
   UnexpectedResponse = Class.new(Error)
+
+  # Base class to inflate the standard errors returned from the Nylas APi
   class APIError < Error
     attr_accessor :type
     attr_accessor :message

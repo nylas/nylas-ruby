@@ -1,4 +1,5 @@
 module Nylas
+  # An enumerable for working with index and search endpoints
   class Collection
     attr_accessor :model, :api, :constraints
     def initialize(model:, api:, constraints: nil)
@@ -62,26 +63,27 @@ module Nylas
     # Iterates over every result that meets the filters, retrieving a page at a time
     def find_each
       return enum_for(:find_each) unless block_given?
-      accumulated = []
       query = self
-      loop do
-        results = query.each.to_a
-        results.each do |instance|
+      accumulated = 0
+
+      while query
+        results = query.each do |instance|
           yield(instance)
-          accumulated.push(instance)
         end
-        return accumulated unless more_pages?(accumulated, results)
-        query = query.next_page
+
+        accumulated += results.length
+        query = query.next_page(accumulated: accumulated, current_page: results)
       end
     end
 
-    def next_page
+    def next_page(accumulated: nil, current_page: nil)
+      return nil unless more_pages?(accumulated, current_page)
       self.class.new(model: model, api: api, constraints: constraints.next_page)
     end
 
     def more_pages?(accumulated, current_page)
       return false if current_page.empty?
-      return false if constraints.limit && accumulated.length >= constraints.limit
+      return false if constraints.limit && accumulated >= constraints.limit
       return false if constraints.per_page && current_page.length < constraints.per_page
       true
     end

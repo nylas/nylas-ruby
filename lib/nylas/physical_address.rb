@@ -1,4 +1,6 @@
 module Nylas
+  # Structure to represent the Physical Address schema
+  # @see https://docs.nylas.com/reference#contactsid
   class PhysicalAddress
     include Model::Attributable
     attribute :format, :string
@@ -10,6 +12,7 @@ module Nylas
     attribute :country, :string
   end
 
+  # Serializes, Deserializes between {PhysicalAddress} objects and a {Hash}
   class PhysicalAddressType < Types::HashType
     casts_to PhysicalAddress
   end
