@@ -9,9 +9,13 @@ module Nylas
     def self.included(model)
       model.include(Attributable)
       model.extend(ClassMethods)
+      model.collectionable = true
+      model.searchable = true
+      model.read_only = false
     end
 
     def save
+      raise_if_read_only
       result = if id
                  api.execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
@@ -21,6 +25,7 @@ module Nylas
     end
 
     def update(**data)
+      raise_if_read_only
       attributes.merge(**data)
       api.execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       true
@@ -48,8 +53,28 @@ module Nylas
       JSON.dump(to_h)
     end
 
+    def raise_if_read_only
+      self.class.raise_if_read_only
+    end
+
     module ClassMethods
-      attr_accessor :resources_path
+      attr_accessor :resources_path, :searchable, :read_only, :collectionable
+
+      def read_only?
+        read_only == true
+      end
+
+      def raise_if_read_only
+        raise NotImplementedError, "#{self} is read only" if read_only?
+      end
+
+      def searchable?
+        searchable == true
+      end
+
+      def collectionable?
+        collectionable == true
+      end
 
       def from_json(json, api:)
         from_hash(JSON.parse(json, symbolize_names: true), api: api)

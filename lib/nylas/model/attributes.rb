@@ -1,6 +1,11 @@
 module Nylas
   module Model
     class Attributes
+      class UndefinedAttributeError < StandardError
+        def initialize(attribute, attribute_list)
+          super("#{attribute} not in #{attribute_list}")
+        end
+      end
       attr_accessor :data, :attribute_definitions
 
       def initialize(attribute_definitions)
@@ -13,8 +18,13 @@ module Nylas
       end
 
       def []=(key, value)
-        data[key] = attribute_definitions[key].cast(value)
+        data[key] = cast(key, value)
       end
+
+      private def cast(key, value)
+        attribute_definitions[key].cast(value)
+      end
+
 
       # Merges data into the registry while casting input types correctly
       def merge(new_data)

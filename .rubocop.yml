@@ -3,6 +3,8 @@ AllCops:
   TargetRubyVersion: 2.2
   DisplayCopNames: true
   DisplayStyleGuide: true
+  Exclude:
+    - examples/plain-ruby.rb
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

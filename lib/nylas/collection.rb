@@ -12,12 +12,14 @@ module Nylas
     end
 
     def create(**attributes)
+      model.raise_if_read_only
       instance = model.from_hash(attributes, api: api)
       instance.save
       instance
     end
 
     def where(filters)
+      raise NotImplementedError, "#{model} does not support search" unless model.searchable?
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Nylas::V2::Contact do
+describe Nylas::Contact do
   let(:full_json) do
     '{ "id": "1234", "object": "contact", "account_id": "12345", ' \
       '"given_name":"given", "middle_name": "middle", "surname": "surname", ' \
