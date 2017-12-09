@@ -11,4 +11,3 @@ module Nylas
 
   Types.registry[:im_address] = IMAddressType.new
 end
-

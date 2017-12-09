@@ -11,4 +11,3 @@ module Nylas
 
   Types.registry[:email_address] = EmailAddressType.new
 end
-

@@ -16,7 +16,7 @@ module Nylas
     # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::API]
     def initialize(client: nil, app_id: nil, app_secret: nil, access_token: nil,
-                   api_server: 'https://api.nylas.com', service_domain: 'api.nylas.com')
+                   api_server: "https://api.nylas.com", service_domain: "api.nylas.com")
       self.client = client || HttpClient.new(app_id: app_id, app_secret: app_secret,
                                              access_token: access_token, api_server: api_server,
                                              service_domain: service_domain)
@@ -32,7 +32,6 @@ module Nylas
       prevent_calling_if_missing_access_token(:current_account)
       CurrentAccount.from_hash(client.execute(method: :get, path: "/account"), api: self)
     end
-
 
     private def prevent_calling_if_missing_access_token(method_name)
       return if client.access_token && !client.access_token.empty?

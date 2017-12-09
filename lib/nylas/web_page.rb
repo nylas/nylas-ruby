@@ -11,4 +11,3 @@ module Nylas
 
   Types.registry[:web_page] = WebPageType.new
 end
-

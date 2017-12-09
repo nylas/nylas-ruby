@@ -10,7 +10,7 @@ module Nylas
       429 => SendingQuotaExceeded,
       500 => InternalError,
       502 => BadGateway,
-      503 => ServiceUnavailable,
+      503 => ServiceUnavailable
     }.freeze
 
     include Logging
@@ -26,9 +26,9 @@ module Nylas
     #                            you're using a self-hosted Nylas instance.
     # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::API]
-    def initialize(app_id: , app_secret:, access_token: nil, api_server: 'https://api.nylas.com',
-                   service_domain: 'api.nylas.com')
-      unless api_server.include?('://')
+    def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com",
+                   service_domain: "api.nylas.com")
+      unless api_server.include?("://")
         raise "When overriding the Nylas API server address, you must include https://"
       end
       @api_server = api_server
@@ -37,7 +37,6 @@ module Nylas
       @app_id = app_id
       @service_domain = service_domain
     end
-
 
     # Sends a request to the Nylas API and rai
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
@@ -50,12 +49,12 @@ module Nylas
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [Array Hash Stringn]
-    def execute(method: , url: nil, path: nil, headers: {}, query: {}, payload: nil)
+    def execute(method:, url: nil, path: nil, headers: {}, query: {}, payload: nil)
       headers[:params] = query
-      url = url || url_for_path(path)
+      url ||= url_for_path(path)
       resulting_headers = default_headers.merge(headers)
       rest_client_execute(method: method, url: url, payload: payload,
-                          headers: resulting_headers) do |response, request, result|
+                          headers: resulting_headers) do |response, _request, result|
 
         response = parse_response(response)
         handle_failed_response(result: result, response: response)
@@ -63,7 +62,7 @@ module Nylas
       end
     end
     inform_on :execute, level: :debug,
-      also_log: { result: true, values: [:method, :url, :path, :headers, :query, :payload] }
+                        also_log: { result: true, values: %i[method url path headers query payload] }
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -79,7 +78,7 @@ module Nylas
 
     # Syntactical sugar for making PUT requests via the API.
     # @see #execute
-    def put(path: nil, url: nil, payload: ,headers: {}, query: {})
+    def put(path: nil, url: nil, payload:, headers: {}, query: {})
       execute(method: :put, path: path, url: url, headers: headers, query: query, payload: payload)
     end
 
@@ -89,35 +88,30 @@ module Nylas
       execute(method: :delete, path: path, url: url, headers: headers, query: query, payload: payload)
     end
 
-
-
-    private def rest_client_execute(method: , url: , headers: , payload: , &block)
+    private def rest_client_execute(method:, url:, headers:, payload:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
                                     headers: headers, &block)
     end
     inform_on :rest_client_execute, level: :debug,
-      also_log: { result: true, values: [:method, :url, :headers, :payload] }
-
+                                    also_log: { result: true, values: %i[method url headers payload] }
 
     def default_headers
       @default_headers ||= {
-        'X-Nylas-API-Wrapper' => 'ruby',
-        'User-Agent' => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
-        'Content-types' => 'application/json'
+        "X-Nylas-API-Wrapper" => "ruby",
+        "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
+        "Content-types" => "application/json"
       }
     end
 
     private def parse_response(response)
-      begin
-        response.kind_of?(Enumerable) ? response : JSON.parse(response, symbolize_names: true)
-      rescue JSON::ParserError
-        response
-      end
+      response.is_a?(Enumerable) ? response : JSON.parse(response, symbolize_names: true)
+    rescue JSON::ParserError
+      response
     end
 
     private def url_for_path(path)
-      raise NoAuthToken.new if @access_token == nil and (@app_secret != nil or @app_id != nil)
-      protocol, domain = @api_server.split('//')
+      raise NoAuthToken if @access_token.nil? && (!@app_secret.nil? || !@app_id.nil?)
+      protocol, domain = @api_server.split("//")
       "#{protocol}//#{@access_token}:@#{domain}#{path}"
     end
 
@@ -125,14 +119,14 @@ module Nylas
       http_code = result.code.to_i
 
       handle_anticipated_failure_mode(http_code: http_code, response: response)
-      raise UnexpectedResponse.new(result.msg) if result.is_a?(Net::HTTPClientError)
+      raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
     end
 
     private def handle_anticipated_failure_mode(http_code:, response:)
       if http_code != 200
         exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
         if response.is_a?(Hash)
-          raise exception.new(response['type'], response['message'], response.fetch('server_error', nil))
+          raise exception.new(response["type"], response["message"], response.fetch("server_error", nil))
         end
       end
     end

@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'sinatra', '1.4.5'
-gem 'nylas', '2.0.1'
-gem 'rest-client'
+gem "nylas", "2.0.1"
+gem "rest-client"
+gem "sinatra", "1.4.5"

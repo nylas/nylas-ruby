@@ -11,7 +11,7 @@ module Nylas
   class NylasDateType < Types::HashType
     casts_to NylasDate
     def cast(value)
-      value.is_a?(String) ? super({ object: "date", date: value}) : super
+      value.is_a?(String) ? super({ object: "date", date: value }) : super
     end
   end
 

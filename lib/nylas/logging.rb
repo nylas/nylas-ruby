@@ -1,5 +1,5 @@
 begin
-  require 'informed'
+  require "informed"
 rescue LoadError
 end
 module Nylas
@@ -22,7 +22,7 @@ module Nylas
     end
 
     def self.level
-      Logger.const_get(ENV['NYLAS_LOG_LEVEL'] || :WARN)
+      Logger.const_get(ENV["NYLAS_LOG_LEVEL"] || :WARN)
     end
 
     def self.logger=(logger)
@@ -31,8 +31,7 @@ module Nylas
 
     # No op for inform_on if user does not have the informed gem installed.
     module NoOpInformOn
-      def inform_on(method, level: :debug , also_log: {})
-      end
+      def inform_on(method, level: :debug, also_log: {}); end
     end
   end
 end

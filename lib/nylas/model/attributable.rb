@@ -7,7 +7,7 @@ module Nylas
 
       def initialize(**initial_data)
         initial_data.each do |attribute_name, value|
-          self.send(:"#{attribute_name}=", value)
+          send(:"#{attribute_name}=", value)
         end
       end
 

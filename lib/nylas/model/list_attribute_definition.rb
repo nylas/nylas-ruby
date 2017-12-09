@@ -18,7 +18,6 @@ module Nylas
         list.map { |item| type.serialize(item) }
       end
 
-
       def type
         Types.registry[type_name]
       end

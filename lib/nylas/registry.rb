@@ -11,9 +11,8 @@ module Nylas
     def_delegators :registry_data, :keys, :each, :reduce
 
     def initialize(initial_data = {})
-      self.registry_data = initial_data.each.reduce({}) do |registry, (key, value)|
+      self.registry_data = initial_data.each.each_with_object({}) do |(key, value), registry|
         registry[key] = value
-        registry
       end
     end
 

@@ -1,7 +1,7 @@
-require_relative 'model/attribute_definition'
-require_relative 'model/list_attribute_definition'
-require_relative 'model/attributable'
-require_relative 'model/attributes'
+require_relative "model/attribute_definition"
+require_relative "model/list_attribute_definition"
+require_relative "model/attributable"
+require_relative "model/attributes"
 module Nylas
   module Model
     attr_accessor :api

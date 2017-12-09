@@ -12,7 +12,7 @@ module Nylas
 
       types.each do |value|
         count = 0
-        if OBJECTS_TABLE.has_value?(value)
+        if OBJECTS_TABLE.value?(value)
           param_name = OBJECTS_TABLE.key(value)
           query_string += "#{param_name},"
         end

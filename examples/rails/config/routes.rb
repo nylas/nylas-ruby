@@ -1,12 +1,11 @@
 Rails.application.routes.draw do
-  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'application#index'
-  get 'login_callback' => 'application#login_callback'
-  get 'login' => 'application#login'
+  root "application#index"
+  get "login_callback" => "application#login_callback"
+  get "login" => "application#login"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -1,14 +1,13 @@
-require 'simplecov'
+require "simplecov"
 SimpleCov.start
 
-
-require 'nylas-streaming'
-require 'pry'
-require 'webmock/rspec'
+require "nylas-streaming"
+require "pry"
+require "webmock/rspec"
 
 class FakeAPI
   def execute(method:, path:, payload: nil)
-    requests.push({ method: method, path: path, payload: payload })
+    requests.push(method: method, path: path, payload: payload)
   end
 
   def requests
@@ -23,7 +22,7 @@ class FullModel
   self.resources_path = "/collection"
   # It is possible to exclude certain values on create or update even if they're set. Mostly useful for ids or
   # values that are generated server side.
-  attribute :id, :string, exclude_when: [:creating, :updating]
+  attribute :id, :string, exclude_when: %i[creating updating]
 
   attribute :date, :date
   attribute :email_address, :email_address
@@ -42,7 +41,7 @@ class ReadOnlyModel
   self.resources_path = "/read_only_collection"
   self.read_only = true
 
-  attribute :id, :string, exclude_when: [:creating, :updating]
+  attribute :id, :string, exclude_when: %i[creating updating]
 
   attribute :date, :date
   attribute :email_address, :email_address
@@ -61,7 +60,7 @@ class NonSearchableModel < FullModel
   self.searchable = false
   self.resources_path = "/non_searchable_collection"
 
-  attribute :id, :string, exclude_when: [:creating, :updating]
+  attribute :id, :string, exclude_when: %i[creating updating]
 
   attribute :date, :date
   attribute :email_address, :email_address

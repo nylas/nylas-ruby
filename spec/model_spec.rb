@@ -1,4 +1,4 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Nylas::Model do
   def example_instance_json
@@ -59,9 +59,9 @@ describe Nylas::Model do
     end
 
     it "supports physical address attributes" do
-      address_json = JSON.dump({ format: "structured", type: "work", street_address: "123 N West St",
-                                 postal_code: "12345+0987", state: "CA", country: "USA"})
-      instance = FullModel.from_json('{ "physical_address": ' + address_json + ' } ', api: api)
+      address_json = JSON.dump(format: "structured", type: "work", street_address: "123 N West St",
+                               postal_code: "12345+0987", state: "CA", country: "USA")
+      instance = FullModel.from_json('{ "physical_address": ' + address_json + " } ", api: api)
       expect(instance.physical_address.format).to eql "structured"
       expect(instance.physical_address.type).to eql "work"
       expect(instance.physical_address.street_address).to eql("123 N West St")

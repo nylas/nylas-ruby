@@ -19,4 +19,3 @@ module Nylas
     attribute :sync_state, :string
   end
 end
-

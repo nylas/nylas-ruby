@@ -13,8 +13,8 @@ module Nylas
         @casts_to_model = model
       end
 
-      def self.casts_to_model
-        @casts_to_model
+      class << self
+        attr_reader :casts_to_model
       end
 
       def model
@@ -33,9 +33,8 @@ module Nylas
       end
 
       def actual_attributes(hash)
-        model.attribute_definitions.keys.reduce({}) do |attributes, attribute_name|
+        model.attribute_definitions.keys.each_with_object({}) do |attribute_name, attributes|
           attributes[attribute_name] = hash[attribute_name]
-          attributes
         end
       end
     end

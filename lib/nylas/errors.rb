@@ -31,4 +31,3 @@ module Nylas
   InternalError = Class.new(APIError)
   MailProviderError = Class.new(APIError)
 end
-

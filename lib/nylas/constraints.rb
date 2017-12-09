@@ -22,17 +22,16 @@ module Nylas
     end
 
     def to_query
-      query = where.reduce({}) do |query, (name, value)|
+      query = where.each_with_object({}) do |(name, value), query|
         query[name] = value
-        query
       end
-      query[:limit] = !limit.nil? && limit < per_page ? limit : per_page 
+      query[:limit] = !limit.nil? && limit < per_page ? limit : per_page
       query[:offset] = offset unless offset.nil?
       query[:view] = view unless view.nil?
       query
     end
 
-    def self.from_constraints(constraints=Constraints.new)
+    def self.from_constraints(constraints = Constraints.new)
       return constraints if constraints.is_a?(Constraints)
       return new(**constraints) if constraints.respond_to?(:key?)
       return new if constraints.nil?

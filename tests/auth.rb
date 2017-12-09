@@ -1,13 +1,13 @@
 # A basic sinatra app that goes through the auth flow to make
 # sure there's no breakage.
 
-require 'sinatra/base'
-require 'nylas'
+require "sinatra/base"
+require "nylas"
 
-$:.unshift File.join(File.dirname(__FILE__))
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__))
 
 begin
-  load 'credentials.rb'
+  load "credentials.rb"
 rescue LoadError
   puts "It seems you didn't create a 'credentials.rb' file. Look at credentials.rb.template for an example."
   exit
@@ -16,12 +16,11 @@ end
 print APP_ID
 
 ENDPOINTS = [
-  {:api_path => "https://api.nylas.com", :login_domain => "api.nylas.com"},
-]
+  { api_path: "https://api.nylas.com", login_domain: "api.nylas.com" }
+].freeze
 
 class App < Sinatra::Base
-  get '/' do
-
+  get "/" do
     entry = params[:entry].to_i
     api_path = ENDPOINTS[entry][:api_path]
     login_domain = ENDPOINTS[entry][:login_domain]
@@ -31,10 +30,10 @@ class App < Sinatra::Base
 
     # This URL must be registered with your application in the developer portal
     callback_url = "http://localhost:4567/callback"
-    redirect to(inbox.url_for_authentication(callback_url, nil, :state => 'blue_state'))
+    redirect to(inbox.url_for_authentication(callback_url, nil, state: "blue_state"))
   end
 
-  get '/callback' do
+  get "/callback" do
     api_path = ENDPOINTS[0][:api_path]
     login_domain = ENDPOINTS[0][:login_domain]
 
@@ -42,7 +41,7 @@ class App < Sinatra::Base
                            service_domain: login_domain)
     inbox_token = inbox.token_for_code(params[:code])
     inbox = Nylas::API.new(app_id: APP_ID, app_secret: APP_SECRET, access_token: inbox_token,
-                           api_server: api_path, service_domain:login_domain)
+                           api_server: api_path, service_domain: login_domain)
     return inbox_token
   end
 

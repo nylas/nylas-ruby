@@ -1,7 +1,7 @@
 module Nylas
   class Collection
     attr_accessor :model, :api, :constraints
-    def initialize(model: , api: , constraints: nil)
+    def initialize(model:, api:, constraints: nil)
       self.constraints = Constraints.from_constraints(constraints)
       self.model = model
       self.api = api
@@ -36,7 +36,7 @@ module Nylas
     end
 
     # Iterates over a single page of results based upon current pagination settings
-    def each(&block)
+    def each
       return enum_for(:each) unless block_given?
       execute.each do |result|
         yield(model.from_hash(result, api: api))
@@ -60,12 +60,12 @@ module Nylas
     end
 
     # Iterates over every result that meets the filters, retrieving a page at a time
-    def find_each(&block)
+    def find_each
       return enum_for(:find_each) unless block_given?
       accumulated = []
       accumulating = true
       query = self
-      while true
+      loop do
         results = query.execute.compact
         results.each do |result|
           instance = model.from_hash(result, api: api)
@@ -84,28 +84,27 @@ module Nylas
     def more_pages?(accumulated, current_page)
       return false if current_page.empty?
       return false if constraints.limit && accumulated.length >= constraints.limit
-        return false if constraints.per_page && current_page.length < constraints.per_page
-        true
+      return false if constraints.per_page && current_page.length < constraints.per_page
+      true
       end
 
-      # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
-      # consideration other query constraints, such as where clauses.
-      def find(id)
-        instance = model.from_hash({ id: id }, api: api)
-        instance.reload
-        instance
-      end
+    # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
+    # consideration other query constraints, such as where clauses.
+    def find(id)
+      instance = model.from_hash({ id: id }, api: api)
+      instance.reload
+      instance
+    end
 
-      # @return [Hash] Specification for request to be passed to {API#execute}
-      def to_be_executed
-        { method: :get, path: model.resources_path, query: constraints.to_query }
-      end
+    # @return [Hash] Specification for request to be passed to {API#execute}
+    def to_be_executed
+      { method: :get, path: model.resources_path, query: constraints.to_query }
+    end
 
-      # Retrieves the data from the API for the particular constraints
-      # @return [Hash,Array]
-      def execute
-        api.execute(to_be_executed)
-      end
+    # Retrieves the data from the API for the particular constraints
+    # @return [Hash,Array]
+    def execute
+      api.execute(to_be_executed)
+    end
     end
 end
-
