@@ -39,11 +39,7 @@ We support Rails 4.2 and above. A more detailed compatiblity list can be found i
 
 ## Examples
 
-### Plain Ruby
-The following examples are from [examples/plain-ruby.rb](examples/plain-ruby.rb)
-
-{include:file:examples/plain-ruby.rb}
-
+Examples are located in the [examples](./examples) directory. Examples in plain ruby are in [examples/plain-ruby/](./examples/plain-ruby). They are grouped by the API endpoints they interact with.
 
 ### Handling Errors
 The Nylas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.

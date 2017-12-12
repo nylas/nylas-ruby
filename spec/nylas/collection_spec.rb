@@ -59,7 +59,7 @@ describe Nylas::Collection do
   describe "#find" do
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
       collection = described_class.new(model: ReadOnlyModel, api: api)
-      allow(api).to receive(:execute).with(method: :get, path: "/read_only_collection/1234")
+      allow(api).to receive(:execute).with(method: :get, path: "/read_only_collection/1234", payload: nil)
         .and_return(example_instance_hash)
 
       instance = collection.find(1234)

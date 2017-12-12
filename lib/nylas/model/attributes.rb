@@ -31,7 +31,7 @@ module Nylas
       def to_h(keys: attribute_definitions.keys)
         keys.each_with_object({}) do |key, casted_data|
           value = attribute_definitions[key].serialize(self[key])
-          casted_data[key] = value unless value.nil? || value.empty?
+          casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
       end
 

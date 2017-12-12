@@ -79,5 +79,14 @@ module Nylas
       end
     end
     Types.registry[:string] = StringType.new
+
+    # Type for attributes represented as booleans.
+    class BooleanType < ValueType
+      # @param value [Object] Strictly casts the passed in value to a boolean (must be true, not "" or 1)
+      def cast(value)
+        value == true
+      end
+    end
+    Types.registry[:boolean] = BooleanType.new
   end
 end

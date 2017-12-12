@@ -14,7 +14,7 @@ module Nylas
     }.freeze
 
     include Logging
-    attr_accessor :api_server, :default_headers
+    attr_accessor :api_server, :default_headers, :service_domain
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
@@ -25,7 +25,7 @@ module Nylas
     # @param api_server [String] (Optional) Which Nylas API Server to connect to. Only change this if
     #                            you're using a self-hosted Nylas instance.
     # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
-    # @return [Nylas::API]
+    # @return [Nylas::HttpClient]
     def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com",
                    service_domain: "api.nylas.com")
       unless api_server.include?("://")
@@ -36,6 +36,12 @@ module Nylas
       @app_secret = app_secret
       @app_id = app_id
       @service_domain = service_domain
+    end
+
+    # @return [Nylas::HttpClient[]
+    def as(access_token)
+      HttpClient.new(app_id: app_id, access_token: access_token,
+                     app_secret: app_secret, api_server: api_server, service_domain: service_domain)
     end
 
     # Sends a request to the Nylas API and rai
@@ -111,11 +117,11 @@ module Nylas
     rescue JSON::ParserError
       response
     end
+    inform_on :parse_response, level: :debug, also_log: { result: true }
 
     private def url_for_path(path)
-      raise NoAuthToken if @access_token.nil? && (!@app_secret.nil? || !@app_id.nil?)
-      protocol, domain = @api_server.split("//")
-      "#{protocol}//#{@access_token}:@#{domain}#{path}"
+      protocol, domain = api_server.split("//")
+      "#{protocol}//#{access_token}:@#{domain}#{path}"
     end
 
     private def handle_failed_response(result:, response:)
@@ -129,7 +135,7 @@ module Nylas
       return if http_code == 200
       return unless response.is_a?(Hash)
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      raise exception.new(response["type"], response["message"], response.fetch("server_error", nil))
+      raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
     end
   end
 end

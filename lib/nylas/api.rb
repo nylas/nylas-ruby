@@ -3,7 +3,7 @@ module Nylas
   class API
     attr_accessor :client
     extend Forwardable
-    def_delegators :client, :execute, :get, :post, :put, :delete
+    def_delegators :client, :execute, :get, :post, :put, :delete, :app_id
 
     include Logging
 
@@ -32,7 +32,19 @@ module Nylas
     # @return [CurrentAccount] The account details for whomevers access token is set
     def current_account
       prevent_calling_if_missing_access_token(:current_account)
-      CurrentAccount.from_hash(client.execute(method: :get, path: "/account"), api: self)
+      CurrentAccount.from_hash(execute(method: :get, path: "/account"), api: self)
+    end
+
+    # @return [Collection<Account>] A queryable collection of Accounts
+    def accounts
+      @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
+    end
+
+    # Allows you to get an API that acts as a different user but otherwise has the same settings
+    # @param [String] Oauth Access token or app secret used to authenticate with the API
+    # @return [API]
+    def as(access_token)
+      API.new(client: client.as(access_token))
     end
 
     private def prevent_calling_if_missing_access_token(method_name)
