@@ -47,6 +47,11 @@ module Nylas
       API.new(client: client.as(access_token))
     end
 
+    # @return [Collection<Thread>] A queryable collection of Threads
+    def threads
+      client.execute(method: :get, path: "/threads")
+    end
+
     private def prevent_calling_if_missing_access_token(method_name)
       return if client.access_token && !client.access_token.empty?
       raise NoAuthToken, method_name

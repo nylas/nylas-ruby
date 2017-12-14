@@ -57,6 +57,26 @@ module Nylas
       end
     end
 
+    # Type for attributes represented as a unix timestamp in the API and Time in Ruby
+    class UnixTimestampType
+      def cast(object)
+        return object if object.is_a?(Time) || object.nil?
+        return Time.at(object.to_i) if object.is_a?(String)
+        return Time.at(object) if object.is_a?(Numeric)
+        return object.to_time if object.is_a?(Date)
+        raise TypeError, "Unable to cast #{object} to Time"
+      end
+
+      def deserialize(object)
+        cast(object)
+      end
+
+      def serialize(object)
+        object.to_i
+      end
+    end
+    Types.registry[:unix_timestamp] = UnixTimestampType.new
+
     # Type for attributes represented as an iso8601 dates in the API and Date in Ruby
     class DateType < ValueType
       def cast(value)
@@ -79,6 +99,15 @@ module Nylas
       end
     end
     Types.registry[:string] = StringType.new
+
+    # Type for attributes represented as pure integers both within the API and in Ruby
+    class IntegerType < ValueType
+      # @param value [Object] Casts the passed in object to an integer using to_i
+      def cast(value)
+        value.to_i
+      end
+    end
+    Types.registry[:integer] = IntegerType.new
 
     # Type for attributes represented as booleans.
     class BooleanType < ValueType
