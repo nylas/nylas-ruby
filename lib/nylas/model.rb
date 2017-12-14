@@ -18,22 +18,26 @@ module Nylas
     def save
       raise_if_read_only
       result = if id
-                 api.execute(method: :put, payload: attributes.serialize, path: resource_path)
+                 execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
-                 api.execute(method: :post, payload: attributes.serialize, path: resources_path)
+                 execute(method: :post, payload: attributes.serialize, path: resources_path)
                end
       attributes.merge(result)
+    end
+
+    def execute(method:, payload: nil, path:)
+      api.execute(method: method, payload: payload, path: path)
     end
 
     def update(**data)
       raise_if_read_only
       attributes.merge(**data)
-      api.execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
+      execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       true
     end
 
     def reload
-      attributes.merge(api.execute(method: :get, path: resource_path))
+      attributes.merge(execute(method: :get, path: resource_path))
       true
     end
 
@@ -42,11 +46,11 @@ module Nylas
     end
 
     def resources_path
-      self.class.resources_path
+      self.class.resources_path(api: api)
     end
 
     def destroy
-      api.execute(method: :delete, path: resource_path)
+      execute(method: :delete, path: resource_path)
     end
 
     # @return [String] JSON String of the model.
@@ -64,6 +68,10 @@ module Nylas
 
       def read_only?
         read_only == true
+      end
+
+      def resources_path(*)
+        @resources_path
       end
 
       def raise_if_read_only

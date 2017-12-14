@@ -98,7 +98,7 @@ module Nylas
 
     # @return [Hash] Specification for request to be passed to {API#execute}
     def to_be_executed
-      { method: :get, path: model.resources_path, query: constraints.to_query }
+      { method: :get, path: model.resources_path(api: api), query: constraints.to_query }
     end
 
     # Retrieves the data from the API for the particular constraints
