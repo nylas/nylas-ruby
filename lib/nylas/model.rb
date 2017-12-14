@@ -18,7 +18,6 @@ module Nylas
     def save
       raise_if_read_only
       result = if id
-                 exec
                  execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
                  execute(method: :post, payload: attributes.serialize, path: resources_path)
