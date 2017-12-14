@@ -13,10 +13,10 @@ demonstrate { api.accounts.limit(5).map(&:to_h) }
 
 # Deactivating an account
 account = api.accounts.first
-demonstrate { account.deactivate }
+demonstrate { account.downgrade }
 demonstrate { account.to_h }
 
 # Activating an account
-demonstrate { account.activate }
+demonstrate { account.upgrade }
 demonstrate { account.to_h }
 

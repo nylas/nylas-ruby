@@ -24,20 +24,20 @@ describe Nylas::Account do
     expect(account.trial).to be false
   end
 
-  it "can be deactivated" do
+  it "can be downgraded" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
-    expect(account.deactivate).to be_truthy
+    expect(account.downgrade).to be_truthy
 
     expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/downgrade",
                                                 payload: nil)
   end
-  it "can be activated" do
+  it "can be upgraded" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
-    expect(account.activate).to be_truthy
+    expect(account.upgrade).to be_truthy
 
     expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/upgrade",
                                                 payload: nil)

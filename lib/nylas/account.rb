@@ -14,12 +14,12 @@ module Nylas
     attribute :email, :string
     attribute :trial, :boolean
 
-    def activate
+    def upgrade
       response = execute(method: :post, path: "#{resource_path}/upgrade")
       response[:success]
     end
 
-    def deactivate
+    def downgrade
       response = execute(method: :post, path: "#{resource_path}/downgrade")
       response[:success]
     end
