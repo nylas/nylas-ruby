@@ -49,7 +49,7 @@ module Nylas
 
     # @return [Collection<Thread>] A queryable collection of Threads
     def threads
-      client.execute(method: :get, path: "/threads")
+      @threads ||= Collection.new(model: Thread, api: self)
     end
 
     private def prevent_calling_if_missing_access_token(method_name)

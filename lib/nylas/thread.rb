@@ -29,6 +29,16 @@ module Nylas
 
     has_n_of_attribute :label_ids, :string
 
+    UPDATABLE_ATTRIBUTES = [:label_ids, :folder_id, :starred, :unread].freeze
+    def update(data)
+      unupdatable_attributes = data.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
+      unless unupdatable_attributes.empty?
+        raise ArgumentError, "Cannot update #{unupdatable_attributes} only " \
+                             "#{UPDATABLE_ATTRIBUTES} are updatable"
+      end
+      super(data)
+    end
+
     def starred?
       starred
     end

@@ -71,5 +71,14 @@ describe Nylas::Thread do
                                                                      label_ids: ["label-1234",
                                                                                  "label-4567"]))
     end
+
+    it "raises an argument error if the data has any keys that aren't allowed to be updated" do
+      api =  instance_double(Nylas::API, execute: "{}")
+      thread = described_class.from_json('{ "id": "thread-1234" }', api: api)
+      expect do
+        thread.update(subject: "A new subject!")
+      end.to raise_error ArgumentError, "Cannot update [:subject] only " \
+                                        "#{described_class::UPDATABLE_ATTRIBUTES} are updatable"
+    end
   end
 end

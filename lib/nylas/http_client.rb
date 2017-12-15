@@ -6,9 +6,11 @@ module Nylas
       402 => MessageRejected,
       403 => AccessDenied,
       404 => ResourceNotFound,
+      405 => MethodNotAllowed,
       422 => MailProviderError,
       429 => SendingQuotaExceeded,
       500 => InternalError,
+      501 => EndpointNotYetImplemented,
       502 => BadGateway,
       503 => ServiceUnavailable
     }.freeze
