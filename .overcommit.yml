@@ -12,6 +12,7 @@ PreCommit:
   RuboCop:
     enabled: true
     on_warn: fail # Treat all warnings as failures
+    required_executable: './bin/rubocop'
   TrailingWhitespace:
     enabled: true
 
