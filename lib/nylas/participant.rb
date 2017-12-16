@@ -4,6 +4,8 @@ module Nylas
     include Model::Attributable
     attribute :name, :string
     attribute :email, :string
+    attribute :comment, :string
+    attribute :status, :string
   end
 
   # Serializes, Deserializes between {Participant} objects and a {Hash}

@@ -95,6 +95,7 @@ module Nylas
     class StringType < ValueType
       # @param value [Object] Casts the passed in object to a string using #to_s
       def cast(value)
+        return value if value.nil?
         value.to_s
       end
     end
@@ -104,6 +105,7 @@ module Nylas
     class IntegerType < ValueType
       # @param value [Object] Casts the passed in object to an integer using to_i
       def cast(value)
+        return nil if value.nil?
         value.to_i
       end
     end
