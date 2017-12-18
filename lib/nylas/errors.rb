@@ -26,11 +26,13 @@ module Nylas
   end
   AccessDenied = Class.new(APIError)
   ResourceNotFound = Class.new(APIError)
+  MethodNotAllowed = Class.new(APIError)
   InvalidRequest = Class.new(APIError)
   MessageRejected = Class.new(APIError)
   SendingQuotaExceeded = Class.new(APIError)
   ServiceUnavailable = Class.new(APIError)
   BadGateway = Class.new(APIError)
   InternalError = Class.new(APIError)
+  EndpointNotYetImplemented = Class.new(APIError)
   MailProviderError = Class.new(APIError)
 end
