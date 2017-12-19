@@ -14,7 +14,7 @@ describe Nylas::Collection do
   describe "#each" do
     it "Returns an enumerable for a single page of results, filtered by `offset` and `limit` and `where`" do
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 })
+        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }, headers: {})
         .and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
@@ -26,7 +26,7 @@ describe Nylas::Collection do
 
     it "allows you to use a block directly" do
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 })
+        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }, headers: {})
         .and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
@@ -45,11 +45,11 @@ describe Nylas::Collection do
     it "iterates over every page filtered based on `limit` and `where`" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).with(method: :get, path: "/collection",
-                                           query: { limit: 100, offset: 0 })
+                                           query: { limit: 100, offset: 0 }, headers: {})
         .and_return(Array.new(100) { example_instance_hash })
 
       allow(api).to receive(:execute).with(method: :get, path: "/collection",
-                                           query: { limit: 100, offset: 100 })
+                                           query: { limit: 100, offset: 100 }, headers: {})
         .and_return(Array.new(50) { example_instance_hash })
 
       expect(collection.find_each.to_a.size).to be 150

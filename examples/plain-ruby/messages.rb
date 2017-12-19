@@ -15,6 +15,9 @@ demonstrate { api.messages.first.to_h }
 demonstrate { api.messages.expanded.first.to_h }
 
 message = api.messages.first
+# Retrieving a raw message
+demonstrate { api.messages.raw.find(message.id) }
+
 # Starring and marking a message as unread
 demonstrate { message.update(starred: true, unread: true) }
 reloaded_message = api.messages.first

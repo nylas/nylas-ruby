@@ -3,6 +3,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#messages
   class Message
     include Model
+    self.raw_mime_type = "message/rfc822"
     self.resources_path = "/messages"
 
     attribute :id, :string

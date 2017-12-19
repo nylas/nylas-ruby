@@ -64,7 +64,7 @@ module Nylas
 
     # Allows you to narrow in exactly what kind of model you're working with
     module ClassMethods
-      attr_accessor :resources_path, :searchable, :read_only, :collectionable
+      attr_accessor :resources_path, :searchable, :read_only, :collectionable, :raw_mime_type
 
       def read_only?
         read_only == true
@@ -76,6 +76,10 @@ module Nylas
 
       def raise_if_read_only
         raise NotImplementedError, "#{self} is read only" if read_only?
+      end
+
+      def exposable_as_raw?
+        !raw_mime_type.nil?
       end
 
       def searchable?

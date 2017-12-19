@@ -24,6 +24,11 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 
+    def raw
+      raise NotImplementedError, "#{model} does not support raw" unless model.exposable_as_raw?
+      self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
+    end
+
     def count
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
     end
@@ -95,6 +100,14 @@ module Nylas
     # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
     # consideration other query constraints, such as where clauses.
     def find(id)
+      constraints.accept == "application/json" ? find_model(id) : find_raw(id)
+    end
+
+    def find_raw(id)
+      api.execute(to_be_executed.merge(path: "#{model.resources_path(api: api)}/#{id}")).to_s
+    end
+
+    def find_model(id)
       instance = model.from_hash({ id: id }, api: api)
       instance.reload
       instance
@@ -102,7 +115,8 @@ module Nylas
 
     # @return [Hash] Specification for request to be passed to {API#execute}
     def to_be_executed
-      { method: :get, path: model.resources_path(api: api), query: constraints.to_query }
+      { method: :get, path: model.resources_path(api: api), query: constraints.to_query,
+        headers: constraints.to_headers }
     end
 
     # Retrieves the data from the API for the particular constraints
