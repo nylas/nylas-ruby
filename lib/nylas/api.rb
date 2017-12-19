@@ -35,12 +35,22 @@ module Nylas
       CurrentAccount.from_hash(execute(method: :get, path: "/account"), api: self)
     end
 
-    # @return [Collection<Account>] A queryable collection of Accounts
+    # @return [Collection<Account>] A queryable collection of {Account}s
     def accounts
       @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
     end
 
-    # @return[Collection<Message>] A queryable collection of Message objects
+    # @return [Collection<Folder>] A queryable collection of {Folder}s
+    def folders
+      @folders ||= Collection.new(model: Folder, api: self)
+    end
+
+    # @return [Collection<Label>] A queryable collection of {Label} objects
+    def labels
+      @labels ||= Collection.new(model: Label, api: self)
+    end
+
+    # @return[Collection<Message>] A queryable collection of {Message} objects
     def messages
       @messages ||= Collection.new(model: Message, api: self)
     end

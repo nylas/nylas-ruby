@@ -2,8 +2,15 @@ module Nylas
   # Structure to represent the Label Schema
   # @see https://docs.nylas.com/reference#labels
   class Label
-    include Model::Attributable
+    include Model
+    self.resources_path = "/labels"
+    self.searchable = false
+
     attribute :id, :string
+    attribute :account_id, :string
+
+    attribute :object, :string
+
     attribute :name, :string
     attribute :display_name, :string
   end
