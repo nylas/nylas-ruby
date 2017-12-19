@@ -37,8 +37,12 @@ module Nylas
 
       def actual_attributes(hash)
         model.attribute_definitions.keys.each_with_object({}) do |attribute_name, attributes|
-          attributes[attribute_name] = hash[attribute_name]
+          attributes[attribute_name] = hash[json_key_from_attribute_name(attribute_name)]
         end
+      end
+
+      def json_key_from_attribute_name(name)
+        name
       end
     end
 

@@ -42,7 +42,7 @@ module Nylas
 
     # @return[Collection<Message>] A queryable collection of Message objects
     def messages
-      get(path: "/messages")
+      @messages ||= Collection.new(model: Message, api: self)
     end
 
     # Allows you to get an API that acts as a different user but otherwise has the same settings

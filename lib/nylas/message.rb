@@ -3,10 +3,14 @@ module Nylas
   # @see https://docs.nylas.com/reference#messages
   class Message
     include Model
+    self.resources_path = "/messages"
+
     attribute :id, :string
     attribute :object, :string
     attribute :account_id, :string
     attribute :thread_id, :string
+
+    attribute :headers, :message_headers
 
     has_n_of_attribute :to, :email_address
     has_n_of_attribute :from, :email_address

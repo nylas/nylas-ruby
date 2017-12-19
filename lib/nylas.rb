@@ -22,6 +22,7 @@ require_relative "nylas/file"
 require_relative "nylas/folder"
 require_relative "nylas/im_address"
 require_relative "nylas/label"
+require_relative "nylas/message_headers"
 require_relative "nylas/participant"
 require_relative "nylas/physical_address"
 require_relative "nylas/phone_number"
@@ -48,6 +49,7 @@ module Nylas
   Types.registry[:folder] = FolderType.new
   Types.registry[:im_address] = IMAddressType.new
   Types.registry[:label] = LabelType.new
+  Types.registry[:message_headers] = MessageHeadersType.new
   Types.registry[:participant] = ParticipantType.new
   Types.registry[:physical_address] = PhysicalAddressType.new
   Types.registry[:phone_number] = PhoneNumberType.new

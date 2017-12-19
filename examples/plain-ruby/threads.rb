@@ -9,6 +9,18 @@ api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SEC
 # How many threads are there?
 demonstrate { api.threads.count }
 
+thread = api.threads.first
+# Threads have quite a bit of information
+demonstrate { thread.to_h }
+
+# Threads may be expanded
+# demonstrate { api.threads.expanded.first }
+
+# Threads may have their unread/starred statuses updated
+demonstrate { thread.update(starred: true, unread: true) }
+reloaded_thread = api.threads.first
+demonstrate { { starred: reloaded_thread.starred, unread: reloaded_thread.unread } }
+
 # Threads cannot be created
 demonstrate do
   begin
@@ -19,17 +31,8 @@ demonstrate do
 end
 
 
-thread = api.threads.first
-# Threads have quite a bit of information
-demonstrate { thread.to_h }
-
-# Threads may have their unread/starred statuses updated
-demonstrate { thread.update(starred: true, unread: true) }
-reloaded_thread = api.threads.first
-demonstrate { { starred: reloaded_thread.starred, unread: reloaded_thread.unread } }
 
 # Threads may not be destroyed
-
 demonstrate do
   begin
     thread.destroy

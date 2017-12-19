@@ -28,6 +28,10 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
     end
 
+    def expanded
+      self.class.new(model: model, api: api, constraints: constraints.merge(view: "expanded"))
+    end
+
     def first
       model.from_hash(execute.first, api: api)
     end
