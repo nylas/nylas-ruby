@@ -2,6 +2,10 @@ module Nylas
   # An enumerable for working with index and search endpoints
   class Collection
     attr_accessor :model, :api, :constraints
+    extend Forwardable
+    def_delegators :each, :map, :select, :reject, :to_a
+    def_delegators :to_a, :first, :last, :[]
+
     def initialize(model:, api:, constraints: nil)
       self.constraints = Constraints.from_constraints(constraints)
       self.model = model
@@ -37,28 +41,12 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "expanded"))
     end
 
-    def first
-      model.from_hash(execute.first, api: api)
-    end
-
-    def[](index)
-      model.from_hash(execute(index), api: api)
-    end
-
     # Iterates over a single page of results based upon current pagination settings
     def each
       return enum_for(:each) unless block_given?
       execute.each do |result|
         yield(model.from_hash(result, api: api))
       end
-    end
-
-    def to_a
-      each.to_a
-    end
-
-    def map(&block)
-      each.map(&block)
     end
 
     def limit(quantity)
