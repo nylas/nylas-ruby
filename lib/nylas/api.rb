@@ -40,6 +40,11 @@ module Nylas
       @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
     end
 
+    # @return[Collection<Message>] A queryable collection of Message objects
+    def messages
+      @messages ||= Collection.new(model: Message, api: self)
+    end
+
     # Allows you to get an API that acts as a different user but otherwise has the same settings
     # @param [String] Oauth Access token or app secret used to authenticate with the API
     # @return [API]

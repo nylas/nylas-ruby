@@ -3,7 +3,11 @@ module Nylas
   # @see https://docs.nylas.com/reference#folders
   class Folder
     include Model::Attributable
+    attribute :object, :string
+
     attribute :id, :string
+    attribute :account_id, :string
+
     attribute :name, :string
     attribute :display_name, :string
   end

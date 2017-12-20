@@ -5,6 +5,7 @@ module Nylas
     include Model::Attributable
     attribute :type, :string
     attribute :email, :string
+    attribute :name, :string
   end
 
   # Serializes, Deserializes between {EmailAddress} objects and a {Hash}

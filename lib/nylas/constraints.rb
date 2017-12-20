@@ -1,22 +1,26 @@
 module Nylas
   # The constraints a particular GET request will include in their query params
   class Constraints
-    attr_accessor :where, :limit, :offset, :view, :per_page
-    def initialize(where: {}, limit: nil, offset: 0, view: nil, per_page: 100)
+    attr_accessor :where, :limit, :offset, :view, :per_page, :accept
+    # rubocop:disable Metrics/ParameterLists
+    def initialize(where: {}, limit: nil, offset: 0, view: nil, per_page: 100, accept: "application/json")
       self.where = where
       self.limit = limit
       self.offset = offset
       self.view = view
       self.per_page = per_page
+      self.accept = accept
     end
 
-    def merge(where: {}, limit: nil, offset: nil, view: nil, per_page: nil)
+    def merge(where: {}, limit: nil, offset: nil, view: nil, per_page: nil, accept: nil)
       Constraints.new(where: where.merge(where),
                       limit: limit || self.limit,
                       per_page: per_page || self.per_page,
                       offset: offset || self.offset,
-                      view: view || self.view)
+                      view: view || self.view,
+                      accept: accept || self.accept)
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def next_page
       merge(offset: offset + per_page)
@@ -30,6 +34,10 @@ module Nylas
       query[:offset] = offset unless offset.nil?
       query[:view] = view unless view.nil?
       query
+    end
+
+    def to_headers
+      accept == "application/json" ? {} : { "Accept" => accept, "Content-types" => accept }
     end
 
     def limit_for_query

@@ -2,6 +2,10 @@ module Nylas
   # An enumerable for working with index and search endpoints
   class Collection
     attr_accessor :model, :api, :constraints
+    extend Forwardable
+    def_delegators :each, :map, :select, :reject, :to_a
+    def_delegators :to_a, :first, :last, :[]
+
     def initialize(model:, api:, constraints: nil)
       self.constraints = Constraints.from_constraints(constraints)
       self.model = model
@@ -24,16 +28,17 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 
+    def raw
+      raise NotImplementedError, "#{model} does not support raw" unless model.exposable_as_raw?
+      self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
+    end
+
     def count
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
     end
 
-    def first
-      model.from_hash(execute.first, api: api)
-    end
-
-    def[](index)
-      model.from_hash(execute(index), api: api)
+    def expanded
+      self.class.new(model: model, api: api, constraints: constraints.merge(view: "expanded"))
     end
 
     # Iterates over a single page of results based upon current pagination settings
@@ -42,14 +47,6 @@ module Nylas
       execute.each do |result|
         yield(model.from_hash(result, api: api))
       end
-    end
-
-    def to_a
-      each.to_a
-    end
-
-    def map(&block)
-      each.map(&block)
     end
 
     def limit(quantity)
@@ -91,6 +88,14 @@ module Nylas
     # Retrieves a record. Nylas doesn't support where filters on GET so this will not take into
     # consideration other query constraints, such as where clauses.
     def find(id)
+      constraints.accept == "application/json" ? find_model(id) : find_raw(id)
+    end
+
+    def find_raw(id)
+      api.execute(to_be_executed.merge(path: "#{model.resources_path(api: api)}/#{id}")).to_s
+    end
+
+    def find_model(id)
       instance = model.from_hash({ id: id }, api: api)
       instance.reload
       instance
@@ -98,7 +103,8 @@ module Nylas
 
     # @return [Hash] Specification for request to be passed to {API#execute}
     def to_be_executed
-      { method: :get, path: model.resources_path(api: api), query: constraints.to_query }
+      { method: :get, path: model.resources_path(api: api), query: constraints.to_query,
+        headers: constraints.to_headers }
     end
 
     # Retrieves the data from the API for the particular constraints
