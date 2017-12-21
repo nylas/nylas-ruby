@@ -12,6 +12,7 @@ module Nylas
     attribute :version, :integer
     attribute :account_id, :string
     attribute :thread_id, :string
+    attribute :reply_to_message_id, :string
 
     has_n_of_attribute :to, :email_address
     has_n_of_attribute :from, :email_address
@@ -37,6 +38,10 @@ module Nylas
 
     def unread?
       unread
+    end
+
+    def destroy
+      execute(method: :delete, path: resource_path, payload: attributes.serialize(keys: [:version]))
     end
   end
 end

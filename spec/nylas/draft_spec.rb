@@ -25,7 +25,7 @@ describe Nylas::Draft do
     it "Deserializes all the attributes into Ruby objects" do
       api = instance_double(Nylas::API)
       data = { id: "drft-592", version: 0, object: "draft", account_id: "acc-9987", thread_id: "thread-1234",
-               date: 1_513_276_982,
+               reply_to_message_id: "mess-1234", date: 1_513_276_982,
                to: [{ email: "to@example.com", name: "To Example" }],
                from: [{ email: "from@example.com", name: "From Example" }],
                cc: [{ email: "cc@example.com", name: "CC Example" }],
@@ -47,6 +47,7 @@ describe Nylas::Draft do
       expect(draft.id).to eql "drft-592"
       expect(draft.account_id).to eql "acc-9987"
       expect(draft.thread_id).to eql "thread-1234"
+      expect(draft.reply_to_message_id).to eql "mess-1234"
       expect(draft.date).to eql Time.at(1_513_276_982)
 
       expect(draft.to[0].email).to eql "to@example.com"

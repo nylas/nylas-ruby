@@ -7,9 +7,30 @@ api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SEC
 
 
 # Retrieving a count of drafts
-# demonstrate { api.drafts.count }
+demonstrate { api.drafts.count }
 
-# Retrieving a draft
-puts api.drafts.first.to_h
-demonstrate { api.drafts.first.to_h }
+# Retrieving drafts as a collection draft
+demonstrate { api.drafts.limit(2).map(&:to_h) }
+example_draft =  api.drafts.first
 
+# Retrieving a particular drafts
+demonstrate { api.drafts.find(example_draft.id) }
+
+# Creating a draft
+demonstrate do
+  example_draft = api.drafts.create(subject: "A new draft!")
+  example_draft.to_h
+end
+
+# Updating a draft
+demonstrate do
+  example_draft.to << { name: "Other person", email: "other@example.com" }
+  example_draft.save
+  api.drafts.find(example_draft.id).to.map(&:to_h)
+end
+
+# Destroying a draft
+
+demonstrate do
+  example_draft.destroy
+end

@@ -47,7 +47,7 @@ module Nylas
 
     # @return[Collection<Draft>] A queryable collection of {Draft} objects
     def drafts
-      @drafts ||= get(path: "/drafts")
+      @drafts ||= Collection.new(model: Draft, api: self)
     end
 
     # @return [Collection<Event>] A queryable collection of {Event}s
