@@ -40,14 +40,14 @@ module Nylas
       @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
     end
 
-    # @return [Collection<File>] A queryable collection of {File}s
-    def files
-      @files ||= Collection.new(model: File, api: self)
-    end
-
     # @return [Collection<Calendar>] A queryable collection of {Calendar}s
     def calendars
       @calendars ||= Collection.new(model: Calendar, api: self)
+    end
+
+    # @return[Collection<Draft>] A queryable collection of {Draft} objects
+    def drafts
+      @drafts ||= get(path: "/drafts")
     end
 
     # @return [Collection<Event>] A queryable collection of {Event}s
@@ -58,6 +58,11 @@ module Nylas
     # @return [Collection<Folder>] A queryable collection of {Folder}s
     def folders
       @folders ||= Collection.new(model: Folder, api: self)
+    end
+
+    # @return [Collection<File>] A queryable collection of {File}s
+    def files
+      @files ||= Collection.new(model: File, api: self)
     end
 
     # @return [Collection<Label>] A queryable collection of {Label} objects
