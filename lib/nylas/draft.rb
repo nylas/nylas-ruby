@@ -32,6 +32,11 @@ module Nylas
     attribute :folder, :label
     has_n_of_attribute :labels, :label
 
+    def send!
+      save
+      execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
+    end
+
     def starred?
       starred
     end

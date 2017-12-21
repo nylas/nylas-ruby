@@ -22,6 +22,13 @@ demonstrate do
   example_draft.to_h
 end
 
+# Sending a draft
+demonstrate do
+  draft = api.drafts.create(to: [{ email: ENV.fetch('NYLAS_EXAMPLE_EMAIL', 'not-a-real-email@example.com')}],
+                            subject: "A new draft!")
+  draft.send!
+end
+
 # Updating a draft
 demonstrate do
   example_draft.to << { name: "Other person", email: "other@example.com" }
