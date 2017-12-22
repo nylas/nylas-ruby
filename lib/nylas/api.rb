@@ -45,6 +45,11 @@ module Nylas
       @files ||= Collection.new(model: File, api: self)
     end
 
+    # @return [Collection<Calendar>] A queryable collection of {Calendar}s
+    def calendars
+      @calendars ||= Collection.new(model: Calendar, api: self)
+    end
+
     # @return [Collection<Folder>] A queryable collection of {Folder}s
     def folders
       @folders ||= Collection.new(model: Folder, api: self)

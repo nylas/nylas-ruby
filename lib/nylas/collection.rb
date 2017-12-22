@@ -45,6 +45,10 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "expanded"))
     end
 
+    def ids
+      self.class.new(model: model, api: api, constraints: constraints.merge(view: "ids")).execute
+    end
+
     # Iterates over a single page of results based upon current pagination settings
     def each
       return enum_for(:each) unless block_given?

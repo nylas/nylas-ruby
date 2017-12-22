@@ -33,6 +33,7 @@ require_relative "nylas/nylas_date"
 
 # Models supported by the API
 require_relative "nylas/account"
+require_relative "nylas/calendar"
 require_relative "nylas/contact"
 require_relative "nylas/current_account"
 require_relative "nylas/deltas"
