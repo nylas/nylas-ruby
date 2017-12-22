@@ -4,7 +4,12 @@ module Nylas
   class Folder
     include Model
     self.resources_path = "/folders"
-    self.searchable = false
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = false
+    self.updatable = true
+    self.destroyable = true
 
     attribute :id, :string
     attribute :account_id, :string

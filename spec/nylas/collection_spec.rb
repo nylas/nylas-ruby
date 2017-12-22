@@ -58,8 +58,8 @@ describe Nylas::Collection do
 
   describe "#find" do
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
-      collection = described_class.new(model: ReadOnlyModel, api: api)
-      allow(api).to receive(:execute).with(method: :get, path: "/read_only_collection/1234", payload: nil)
+      collection = described_class.new(model: FullModel, api: api)
+      allow(api).to receive(:execute).with(method: :get, path: "/collection/1234", payload: nil)
         .and_return(example_instance_hash)
 
       instance = collection.find(1234)
@@ -70,18 +70,16 @@ describe Nylas::Collection do
 
   describe "#where" do
     it "raises a NotImplementedError stating the model is not searchable when the model is not searchable" do
-      collection = described_class.new(model: NonSearchableModel, api: api)
-      expect { collection.where(id: "1234") }.to raise_error(NotImplementedError,
-                                                             "#{NonSearchableModel} does not support search")
+      collection = described_class.new(model: NonFilterableModel, api: api)
+      expect { collection.where(id: "1234") }.to raise_error(Nylas::ModelNotFilterableError)
     end
   end
 
   describe "#create" do
     it "sends the data to the appropriate endpoint using a post"
-    it "Raises a not implemented error if the model is read only" do
-      collection = described_class.new(model: ReadOnlyModel, api: api)
-      expect { collection.create(id: "1234") }.to raise_error(NotImplementedError,
-                                                              "#{ReadOnlyModel} is read only")
+    it "Raises a not implemented error if the model is not creatable" do
+      collection = described_class.new(model: NotCreatableModel, api: api)
+      expect { collection.create(string: "1234") }.to raise_error(Nylas::ModelNotCreatableError)
     end
   end
 end

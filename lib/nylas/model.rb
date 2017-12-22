@@ -7,20 +7,25 @@ module Nylas
   module Model
     attr_accessor :api
 
+    def model_class
+      self.class
+    end
+
     def self.included(model)
       model.include(Attributable)
       model.extend(ClassMethods)
-      model.collectionable = true
-      model.searchable = true
-      model.read_only = false
+      model.extend(Forwardable)
+      model.def_delegators :model_class, :creatable?, :filterable?, :listable?, :showable?, :updatable?,
+                           :destroyable?
+      model.allows_operations
     end
 
     def save
-      raise_if_read_only
       result = if id
+                 raise ModelNotUpdatableError, self unless updatable?
                  execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
-                 execute(method: :post, payload: attributes.serialize, path: resources_path)
+                 create
                end
       attributes.merge(result)
     end
@@ -29,8 +34,13 @@ module Nylas
       api.execute(method: method, payload: payload, path: path)
     end
 
+    def create
+      raise ModelNotCreatableError, self unless creatable?
+      execute(method: :post, payload: attributes.serialize, path: resources_path)
+    end
+
     def update(**data)
-      raise_if_read_only
+      raise ModelNotUpdatableError, model_class unless updatable?
       attributes.merge(**data)
       execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       true
@@ -50,6 +60,7 @@ module Nylas
     end
 
     def destroy
+      raise ModelNotDestroyableError, self unless destroyable?
       execute(method: :delete, path: resource_path)
     end
 
@@ -58,36 +69,54 @@ module Nylas
       JSON.dump(to_h)
     end
 
-    def raise_if_read_only
-      self.class.raise_if_read_only
-    end
-
     # Allows you to narrow in exactly what kind of model you're working with
     module ClassMethods
-      attr_accessor :resources_path, :searchable, :read_only, :collectionable, :raw_mime_type
+      attr_accessor :resources_path, :raw_mime_type,
+                    :creatable, :showable, :filterable, :listable, :updatable, :destroyable
 
-      def read_only?
-        read_only == true
+      # rubocop:disable Metrics/ParameterLists
+      def allows_operations(creatable: false, showable: false, listable: false, filterable: false,
+                            updatable: false, destroyable: false)
+
+        self.creatable ||= creatable
+        self.showable ||= showable
+        self.listable ||= listable
+        self.filterable ||= filterable
+        self.updatable ||= updatable
+        self.destroyable ||= destroyable
+      end
+
+      # rubocop:enable Metrics/ParameterLists
+      def creatable?
+        creatable
+      end
+
+      def showable?
+        showable
+      end
+
+      def listable?
+        listable
+      end
+
+      def filterable?
+        filterable
+      end
+
+      def updatable?
+        updatable
+      end
+
+      def destroyable?
+        destroyable
       end
 
       def resources_path(*)
         @resources_path
       end
 
-      def raise_if_read_only
-        raise NotImplementedError, "#{self} is read only" if read_only?
-      end
-
       def exposable_as_raw?
         !raw_mime_type.nil?
-      end
-
-      def searchable?
-        searchable == true
-      end
-
-      def collectionable?
-        collectionable == true
       end
 
       def from_json(json, api:)

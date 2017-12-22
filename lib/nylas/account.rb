@@ -3,8 +3,8 @@ module Nylas
   # @see https://docs.nylas.com/reference#account-management
   class Account
     include Model
-    self.searchable = false
-    self.read_only = true
+    self.listable = true
+    self.showable = true
 
     attribute :id, :string
     attribute :account_id, :string

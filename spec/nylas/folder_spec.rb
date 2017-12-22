@@ -1,14 +1,22 @@
 describe Nylas::Folder do
-  it "is not searchable" do
-    expect(described_class).not_to be_searchable
+  it "is not filterable" do
+    expect(described_class).not_to be_filterable
   end
 
-  it "is collectionable" do
-    expect(described_class).to be_collectionable
+  it "is listable" do
+    expect(described_class).to be_listable
   end
 
-  it "is not read only" do
-    expect(described_class).not_to be_read_only
+  it "is creatable" do
+    expect(described_class).to be_creatable
+  end
+
+  it "is updatable" do
+    expect(described_class).to be_updatable
+  end
+
+  it "is destroyable" do
+    expect(described_class).to be_destroyable
   end
 
   describe "#from_json" do

@@ -25,7 +25,7 @@ demonstrate { { starred: reloaded_thread.starred, unread: reloaded_thread.unread
 demonstrate do
   begin
     api.threads.create
-  rescue Nylas::MethodNotAllowed => e
+  rescue Nylas::ModelNotCreatableError => e
     "#{e.class}: #{e.message}"
   end
 end
@@ -36,7 +36,7 @@ end
 demonstrate do
   begin
     thread.destroy
-  rescue Nylas::EndpointNotYetImplemented => e
+  rescue Nylas::ModelNotDestroyableError => e
     "#{e.class}: #{e.message}"
   end
 end

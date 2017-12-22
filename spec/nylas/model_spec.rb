@@ -16,17 +16,21 @@ describe Nylas::Model do
   end
 
   describe "#save" do
-    it "raises a NotImplementedError exception if the model is flagged as read only" do
-      instance = ReadOnlyModel.from_json(example_instance_json, api: api)
-      expect { instance.save }.to raise_error(NotImplementedError, "#{ReadOnlyModel} is read only")
+    it "raises a NotImplementedError exception if the model is flagged as not updatable" do
+      instance = NotUpdatableModel.from_hash({ id: "model-1234" }, api: api)
+      expect { instance.save }.to raise_error(Nylas::ModelNotUpdatableError)
+    end
+
+    it "raises a ModelNotCreatable exception if the model is new and is flagged as not creatable" do
+      instance = NotCreatableModel.from_hash({}, api: api)
+      expect { instance.save }.to raise_error(Nylas::ModelNotCreatableError)
     end
   end
 
   describe "#update" do
     it "raises a NotImplementedError exception if the model is flagged as read only" do
-      instance = ReadOnlyModel.from_json(example_instance_json, api: api)
-      expect { instance.update(name: "other") }.to raise_error(NotImplementedError,
-                                                               "#{ReadOnlyModel} is read only")
+      instance = NotUpdatableModel.from_json(example_instance_json, api: api)
+      expect { instance.update(name: "other") }.to raise_error(Nylas::ModelNotUpdatableError)
     end
   end
 
