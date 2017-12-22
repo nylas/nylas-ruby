@@ -1,14 +1,23 @@
 require "spec_helper"
 
 describe Nylas::CurrentAccount do
-  it "is not searchable" do
-    expect(described_class).not_to be_searchable
+  it "is not filterable" do
+    expect(described_class).not_to be_filterable
   end
-  it "is not collectionable" do
-    expect(described_class).not_to be_collectionable
+  it "is not listable" do
+    expect(described_class).not_to be_listable
   end
-  it "is read only" do
-    expect(described_class).to be_read_only
+
+  it "is not creatable" do
+    expect(described_class).not_to be_creatable
+  end
+
+  it "is not updatable" do
+    expect(described_class).not_to be_updatable
+  end
+
+  it "is showable" do
+    expect(described_class).to be_showable
   end
 
   it "can be deserialized from JSON" do

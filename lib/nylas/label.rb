@@ -4,7 +4,12 @@ module Nylas
   class Label
     include Model
     self.resources_path = "/labels"
-    self.searchable = false
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = false
+    self.updatable = true
+    self.destroyable = true
 
     attribute :id, :string
     attribute :account_id, :string

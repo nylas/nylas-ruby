@@ -1,16 +1,16 @@
 require "spec_helper"
 
 describe Nylas::Thread do
-  it "is searchable" do
-    expect(described_class).to be_searchable
+  it "is filterable" do
+    expect(described_class).to be_filterable
   end
 
-  it "is collectionable" do
-    expect(described_class).to be_collectionable
+  it "is listable" do
+    expect(described_class).to be_listable
   end
 
-  it "is not read only" do
-    expect(described_class).not_to be_read_only
+  it "is updatable" do
+    expect(described_class).to be_updatable
   end
 
   it "can be deserialized from JSON" do

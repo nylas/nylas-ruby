@@ -1,14 +1,22 @@
 describe Nylas::Account do
-  it "is not searchable" do
-    expect(described_class).not_to be_searchable
+  it "is not filterable" do
+    expect(described_class).not_to be_filterable
   end
 
-  it "is read only" do
-    expect(described_class).to be_read_only
+  it "is not creatable" do
+    expect(described_class).not_to be_creatable
   end
 
-  it "is collectionable" do
-    expect(described_class).to be_collectionable
+  it "is not updatable" do
+    expect(described_class).not_to be_creatable
+  end
+
+  it "is not destroyable" do
+    expect(described_class).not_to be_creatable
+  end
+
+  it "is listable" do
+    expect(described_class).to be_listable
   end
 
   it "can be deserialized from JSON" do

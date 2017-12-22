@@ -3,10 +3,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#account
   class CurrentAccount
     include Model
-
-    self.read_only = true
-    self.searchable = false
-    self.collectionable = false
+    self.showable = true
 
     self.resources_path = "/account"
 

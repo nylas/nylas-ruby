@@ -1,6 +1,16 @@
 module Nylas
   Error = Class.new(::StandardError)
 
+  class ModelActionError < Error; end
+  class ModelNotFilterableError < ModelActionError; end
+  class ModelNotCreatableError < ModelActionError; end
+  class ModelNotShowableError < ModelActionError; end
+  class ModelNotAvailableAsRawError < ModelActionError; end
+  class ModelNotListableError < ModelActionError; end
+  class ModelNotFilterableError < ModelActionError; end
+  class ModelNotUpdatableError < ModelActionError; end
+  class ModelNotDestroyableError < ModelActionError; end
+
   # Indicates that a given method needs an access token to work.
   class NoAuthToken < Error
     def initialize(method_name)

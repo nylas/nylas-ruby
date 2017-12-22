@@ -4,6 +4,12 @@ module Nylas
   class Contact
     include Model
     self.resources_path = "/contacts"
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.updatable = true
+    self.destroyable = true
 
     attribute :id, :string, exclude_when: %i(creating updating)
     attribute :object, :string, default: "contact"

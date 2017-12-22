@@ -55,6 +55,14 @@ module Nylas
       @messages ||= Collection.new(model: Message, api: self)
     end
 
+    # @param message [Hash, String, #send!]
+    # @return [Message] The resulting message
+    def send!(message)
+      return message.send! if message.respond_to?(:send!)
+      return NewMessage.from_data(**message, api: self).send! if message.respond_to?(:key?)
+      return RawMessage.new(message, api: self).send! if message.is_a? String
+    end
+
     # Allows you to get an API that acts as a different user but otherwise has the same settings
     # @param [String] Oauth Access token or app secret used to authenticate with the API
     # @return [API]

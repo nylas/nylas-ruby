@@ -17,19 +17,18 @@ module Nylas
     end
 
     def create(**attributes)
-      model.raise_if_read_only
       instance = model.from_hash(attributes, api: api)
       instance.save
       instance
     end
 
     def where(filters)
-      raise NotImplementedError, "#{model} does not support search" unless model.searchable?
+      raise ModelNotFilterableError, model unless model.filterable?
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 
     def raw
-      raise NotImplementedError, "#{model} does not support raw" unless model.exposable_as_raw?
+      raise ModelNotAvailableAsRawError, model unless model.exposable_as_raw?
       self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
     end
 
