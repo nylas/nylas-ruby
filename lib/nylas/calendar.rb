@@ -19,5 +19,9 @@ module Nylas
     def read_only?
       read_only == true
     end
+
+    def events
+      api.events.where(calendar_id: id)
+    end
   end
 end

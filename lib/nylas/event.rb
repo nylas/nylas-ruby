@@ -32,5 +32,11 @@ module Nylas
     def read_only?
       read_only
     end
+
+    def rsvp(status, notify_participants:)
+      rsvp = Rsvp.new(api: api, status: status, notify_participants: notify_participants,
+                      event_id: id, account_id: account_id)
+      rsvp.save
+    end
   end
 end

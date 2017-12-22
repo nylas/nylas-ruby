@@ -36,3 +36,10 @@ demonstrate { api.events.find(example_event.id).location }
 # Deleting an event
 demonstrate { example_event.destroy }
 
+# RSVPing to an Event
+calendar = api.calendars.select { |c| c.name == "Emailed events" }.first
+event = calendar.events.first
+event.rsvp(:yes, notify_participants: true)
+event.rsvp(:no, notify_participants: true)
+event.rsvp(:maybe, notify_participants: true)
+
