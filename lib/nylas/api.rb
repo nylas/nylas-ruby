@@ -40,6 +40,11 @@ module Nylas
       @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
     end
 
+    # @return [Collection<File>] A queryable collection of {File}s
+    def files
+      @files ||= Collection.new(model: File, api: self)
+    end
+
     # @return [Collection<Folder>] A queryable collection of {Folder}s
     def folders
       @folders ||= Collection.new(model: Folder, api: self)
