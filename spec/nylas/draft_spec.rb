@@ -1,8 +1,12 @@
 require "spec_helper"
 
 describe Nylas::Draft do
-  it "is not searchable" do
-    expect(described_class).not_to be_searchable
+  it "is not filterable" do
+    expect(described_class).not_to be_filterable
+  end
+
+  it "is creatable" do
+    expect(described_class).to be_creatable
   end
 
   it "is showable" do
@@ -13,12 +17,12 @@ describe Nylas::Draft do
     expect(described_class).to be_listable
   end
 
-  it "is creatable" do
-    expect(described_class).to be_creatable
-  end
-
   it "is updatable" do
     expect(described_class).to be_updatable
+  end
+
+  it "is destroyable" do
+    expect(described_class).to be_destroyable
   end
 
   describe "#send!" do
@@ -28,7 +32,7 @@ describe Nylas::Draft do
       update_json = draft.to_json
       allow(api).to receive(:execute)
       allow(api).to receive(:execute).with(method: :put, path: "/drafts/draft-1234", payload: update_json)
-        .and_return(id: "draft-1234", version: "6")
+                                     .and_return(id: "draft-1234", version: "6")
 
       draft.send!
 

@@ -4,8 +4,7 @@ module Nylas
   class Draft
     include Model
     self.resources_path = "/drafts"
-    allows_operations(showable: true, listable: true, creatable: true, updatable: true, destroyable: true)
-    self.searchable = false
+    allows_operations(creatable: true, showable: true, listable: true, updatable: true, destroyable: true)
 
     attribute :id, :string
     attribute :object, :string
