@@ -15,5 +15,9 @@ module Nylas
     attribute :description, :string
 
     attribute :read_only, :boolean
+
+    def read_only?
+      read_only == true
+    end
   end
 end
