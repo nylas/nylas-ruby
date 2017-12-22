@@ -25,6 +25,7 @@ require_relative "nylas/folder"
 require_relative "nylas/im_address"
 require_relative "nylas/label"
 require_relative "nylas/message_headers"
+require_relative "nylas/message_tracking"
 require_relative "nylas/participant"
 require_relative "nylas/physical_address"
 require_relative "nylas/phone_number"
@@ -42,6 +43,8 @@ require_relative "nylas/current_account"
 require_relative "nylas/deltas"
 require_relative "nylas/delta"
 require_relative "nylas/message"
+require_relative "nylas/new_message"
+require_relative "nylas/raw_message"
 require_relative "nylas/thread"
 require_relative "nylas/webhook"
 
@@ -62,6 +65,7 @@ module Nylas
   Types.registry[:label] = Types::ModelType.new(model: Label)
   Types.registry[:message] = Types::ModelType.new(model: Message)
   Types.registry[:message_headers] = MessageHeadersType.new
+  Types.registry[:message_tracking] = Types::ModelType.new(model: MessageTracking)
   Types.registry[:participant] = Types::ModelType.new(model: Participant)
   Types.registry[:physical_address] = Types::ModelType.new(model: PhysicalAddress)
   Types.registry[:phone_number] = Types::ModelType.new(model: PhoneNumber)
