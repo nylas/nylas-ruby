@@ -37,8 +37,8 @@ module GemConfig
      ["jeweler", "~> 2.1"],
      ["yard", "~> 0.9.0"],
      ["awesome_print", "~> 1.0"],
-     ["rubocop", "~> 0.46.0"],
-     ["rubocop-rspec", "~> 1.8.0"],
+     ["rubocop", "~> 0.52.0"],
+     ["rubocop-rspec", "~> 1.20.1"],
      ["overcommit", "~> 0.41"]] + testing_and_debugging_dependencies
   end
 

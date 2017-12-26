@@ -8,11 +8,11 @@ describe Nylas::Account do
   end
 
   it "is not updatable" do
-    expect(described_class).not_to be_creatable
+    expect(described_class).not_to be_updatable
   end
 
   it "is not destroyable" do
-    expect(described_class).not_to be_creatable
+    expect(described_class).not_to be_destroyable
   end
 
   it "is listable" do

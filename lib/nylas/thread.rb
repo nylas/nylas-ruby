@@ -33,7 +33,7 @@ module Nylas
 
     has_n_of_attribute :label_ids, :string
 
-    UPDATABLE_ATTRIBUTES = [:label_ids, :folder_id, :starred, :unread].freeze
+    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread].freeze
     def update(data)
       unupdatable_attributes = data.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
       unless unupdatable_attributes.empty?
