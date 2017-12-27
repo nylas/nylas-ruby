@@ -13,6 +13,7 @@ require_relative "nylas/types"
 require_relative "nylas/constraints"
 
 require_relative "nylas/collection"
+require_relative "nylas/search_collection"
 require_relative "nylas/model"
 
 # Attribute types supported by the API
