@@ -16,7 +16,8 @@ module Nylas
     }.freeze
 
     include Logging
-    attr_accessor :api_server, :default_headers, :service_domain
+    attr_accessor :api_server, :service_domain
+    attr_writer :default_headers
     attr_reader :access_token
     attr_reader :app_id
     attr_reader :app_secret
@@ -72,7 +73,7 @@ module Nylas
     end
     # rubocop:enable Metrics/ParameterLists
     inform_on :execute, level: :debug,
-                        also_log: { result: true, values: %i(method url path headers query payload) }
+                        also_log: { result: true, values: %i[method url path headers query payload] }
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -104,7 +105,7 @@ module Nylas
                                     headers: headers, &block)
     end
     inform_on :rest_client_execute, level: :debug,
-                                    also_log: { result: true, values: %i(method url headers payload) }
+                                    also_log: { result: true, values: %i[method url headers payload] }
 
     def default_headers
       @default_headers ||= {
