@@ -19,6 +19,8 @@ module Nylas
 
       private def cast(key, value)
         attribute_definitions[key].cast(value)
+      rescue TypeError => e
+        raise TypeError, "#{key} #{e.message}"
       end
 
       # Merges data into the registry while casting input types correctly

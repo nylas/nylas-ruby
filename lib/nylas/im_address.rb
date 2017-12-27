@@ -6,9 +6,4 @@ module Nylas
     attribute :type, :string
     attribute :im_address, :string
   end
-
-  # Serializes, Deserializes between {IMAddress} objects and their JSON representation
-  class IMAddressType < Types::HashType
-    casts_to IMAddress
-  end
 end

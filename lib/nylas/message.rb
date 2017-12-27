@@ -20,6 +20,8 @@ module Nylas
     has_n_of_attribute :reply_to, :email_address
 
     attribute :date, :unix_timestamp
+    # This is only used when receiving a message received notification via a webhook
+    attribute :received_date, :unix_timestamp
     attribute :subject, :string
     attribute :snippet, :string
     attribute :body, :string

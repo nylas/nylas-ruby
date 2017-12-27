@@ -11,8 +11,11 @@ module Nylas
   end
 
   # Serializes, Deserializes between {NylasDate} objects and a {Hash}
-  class NylasDateType < Types::HashType
-    casts_to NylasDate
+  class NylasDateType < Types::ModelType
+    def initialize
+      super(model: NylasDate)
+    end
+
     def cast(value)
       value.is_a?(String) ? super({ object: "date", date: value }) : super
     end

@@ -5,23 +5,29 @@ module Nylas
       @registry ||= Registry.new
     end
 
-    # Type for attributes that are persisted in the API as a hash but exposed in ruby as a particular
-    # structure
+    # Casts/Serializes data that is persisted and used natively as a Hash
     class HashType
       def serialize(object)
         object.to_h
       end
 
-      def self.casts_to(model)
-        @casts_to_model = model
+      def cast(value)
+        return JSON.parse(value, symbolize_names: true) if value.is_a?(String)
+        return value if value.respond_to?(:key)
+      end
+    end
+    Types.registry[:hash] = HashType.new
+
+    # Type for attributes that are persisted in the API as a hash but exposed in ruby as a particular
+    # {Model} or Model-like thing.
+    class ModelType
+      attr_accessor :model
+      def initialize(model:)
+        self.model = model
       end
 
-      class << self
-        attr_reader :casts_to_model
-      end
-
-      def model
-        self.class.casts_to_model
+      def serialize(object)
+        object.to_h
       end
 
       def cast(value)
@@ -119,6 +125,7 @@ module Nylas
     class BooleanType < ValueType
       # @param value [Object] Strictly casts the passed in value to a boolean (must be true, not "" or 1)
       def cast(value)
+        return nil if value.nil?
         return true if value == true
         return false if value == false
         raise TypeError, "#{value} must be either true or false"

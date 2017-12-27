@@ -15,9 +15,4 @@ module Nylas
       @range ||= Range.new(start_time, end_time)
     end
   end
-
-  # Serializes, Deserializes between {Timespan} objects and a {Hash}
-  class TimespanType < Types::HashType
-    casts_to Timespan
-  end
 end

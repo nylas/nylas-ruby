@@ -9,13 +9,15 @@ module Nylas
   end
 
   # Serializes, Deserializes between {MessageHeaders} objects and a Hash
-  class MessageHeadersType < Types::HashType
+  class MessageHeadersType < Types::ModelType
+    def initialize
+      super(model: MessageHeaders)
+    end
     RUBY_KEY_TO_JSON_KEY_MAP = {
       in_reply_to: :"In-Reply-To",
       message_id: :"Message-Id",
       references: :References
     }.freeze
-    casts_to MessageHeaders
     def json_key_from_attribute_name(attribute_name)
       RUBY_KEY_TO_JSON_KEY_MAP.fetch(attribute_name)
     end

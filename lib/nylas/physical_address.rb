@@ -11,9 +11,4 @@ module Nylas
     attribute :city, :string
     attribute :country, :string
   end
-
-  # Serializes, Deserializes between {PhysicalAddress} objects and a {Hash}
-  class PhysicalAddressType < Types::HashType
-    casts_to PhysicalAddress
-  end
 end

@@ -19,9 +19,4 @@ module Nylas
     attribute :name, :string
     attribute :display_name, :string
   end
-
-  # Serializes, Deserializes between {Folder} objects and a {Hash}
-  class FolderType < Types::HashType
-    casts_to Folder
-  end
 end
