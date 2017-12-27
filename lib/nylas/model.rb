@@ -72,7 +72,7 @@ module Nylas
     # Allows you to narrow in exactly what kind of model you're working with
     module ClassMethods
       attr_accessor :raw_mime_type, :creatable, :showable, :filterable, :searchable, :listable, :updatable,
-        :destroyable
+                    :destroyable
       attr_writer :resources_path
 
       # rubocop:disable Metrics/ParameterLists

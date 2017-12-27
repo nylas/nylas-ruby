@@ -27,7 +27,7 @@ demonstrate { { starred: reloaded_message.starred, unread: reloaded_message.unre
 demonstrate do
   begin
     api.messages.create
-  rescue Nylas::MethodNotAllowed => e
+  rescue Nylas::ModelNotCreatableError => e
     "#{e.class}: #{e.message}"
   end
 end
@@ -37,8 +37,12 @@ message = api.messages.first
 demonstrate do
   begin
     message.destroy
-  rescue Nylas::MethodNotAllowed => e
+  rescue Nylas::ModelNotDestroyableError => e
     "#{e.class}: #{e.message}"
   end
 end
+
+# Messages may be searched.
+# See https://docs.nylas.com/reference#messages-search and https://docs.nylas.com/reference#search
+demonstrate { api.messages.search("That really important email").map(&:to_h) }
 
