@@ -113,7 +113,7 @@ module Nylas
     end
 
     def resources_path
-      model.resources_path(pai: api)
+      model.resources_path(api: api)
     end
 
     def find_model(id)
