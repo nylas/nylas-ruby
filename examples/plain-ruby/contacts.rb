@@ -9,55 +9,38 @@ demonstrate { api.contacts.count }
 # Retrieving a subset of contacts using limit
 demonstrate { api.contacts.limit(5).map(&:to_h) }
 
-if ENV['CREATE_MORE_CONTACTS']
-  loaded_contacts = 20.times.map do
-    data = {
-      physical_addresses: [{ format: "structured",
-                             type: ['home', 'work', nil].sample,
-                             street_address: Faker::Address.street_address,
-                             postal_code: Faker::Address.postcode,
-                             city: Faker::Address.city,
-                             state: Faker::Address.state,
-                             country: ["USA", "America", "Canada"].sample }],
-    phone_numbers: [{ type: ['business', 'home', 'mobile', 'pager', 'business_fax', 'home_fax',
-                             'organization_main', 'assistant', 'radio'].sample,
-                             number: Faker::PhoneNumber.cell_phone }],
-                             email_addresses: [{ type: ['personal', 'work', nil].sample, email: Faker::Internet.safe_email }],
-                             web_pages: [{ type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') }],
-                             web_page: { type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') },
-                             given_name: Faker::Name.first_name,
-                             surname: Faker::Name.last_name
-    }
-    begin
-      contact = api.contacts.create(data)
-    rescue Nylas::InternalError => e
-      Nylas::Logging.logger.error(data)
-      Nylas::Logging.logger.error(e.message)
-    end
-    contact
-  end.compact
-else
-  loaded_contacts = api.contacts.offset(100).to_a
+data = {
+  given_name: Faker::Name.first_name,
+  surname: Faker::Name.last_name,
+  physical_addresses: [{ format: "structured",
+                         type: ['home', 'work', nil].sample,
+                         street_address: Faker::Address.street_address,
+                         postal_code: Faker::Address.postcode,
+                         city: Faker::Address.city,
+                         state: Faker::Address.state,
+                         country: ["USA", "America", "Canada"].sample }],
+  phone_numbers: [{ type: ['business', 'home', 'mobile', 'pager', 'business_fax', 'home_fax',
+                           'organization_main', 'assistant', 'radio'].sample,
+                    number: Faker::PhoneNumber.cell_phone }],
+  email_addresses: [{ type: ['personal', 'work', nil].sample, email: Faker::Internet.safe_email }],
+  web_pages: [{ type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') }],
+  web_page: { type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') },
+}
+contact = api.contacts.create(data)
+
+
+# Searching contacts!
+demonstrate do
+  #api.contacts.where(email: contact.email_addresses.first.email,
+  #                   country: contact.physical_addresses.first.country,
+  #                   phone_number: contact.phone_numbers.first.number,
+  #                   street_address: contact.physical_addresses.first.street_address).map(&:to_h)
+
 end
-
-
-demonstrate { api.contacts.count }
-
-# Searching!
-# demonstrate { api.contacts.where(email: loaded_contacts[8].email_addresses.first.email).limit(3).map(&:to_h) }
-demonstrate { api.contacts.where(state: loaded_contacts[3].physical_addresses.first.state).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(country: loaded_contacts[5].physical_addresses.first.country).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(phone_number: loaded_contacts[12].phone_numbers.first.number).limit(2).map(&:to_h) }
-demonstrate { api.contacts.where(street_address: loaded_contacts[13].physical_addresses.first.street_address).limit(2).map(&:to_h) }
-
-# Retrieving the first page of contacts
-demonstrate { api.contacts.map(&:to_h) }
 
 # Retrieve all pages of contacts
 demonstrate { api.contacts.find_each.map(&:to_h) }
 
-contact = api.contacts.first
-# Updating a contact
 demonstrate { contact.update(surname: Faker::Name.last_name) }
 
 # Retrieving a contact by ID
@@ -73,8 +56,5 @@ end
 demonstrate { contact.reload }
 demonstrate { contact.surname }
 
-api.contacts.each do |contact|
-  contact.destroy
-end
-
-demonstrate { api.contacts.count }
+# Destroying a contact
+demonstrate { contact.destroy }
