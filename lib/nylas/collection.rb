@@ -13,11 +13,11 @@ module Nylas
     end
 
     def new(**attributes)
-      model.from_hash(attributes, api: api)
+      model.new(attributes.merge(api: api))
     end
 
     def create(**attributes)
-      instance = model.from_hash(attributes, api: api)
+      instance = model.new(attributes.merge(api: api))
       instance.save
       instance
     end

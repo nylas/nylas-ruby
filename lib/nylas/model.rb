@@ -21,13 +21,17 @@ module Nylas
     end
 
     def save
-      result = if id
+      result = if persisted?
                  raise ModelNotUpdatableError, self unless updatable?
                  execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
                  create
                end
       attributes.merge(result)
+    end
+
+    def persisted?
+      !id.nil?
     end
 
     def execute(method:, payload: nil, path:)
