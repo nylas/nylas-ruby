@@ -3,9 +3,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#threads
   class Thread
     include Model
-    self.filterable = true
-    self.listable = true
-    self.updatable = true
+    allows_operations(searchable: true, filterable: true, listable: true, updatable: true)
 
     self.resources_path = "/threads"
 

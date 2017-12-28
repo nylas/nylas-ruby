@@ -27,6 +27,11 @@ module Nylas
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 
+    def search(query)
+      raise ModelNotSearchableError, model unless model.searchable?
+      SearchCollection.new(model: model, api: api, constraints: constraints.merge(where: { q: query }))
+    end
+
     def raw
       raise ModelNotAvailableAsRawError, model unless model.exposable_as_raw?
       self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
@@ -91,7 +96,11 @@ module Nylas
     end
 
     def find_raw(id)
-      api.execute(to_be_executed.merge(path: "#{model.resources_path(api: api)}/#{id}")).to_s
+      api.execute(to_be_executed.merge(path: "#{resources_path}/#{id}")).to_s
+    end
+
+    def resources_path
+      model.resources_path(pai: api)
     end
 
     def find_model(id)
@@ -102,7 +111,7 @@ module Nylas
 
     # @return [Hash] Specification for request to be passed to {API#execute}
     def to_be_executed
-      { method: :get, path: model.resources_path(api: api), query: constraints.to_query,
+      { method: :get, path: resources_path, query: constraints.to_query,
         headers: constraints.to_headers }
     end
 

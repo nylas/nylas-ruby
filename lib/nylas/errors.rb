@@ -8,6 +8,7 @@ module Nylas
   class ModelNotAvailableAsRawError < ModelActionError; end
   class ModelNotListableError < ModelActionError; end
   class ModelNotFilterableError < ModelActionError; end
+  class ModelNotSearchableError < ModelActionError; end
   class ModelNotUpdatableError < ModelActionError; end
   class ModelNotDestroyableError < ModelActionError; end
 

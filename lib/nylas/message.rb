@@ -5,6 +5,7 @@ module Nylas
     include Model
     self.raw_mime_type = "message/rfc822"
     self.resources_path = "/messages"
+    allows_operations(showable: true, listable: true, filterable: true, searchable: true, updatable: true)
 
     attribute :id, :string
     attribute :object, :string

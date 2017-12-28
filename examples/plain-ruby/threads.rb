@@ -41,3 +41,8 @@ demonstrate do
   end
 end
 
+
+# Threads may be searched.
+# See https://docs.nylas.com/reference#search-threads and https://docs.nylas.com/reference#search
+demonstrate { api.threads.search("That really important email").map(&:to_h) }
+
