@@ -8,9 +8,4 @@ module Nylas
     attribute :filename, :string
     attribute :size, :integer
   end
-
-  # Serializes, Deserializes between {File} objects and a {Hash}
-  class FileType < Types::HashType
-    casts_to File
-  end
 end

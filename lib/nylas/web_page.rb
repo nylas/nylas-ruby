@@ -6,9 +6,4 @@ module Nylas
     attribute :type, :string
     attribute :url, :string
   end
-
-  # Serializes, Deserializes between {WebPage} objects and a {Hash}
-  class WebPageType < Types::HashType
-    casts_to WebPage
-  end
 end

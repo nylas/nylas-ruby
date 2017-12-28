@@ -7,9 +7,4 @@ module Nylas
     attribute :email, :string
     attribute :name, :string
   end
-
-  # Serializes, Deserializes between {EmailAddress} objects and a {Hash}
-  class EmailAddressType < Types::HashType
-    casts_to EmailAddress
-  end
 end

@@ -34,8 +34,11 @@ require_relative "nylas/nylas_date"
 require_relative "nylas/account"
 require_relative "nylas/contact"
 require_relative "nylas/current_account"
+require_relative "nylas/deltas"
+require_relative "nylas/delta"
 require_relative "nylas/message"
 require_relative "nylas/thread"
+require_relative "nylas/webhook"
 
 require_relative "nylas/http_client"
 require_relative "nylas/api"
@@ -43,17 +46,21 @@ require_relative "nylas/api"
 # an SDK for interacting with the Nylas API
 # @see https://docs.nylas.com/reference
 module Nylas
-  Types.registry[:email_address] = EmailAddressType.new
-  Types.registry[:event] = EventType.new
-  Types.registry[:file] = FileType.new
-  Types.registry[:folder] = FolderType.new
-  Types.registry[:im_address] = IMAddressType.new
-  Types.registry[:label] = LabelType.new
+  Types.registry[:account] = Types::ModelType.new(model: Account)
+  Types.registry[:delta] = Types::ModelType.new(model: Delta)
+  Types.registry[:delta_object_data] = Delta::ObjectDataType.new
+  Types.registry[:email_address] = Types::ModelType.new(model: EmailAddress)
+  Types.registry[:event] = Types::ModelType.new(model: Event)
+  Types.registry[:file] = Types::ModelType.new(model: File)
+  Types.registry[:folder] = Types::ModelType.new(model: Folder)
+  Types.registry[:im_address] = Types::ModelType.new(model: IMAddress)
+  Types.registry[:label] = Types::ModelType.new(model: Label)
+  Types.registry[:message] = Types::ModelType.new(model: Message)
   Types.registry[:message_headers] = MessageHeadersType.new
-  Types.registry[:participant] = ParticipantType.new
-  Types.registry[:physical_address] = PhysicalAddressType.new
-  Types.registry[:phone_number] = PhoneNumberType.new
-  Types.registry[:timespan] = TimespanType.new
-  Types.registry[:web_page] = WebPageType.new
+  Types.registry[:participant] = Types::ModelType.new(model: Participant)
+  Types.registry[:physical_address] = Types::ModelType.new(model: PhysicalAddress)
+  Types.registry[:phone_number] = Types::ModelType.new(model: PhoneNumber)
+  Types.registry[:timespan] = Types::ModelType.new(model: Timespan)
+  Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new
 end

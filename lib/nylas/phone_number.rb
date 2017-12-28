@@ -6,9 +6,4 @@ module Nylas
     attribute :type, :string
     attribute :number, :string
   end
-
-  # Serializes, Deserializes between {PhoneNumber} objects and a {Hash}
-  class PhoneNumberType < Types::HashType
-    casts_to PhoneNumber
-  end
 end

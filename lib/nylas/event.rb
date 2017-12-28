@@ -26,9 +26,4 @@ module Nylas
       read_only
     end
   end
-
-  # Serializes, Deserializes between {Event} objects and a {Hash}
-  class EventType < Types::HashType
-    casts_to Event
-  end
 end

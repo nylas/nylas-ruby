@@ -75,6 +75,11 @@ module Nylas
       @threads ||= Collection.new(model: Thread, api: self)
     end
 
+    # @return [Collection<Webhook>] A queryable collection of {Webhook}s
+    def webhooks
+      @webhooks ||= Collection.new(model: Webhook, api: as(client.app_secret))
+    end
+
     private def prevent_calling_if_missing_access_token(method_name)
       return if client.access_token && !client.access_token.empty?
       raise NoAuthToken, method_name

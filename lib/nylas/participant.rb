@@ -7,9 +7,4 @@ module Nylas
     attribute :comment, :string
     attribute :status, :string
   end
-
-  # Serializes, Deserializes between {Participant} objects and a {Hash}
-  class ParticipantType < Types::HashType
-    casts_to Participant
-  end
 end
