@@ -19,6 +19,7 @@ require_relative "nylas/model"
 # Attribute types supported by the API
 require_relative "nylas/email_address"
 require_relative "nylas/event"
+require_relative "nylas/event_collection"
 require_relative "nylas/file"
 require_relative "nylas/folder"
 require_relative "nylas/im_address"
@@ -27,12 +28,15 @@ require_relative "nylas/message_headers"
 require_relative "nylas/participant"
 require_relative "nylas/physical_address"
 require_relative "nylas/phone_number"
+require_relative "nylas/recurrence"
+require_relative "nylas/rsvp"
 require_relative "nylas/timespan"
 require_relative "nylas/web_page"
 require_relative "nylas/nylas_date"
 
 # Models supported by the API
 require_relative "nylas/account"
+require_relative "nylas/calendar"
 require_relative "nylas/contact"
 require_relative "nylas/current_account"
 require_relative "nylas/deltas"
@@ -61,6 +65,7 @@ module Nylas
   Types.registry[:participant] = Types::ModelType.new(model: Participant)
   Types.registry[:physical_address] = Types::ModelType.new(model: PhysicalAddress)
   Types.registry[:phone_number] = Types::ModelType.new(model: PhoneNumber)
+  Types.registry[:recurrence] = Types::ModelType.new(model: Recurrence)
   Types.registry[:timespan] = Types::ModelType.new(model: Timespan)
   Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new

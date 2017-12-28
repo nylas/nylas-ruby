@@ -12,6 +12,7 @@ module Nylas
       self.api = api
     end
 
+    # Instantiates a new model
     def new(**attributes)
       model.new(attributes.merge(api: api))
     end
@@ -22,6 +23,8 @@ module Nylas
       instance
     end
 
+    # Merges in additional filters when querying the collection
+    # @return [Collection<Model>]
     def where(filters)
       raise ModelNotFilterableError, model unless model.filterable?
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
@@ -32,24 +35,34 @@ module Nylas
       SearchCollection.new(model: model, api: api, constraints: constraints.merge(where: { q: query }))
     end
 
+    # The collection now returns a string representation of the model in a particular mime type instead of
+    # Model objects
+    # @return [Collection<String>]
     def raw
       raise ModelNotAvailableAsRawError, model unless model.exposable_as_raw?
       self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
     end
 
+    # @return [Integer]
     def count
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "count")).execute[:count]
     end
 
+    # @return [Collection<Model>]
     def expanded
       self.class.new(model: model, api: api, constraints: constraints.merge(view: "expanded"))
+    end
+
+    # @return [Array<String>]
+    def ids
+      self.class.new(model: model, api: api, constraints: constraints.merge(view: "ids")).execute
     end
 
     # Iterates over a single page of results based upon current pagination settings
     def each
       return enum_for(:each) unless block_given?
       execute.each do |result|
-        yield(model.from_hash(result, api: api))
+        yield(model.new(result.merge(api: api)))
       end
     end
 
@@ -100,7 +113,7 @@ module Nylas
     end
 
     def resources_path
-      model.resources_path(pai: api)
+      model.resources_path(api: api)
     end
 
     def find_model(id)
