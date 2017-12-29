@@ -5,7 +5,10 @@ module Nylas
   # @see https://docs.nylas.com/reference#deltas
   class Deltas
     include Model
+    self.resources_path = "/delta"
     has_n_of_attribute :deltas, :delta
+    attribute :cursor_start, :string
+    attribute :cursor_end, :string
 
     extend Forwardable
     def_delegators :deltas, :length, :each, :map, :first

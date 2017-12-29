@@ -10,7 +10,7 @@ describe Nylas::Deltas do
     expect(delta.date).to eql(Time.at(1_514_335_663))
     expect(delta.type).to eql "account.running"
     expect(delta.object).to eql "account"
-    expect(delta.instance).to be_a Nylas::Account
+    expect(delta.model).to be_a Nylas::Account
     expect(delta.id).to eql "dlt-09876"
     expect(delta.namespace_id).to eql "acc-2345"
     expect(delta.account_id).to eql "acc-2345"
@@ -37,9 +37,9 @@ describe Nylas::Deltas do
     delta = deltas.first
     expect(delta.date).to eql(Time.at(1_514_339_684))
     expect(delta.object).to eql("message")
-    expect(delta.instance).to be_a Nylas::Message
-    expect(delta.instance.id).to eql "msg-1234"
-    expect(delta.instance.thread_id).to eql "thread-098"
-    expect(delta.instance.received_date).to eql Time.at(1_514_339_665)
+    expect(delta.model).to be_a Nylas::Message
+    expect(delta.model.id).to eql "msg-1234"
+    expect(delta.model.thread_id).to eql "thread-098"
+    expect(delta.model.received_date).to eql Time.at(1_514_339_665)
   end
 end
