@@ -14,8 +14,6 @@ module Nylas
     attribute :metadata, :hash
     attribute :object_attributes, :hash
 
-    extend Forwardable
-
     def model
       return nil if object.nil?
       @model ||= Types.registry[object.to_sym].cast(object_attributes_with_ids)

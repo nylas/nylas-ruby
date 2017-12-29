@@ -6,11 +6,12 @@ module Nylas
   class Deltas
     include Model
     self.resources_path = "/delta"
+    allows_operations(filterable: true)
     has_n_of_attribute :deltas, :delta
     attribute :cursor_start, :string
     attribute :cursor_end, :string
 
     extend Forwardable
-    def_delegators :deltas, :length, :each, :map, :first
+    def_delegators :deltas, :count, :length, :each, :map, :first, :to_a, :empty?
   end
 end
