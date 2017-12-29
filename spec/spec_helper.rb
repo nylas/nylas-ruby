@@ -1,7 +1,7 @@
 require "simplecov"
 SimpleCov.start
 
-require "nylas-streaming"
+require "nylas"
 require "pry"
 require "webmock/rspec"
 

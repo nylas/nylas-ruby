@@ -3,7 +3,7 @@ module Nylas
   class Collection
     attr_accessor :model, :api, :constraints
     extend Forwardable
-    def_delegators :each, :map, :select, :reject, :to_a
+    def_delegators :each, :map, :select, :reject, :to_a, :take
     def_delegators :to_a, :first, :last, :[]
 
     def initialize(model:, api:, constraints: nil)
@@ -90,7 +90,7 @@ module Nylas
       end
     end
 
-    def next_page(accumulated: nil, current_page: nil)
+    def next_page(accumulated:, current_page:)
       return nil unless more_pages?(accumulated, current_page)
       self.class.new(model: model, api: api, constraints: constraints.next_page)
     end

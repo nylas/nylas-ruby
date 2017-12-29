@@ -13,7 +13,6 @@ require_relative "nylas/types"
 require_relative "nylas/constraints"
 
 require_relative "nylas/collection"
-require_relative "nylas/search_collection"
 require_relative "nylas/model"
 
 # Attribute types supported by the API
@@ -34,6 +33,10 @@ require_relative "nylas/rsvp"
 require_relative "nylas/timespan"
 require_relative "nylas/web_page"
 require_relative "nylas/nylas_date"
+
+# Custom collection types
+require_relative "nylas/search_collection"
+require_relative "nylas/deltas_collection"
 
 # Models supported by the API
 require_relative "nylas/account"
@@ -56,8 +59,8 @@ require_relative "nylas/api"
 # @see https://docs.nylas.com/reference
 module Nylas
   Types.registry[:account] = Types::ModelType.new(model: Account)
-  Types.registry[:delta] = Types::ModelType.new(model: Delta)
-  Types.registry[:delta_object_data] = Delta::ObjectDataType.new
+  Types.registry[:delta] = DeltaType.new
+  Types.registry[:draft] = Types::ModelType.new(model: Draft)
   Types.registry[:email_address] = Types::ModelType.new(model: EmailAddress)
   Types.registry[:event] = Types::ModelType.new(model: Event)
   Types.registry[:file] = Types::ModelType.new(model: File)
