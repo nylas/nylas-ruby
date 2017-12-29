@@ -59,6 +59,7 @@ require_relative "nylas/api"
 # @see https://docs.nylas.com/reference
 module Nylas
   Types.registry[:account] = Types::ModelType.new(model: Account)
+  Types.registry[:contact] = Types::ModelType.new(model: Contact)
   Types.registry[:delta] = DeltaType.new
   Types.registry[:draft] = Types::ModelType.new(model: Draft)
   Types.registry[:email_address] = Types::ModelType.new(model: EmailAddress)
@@ -74,6 +75,7 @@ module Nylas
   Types.registry[:physical_address] = Types::ModelType.new(model: PhysicalAddress)
   Types.registry[:phone_number] = Types::ModelType.new(model: PhoneNumber)
   Types.registry[:recurrence] = Types::ModelType.new(model: Recurrence)
+  Types.registry[:thread] = Types::ModelType.new(model: Thread)
   Types.registry[:timespan] = Types::ModelType.new(model: Timespan)
   Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new
