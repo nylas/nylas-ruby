@@ -14,8 +14,10 @@ module Nylas
     attribute :id, :string, exclude_when: %i[creating updating]
     attribute :object, :string, default: "contact"
     attribute :account_id, :string, exclude_when: %i[creating updating]
+
     attribute :given_name, :string
     attribute :middle_name, :string
+    attribute :picture_url, :string
     attribute :surname, :string
     attribute :birthday, :nylas_date
     attribute :suffix, :string
