@@ -31,10 +31,10 @@ contact = api.contacts.create(data)
 
 # Searching contacts!
 demonstrate do
-  #api.contacts.where(email: contact.email_addresses.first.email,
-  #                   country: contact.physical_addresses.first.country,
-  #                   phone_number: contact.phone_numbers.first.number,
-  #                   street_address: contact.physical_addresses.first.street_address).map(&:to_h)
+  api.contacts.where(email: contact.email_addresses.first.email,
+                     #country: contact.physical_addresses.first.country,
+                     phone_number: contact.phone_numbers.first.number,
+                     street_address: contact.physical_addresses.first.street_address).map(&:to_h)
 
 end
 
