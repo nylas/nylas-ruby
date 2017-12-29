@@ -79,7 +79,7 @@ module Nylas
     # @return [Message] The resulting message
     def send!(message)
       return message.send! if message.respond_to?(:send!)
-      return NewMessage.from_data(**message, api: self).send! if message.respond_to?(:key?)
+      return NewMessage.new(**message.merge(api: self)).send! if message.respond_to?(:key?)
       return RawMessage.new(message, api: self).send! if message.is_a? String
     end
 
