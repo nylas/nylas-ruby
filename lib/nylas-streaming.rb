@@ -62,12 +62,8 @@ module Nylas
       end
 
       def listener
-        return @listener if @listener
-        @listener = EventMachine::HttpRequest.new(url, connect_timeout: connect_timeout,
-                                                       inactivity_timeout: inactivity_timeout).get
-
-        # @listener.errback(&method(:http_error_handler))
-        @listener
+        @listener ||= EventMachine::HttpRequest.new(url, connect_timeout: connect_timeout,
+                                                         inactivity_timeout: inactivity_timeout).get
       end
 
       def http_error_handler(client)
