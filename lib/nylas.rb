@@ -60,6 +60,7 @@ require_relative "nylas/api"
 module Nylas
   Types.registry[:account] = Types::ModelType.new(model: Account)
   Types.registry[:delta] = DeltaType.new
+  Types.registry[:draft] = Types::ModelType.new(model: Draft)
   Types.registry[:email_address] = Types::ModelType.new(model: EmailAddress)
   Types.registry[:event] = Types::ModelType.new(model: Event)
   Types.registry[:file] = Types::ModelType.new(model: File)
