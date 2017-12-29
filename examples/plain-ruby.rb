@@ -12,3 +12,5 @@ require_relative 'plain-ruby/labels'
 require_relative 'plain-ruby/messages'
 require_relative 'plain-ruby/sending-messages'
 require_relative 'plain-ruby/threads'
+
+require_relative 'plain-ruby/streaming'
