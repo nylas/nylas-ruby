@@ -77,26 +77,26 @@ module Nylas
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
-    def get(path: nil, url: nil, headers: {}, query: {})
-      execute(method: :get, path: path, query: query, url: url, headers: headers)
+    def get(path: nil, headers: {}, query: {})
+      execute(method: :get, path: path, query: query, headers: headers)
     end
 
     # Syntactical sugar for making POST requests via the API.
     # @see #execute
-    def post(path: nil, url: nil, payload: nil, headers: {}, query: {})
-      execute(method: :post, path: path, url: url, headers: headers, query: query, payload: payload)
+    def post(path: nil, payload: nil, headers: {}, query: {})
+      execute(method: :post, path: path, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making PUT requests via the API.
     # @see #execute
-    def put(path: nil, url: nil, payload:, headers: {}, query: {})
-      execute(method: :put, path: path, url: url, headers: headers, query: query, payload: payload)
+    def put(path: nil, payload:, headers: {}, query: {})
+      execute(method: :put, path: path, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making DELETE requests via the API.
     # @see #execute
-    def delete(path: nil, url: nil, payload: nil, headers: {}, query: {})
-      execute(method: :delete, path: path, url: url, headers: headers, query: query, payload: payload)
+    def delete(path: nil, payload: nil, headers: {}, query: {})
+      execute(method: :delete, path: path, headers: headers, query: query, payload: payload)
     end
     # rubocop:enable Metrics/ParameterList
 
