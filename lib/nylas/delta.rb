@@ -7,6 +7,8 @@ module Nylas
     attribute :id, :string
     attribute :type, :string
     attribute :object, :string
+    attribute :event, :string
+    attribute :cursor, :string
     attribute :namespace_id, :string
     attribute :account_id, :string
 

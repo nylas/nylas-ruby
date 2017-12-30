@@ -49,8 +49,6 @@ module Nylas
 
     # Sends a request to the Nylas API and rai
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
-    # @param url [String] (Optional, defaults to nil) - Full URL to access. Deprecated and will be removed in
-    #                     5.0.
     # @param path [String] (Optional, defaults to nil) - Relative path from the API Base. Preferred way to
     #                      execute arbitrary or-not-yet-SDK-ified API commands.
     # @param headers [Hash] (Optional, defaults to {}) - Additional HTTP headers to include in the payload.
@@ -58,45 +56,47 @@ module Nylas
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [Array Hash Stringn]
-    # rubocop:disable Metrics/ParameterLists
-    def execute(method:, url: nil, path: nil, headers: {}, query: {}, payload: nil)
-      headers[:params] = query
-      url ||= url_for_path(path)
-      resulting_headers = default_headers.merge(headers)
-      rest_client_execute(method: method, url: url, payload: payload,
-                          headers: resulting_headers) do |response, _request, result|
-
+    def execute(method:, path: nil, headers: {}, query: {}, payload: nil)
+      request = build_request(method: method, path: path, headers: headers, query: query, payload: payload)
+      rest_client_execute(**request) do |response, _request, result|
         response = parse_response(response)
         handle_failed_response(result: result, response: response)
         response
       end
     end
-    # rubocop:enable Metrics/ParameterLists
     inform_on :execute, level: :debug,
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
+    def build_request(method:, path: nil, headers: {}, query: {}, payload: nil)
+      headers[:params] = query
+      url ||= url_for_path(path)
+      resulting_headers = default_headers.merge(headers)
+      { method: method, url: url, payload: payload, headers: resulting_headers }
+    end
+    # rubocop:enable Metrics/ParameterLists
+
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
-    def get(path: nil, url: nil, headers: {}, query: {})
-      execute(method: :get, path: path, query: query, url: url, headers: headers)
+    def get(path: nil, headers: {}, query: {})
+      execute(method: :get, path: path, query: query, headers: headers)
     end
 
     # Syntactical sugar for making POST requests via the API.
     # @see #execute
-    def post(path: nil, url: nil, payload: nil, headers: {}, query: {})
-      execute(method: :post, path: path, url: url, headers: headers, query: query, payload: payload)
+    def post(path: nil, payload: nil, headers: {}, query: {})
+      execute(method: :post, path: path, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making PUT requests via the API.
     # @see #execute
-    def put(path: nil, url: nil, payload:, headers: {}, query: {})
-      execute(method: :put, path: path, url: url, headers: headers, query: query, payload: payload)
+    def put(path: nil, payload:, headers: {}, query: {})
+      execute(method: :put, path: path, headers: headers, query: query, payload: payload)
     end
 
     # Syntactical sugar for making DELETE requests via the API.
     # @see #execute
-    def delete(path: nil, url: nil, payload: nil, headers: {}, query: {})
-      execute(method: :delete, path: path, url: url, headers: headers, query: query, payload: payload)
+    def delete(path: nil, payload: nil, headers: {}, query: {})
+      execute(method: :delete, path: path, headers: headers, query: query, payload: payload)
     end
     # rubocop:enable Metrics/ParameterList
 
@@ -115,14 +115,14 @@ module Nylas
       }
     end
 
-    private def parse_response(response)
+    def parse_response(response)
       response.is_a?(Enumerable) ? response : JSON.parse(response, symbolize_names: true)
     rescue JSON::ParserError
       response
     end
     inform_on :parse_response, level: :debug, also_log: { result: true }
 
-    private def url_for_path(path)
+    def url_for_path(path)
       protocol, domain = api_server.split("//")
       "#{protocol}//#{access_token}:@#{domain}#{path}"
     end
