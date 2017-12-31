@@ -13,7 +13,7 @@ use OmniAuth::Builder do
               'calendar'].join(', ') }
 end
 get "/" do
-  "YAY"
+  '<a href="/auth/google">Authenticate a Google Account</a>'
 end
 
 get "/auth/failure" do
@@ -39,6 +39,6 @@ end
     # unless people deactivate their account with your software)
     api.revoke(nylas_token)
 
-    "An email you've received has the subject #{email.subject} and the body #{email.body}"
+    "An email you've received has the subject #{an_email.subject} and the body #{an_email.body}"
   end
 end
