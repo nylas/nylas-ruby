@@ -52,6 +52,8 @@ require_relative "nylas/raw_message"
 require_relative "nylas/thread"
 require_relative "nylas/webhook"
 
+require_relative "nylas/native_authentication"
+
 require_relative "nylas/http_client"
 require_relative "nylas/api"
 
