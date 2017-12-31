@@ -32,6 +32,13 @@ end
                                                google_refresh_token: auth_hash[:credentials][:refresh_token] })
 
     api_as_user = api.as(nylas_token)
-    api_as_user.messages.first.subject
+
+    an_email = api_as_user.messages.first
+
+    # Revoke the nylas access token so it cannot be used in the future (you probably don't want to do this
+    # unless people deactivate their account with your software)
+    api.revoke(nylas_token)
+
+    "An email you've received has the subject #{email.subject} and the body #{email.body}"
   end
 end

@@ -24,6 +24,7 @@ module Nylas
     end
     # rubocop:enable Metrics/ParameterLists
 
+    # @return [String] A Nylas access token for that particular user.
     def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil)
       NativeAuthentication.new(api: self).authenticate(name: name, email_address: email_address,
                                                        provider: provider, settings: settings,
@@ -84,6 +85,13 @@ module Nylas
     # @return[Collection<Message>] A queryable collection of {Message} objects
     def messages
       @messages ||= Collection.new(model: Message, api: self)
+    end
+
+    # Revokes access to the Nylas API for the given access token
+    # @return [Boolean]
+    def revoke(access_token)
+      response = client.as(access_token).post(path: "/oauth/revoke")
+      response.code == 200 && response.empty?
     end
 
     # @param message [Hash, String, #send!]
