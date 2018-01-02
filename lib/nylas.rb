@@ -61,6 +61,7 @@ require_relative "nylas/api"
 # @see https://docs.nylas.com/reference
 module Nylas
   Types.registry[:account] = Types::ModelType.new(model: Account)
+  Types.registry[:calendar] = Types::ModelType.new(model: Calendar)
   Types.registry[:contact] = Types::ModelType.new(model: Contact)
   Types.registry[:delta] = DeltaType.new
   Types.registry[:draft] = Types::ModelType.new(model: Draft)
