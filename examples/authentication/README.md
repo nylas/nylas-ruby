@@ -15,5 +15,4 @@ Nylas supports two forms of authentication:
 1. Copy `.env.example` to `.env` and set the values based upon the previous steps.
 1. Run the app web server: `bundle exec dotenv ruby app.rb`
 1. Login to whichever mail, contact, and calendaring providers you want using the different authentication mechanisms.
-1. Behold the power of this fully operational communication platform!
 
