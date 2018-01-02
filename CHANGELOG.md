@@ -1,3 +1,9 @@
+### 4.0.0 / 2018-01-??
+* Drop support for ruby 2.0 and below
+* Add support for v2 of the Contacts API
+* Switch to an ActiveModel/ActiveQuery compliant interface for interacting with
+  objects and APIs
+
 ### 3.2.0 / 2017-11-16
 * Add support for Ruby 2.4+
 * Add support for Rails 4+
