@@ -23,8 +23,8 @@ data = {
   phone_numbers: [{ type: ['business', 'home', 'mobile', 'pager', 'business_fax', 'home_fax',
                            'organization_main', 'assistant', 'radio'].sample,
                     number: Faker::PhoneNumber.cell_phone }],
-                    email_addresses: [{ type: ['personal', 'work', nil].sample, email: "contact-with-picture@example.com" },
-                                      { type: ['personal', 'work', nil].sample, email:  Faker::Internet.safe_email }],
+  email_addresses: [{ type: ['personal', 'work', nil].sample, email: "contact-with-picture@example.com" },
+                    { type: ['personal', 'work', nil].sample, email:  Faker::Internet.safe_email }],
   web_pages: [{ type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') }],
   web_page: { type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') },
 }
