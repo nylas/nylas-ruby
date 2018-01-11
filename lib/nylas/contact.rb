@@ -19,7 +19,7 @@ module Nylas
     attribute :middle_name, :string
     attribute :picture_url, :string
     attribute :surname, :string
-    attribute :birthday, :nylas_date
+    attribute :birthday, :string
     attribute :suffix, :string
     attribute :nickname, :string
     attribute :company_name, :string
