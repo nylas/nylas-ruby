@@ -4,7 +4,7 @@ describe Nylas::Contact do
   let(:full_json) do
     '{ "id": "1234", "object": "contact", "account_id": "12345", ' \
       '"given_name":"given", "middle_name": "middle", "surname": "surname", ' \
-      '"birthday": { "date": "1984-01-01", "object": "date" }, "suffix": "Jr.", "nickname": "nick", ' \
+      '"birthday": "1984-01-01", "suffix": "Jr.", "nickname": "nick", ' \
       '"company_name": "company", "job_title": "title", ' \
       '"manager_name": "manager", "office_location": "the office", ' \
       '"notes": "some notes", "email_addresses": [' \
@@ -31,7 +31,7 @@ describe Nylas::Contact do
                      ])
       expect(contact.given_name).to eql "Given"
 
-      expect(contact.birthday).to eql(Date.parse("2017-01-01"))
+      expect(contact.birthday).to eql("2017-01-01")
       expect(contact.email_addresses.first.type).to eql "work"
       expect(contact.email_addresses.first.email).to eql "given@other-job.example.com"
       expect(contact.email_addresses.last.type).to eql "home"
@@ -39,7 +39,7 @@ describe Nylas::Contact do
       request = api.requests[0]
 
       expected_payload = JSON.dump(given_name: "Given",
-                                   birthday: { object: "date", 'date': "2017-01-01" },
+                                   birthday: "2017-01-01",
                                    email_addresses: [{ type: "work",
                                                        email: "given@other-job.example.com" },
                                                      { type: "home",
@@ -60,7 +60,7 @@ describe Nylas::Contact do
       expect(contact.given_name).to eql("given")
       expect(contact.middle_name).to eql("middle")
       expect(contact.surname).to eql("surname")
-      expect(contact.birthday).to eql(Date.parse("1984-01-01"))
+      expect(contact.birthday).to eql("1984-01-01")
       expect(contact.suffix).to eql("Jr.")
       expect(contact.nickname).to eql("nick")
       expect(contact.company_name).to eql("company")
@@ -101,7 +101,7 @@ describe Nylas::Contact do
                                   job_title: "title",
                                   office_location: "the office",
                                   manager_name: "manager",
-                                  birthday: { "object": "date", "date": "1984-01-01" },
+                                  birthday: "1984-01-01",
                                   company_name: "company",
                                   notes: "some notes",
                                   email_addresses: [{ type: "work", email: "given@work.example.com" },

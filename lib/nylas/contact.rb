@@ -19,7 +19,7 @@ module Nylas
     attribute :middle_name, :string
     attribute :picture_url, :string
     attribute :surname, :string
-    attribute :birthday, :nylas_date
+    attribute :birthday, :string
     attribute :suffix, :string
     attribute :nickname, :string
     attribute :company_name, :string
@@ -34,5 +34,15 @@ module Nylas
     has_n_of_attribute :physical_addresses, :physical_address
     has_n_of_attribute :phone_numbers, :phone_number
     has_n_of_attribute :web_pages, :web_page
+
+    # @returns [Tempfile] path to the retrieved picture. It is preferrable to cache this in your system than
+    # to retrieve it from nylas every time.
+    def picture
+      return @picture_tempfile if @picture_tempfile
+      @picture_tempfile = Tempfile.new
+      @picture_tempfile.write(api.get(path: "#{resource_path}/picture"))
+      @picture_tempfile.close
+      @picture_tempfile
+    end
   end
 end
