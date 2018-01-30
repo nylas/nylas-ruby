@@ -31,7 +31,7 @@ describe Nylas::Contact do
                      ])
       expect(contact.given_name).to eql "Given"
 
-      expect(contact.birthday).to eql("2017-01-01")
+      expect(contact.birthday).to eql(Date.new(2017, 1, 1))
       expect(contact.email_addresses.first.type).to eql "work"
       expect(contact.email_addresses.first.email).to eql "given@other-job.example.com"
       expect(contact.email_addresses.last.type).to eql "home"
@@ -60,7 +60,7 @@ describe Nylas::Contact do
       expect(contact.given_name).to eql("given")
       expect(contact.middle_name).to eql("middle")
       expect(contact.surname).to eql("surname")
-      expect(contact.birthday).to eql("1984-01-01")
+      expect(contact.birthday).to eql(Date.new(1984, 1, 1))
       expect(contact.suffix).to eql("Jr.")
       expect(contact.nickname).to eql("nick")
       expect(contact.company_name).to eql("company")
