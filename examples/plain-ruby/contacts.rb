@@ -23,7 +23,7 @@ data = {
   phone_numbers: [{ type: ['business', 'home', 'mobile', 'pager', 'business_fax', 'home_fax',
                            'organization_main', 'assistant', 'radio'].sample,
                     number: Faker::PhoneNumber.cell_phone }],
-  email_addresses: [{ type: ['personal', 'work', nil].sample, email: "contact-with-picture@example.com" },
+  emails: [{ type: ['personal', 'work', nil].sample, email: "contact-with-picture@example.com" },
                     { type: ['personal', 'work', nil].sample, email:  Faker::Internet.safe_email }],
   web_pages: [{ type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') }],
   web_page: { type: ['profile', 'blog', 'homepage', 'work'].sample, url: Faker::Internet.url('example.com') },
@@ -36,7 +36,7 @@ demonstrate { contact.picture_url }
 
 # Searching contacts!
 demonstrate do
-  api.contacts.where(email: contact.email_addresses.first.email,
+  api.contacts.where(email: contact.emails.first.email,
                      #country: contact.physical_addresses.first.country,
                      phone_number: contact.phone_numbers.first.number,
                      street_address: contact.physical_addresses.first.street_address).map(&:to_h)

@@ -29,7 +29,7 @@ module Nylas
     attribute :notes, :string
     attribute :web_page, :web_page
 
-    has_n_of_attribute :email_addresses, :email_address
+    has_n_of_attribute :emails, :email_address
     has_n_of_attribute :im_addresses, :im_address
     has_n_of_attribute :physical_addresses, :physical_address
     has_n_of_attribute :phone_numbers, :phone_number
