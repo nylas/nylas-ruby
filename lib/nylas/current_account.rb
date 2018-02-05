@@ -16,5 +16,6 @@ module Nylas
     attribute :organization_unit, :string
     attribute :provider, :string
     attribute :sync_state, :string
+    attribute :linked_at, :unix_timestamp
   end
 end
