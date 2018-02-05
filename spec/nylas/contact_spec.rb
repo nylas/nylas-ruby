@@ -7,7 +7,7 @@ describe Nylas::Contact do
       '"birthday": "1984-01-01", "suffix": "Jr.", "nickname": "nick", ' \
       '"company_name": "company", "job_title": "title", ' \
       '"manager_name": "manager", "office_location": "the office", ' \
-      '"notes": "some notes", "email_addresses": [' \
+      '"notes": "some notes", "emails": [' \
         '{ "type": "work", "email": "given@work.example.com" }, ' \
         '{ "type": "home", "email": "given@home.example.com" }], ' \
       '"im_addresses": [{ "type": "gtalk", "im_address": "given@gtalk.example.com" }],' \
@@ -25,25 +25,26 @@ describe Nylas::Contact do
       contact = described_class.from_json(full_json, api: api)
 
       contact.update(given_name: "Given", birthday: "2017-01-01",
-                     email_addresses: [
+                     emails: [
                        { type: "work", email: "given@other-job.example.com" },
                        Nylas::EmailAddress.new(type: "home", email: "given@other-home.example.com")
                      ])
-      expect(contact.given_name).to eql "Given"
 
+      expect(contact.given_name).to eql "Given"
       expect(contact.birthday).to eql(Date.new(2017, 1, 1))
-      expect(contact.email_addresses.first.type).to eql "work"
-      expect(contact.email_addresses.first.email).to eql "given@other-job.example.com"
-      expect(contact.email_addresses.last.type).to eql "home"
-      expect(contact.email_addresses.last.email).to eql "given@other-home.example.com"
+      expect(contact.emails.first.type).to eql "work"
+      expect(contact.emails.first.email).to eql "given@other-job.example.com"
+      expect(contact.emails.last.type).to eql "home"
+      expect(contact.emails.last.email).to eql "given@other-home.example.com"
+
       request = api.requests[0]
 
       expected_payload = JSON.dump(given_name: "Given",
                                    birthday: "2017-01-01",
-                                   email_addresses: [{ type: "work",
-                                                       email: "given@other-job.example.com" },
-                                                     { type: "home",
-                                                       email: "given@other-home.example.com" }])
+                                   emails: [{ type: "work",
+                                              email: "given@other-job.example.com" },
+                                            { type: "home",
+                                              email: "given@other-home.example.com" }])
       expect(request[:method]).to be :put
       expect(request[:path]).to eql "/contacts/1234"
       expect(request[:payload]).to eql(expected_payload)
@@ -68,10 +69,10 @@ describe Nylas::Contact do
       expect(contact.manager_name).to eql("manager")
       expect(contact.office_location).to eql("the office")
       expect(contact.notes).to eql("some notes")
-      expect(contact.email_addresses[0].type).to eql("work")
-      expect(contact.email_addresses[0].email).to eql("given@work.example.com")
-      expect(contact.email_addresses[1].type).to eql("home")
-      expect(contact.email_addresses[1].email).to eql("given@home.example.com")
+      expect(contact.emails[0].type).to eql("work")
+      expect(contact.emails[0].email).to eql("given@work.example.com")
+      expect(contact.emails[1].type).to eql("home")
+      expect(contact.emails[1].email).to eql("given@home.example.com")
       expect(contact.im_addresses[0].type).to eql("gtalk")
       expect(contact.im_addresses[0].im_address).to eql("given@gtalk.example.com")
       expect(contact.physical_addresses[0].type).to eql("work")
@@ -104,8 +105,8 @@ describe Nylas::Contact do
                                   birthday: "1984-01-01",
                                   company_name: "company",
                                   notes: "some notes",
-                                  email_addresses: [{ type: "work", email: "given@work.example.com" },
-                                                    { type: "home", email: "given@home.example.com" }],
+                                  emails: [{ type: "work", email: "given@work.example.com" },
+                                           { type: "home", email: "given@home.example.com" }],
                                   im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
                                   phone_numbers: [{ type: "mobile", number: "+1234567890" }],
                                   physical_addresses: [{ format: "structured", type: "work",
