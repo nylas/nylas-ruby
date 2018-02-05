@@ -23,7 +23,8 @@ describe Nylas::CurrentAccount do
   it "can be deserialized from JSON" do
     api = FakeAPI.new
     json = '{ "id": "awa6ltos76vz5hvphkp8k17nt", "account_id": "awa6ltos76vz5hvphkp8k17nt", ' \
-           '  "object": "account", "name": "Example Name", "email_address": "example@example.com", ' \
+           '  "object": "account", "name": "Example Name", "linked_at": 1517870623, ' \
+           '  "email_address": "example@example.com", ' \
            '  "provider": "gmail", "organization_unit": "label", "sync_state": "running" }'
 
     account = described_class.from_json(json, api: api)
@@ -38,7 +39,8 @@ describe Nylas::CurrentAccount do
   it "can be serialized back into JSON" do
     api = FakeAPI.new
     json = '{ "id": "awa6ltos76vz5hvphkp8k17nt", "account_id": "awa6ltos76vz5hvphkp8k17nt", ' \
-           '  "object": "account", "name": "Example Name", "email_address": "example@example.com", ' \
+           '  "object": "account", "name": "Example Name", "linked_at": 1517870623, ' \
+           '  "email_address": "example@example.com", ' \
            '  "provider": "gmail", "organization_unit": "label", "sync_state": "running" }'
 
     account = described_class.from_json(json, api: api)
