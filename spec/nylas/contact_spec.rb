@@ -15,7 +15,8 @@ describe Nylas::Contact do
         '"street_address": "123 N West St", "postal_code": "12345+0987", "state": "CA",' \
         '"country": "USA" }],' \
       '"phone_numbers": [{ "type": "mobile", "number": "+1234567890" }], ' \
-      '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }] ' \
+      '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }],' \
+      '"groups": [{"id": "di", "object": "dnwi", "account_id": "doiw", "name": "nfowie", "path": "fnien"}] ' \
     "}"
   end
   let(:api) { FakeAPI.new }
@@ -112,7 +113,8 @@ describe Nylas::Contact do
                                                          street_address: "123 N West St",
                                                          postal_code: "12345+0987", state: "CA",
                                                          country: "USA" }],
-                                  web_pages: [{ type: "profile", url: "http://given.example.com" }])
+                                  web_pages: [{ type: "profile", url: "http://given.example.com" }],
+                                  groups: [{id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien"}])
     end
   end
   describe "#to_json" do

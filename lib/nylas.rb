@@ -42,6 +42,7 @@ require_relative "nylas/deltas_collection"
 require_relative "nylas/account"
 require_relative "nylas/calendar"
 require_relative "nylas/contact"
+require_relative "nylas/contact_group"
 require_relative "nylas/current_account"
 require_relative "nylas/deltas"
 require_relative "nylas/delta"
@@ -82,4 +83,5 @@ module Nylas
   Types.registry[:timespan] = Types::ModelType.new(model: Timespan)
   Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new
+  Types.registry[:contact_group] = Types::ModelType.new(model: ContactGroup)
 end

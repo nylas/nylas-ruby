@@ -29,6 +29,7 @@ module Nylas
     attribute :notes, :string
     attribute :web_page, :web_page
 
+    has_n_of_attribute :groups, :contact_group
     has_n_of_attribute :emails, :email_address
     has_n_of_attribute :im_addresses, :im_address
     has_n_of_attribute :physical_addresses, :physical_address
