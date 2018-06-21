@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+bin/test
+SDK_VERSION=`ruby -e "require './lib/nylas/version' ; puts Nylas::VERSION"`
+echo "Going to release version $SDK_VERSION of the SDK!"
+
+gem build nylas.gemspec
+
+while true; do
+    read -p "Do you wish to publish this gem to Rubygems? " yn
+    case $yn in
+        [Yy]* )
+             gem push nylas-$SDK_VERSION.gem
+
+             echo "Creating git tag..."
+             git tag "v$SDK_VERSION"
+             git push origin "v$SDK_VERSION"
+
+             break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
