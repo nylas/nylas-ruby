@@ -1,3 +1,3 @@
 module Nylas
-  VERSION = "4.0.0.rc3".freeze
+  VERSION = "4.2.1".freeze
 end
