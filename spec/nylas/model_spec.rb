@@ -32,6 +32,14 @@ describe Nylas::Model do
       instance = NotUpdatableModel.from_json(example_instance_json, api: api)
       expect { instance.update(name: "other") }.to raise_error(Nylas::ModelNotUpdatableError)
     end
+
+    it "raises a MissingFieldError if attempting to set a field that does not exist" do
+      expected_message = "fake_attribute is not a valid attribute for FullModel"
+      instance = FullModel.new
+      expect do
+        instance.update(fake_attribute: "not real")
+      end.to raise_error(Nylas::ModelMissingFieldError, expected_message)
+    end
   end
 
   describe ".from_json(json, api:)" do

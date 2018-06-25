@@ -5,8 +5,10 @@ module Nylas
     # Used to indicate an attempt to retrieve something not yet registered in a registry
     # Includes the list of keys in the registry for debug purposes.
     class MissingKeyError < Error
+      attr_accessor :key
       def initialize(key, keys)
         super("key #{key} not in #{keys}")
+        self.key = key
       end
     end
     attr_accessor :registry_data
