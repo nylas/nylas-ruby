@@ -48,6 +48,8 @@ module Nylas
       attributes.merge(**data)
       execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       true
+    rescue Registry::MissingKeyError => e
+      raise ModelMissingFieldError.new(e.key, self)
     end
 
     def reload

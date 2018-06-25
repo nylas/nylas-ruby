@@ -12,6 +12,13 @@ module Nylas
   class ModelNotUpdatableError < ModelActionError; end
   class ModelNotDestroyableError < ModelActionError; end
 
+  # Raised when attempting to set a field that is not on a model with mass assignment
+  class ModelMissingFieldError < ModelActionError
+    def initialize(field, model)
+      super("#{field} is not a valid attribute for #{model.class.name}")
+    end
+  end
+
   # Indicates that a given method needs an access token to work.
   class NoAuthToken < Error
     def initialize(method_name)
