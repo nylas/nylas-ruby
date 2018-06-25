@@ -8,7 +8,11 @@ module Nylas
 
       def initialize(**initial_data)
         initial_data.each do |attribute_name, value|
-          send(:"#{attribute_name}=", value)
+          if attribute_definitions.key?(attribute_name)
+            send(:"#{attribute_name}=", value)
+          else
+            Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")
+          end
         end
       end
 
@@ -19,6 +23,10 @@ module Nylas
       # @return [Hash] Representation of the model with values serialized into primitives based on their Type
       def to_h
         attributes.to_h
+      end
+
+      private def attribute_definitions
+        self.class.attribute_definitions
       end
 
       # Methods to call when tweaking Attributable classes

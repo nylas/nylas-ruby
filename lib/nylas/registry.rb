@@ -12,7 +12,7 @@ module Nylas
     attr_accessor :registry_data
 
     extend Forwardable
-    def_delegators :registry_data, :keys, :each, :reduce
+    def_delegators :registry_data, :keys, :each, :reduce, :key?
 
     def initialize(initial_data = {})
       self.registry_data = initial_data.each.each_with_object({}) do |(key, value), registry|

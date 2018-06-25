@@ -39,6 +39,10 @@ describe Nylas::Model do
       instance = FullModel.from_json("{}", api: api)
       expect(instance.api).to eql(api)
     end
+    it "doesn't explode if the attribute isn't defined" do
+      instance = FullModel.from_json('{ "missing-attribute": 1234 }', api: api)
+      expect(instance.api).to eql(api)
+    end
 
     it "supports date attributes" do
       instance = FullModel.from_json('{ "date": "2017-01-01" }', api: api)
