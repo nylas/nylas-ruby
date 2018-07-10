@@ -26,11 +26,20 @@ dotenv ruby examples/plain-ruby.rb # Execute the examples in plain old ruby
 ```
 To manually check that the authentication features still work follow the instructions in `examples/authentication/README.md`
 
-Once those all pass, you're ready to release the new version:
+#### Authenticating to Rubygems
+
+Nylas team members can authenticate with the following:
+
 ```
-bin/test
-gem build nylas.gemspec
-gem push nylas-M.m.p.gem # Update the version number
+curl -u nylas https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
 ```
 
-Then update `lib/nylas/version.rb` to the next planned release version and run `bin/setup` again.
+#### Pushing to Rubygems
+
+Once the tests all pass, you're ready to release a new version!
+Update `lib/nylas/version.rb` to the next planned release version then run:
+
+```
+bin/test
+bin/release
+```

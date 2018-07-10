@@ -99,13 +99,3 @@ You can run tests locally using rspec
 ## Contributing
 
 Our guidelines for contributing are in [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-## Deployment
-
-### Authentication Setup
-
-Nylas team members can authenticate with the following:
-
-```
-curl -u nylas https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
-```
