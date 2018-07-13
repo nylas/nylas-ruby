@@ -24,6 +24,7 @@ module Nylas
     attribute :status, :string
     attribute :title, :string
     attribute :when, :timespan
+    attribute :original_start_time, :unix_timestamp
 
     def busy?
       busy
