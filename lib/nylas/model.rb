@@ -53,7 +53,7 @@ module Nylas
     end
 
     def reload
-      attributes.merge(execute(method: :get, path: resource_path))
+      merge(execute(method: :get, path: resource_path))
       true
     end
 

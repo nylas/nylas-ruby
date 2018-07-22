@@ -7,7 +7,11 @@ module Nylas
       end
 
       def initialize(**initial_data)
-        initial_data.each do |attribute_name, value|
+        merge(**initial_data)
+      end
+
+      protected def merge(**data)
+        data.each do |attribute_name, value|
           if self.class.attribute_definitions.key?(attribute_name)
             send(:"#{attribute_name}=", value)
           else

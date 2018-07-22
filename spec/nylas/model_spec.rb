@@ -42,6 +42,14 @@ describe Nylas::Model do
     end
   end
 
+  describe "#reload" do
+    it "does not explode if using an invalid attribute" do
+      allow(api).to receive(:execute).and_return(fake_attribute: "not real")
+      instance = FullModel.from_json('{ "id": 1234 }', api: api)
+      expect { instance.reload }.not_to raise_error
+    end
+  end
+
   describe ".from_json(json, api:)" do
     it "instantiates a ruby version of the Model with pas the data" do
       instance = FullModel.from_json("{}", api: api)
