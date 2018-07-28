@@ -7,12 +7,12 @@ module Nylas
       end
 
       def initialize(**initial_data)
-        merge(**initial_data)
+        assign(**initial_data)
       end
 
-      protected def merge(**data)
+      protected def assign(**data)
         data.each do |attribute_name, value|
-          if self.class.attribute_definitions.key?(attribute_name)
+          if respond_to?(:"#{attribute_name}=")
             send(:"#{attribute_name}=", value)
           else
             Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")

@@ -48,6 +48,15 @@ describe Nylas::Model do
       instance = FullModel.from_json('{ "id": 1234 }', api: api)
       expect { instance.reload }.not_to raise_error
     end
+
+    it "assigns the attributes that do exist" do
+      allow(api).to receive(:execute).and_return(string: "I am real", fake_attribute: "not real")
+      instance = FullModel.from_json('{ "id": 1234 }', api: api)
+      instance.reload
+      expect(instance.id).to eql "1234"
+      expect(instance.string).to eql "I am real"
+      expect { instance.attributes[:fake_attribute] }.to raise_error Nylas::Registry::MissingKeyError
+    end
   end
 
   describe ".from_json(json, api:)" do
