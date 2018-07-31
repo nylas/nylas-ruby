@@ -7,8 +7,12 @@ module Nylas
       end
 
       def initialize(**initial_data)
-        initial_data.each do |attribute_name, value|
-          if self.class.attribute_definitions.key?(attribute_name)
+        assign(**initial_data)
+      end
+
+      protected def assign(**data)
+        data.each do |attribute_name, value|
+          if respond_to?(:"#{attribute_name}=")
             send(:"#{attribute_name}=", value)
           else
             Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")

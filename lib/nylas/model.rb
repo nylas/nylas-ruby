@@ -53,7 +53,7 @@ module Nylas
     end
 
     def reload
-      attributes.merge(execute(method: :get, path: resource_path))
+      assign(execute(method: :get, path: resource_path))
       true
     end
 
@@ -136,8 +136,7 @@ module Nylas
       end
 
       def from_hash(data, api:)
-        instance = new(**data)
-        instance.api = api
+        instance = new(**data.merge(api: api))
         instance
       end
     end
