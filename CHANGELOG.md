@@ -1,3 +1,7 @@
+### 4.2.3 / 2018-07-31
+* Enables silent addition of fields to API without impact to SDK
+* Fixes api attribute breakage on enumeration (https://github.com/nylas/nylas-ruby/issues/188)
+
 ### 4.0.0 / 2018-01-??
 * Drop support for ruby 2.0 and below
 * Add support for v2 of the Contacts API
