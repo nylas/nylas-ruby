@@ -1,4 +1,4 @@
-### 4.2.3 / 2018-07-31
+### 4.2.4 / 2018-08-07
 * Enables silent addition of fields to API without impact to SDK
 * Fixes api attribute breakage on enumeration (https://github.com/nylas/nylas-ruby/issues/188)
 
