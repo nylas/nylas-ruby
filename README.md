@@ -35,7 +35,7 @@ gem install nylas
 
 ### Supported Rails Versions
 
-We support Rails 4.2 and above. A more detailed compatiblity list can be found in our [list of Gemfiles](gemfiles)
+We support Rails 4.2 and above. A more detailed compatibility list can be found in our [list of Gemfiles](gemfiles)
 
 ## Examples
 
