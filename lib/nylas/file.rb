@@ -49,7 +49,7 @@ module Nylas
     private def retrieve_file
       response = api.get(path: "#{resource_path}/download")
       filename = response.headers.fetch(:content_disposition, "").gsub("attachment; filename=", "")
-      temp_file = Tempfile.new(filename)
+      temp_file = Tempfile.new(filename, :encoding => 'ascii-8bit')
       temp_file.write(response.body)
       temp_file.seek(0)
       temp_file
