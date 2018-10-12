@@ -14,6 +14,7 @@ describe Nylas::Thread do
   end
 
   it "can be deserialized from JSON" do
+    api = instance_double(Nylas::API)
     json = JSON.dump(id: "thread-2345", account_id: "acc-1234", draft_ids: ["dra-987"],
                      first_message_timestamp: 1_510_080_143, has_attachments: false,
                      labels: [{ display_name: "All Mail", id: "label-all-mail", name: "all" },
@@ -27,7 +28,7 @@ describe Nylas::Thread do
                                                         name: "Andy from Google" }],
                      snippet: "Hi there!", starred: false, subject: "Hello!", "unread": false, "version": 2)
 
-    thread = described_class.from_json(json, api: nil)
+    thread = described_class.from_json(json, api: api)
     expect(thread.id).to eql "thread-2345"
     expect(thread.account_id).to eql "acc-1234"
     expect(thread.draft_ids).to eql ["dra-987"]
@@ -37,10 +38,11 @@ describe Nylas::Thread do
     expect(thread.labels[0].id).to eql "label-all-mail"
     expect(thread.labels[0].name).to eql "all"
     expect(thread.labels[0].display_name).to eql "All Mail"
+    expect(thread.labels[0].api).to be api
 
     expect(thread.labels[1].id).to eql "label-inbox"
     expect(thread.labels[1].name).to eql "inbox"
-    expect(thread.labels[1].display_name).to eql "Inbox"
+    expect(thread.labels[1].api).to be api
 
     expect(thread.last_message_received_timestamp).to eql Time.at(1_510_080_143)
     expect(thread.last_message_timestamp).to eql Time.at(1_510_080_143)
