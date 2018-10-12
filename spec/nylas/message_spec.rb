@@ -113,4 +113,25 @@ describe Nylas::Message do
       expect(message.labels[1].name).to eql "all"
     end
   end
+
+  describe "#expanded" do
+    it "fetch or return expanded version of message" do
+      api = instance_double(Nylas::API, execute: "{}")
+      message = described_class.from_json('{ "id": "message-1234" }', api: api)
+      data = { id: "draft-1234",
+               headers: { "In-Reply-To": "<evh5uy0shhpm5d0le89goor17-0@example.com>",
+                          "Message-Id": "<84umizq7c4jtrew491brpa6iu-0@example.com>",
+                          "References": ["<evh5uy0shhpm5d0le89goor17-0@example.com>"] } }
+
+      allow(api).to receive(:execute).with(method: :get,
+                                           path: "/messages/message-1234",
+                                           query: { view: "expanded" })
+                                     .and_return(data)
+      message.expanded
+
+      expect(message.expanded.headers.in_reply_to).to eql "<evh5uy0shhpm5d0le89goor17-0@example.com>"
+      expect(message.expanded.headers.message_id).to eql "<84umizq7c4jtrew491brpa6iu-0@example.com>"
+      expect(message.expanded.headers.references[0]).to eql "<evh5uy0shhpm5d0le89goor17-0@example.com>"
+    end
+  end
 end
