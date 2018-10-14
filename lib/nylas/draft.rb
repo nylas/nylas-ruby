@@ -28,7 +28,7 @@ module Nylas
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
-    attribute :folder, :label
+    attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
     def send!
