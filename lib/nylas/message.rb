@@ -41,5 +41,12 @@ module Nylas
     def unread?
       unread
     end
+
+    def expanded
+      return self unless headers.nil?
+
+      assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
+      self
+    end
   end
 end
