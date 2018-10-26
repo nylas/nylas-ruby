@@ -42,6 +42,7 @@ describe Nylas::Thread do
 
     expect(thread.labels[1].id).to eql "label-inbox"
     expect(thread.labels[1].name).to eql "inbox"
+    expect(thread.labels[1].display_name).to eql "Inbox"
     expect(thread.labels[1].api).to be api
 
     expect(thread.last_message_received_timestamp).to eql Time.at(1_510_080_143)
