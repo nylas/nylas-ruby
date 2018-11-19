@@ -13,7 +13,7 @@ module Nylas
     end
 
     def merge(where: {}, limit: nil, offset: nil, view: nil, per_page: nil, accept: nil)
-      Constraints.new(where: where.merge(where),
+      Constraints.new(where: self.where.merge(where),
                       limit: limit || self.limit,
                       per_page: per_page || self.per_page,
                       offset: offset || self.offset,

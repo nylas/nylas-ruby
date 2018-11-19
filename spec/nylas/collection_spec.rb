@@ -82,4 +82,24 @@ describe Nylas::Collection do
       expect { collection.create(string: "1234") }.to raise_error(Nylas::ModelNotCreatableError)
     end
   end
+
+  describe "#count" do
+    it "returns collection count" do
+      collection = described_class.new(model: FullModel, api: api)
+      allow(api).to receive(:execute)
+        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0, view: "count"}, headers: {})
+        .and_return(count: 1)
+
+      expect(collection.count).to eql 1
+    end
+
+    it "returns collection count filtered by `where`" do
+      collection = described_class.new(model: FullModel, api: api)
+      allow(api).to receive(:execute)
+        .with(method: :get, path: "/collection", query: { id: "1234", limit: 100, offset: 0, view: "count"}, headers: {})
+        .and_return(count: 1)
+
+      expect(collection.where(id: "1234").count).to eql 1
+    end
+  end
 end
