@@ -15,6 +15,15 @@ module Nylas
       503 => ServiceUnavailable
     }.freeze
 
+    ENDPOINT_TIMEOUTS = {
+        "/oauth/authorize" => 345,
+        "/messages/search" => 350,
+        "/threads/search" => 350,
+        "/delta" => 3650,
+        "/delta/longpoll" => 3650,
+        "/delta/streaming" => 3650
+    }.freeze
+
     include Logging
     attr_accessor :api_server, :service_domain
     attr_writer :default_headers
@@ -57,7 +66,15 @@ module Nylas
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [Array Hash Stringn]
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil)
-      request = build_request(method: method, path: path, headers: headers, query: query, payload: payload)
+      timeout = ENDPOINT_TIMEOUTS.fetch(path, 230)
+      request = build_request(
+        method: method,
+        path: path,
+        headers: headers,
+        query: query,
+        payload: payload,
+        timeout: timeout
+      )
       rest_client_execute(**request) do |response, _request, result|
         response = parse_response(response)
         handle_failed_response(result: result, response: response)
@@ -67,11 +84,11 @@ module Nylas
     inform_on :execute, level: :debug,
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
-    def build_request(method:, path: nil, headers: {}, query: {}, payload: nil)
+    def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
       headers[:params] = query
       url ||= url_for_path(path)
       resulting_headers = default_headers.merge(headers)
-      { method: method, url: url, payload: payload, headers: resulting_headers }
+      { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
     # rubocop:enable Metrics/ParameterLists
 
@@ -100,9 +117,9 @@ module Nylas
     end
     # rubocop:enable Metrics/ParameterList
 
-    private def rest_client_execute(method:, url:, headers:, payload:, &block)
+    private def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: headers, &block)
+                                    headers: headers, timeout: timeout, &block)
     end
     inform_on :rest_client_execute, level: :debug,
                                     also_log: { result: true, values: %i[method url headers payload] }
