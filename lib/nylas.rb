@@ -69,9 +69,9 @@ module Nylas
   Types.registry[:email_address] = Types::ModelType.new(model: EmailAddress)
   Types.registry[:event] = Types::ModelType.new(model: Event)
   Types.registry[:file] = Types::ModelType.new(model: File)
-  Types.registry[:folder] = Types::ModelType.new(model: Folder)
+  Types.registry[:folder] = Types::ContainerType.new(model: Folder)
   Types.registry[:im_address] = Types::ModelType.new(model: IMAddress)
-  Types.registry[:label] = Types::ModelType.new(model: Label)
+  Types.registry[:label] = Types::ContainerType.new(model: Label)
   Types.registry[:message] = Types::ModelType.new(model: Message)
   Types.registry[:message_headers] = MessageHeadersType.new
   Types.registry[:message_tracking] = Types::ModelType.new(model: MessageTracking)
