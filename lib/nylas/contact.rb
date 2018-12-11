@@ -27,6 +27,7 @@ module Nylas
     attribute :manager_name, :string
     attribute :office_location, :string
     attribute :notes, :string
+    attribute :source, :string
     attribute :web_page, :web_page
 
     has_n_of_attribute :groups, :contact_group

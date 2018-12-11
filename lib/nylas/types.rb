@@ -52,6 +52,12 @@ module Nylas
       end
     end
 
+    class MessageLabelType < ModelType
+      def serialize(object)
+        object.id
+      end
+    end
+
     # Type for attributes that do not require casting/serializing/deserializing.
     class ValueType
       def cast(object)
