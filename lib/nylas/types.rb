@@ -54,7 +54,7 @@ module Nylas
 
     class ContainerType < ModelType
       def serialize(object)
-        object.id
+        object&.id
       end
     end
 
