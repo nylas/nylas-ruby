@@ -12,11 +12,22 @@ describe Nylas::Contact do
         '{ "type": "home", "email": "given@home.example.com" }], ' \
       '"im_addresses": [{ "type": "gtalk", "im_address": "given@gtalk.example.com" }],' \
       '"physical_addresses": [{ "format": "structured", "type": "work",' \
-        '"street_address": "123 N West St", "postal_code": "12345+0987", "state": "CA",' \
+        '"street_address": "123 N West St", "postal_code": "12345+0987", "city": "Los Angeles", "state": "CA",' \
         '"country": "USA" }],' \
       '"phone_numbers": [{ "type": "mobile", "number": "+1234567890" }], ' \
       '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }],' \
       '"groups": [{"id": "di", "object": "dnwi", "account_id": "doiw", "name": "nfowie", "path": "fnien"}] ' \
+    "}"
+  end
+  let(:partial_address_json) do
+    '{ "id": "1234", "object": "contact", "account_id": "12345", ' \
+      '"given_name":"given", "middle_name": "middle", "surname": "surname", ' \
+      '"birthday": "1984-01-01", "suffix": "Jr.", "nickname": "nick", ' \
+      '"company_name": "company", "job_title": "title", ' \
+      '"manager_name": "manager", "office_location": "the office", ' \
+      '"physical_addresses": [{ "format": "structured", "type": "work",' \
+        '"street_address": "123 N West St", "postal_code": "", "city": "", "state": "",' \
+        '"country": "USA" }]' \
     "}"
   end
   let(:api) { FakeAPI.new }
@@ -111,12 +122,34 @@ describe Nylas::Contact do
                                   phone_numbers: [{ type: "mobile", number: "+1234567890" }],
                                   physical_addresses: [{ format: "structured", type: "work",
                                                          street_address: "123 N West St",
-                                                         postal_code: "12345+0987", state: "CA",
+                                                         postal_code: "12345+0987", city: "Los Angeles", state: "CA",
                                                          country: "USA" }],
                                   web_pages: [{ type: "profile", url: "http://given.example.com" }],
                                   groups: [{id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien"}])
     end
+
+    it "serializes attributes correctly for a contact with a partial physical address" do
+      contact = described_class.from_json(partial_address_json, api: api)
+      expect(contact.to_h).to eql(id: "1234",
+                                  object: "contact",
+                                  account_id: "12345",
+                                  given_name: "given",
+                                  middle_name: "middle",
+                                  surname: "surname",
+                                  suffix: "Jr.",
+                                  nickname: "nick",
+                                  job_title: "title",
+                                  office_location: "the office",
+                                  manager_name: "manager",
+                                  birthday: "1984-01-01",
+                                  company_name: "company",
+                                  physical_addresses: [{ format: "structured", type: "work",
+                                                         street_address: "123 N West St",
+                                                         postal_code: "", city: "", state: "",
+                                                         country: "USA" }])
+    end
   end
+
   describe "#to_json" do
     it "returns a string of JSON" do
       contact = described_class.from_json(full_json, api: api)
