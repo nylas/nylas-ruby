@@ -33,11 +33,7 @@ module Nylas
       def to_h(keys: attribute_definitions.keys)
         keys.each_with_object({}) do |key, casted_data|
           value = attribute_definitions[key].serialize(self[key])
-          if %i[street_address postal_code state city country].include?(key)
-            casted_data[key] = value || ""
-          else
-            casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
-          end
+          casted_data[key] = defaulted_value(value)
         end
       end
 
@@ -47,6 +43,13 @@ module Nylas
 
       private def default_attributes
         attribute_definitions.keys.zip([]).to_h
+      end
+
+      private def defaulted_value(value)
+        result = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
+        result ||= [] if value.is_a?(Array)
+        result ||= "" unless [true, false].include?(value)
+        result
       end
     end
   end
