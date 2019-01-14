@@ -25,6 +25,12 @@ module Nylas
     attribute :title, :string
     attribute :when, :timespan
     attribute :original_start_time, :unix_timestamp
+    attr_reader :raw_json
+
+    def initialize(*args, &block)
+      super(*args, &block)
+      @raw_json = JSON.parse(to_json)
+    end
 
     def busy?
       busy
