@@ -51,6 +51,7 @@ require_relative "nylas/message"
 require_relative "nylas/new_message"
 require_relative "nylas/raw_message"
 require_relative "nylas/thread"
+require_relative "nylas/tracking"
 require_relative "nylas/webhook"
 
 require_relative "nylas/native_authentication"
@@ -81,6 +82,7 @@ module Nylas
   Types.registry[:recurrence] = Types::ModelType.new(model: Recurrence)
   Types.registry[:thread] = Types::ModelType.new(model: Thread)
   Types.registry[:timespan] = Types::ModelType.new(model: Timespan)
+  Types.registry[:tracking] = Types::ModelType.new(model: Tracking)
   Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new
   Types.registry[:contact_group] = Types::ModelType.new(model: ContactGroup)
