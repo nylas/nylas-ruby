@@ -28,6 +28,7 @@ module Nylas
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
+    has_n_of_attribute :file_ids, :string
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
