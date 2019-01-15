@@ -14,7 +14,6 @@ describe Nylas::Contact do
       '"physical_addresses": [{ "format": "structured", "type": "work",' \
         '"street_address": "123 N West St", "postal_code": "12345+0987", "city": "Los Angeles", "state": "CA",' \
         '"country": "USA" }],' \
-      '"web_page": {}, ' \
       '"phone_numbers": [{ "type": "mobile", "number": "+1234567890" }], ' \
       '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }],' \
       '"groups": [{"id": "di", "object": "dnwi", "account_id": "doiw", "name": "nfowie", "path": "fnien"}] ' \
@@ -117,7 +116,6 @@ describe Nylas::Contact do
                                   birthday: "1984-01-01",
                                   company_name: "company",
                                   notes: "some notes",
-                                  web_page: {},
                                   emails: [{ type: "work", email: "given@work.example.com" },
                                            { type: "home", email: "given@home.example.com" }],
                                   im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
@@ -149,7 +147,6 @@ describe Nylas::Contact do
                                   groups: [],
                                   im_addresses: [],
                                   phone_numbers: [],
-                                  web_page: {},
                                   web_pages: [],
                                   physical_addresses: [{ format: "structured", type: "work",
                                                          street_address: "123 N West St",

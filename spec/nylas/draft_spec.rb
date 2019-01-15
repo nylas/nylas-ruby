@@ -35,12 +35,8 @@ describe Nylas::Draft do
                                      .and_return(id: "draft-1234", version: "6")
 
       draft.send!
-
-      expect(api).to have_received(:execute).with(method: :put, path: "/drafts/#{draft.id}",
-                                                  payload: update_json)
       expect(api).to have_received(:execute).with(method: :post, path: "/send",
-                                                  payload: JSON.dump(draft_id: draft.id,
-                                                                     version: draft.version))
+                                                  payload: update_json)
     end
   end
 
