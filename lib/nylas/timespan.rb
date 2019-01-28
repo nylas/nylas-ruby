@@ -9,9 +9,9 @@ module Nylas
     attribute :start_time, :unix_timestamp
     attribute :end_time, :unix_timestamp
     attribute :time, :unix_timestamp
-    attribute :date, :unix_timestamp
-    attribute :start_date, :unix_timestamp
-    attribute :end_date, :unix_timestamp
+    attribute :date, :string
+    attribute :start_date, :string
+    attribute :end_date, :string
 
     def_delegators :range, :cover?
 
