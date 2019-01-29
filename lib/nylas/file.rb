@@ -46,8 +46,12 @@ module Nylas
       true
     end
 
+    def download_raw
+      api.get(path: "#{resource_path}/download")
+    end
+
     private def retrieve_file
-      response = api.get(path: "#{resource_path}/download")
+      response = download_raw
       filename = response.headers.fetch(:content_disposition, "").gsub("attachment; filename=", "")
       temp_file = Tempfile.new(filename)
       temp_file.write(response.body)
