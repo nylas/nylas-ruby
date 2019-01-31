@@ -40,6 +40,19 @@ module Nylas
       read_only
     end
 
+    def save
+      result = if persisted?
+                 raise ModelNotUpdatableError, self unless updatable?
+
+                 payload = JSON.parse(attributes.serialize)
+                 payload["when"] = payload["when"].except("object")
+                 execute(method: :put, payload: payload.to_json, path: resource_path)
+               else
+                 create
+               end
+      attributes.merge(result)
+    end
+
     def rsvp(status, notify_participants:)
       rsvp = Rsvp.new(api: api, status: status, notify_participants: notify_participants,
                       event_id: id, account_id: account_id)
