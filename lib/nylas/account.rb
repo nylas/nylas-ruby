@@ -24,6 +24,11 @@ module Nylas
       response[:success]
     end
 
+    def revoke_all
+      response = execute(method: :post, path: "#{resource_path}/revoke-all")
+      response[:success]
+    end
+
     def self.resources_path(api:)
       "/a/#{api.app_id}/accounts"
     end
