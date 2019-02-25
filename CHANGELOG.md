@@ -1,6 +1,8 @@
 ### Unreleased
 * Drop support for Ruby 2.2 and 2.3: they have reached end-of-life
 * Add support for Ruby 2.5 and 2.6
+* Add `scopes` argument to `Nylas::API#authenticate` for
+  [selective sync](https://docs.nylas.com/docs/how-to-use-selective-sync)
 
 ### 4.2.4 / 2018-08-07
 * Enables silent addition of fields to API without impact to SDK
