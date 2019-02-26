@@ -33,7 +33,7 @@ module GemConfig
   end
 
   def self.dev_dependencies
-    [["bundler", "~> 1.3"],
+    [["bundler"],
      ["jeweler", "~> 2.1"],
      ["yard", "~> 0.9.0"],
      ["awesome_print", "~> 1.0"],
