@@ -8,7 +8,7 @@ module GemConfig
     gem.license = "MIT"
     gem.version = Nylas::VERSION
     gem.platform = "ruby"
-    gem.required_ruby_version = "~> 2.2"
+    gem.required_ruby_version = ">= 2.4"
     append_nylas_data(gem)
     dev_dependencies.each do |dependency|
       gem.add_development_dependency(*dependency)
@@ -33,7 +33,7 @@ module GemConfig
   end
 
   def self.dev_dependencies
-    [["bundler", "~> 1.3"],
+    [["bundler", ">= 1.3.0"],
      ["jeweler", "~> 2.1"],
      ["yard", "~> 0.9.0"],
      ["awesome_print", "~> 1.0"],
