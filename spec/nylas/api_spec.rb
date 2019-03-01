@@ -20,6 +20,11 @@ describe Nylas::API do
                                                        "No access token was provided and the " \
                                                        "current_account method requires one"
     end
+
+    it "sets X-Nylas-Client-Id header" do
+      client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
+      expect(client.default_headers).to include("X-Nylas-Client-Id" => "not-real")
+    end
   end
   describe "#execute" do
     it "builds the URL based upon the api_server it was initialized with"
