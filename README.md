@@ -59,6 +59,8 @@ api.authenticate(
 )
 ```
 
+If you do not pass any scopes, then the SDK will default to using all of them.
+
 ### Handling Errors
 The Nylas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
 
