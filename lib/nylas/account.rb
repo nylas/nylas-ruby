@@ -24,8 +24,10 @@ module Nylas
       response[:success]
     end
 
-    def revoke_all
-      response = execute(method: :post, path: "#{resource_path}/revoke-all")
+    def revoke_all(keep_access_token: nil)
+      payload = JSON.dump(keep_access_token: keep_access_token) if keep_access_token
+
+      response = execute(method: :post, path: "#{resource_path}/revoke-all", payload: payload)
       response[:success]
     end
 
