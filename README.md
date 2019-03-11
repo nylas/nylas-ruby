@@ -41,6 +41,26 @@ We support Rails 4.2 and above. A more detailed compatibility list can be found 
 
 Examples are located in the [examples](./examples) directory. Examples in plain ruby are in [examples/plain-ruby/](./examples/plain-ruby). They are grouped by the API endpoints they interact with.
 
+## Scopes
+
+The Nylas API allows you to set various scopes during the authentication process
+in order to use the [Selective Sync](https://docs.nylas.com/docs/how-to-use-selective-sync)
+feature. Currently, these scopes are `email`, `calendar`, and `contacts`.
+You can pass an array of scopes to `Nylas::API#authenticate`, like this:
+
+```ruby
+api = Nylas::API.new()
+api.authenticate(
+    name: 'fake',
+    email_address: 'fake@example.com',
+    provider: :gmail,
+    settings: {},
+    scopes: ["email"]
+)
+```
+
+If you do not pass any scopes, then the SDK will default to using all of them.
+
 ### Handling Errors
 The Nylas API uses conventional HTTP response codes to indicate success or failure of an API request. The ruby gem raises these as native exceptions.
 

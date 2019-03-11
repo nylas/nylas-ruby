@@ -4,6 +4,9 @@ SimpleCov.start
 require "nylas"
 require "pry"
 require "webmock/rspec"
+require "rspec-json_matcher"
+
+RSpec.configuration.include RSpec::JsonMatcher
 
 class FakeAPI
   def execute(method:, path:, payload: nil)

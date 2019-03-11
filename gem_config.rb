@@ -47,6 +47,7 @@ module GemConfig
      ["pry-nav", "~> 0.2.4"],
      ["pry-stack_explorer", "~> 0.4.9"],
      ["rspec", "~> 3.7"],
+     ["rspec-json_matcher", "~> 0.1"],
      ["webmock", "~> 3.0"],
      ["faker", "~> 1.8"],
      ["informed", "~> 1.0"],

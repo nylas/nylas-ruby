@@ -25,10 +25,15 @@ module Nylas
     # rubocop:enable Metrics/ParameterLists
 
     # @return [String] A Nylas access token for that particular user.
-    def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil)
-      NativeAuthentication.new(api: self).authenticate(name: name, email_address: email_address,
-                                                       provider: provider, settings: settings,
-                                                       reauth_account_id: reauth_account_id)
+    def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil, scopes: nil)
+      NativeAuthentication.new(api: self).authenticate(
+        name: name,
+        email_address: email_address,
+        provider: provider,
+        settings: settings,
+        reauth_account_id: reauth_account_id,
+        scopes: scopes,
+      )
     end
 
     # @return [Collection<Contact>] A queryable collection of Contacts
