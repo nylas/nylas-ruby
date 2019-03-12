@@ -19,6 +19,9 @@ Metrics/BlockLength:
     - "*.gemspec"
     - "spec/**/*_spec.rb"
 
+Metrics/ParameterLists:
+  Max: 8
+
 Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"

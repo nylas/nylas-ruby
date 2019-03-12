@@ -19,12 +19,6 @@ module Nylas
         data[key] = cast(key, value)
       end
 
-      private def cast(key, value)
-        attribute_definitions[key].cast(value)
-      rescue TypeError => e
-        raise TypeError, "#{key} #{e.message}"
-      end
-
       # Merges data into the registry while casting input types correctly
       def merge(new_data)
         new_data.each do |attribute_name, value|
@@ -43,7 +37,15 @@ module Nylas
         JSON.dump(to_h(keys: keys))
       end
 
-      private def default_attributes
+      private
+
+      def cast(key, value)
+        attribute_definitions[key].cast(value)
+      rescue TypeError => e
+        raise TypeError, "#{key} #{e.message}"
+      end
+
+      def default_attributes
         attribute_definitions.keys.zip([]).to_h
       end
     end

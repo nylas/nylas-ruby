@@ -17,14 +17,12 @@ module Nylas
     #                            you're using a self-hosted Nylas instance.
     # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::API]
-    # rubocop:disable Metrics/ParameterLists
     def initialize(client: nil, app_id: nil, app_secret: nil, access_token: nil,
                    api_server: "https://api.nylas.com", service_domain: "api.nylas.com")
       self.client = client || HttpClient.new(app_id: app_id, app_secret: app_secret,
                                              access_token: access_token, api_server: api_server,
                                              service_domain: service_domain)
     end
-    # rubocop:enable Metrics/ParameterLists
 
     # @return [String] A Nylas access token for that particular user.
     def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil, scopes: nil)
@@ -126,7 +124,9 @@ module Nylas
       @webhooks ||= Collection.new(model: Webhook, api: as(client.app_secret))
     end
 
-    private def prevent_calling_if_missing_access_token(method_name)
+    private
+
+    def prevent_calling_if_missing_access_token(method_name)
       return if client.access_token && !client.access_token.empty?
 
       raise NoAuthToken, method_name

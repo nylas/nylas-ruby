@@ -98,7 +98,10 @@ describe Nylas::Collection do
     it "returns collection count filtered by `where`" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { id: "1234", limit: 100, offset: 0, view: "count" }, headers: {})
+        .with(method: :get,
+              path: "/collection",
+              query: { id: "1234", limit: 100, offset: 0, view: "count" },
+              headers: {})
         .and_return(count: 1)
 
       expect(collection.where(id: "1234").count).to be 1

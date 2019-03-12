@@ -13,7 +13,9 @@ module Nylas
         self.default = default
       end
 
-      private def type
+      private
+
+      def type
         Types.registry[type_name]
       end
     end

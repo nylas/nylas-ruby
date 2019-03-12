@@ -59,7 +59,10 @@ describe Nylas::Account do
 
     expect(account.revoke_all(keep_access_token: access_token)).to be_truthy
 
-    expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/revoke-all",
-                                                payload: be_json("keep_access_token" => access_token))
+    expect(api).to have_received(:execute).with(
+      method: :post,
+      path: "/a/app-987/accounts/acc-1234/revoke-all",
+      payload: be_json("keep_access_token" => access_token)
+    )
   end
 end

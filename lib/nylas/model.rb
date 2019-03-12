@@ -87,7 +87,6 @@ module Nylas
                     :destroyable
       attr_writer :resources_path
 
-      # rubocop:disable Metrics/ParameterLists
       def allows_operations(creatable: false, showable: false, listable: false, filterable: false,
                             searchable: false, updatable: false, destroyable: false)
 
@@ -100,7 +99,6 @@ module Nylas
         self.destroyable ||= destroyable
       end
 
-      # rubocop:enable Metrics/ParameterLists
       def creatable?
         creatable
       end

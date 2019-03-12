@@ -12,7 +12,7 @@ module Nylas
         assign(**initial_data)
       end
 
-      protected def assign(**data)
+      protected def assign(**data) # rubocop:disable Style/AccessModifierDeclarations
         data.each do |attribute_name, value|
           if respond_to?(:"#{attribute_name}=")
             send(:"#{attribute_name}=", value)
