@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Ruby object to represent a single change. Used both when receiving a webhook, as well as the deltas API.
   # @see https://docs.nylas.com/reference#receiving-notifications
@@ -18,6 +20,7 @@ module Nylas
 
     def model
       return nil if object.nil?
+
       @model ||= Types.registry[object.to_sym].cast(object_attributes_with_ids)
     end
 

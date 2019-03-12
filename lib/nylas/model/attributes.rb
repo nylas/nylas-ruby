@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   module Model
     # Stores the actual model data to allow for type casting and clean/dirty checking

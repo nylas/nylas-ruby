@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Structure to represent a Nylas Timespan.
   # @see https://docs.nylas.com/reference#section-timespan

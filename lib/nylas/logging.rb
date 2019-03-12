@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # We are explicitely choosing to allow clients to use or not use informed at their discretion
 # rubocop:disable Lint/HandleExceptions
 begin
@@ -20,6 +22,7 @@ module Nylas
 
     def self.logger
       return @logger if @logger
+
       @logger = Logger.new(STDOUT)
       @logger.level = level
       @logger

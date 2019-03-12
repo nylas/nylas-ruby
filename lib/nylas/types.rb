@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Collection of attribute types
   module Types
@@ -34,6 +36,7 @@ module Nylas
         return model.new if value.nil?
         return value if already_cast?(value)
         return model.new(**actual_attributes(value)) if value.respond_to?(:key?)
+
         raise TypeError, "Unable to cast #{value} to a #{model}"
       end
 
@@ -74,6 +77,7 @@ module Nylas
         return Time.at(object.to_i) if object.is_a?(String)
         return Time.at(object) if object.is_a?(Numeric)
         return object.to_time if object.is_a?(Date)
+
         raise TypeError, "Unable to cast #{object} to Time"
       end
 
@@ -91,11 +95,13 @@ module Nylas
     class DateType < ValueType
       def cast(value)
         return nil if value.nil?
+
         Date.parse(value)
       end
 
       def serialize(value)
         return value.iso8601 if value.respond_to?(:iso8601)
+
         value
       end
     end
@@ -106,6 +112,7 @@ module Nylas
       # @param value [Object] Casts the passed in object to a string using #to_s
       def cast(value)
         return value if value.nil?
+
         value.to_s
       end
     end
@@ -116,6 +123,7 @@ module Nylas
       # @param value [Object] Casts the passed in object to an integer using to_i
       def cast(value)
         return nil if value.nil?
+
         value.to_i
       end
     end
@@ -128,6 +136,7 @@ module Nylas
         return nil if value.nil?
         return true if value == true
         return false if value == false
+
         raise TypeError, "#{value} must be either true or false"
       end
     end

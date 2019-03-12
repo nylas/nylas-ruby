@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Represents a webhook attached to your application.
   # @see https://docs.nylas.com/reference#webhooks

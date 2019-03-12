@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nylas::Deltas do
   it "safely inflates an account.running event" do
     data = { "deltas": [{ "date": 1_514_335_663, "object": "account", "type": "account.running",

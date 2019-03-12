@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nylas::Message do
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do

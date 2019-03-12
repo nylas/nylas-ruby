@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Used to create a hash-like structure which defaults to raising an exception in the event the key to
   # retrieve does not exist.

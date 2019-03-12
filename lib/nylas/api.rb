@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
   class API
@@ -32,7 +34,7 @@ module Nylas
         provider: provider,
         settings: settings,
         reauth_account_id: reauth_account_id,
-        scopes: scopes,
+        scopes: scopes
       )
     end
 
@@ -126,6 +128,7 @@ module Nylas
 
     private def prevent_calling_if_missing_access_token(method_name)
       return if client.access_token && !client.access_token.empty?
+
       raise NoAuthToken, method_name
     end
   end

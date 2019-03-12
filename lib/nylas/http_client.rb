@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient
@@ -16,12 +18,12 @@ module Nylas
     }.freeze
 
     ENDPOINT_TIMEOUTS = {
-        "/oauth/authorize" => 345,
-        "/messages/search" => 350,
-        "/threads/search" => 350,
-        "/delta" => 3650,
-        "/delta/longpoll" => 3650,
-        "/delta/streaming" => 3650
+      "/oauth/authorize" => 345,
+      "/messages/search" => 350,
+      "/threads/search" => 350,
+      "/delta" => 3650,
+      "/delta/longpoll" => 3650,
+      "/delta/streaming" => 3650
     }.freeze
 
     include Logging
@@ -43,6 +45,7 @@ module Nylas
       unless api_server.include?("://")
         raise "When overriding the Nylas API server address, you must include https://"
       end
+
       @api_server = api_server
       @access_token = access_token
       @app_secret = app_secret
@@ -90,7 +93,6 @@ module Nylas
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
-    # rubocop:enable Metrics/ParameterLists
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -115,7 +117,6 @@ module Nylas
     def delete(path: nil, payload: nil, headers: {}, query: {})
       execute(method: :delete, path: path, headers: headers, query: query, payload: payload)
     end
-    # rubocop:enable Metrics/ParameterList
 
     private def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
@@ -155,6 +156,7 @@ module Nylas
     private def handle_anticipated_failure_mode(http_code:, response:)
       return if http_code == 200
       return unless response.is_a?(Hash)
+
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Authenticate your application using the native interface
   # @see https://docs.nylas.com/reference#native-authentication-1
@@ -9,7 +11,7 @@ module Nylas
 
     def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil,
                      scopes: nil)
-      scopes ||= ["email", "calendar", "contacts"]
+      scopes ||= %w[email calendar contacts]
       scopes = scopes.join(",") unless scopes.is_a?(String)
       code = retrieve_code(name: name, email_address: email_address, provider: provider,
                            settings: settings, reauth_account_id: reauth_account_id, scopes: scopes)

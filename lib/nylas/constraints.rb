@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # The constraints a particular GET request will include in their query params
   class Constraints
@@ -48,6 +50,7 @@ module Nylas
       return constraints if constraints.is_a?(Constraints)
       return new(**constraints) if constraints.respond_to?(:key?)
       return new if constraints.nil?
+
       raise TypeError, "passed in constraints #{constraints} cannot be cast to a set of constraints"
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Allows RSVPing to a particular event
   # @see https://docs.nylas.com/reference#rsvping-to-invitations

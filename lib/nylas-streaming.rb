@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "yajl"
 require "em-http"
 require "nylas"
@@ -72,6 +74,7 @@ module Nylas
 
       def parser
         return @parser if @parser
+
         @parser = Yajl::Parser.new(symbolize_keys: true)
         @parser
       end

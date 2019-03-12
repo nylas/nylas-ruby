@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Nylas::NativeAuthentication do
@@ -18,8 +20,8 @@ describe Nylas::NativeAuthentication do
 
       expect(
         api.authenticate(
-          name: 'fake',
-          email_address: 'fake@example.com',
+          name: "fake",
+          email_address: "fake@example.com",
           provider: :gmail,
           settings: {}
         )
@@ -42,8 +44,8 @@ describe Nylas::NativeAuthentication do
 
       expect(
         api.authenticate(
-          name: 'fake',
-          email_address: 'fake@example.com',
+          name: "fake",
+          email_address: "fake@example.com",
           provider: :gmail,
           settings: {},
           scopes: ["email"]
@@ -67,11 +69,11 @@ describe Nylas::NativeAuthentication do
 
       expect(
         api.authenticate(
-          name: 'fake',
-          email_address: 'fake@example.com',
+          name: "fake",
+          email_address: "fake@example.com",
           provider: :gmail,
           settings: {},
-          scopes: ["email", "contacts"]
+          scopes: %w[email contacts]
         )
       ).to eql("fake-token")
     end
@@ -92,8 +94,8 @@ describe Nylas::NativeAuthentication do
 
       expect(
         api.authenticate(
-          name: 'fake',
-          email_address: 'fake@example.com',
+          name: "fake",
+          email_address: "fake@example.com",
           provider: :gmail,
           settings: {},
           scopes: "calendar"

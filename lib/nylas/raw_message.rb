@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Allows sending of email with nylas from an rfc822 compatible string
   class RawMessage

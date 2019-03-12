@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe Nylas::Contact do
@@ -114,7 +116,7 @@ describe Nylas::Contact do
                                                          postal_code: "12345+0987", state: "CA",
                                                          country: "USA" }],
                                   web_pages: [{ type: "profile", url: "http://given.example.com" }],
-                                  groups: [{id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien"}])
+                                  groups: [{ id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien" }])
     end
   end
   describe "#to_json" do

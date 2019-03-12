@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Structure to represent the Physical Address schema
   # @see https://docs.nylas.com/reference#contactsid

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   module Model
     # Allows models to have an attribute which is a lists of another type of thing
@@ -12,6 +14,7 @@ module Nylas
 
       def cast(list)
         return default if list.nil? || list.empty?
+
         list.map { |item| type.cast(item) }
       end
 

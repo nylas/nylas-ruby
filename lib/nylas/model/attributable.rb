@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   module Model
     # Allows defining of tyypecastable attributes on a model

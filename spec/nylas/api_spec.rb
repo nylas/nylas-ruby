@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 # This spec is the only one that should have any webmock stuff going on, everything else should use the
