@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nylas::Folder do
   it "is not filterable" do
     expect(described_class).not_to be_filterable

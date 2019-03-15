@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 # This spec is the only one that should have any webmock stuff going on, everything else should use the
@@ -26,6 +28,7 @@ describe Nylas::API do
       expect(client.default_headers).to include("X-Nylas-Client-Id" => "not-real")
     end
   end
+
   describe "#execute" do
     it "builds the URL based upon the api_server it was initialized with"
     it "adds the nylas headers to the request"

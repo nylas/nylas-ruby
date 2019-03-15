@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "yajl"
 require "em-http"
 require "nylas"
@@ -23,7 +25,6 @@ module Nylas
       # @param include_types [Array<String>] List of Object types to exclusively include in the stream
       # @param connect_timeout [Integer] How long to wait before timing out on attempted connection
       # @param inactivity_timeout [Integer] How long to wait before timing out on inactivity
-      # rubocop:disable Metrics/ParameterLists
       def initialize(cursor:, api:, exclude_types: [], include_types: [], expanded: false, connect_timeout: 0,
                      inactivity_timeout: 0)
         self.cursor = cursor
@@ -34,7 +35,6 @@ module Nylas
         self.connect_timeout = connect_timeout
         self.inactivity_timeout = inactivity_timeout
       end
-      # rubocop:enable Metrics/ParameterLists
 
       def stream
         parser.on_parse_complete = lambda do |data|
@@ -72,6 +72,7 @@ module Nylas
 
       def parser
         return @parser if @parser
+
         @parser = Yajl::Parser.new(symbolize_keys: true)
         @parser
       end

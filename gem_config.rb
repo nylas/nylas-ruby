@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "./lib/nylas/version"
 
 # Consistently apply nylas' standard gem data across gems
@@ -23,12 +25,12 @@ module GemConfig
 
   def self.metadata
     {
-      "bug_tracker_uri"   => "https://github.com/nylas/nylas-ruby/issues",
-      "changelog_uri"     => "https://github.com/nylas/nylas-ruby/blob/master/CHANGELOG.md",
+      "bug_tracker_uri" => "https://github.com/nylas/nylas-ruby/issues",
+      "changelog_uri" => "https://github.com/nylas/nylas-ruby/blob/master/CHANGELOG.md",
       "documentation_uri" => "http://www.rubydoc.info/gems/nylas",
-      "homepage_uri"      => "https://www.nylas.com",
-      "source_code_uri"   => "https://github.com/nylas/nylas-ruby",
-      "wiki_uri"          => "https://github.com/nylas/nylas-ruby/wiki"
+      "homepage_uri" => "https://www.nylas.com",
+      "source_code_uri" => "https://github.com/nylas/nylas-ruby",
+      "wiki_uri" => "https://github.com/nylas/nylas-ruby/wiki"
     }
   end
 

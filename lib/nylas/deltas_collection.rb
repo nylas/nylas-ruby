@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Special collection for delta objects
   class DeltasCollection < Collection
@@ -24,6 +26,7 @@ module Nylas
 
     def next_page(*)
       return nil if empty?
+
       where(cursor: cursor_end)
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   module Model
     # Define a particular attribute for a given model
@@ -11,7 +13,9 @@ module Nylas
         self.default = default
       end
 
-      private def type
+      private
+
+      def type
         Types.registry[type_name]
       end
     end

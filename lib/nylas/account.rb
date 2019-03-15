@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Representation of the accounts for Account management purposes.
   # @see https://docs.nylas.com/reference#account-management

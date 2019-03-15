@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Structure to represent a the Event Schema.
   # @see https://docs.nylas.com/reference#events

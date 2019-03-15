@@ -1,10 +1,12 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.4
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
     - examples/**/*
+    - vendor/**/*
+    - gemfiles/vendor/**/*
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
@@ -16,6 +18,9 @@ Metrics/BlockLength:
   Exclude:
     - "*.gemspec"
     - "spec/**/*_spec.rb"
+
+Metrics/ParameterLists:
+  Max: 8
 
 Naming/FileName:
   Exclude:

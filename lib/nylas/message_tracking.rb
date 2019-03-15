@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Message tracking features
   # @see https://docs.nylas.com/reference#message-tracking-overview

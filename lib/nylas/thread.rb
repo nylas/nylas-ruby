@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Ruby representation of the Nylas /threads API
   # @see https://docs.nylas.com/reference#threads

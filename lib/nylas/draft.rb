@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Ruby representatin of a Nylas Draft object
   # @see https://docs.nylas.com/reference#drafts

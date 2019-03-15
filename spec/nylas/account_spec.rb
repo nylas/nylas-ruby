@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Nylas::Account do
   it "is not filterable" do
     expect(described_class).not_to be_filterable
@@ -53,11 +55,14 @@ describe Nylas::Account do
   it "can revoke all tokens" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
-    access_token = 'some_access_token'
+    access_token = "some_access_token"
 
     expect(account.revoke_all(keep_access_token: access_token)).to be_truthy
 
-    expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/revoke-all",
-                                                payload: be_json("keep_access_token" => access_token))
+    expect(api).to have_received(:execute).with(
+      method: :post,
+      path: "/a/app-987/accounts/acc-1234/revoke-all",
+      payload: be_json("keep_access_token" => access_token)
+    )
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "./gem_config"
 
 Gem::Specification.new do |gem|

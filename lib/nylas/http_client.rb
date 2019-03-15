@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Nylas
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
-  class HttpClient
+  class HttpClient # rubocop:disable Metrics/ClassLength
     HTTP_CODE_TO_EXCEPTIONS = {
       400 => InvalidRequest,
       402 => MessageRejected,
@@ -16,12 +18,12 @@ module Nylas
     }.freeze
 
     ENDPOINT_TIMEOUTS = {
-        "/oauth/authorize" => 345,
-        "/messages/search" => 350,
-        "/threads/search" => 350,
-        "/delta" => 3650,
-        "/delta/longpoll" => 3650,
-        "/delta/streaming" => 3650
+      "/oauth/authorize" => 345,
+      "/messages/search" => 350,
+      "/threads/search" => 350,
+      "/delta" => 3650,
+      "/delta/longpoll" => 3650,
+      "/delta/streaming" => 3650
     }.freeze
 
     include Logging
@@ -43,6 +45,7 @@ module Nylas
       unless api_server.include?("://")
         raise "When overriding the Nylas API server address, you must include https://"
       end
+
       @api_server = api_server
       @access_token = access_token
       @app_secret = app_secret
@@ -65,6 +68,7 @@ module Nylas
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
     # @return [Array Hash Stringn]
+    # rubocop:disable Metrics/MethodLength
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil)
       timeout = ENDPOINT_TIMEOUTS.fetch(path, 230)
       request = build_request(
@@ -81,6 +85,7 @@ module Nylas
         response
       end
     end
+    # rubocop:enable Metrics/MethodLength
     inform_on :execute, level: :debug,
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
@@ -90,7 +95,6 @@ module Nylas
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
-    # rubocop:enable Metrics/ParameterLists
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
@@ -115,14 +119,6 @@ module Nylas
     def delete(path: nil, payload: nil, headers: {}, query: {})
       execute(method: :delete, path: path, headers: headers, query: query, payload: payload)
     end
-    # rubocop:enable Metrics/ParameterList
-
-    private def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
-      ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: headers, timeout: timeout, &block)
-    end
-    inform_on :rest_client_execute, level: :debug,
-                                    also_log: { result: true, values: %i[method url headers payload] }
 
     def default_headers
       @default_headers ||= {
@@ -145,16 +141,27 @@ module Nylas
       "#{protocol}//#{access_token}:@#{domain}#{path}"
     end
 
-    private def handle_failed_response(result:, response:)
+    private
+
+    def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
+      ::RestClient::Request.execute(method: method, url: url, payload: payload,
+                                    headers: headers, timeout: timeout, &block)
+    end
+
+    inform_on :rest_client_execute, level: :debug,
+                                    also_log: { result: true, values: %i[method url headers payload] }
+
+    def handle_failed_response(result:, response:)
       http_code = result.code.to_i
 
       handle_anticipated_failure_mode(http_code: http_code, response: response)
       raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
     end
 
-    private def handle_anticipated_failure_mode(http_code:, response:)
+    def handle_anticipated_failure_mode(http_code:, response:)
       return if http_code == 200
       return unless response.is_a?(Hash)
+
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
     end

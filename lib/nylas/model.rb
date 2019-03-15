@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "model/attribute_definition"
 require_relative "model/list_attribute_definition"
 require_relative "model/attributable"
@@ -23,6 +25,7 @@ module Nylas
     def save
       result = if persisted?
                  raise ModelNotUpdatableError, self unless updatable?
+
                  execute(method: :put, payload: attributes.serialize, path: resource_path)
                else
                  create
@@ -40,11 +43,13 @@ module Nylas
 
     def create
       raise ModelNotCreatableError, self unless creatable?
+
       execute(method: :post, payload: attributes.serialize, path: resources_path)
     end
 
     def update(**data)
       raise ModelNotUpdatableError, model_class unless updatable?
+
       attributes.merge(**data)
       execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
       true
@@ -67,6 +72,7 @@ module Nylas
 
     def destroy
       raise ModelNotDestroyableError, self unless destroyable?
+
       execute(method: :delete, path: resource_path)
     end
 
@@ -81,7 +87,6 @@ module Nylas
                     :destroyable
       attr_writer :resources_path
 
-      # rubocop:disable Metrics/ParameterLists
       def allows_operations(creatable: false, showable: false, listable: false, filterable: false,
                             searchable: false, updatable: false, destroyable: false)
 
@@ -94,7 +99,6 @@ module Nylas
         self.destroyable ||= destroyable
       end
 
-      # rubocop:enable Metrics/ParameterLists
       def creatable?
         creatable
       end

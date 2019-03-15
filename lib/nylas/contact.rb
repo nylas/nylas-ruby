@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # ActiveModel compliant interface for interacting with the Contacts API
   # @see https://docs.nylas.com/reference#contacts
@@ -40,6 +42,7 @@ module Nylas
     # to retrieve it from nylas every time.
     def picture
       return @picture_tempfile if @picture_tempfile
+
       @picture_tempfile = Tempfile.new
       @picture_tempfile.write(api.get(path: "#{resource_path}/picture"))
       @picture_tempfile.close

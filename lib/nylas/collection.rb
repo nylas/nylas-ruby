@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # An enumerable for working with index and search endpoints
   class Collection
@@ -27,11 +29,13 @@ module Nylas
     # @return [Collection<Model>]
     def where(filters)
       raise ModelNotFilterableError, model unless model.filterable?
+
       self.class.new(model: model, api: api, constraints: constraints.merge(where: filters))
     end
 
     def search(query)
       raise ModelNotSearchableError, model unless model.searchable?
+
       SearchCollection.new(model: model, api: api, constraints: constraints.merge(where: { q: query }))
     end
 
@@ -40,6 +44,7 @@ module Nylas
     # @return [Collection<String>]
     def raw
       raise ModelNotAvailableAsRawError, model unless model.exposable_as_raw?
+
       self.class.new(model: model, api: api, constraints: constraints.merge(accept: model.raw_mime_type))
     end
 
@@ -61,6 +66,7 @@ module Nylas
     # Iterates over a single page of results based upon current pagination settings
     def each
       return enum_for(:each) unless block_given?
+
       execute.each do |result|
         yield(model.new(result.merge(api: api)))
       end
@@ -77,6 +83,7 @@ module Nylas
     # Iterates over every result that meets the filters, retrieving a page at a time
     def find_each
       return enum_for(:find_each) unless block_given?
+
       query = self
       accumulated = 0
 
@@ -92,6 +99,7 @@ module Nylas
 
     def next_page(accumulated:, current_page:)
       return nil unless more_pages?(accumulated, current_page)
+
       self.class.new(model: model, api: api, constraints: constraints.next_page)
     end
 
@@ -99,6 +107,7 @@ module Nylas
       return false if current_page.empty?
       return false if constraints.limit && accumulated >= constraints.limit
       return false if constraints.per_page && current_page.length < constraints.per_page
+
       true
     end
 
