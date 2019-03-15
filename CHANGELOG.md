@@ -8,6 +8,7 @@ nothing yet
 * Add `scopes` argument to `Nylas::API#authenticate` for
   [selective sync](https://docs.nylas.com/docs/how-to-use-selective-sync)
 * Add `Account#revoke_all`
+* Add X-Nylas-Client-Id header for HTTP requests
 
 ### 4.2.4 / 2018-08-07
 * Enables silent addition of fields to API without impact to SDK
