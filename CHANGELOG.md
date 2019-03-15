@@ -1,8 +1,5 @@
 ### Unreleased
 
-nothing yet
-
-### 4.3.0 / 2019-03-15
 * Drop support for Ruby 2.2 and 2.3: they have reached end-of-life
 * Add support for Ruby 2.5 and 2.6
 * Add `scopes` argument to `Nylas::API#authenticate` for
