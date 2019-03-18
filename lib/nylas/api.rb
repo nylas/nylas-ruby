@@ -99,6 +99,13 @@ module Nylas
       response.code == 200 && response.empty?
     end
 
+    # Returns list of IP addresses
+    # @return [Boolean]
+    def ip_addresses
+        response = client.as(access_token).get(path: "/ip_addresses")
+        response.code == 200 && response.empty?
+    end
+
     # @param message [Hash, String, #send!]
     # @return [Message] The resulting message
     def send!(message)
