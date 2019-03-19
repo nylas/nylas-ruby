@@ -100,10 +100,11 @@ module Nylas
     end
 
     # Returns list of IP addresses
-    # @return [Boolean]
+    # @return [Hash]
+    # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
     def ip_addresses
         response = client.as(access_token).get(path: "/ip_addresses")
-        response.code == 200 && response.empty?
+        return response
     end
 
     # @param message [Hash, String, #send!]

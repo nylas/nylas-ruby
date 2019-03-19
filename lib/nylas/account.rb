@@ -33,11 +33,6 @@ module Nylas
       response[:success]
     end
 
-    def ip_addresses
-        response = execute(method :get, path "#{resource_path}/ip_addresses")
-        response[:success]
-    end
-
     def self.resources_path(api:)
       "/a/#{api.app_id}/accounts"
     end
