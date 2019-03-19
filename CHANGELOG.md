@@ -1,6 +1,6 @@
 ### Unreleased
 
-nothing yet
+* Add optional argument for `Model#to_json`
 
 ### 4.3.0 / 2019-03-18
 

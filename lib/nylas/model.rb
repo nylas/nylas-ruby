@@ -77,7 +77,7 @@ module Nylas
     end
 
     # @return [String] JSON String of the model.
-    def to_json
+    def to_json(_opts = {})
       JSON.dump(to_h)
     end
 
