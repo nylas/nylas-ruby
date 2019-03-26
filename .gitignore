@@ -8,12 +8,14 @@
 Gemfile.lock
 gemfiles/*.lock
 InstalledFiles
+.idea/
 _yardoc
 coverage
 doc/
 lib/bundler/man
 pkg
 rdoc
+.ruby-version
 spec/reports
 test/tmp
 test/version_tmp
