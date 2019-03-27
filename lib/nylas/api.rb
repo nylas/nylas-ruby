@@ -99,6 +99,14 @@ module Nylas
       response.code == 200 && response.empty?
     end
 
+    # Returns list of IP addresses
+    # @return [Hash]
+    # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
+    def ip_addresses
+      path = "/a/#{app_id}/ip_addresses"
+      client.as(client.app_secret).get(path: path)
+    end
+
     # @param message [Hash, String, #send!]
     # @return [Message] The resulting message
     def send!(message)
