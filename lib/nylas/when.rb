@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Nylas
   # Structure to represent all the Nylas time types.
   # @see https://docs.nylas.com/reference#section-time
@@ -25,22 +27,19 @@ module Nylas
     def_delegators :range, :cover?
 
     def as_timespan
-      if object == 'timespan'
-        Timespan.new(object: object,
-                     start_time: start_time,
-                     end_time: end_time)
-      end
+      return unless object == "timespan"
+      Timespan.new(object: object, start_time: start_time, end_time: end_time)
     end
 
     def range
       case object
-      when 'timespan'
+      when "timespan"
         Range.new(start_time, end_time)
-      when 'datespan'
+      when "datespan"
         Range.new(start_date, end_date)
-      when 'date'
+      when "date"
         Range.new(date, date)
-      when 'time'
+      when "time"
         Range.new(time, time)
       end
     end
