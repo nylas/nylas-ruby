@@ -28,6 +28,7 @@ module Nylas
 
     def as_timespan
       return unless object == "timespan"
+
       Timespan.new(object: object, start_time: start_time, end_time: end_time)
     end
 
