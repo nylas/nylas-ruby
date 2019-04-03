@@ -1,5 +1,10 @@
 ### Unreleased
 
+* Nothing yet
+
+### 4.4.0 / 2019-04-03
+
+* Add support for `/ip_addresses` endpoint
 * Add optional argument for `Model#to_json`
 
 ### 4.3.0 / 2019-03-18
