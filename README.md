@@ -30,7 +30,7 @@ gem install nylas
 
 ## Requirements
 
-- Ruby 2.2.2 or above.
+- Ruby 2.3 or above.
 - rest-client, json, yajl-ruby, em-http-request
 
 ### Supported Rails Versions
