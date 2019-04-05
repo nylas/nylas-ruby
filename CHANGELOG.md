@@ -1,6 +1,10 @@
 ### Unreleased
 
+* Add support for `/ip_addresses` endpoint
 * Add optional argument for `Model#to_json`
+* Reintroduce support for Ruby 2.3
+* Add Rails 4 bundler support to setup script
+* Specify gemfiles called in test script
 
 ### 4.3.0 / 2019-03-18
 

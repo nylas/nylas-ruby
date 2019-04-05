@@ -2,10 +2,14 @@
 
 set -e
 
-supported_versions=(2.2.8 2.3.5 2.4.2)
+supported_versions=(2.3.5 2.4.5 2.5.4 2.6.2)
 for version in "${supported_versions[@]}" ; do
   RBENV_VERSION=$version ruby --version
-  for gemfile in $(ls gemfiles/Gemfile* | grep -v lock); do
+  for gemfile in $(ls gemfiles/Gemfile.rails* | grep -v lock); do
+    echo $version $gemfile
+    BUNDLE_GEMFILE=$gemfile RBENV_VERSION=$version bundle exec rspec spec
+  done
+  for gemfile in $(ls gemfiles/Gemfile.rest-client* | grep -v lock); do
     echo $version $gemfile
     BUNDLE_GEMFILE=$gemfile RBENV_VERSION=$version bundle exec rspec spec
   done
