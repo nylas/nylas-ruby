@@ -1,5 +1,9 @@
 ### Unreleased
 
+* Nothing yet
+
+### 4.4.0 / 2019-04-05
+
 * Add support for `/ip_addresses` endpoint
 * Add optional argument for `Model#to_json`
 * Reintroduce support for Ruby 2.3
