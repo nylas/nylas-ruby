@@ -30,6 +30,7 @@ module Nylas
     attribute :office_location, :string
     attribute :notes, :string
     attribute :web_page, :web_page
+    attribute :source, :string
 
     has_n_of_attribute :groups, :contact_group
     has_n_of_attribute :emails, :email_address

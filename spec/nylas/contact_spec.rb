@@ -18,6 +18,7 @@ describe Nylas::Contact do
         '"country": "USA" }],' \
       '"phone_numbers": [{ "type": "mobile", "number": "+1234567890" }], ' \
       '"web_pages": [{ "type": "profile", "url": "http://given.example.com" }],' \
+      '"source": "address_book",' \
       '"groups": [{"id": "di", "object": "dnwi", "account_id": "doiw", ' \
         '"name": "nfowie", "path": "fnien"}] ' \
     "}"
@@ -88,6 +89,7 @@ describe Nylas::Contact do
       expect(contact.phone_numbers[0].number).to eql("+1234567890")
       expect(contact.web_pages[0].type).to eql("profile")
       expect(contact.web_pages[0].url).to eql("http://given.example.com")
+      expect(contact.source).to eql("address_book")
     end
   end
 
@@ -118,7 +120,8 @@ describe Nylas::Contact do
                                postal_code: "12345+0987", state: "CA",
                                country: "USA" }],
         web_pages: [{ type: "profile", url: "http://given.example.com" }],
-        groups: [{ id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien" }]
+        groups: [{ id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien" }],
+        source: "address_book"
       )
     end
   end
