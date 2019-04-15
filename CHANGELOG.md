@@ -2,6 +2,10 @@
 
 * Nothing yet
 
+### 4.5.0 / 2019-04-15
+
+* Add support for `source` attribute in Contact model
+
 ### 4.4.0 / 2019-04-05
 
 * Add support for `/ip_addresses` endpoint
