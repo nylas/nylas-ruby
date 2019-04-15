@@ -2,7 +2,7 @@
 
 * Nothing yet
 
-### 4.4.0 / 2019-04-15
+### 4.5.0 / 2019-04-15
 
 * Add support for `source` attribute in Contact model
 
