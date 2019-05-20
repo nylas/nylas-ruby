@@ -11,8 +11,7 @@ Nylas supports two forms of authentication:
 1. Clone the repository
 1. Install the dependencies by using `bundle install`
 1. Get a Nylas App ID and App Secret from the [Nylas Dashboard](https://dashboard.nylas.com/)
-1. Get a Google Cloud Platform Access Token by following the [Nylas Google OAuth Setup Guide](https://support.nylas.com/hc/en-us/articles/222176307). Make sure to set the callback to `localhost:4567/auth/google/callback`.
+1. Get a Google Cloud Platform Access Token by following the [Nylas Google Setup Guide](https://docs.nylas.com/docs/creating-a-google-project-for-dev). Make sure to set the callback to `localhost:4567/auth/google/callback`.
 1. Copy `.env.example` to `.env` and set the values based upon the previous steps.
 1. Run the app web server: `bundle exec dotenv ruby app.rb`
 1. Login to whichever mail, contact, and calendaring providers you want using the different authentication mechanisms.
-
