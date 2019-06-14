@@ -51,7 +51,11 @@ api.authenticate(
     name: 'fake',
     email_address: 'fake@example.com',
     provider: :gmail,
-    settings: {},
+    settings: {
+      google_client_id: ENV['GOOGLE_CLIENT_ID'],
+      google_client_secret: ENV['GOOGLE_CLIENT_SECRET'],
+      google_refresh_token: auth_hash[:credentials][:refresh_token]
+    },
     scopes: ['email.read_only', 'email.send']
 )
 ```
