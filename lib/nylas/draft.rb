@@ -33,6 +33,8 @@ module Nylas
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
+    transfer :api, to: %i[events files folder labels]
+
     def send!
       save
       execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))

@@ -36,6 +36,8 @@ module Nylas
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
+    transfer :api, to: %i[events files folder labels]
+
     def starred?
       starred
     end

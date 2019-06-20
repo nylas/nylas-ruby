@@ -101,24 +101,29 @@ describe Nylas::Draft do
       expect(draft.files[0].filename).to be_nil
       expect(draft.files[0].id).to eql "file-abc35"
       expect(draft.files[0].size).to be 1264
+      expect(draft.files[0].api).to be api
 
       expect(draft.files[1].content_type).to eql "application/ics"
       expect(draft.files[1].filename).to eql "invite.ics"
       expect(draft.files[1].id).to eql "file-xyz-9234"
       expect(draft.files[1].size).to be 1264
+      expect(draft.files[1].api).to be api
 
       # Note, drafts will either be in a folder *or* labeled, not both.
       expect(draft.folder.display_name).to eql "Inbox"
       expect(draft.folder.name).to eql "inbox"
       expect(draft.folder.id).to eql "folder-inbox"
+      expect(draft.folder.api).to be api
 
       expect(draft.labels[0].display_name).to eql "Inbox"
       expect(draft.labels[0].id).to eql "label-inbox"
       expect(draft.labels[0].name).to eql "inbox"
+      expect(draft.labels[0].api).to be api
 
       expect(draft.labels[1].display_name).to eql "All Mail"
       expect(draft.labels[1].id).to eql "label-all"
       expect(draft.labels[1].name).to eql "all"
+      expect(draft.labels[1].api).to be api
     end
   end
 end

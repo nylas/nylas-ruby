@@ -4,6 +4,7 @@ require_relative "model/attribute_definition"
 require_relative "model/list_attribute_definition"
 require_relative "model/attributable"
 require_relative "model/attributes"
+require_relative "model/transferable"
 module Nylas
   # Include this to define a class to represent an object returned from the API
   module Model
@@ -15,6 +16,7 @@ module Nylas
 
     def self.included(model)
       model.include(Attributable)
+      model.include(Transferable)
       model.extend(ClassMethods)
       model.extend(Forwardable)
       model.def_delegators :model_class, :creatable?, :filterable?, :listable?, :searchable?, :showable?,
