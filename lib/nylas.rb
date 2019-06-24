@@ -35,6 +35,7 @@ require_relative "nylas/rsvp"
 require_relative "nylas/timespan"
 require_relative "nylas/web_page"
 require_relative "nylas/nylas_date"
+require_relative "nylas/when"
 
 # Custom collection types
 require_relative "nylas/search_collection"
@@ -86,4 +87,5 @@ module Nylas
   Types.registry[:web_page] = Types::ModelType.new(model: WebPage)
   Types.registry[:nylas_date] = NylasDateType.new
   Types.registry[:contact_group] = Types::ModelType.new(model: ContactGroup)
+  Types.registry[:when] = Types::ModelType.new(model: When)
 end
