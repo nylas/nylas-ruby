@@ -2,7 +2,7 @@
 
 The Nylas Ruby SDK provides all of the functionality of the Nylas [REST API](https://docs.nylas.com/reference) in an easy-to-use Ruby API. With the SDK, you can programmatically access an email account (e.g. Gmail, Yahoo, etc.) and perform functionality such as getting messages and listing message threads.
 
-This README is for Nylas Ruby SDK version 4. For those who are still using Nylas Ruby SDK Version 3, the documentation and source code are located in the [3.X-master branch](https://github.com/nylas/nylas-ruby/tree/3.X-master). For those upgrading from 3.X to 4.0, review the [upgrade guide](https://github.com/nylas/nylas-ruby/wiki/Upgrading-from-3.X-to-4.0)
+This README is for Nylas Ruby SDK version 4. For those who are still using Nylas Ruby SDK Version 3, the documentation and source code are located in the [3.X-master branch](https://github.com/nylas/nylas-ruby/tree/3.X-master). For those upgrading from 3.X to 4.0, review the [upgrade guide](https://github.com/nylas/nylas-ruby/wiki/Upgrading-from-3.X-to-4.0).
 
 # Table of Contents
 
@@ -128,7 +128,7 @@ rspec spec
 
 # Contributing to the Nylas Ruby SDK
 
-We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions, or join us at our community Slack channel [here](http://slack-invite.nylas.com)
+We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions, or join us at our community Slack channel [here](http://slack-invite.nylas.com).
 
 Please sign the [Contributor License Agreement](https://goo.gl/forms/lKbET6S6iWsGoBbz2) before submitting pull requests (it's similar to other projects, like NodeJS, or Meteor).
 
@@ -139,7 +139,7 @@ The `bin/setup` script installs the different Ruby versions that the gem is expe
 ### Submitting a Pull Request
 
 * Pull requests *may* be submitted before they are feature complete to get feedback and thoughts from the core team.
-* Pull requests *should* pass tests across the supported versions of Ruby, as defined in [.travis.yml](./.travis.yml). To do so, run `bin/test`
+* Pull requests *should* pass tests across the supported versions of Ruby, as defined in [.travis.yml](./.travis.yml). To do so, run `bin/test`.
 * Pull requests *should* add new tests to cover the functionality that is added or a bug that is fixed.
 
 ### Releasing Gems
@@ -152,7 +152,7 @@ You can run the basic examples like this:
 ```shell
 dotenv ruby examples/plain-ruby.rb # Execute the examples in plain old ruby
 ```
-To manually check that the authentication features still work, follow the instructions in `examples/authentication/README.md`
+To manually check that the authentication features still work, follow the instructions in `[examples/authentication/README.md](examples/authentication/README.md)`.
 
 #### Authenticating to RubyGems
 
