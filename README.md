@@ -152,7 +152,7 @@ You can run the basic examples like this:
 ```shell
 dotenv ruby examples/plain-ruby.rb # Execute the examples in plain old ruby
 ```
-To manually check that the authentication features still work, follow the instructions in `[examples/authentication/README.md](examples/authentication/README.md)`.
+To manually check that the authentication features still work, follow the instructions in [examples/authentication/README.md](./examples/authentication/README.md).
 
 #### Authenticating to RubyGems
 
