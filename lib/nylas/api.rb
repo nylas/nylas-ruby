@@ -36,6 +36,21 @@ module Nylas
       )
     end
 
+    # @return [String] A url for hosted authentication
+    def hosted_authentication_url(redirect_uri, login_hint = "", options = {})
+      params = {
+        client_id: app_id,
+        redirect_uri: redirect_uri,
+        response_type: options.fetch(:response_type, "code"),
+        scope: options.fetch(:scope, "email"),
+        login_hint: login_hint
+      }
+
+      params[:state] = options[:state] if options.key?(:state)
+
+      "https://#{client.service_domain}/oauth/authorize?" + URI.encode_www_form(params)
+    end
+
     # @return [Collection<Contact>] A queryable collection of Contacts
     def contacts
       @contacts ||= Collection.new(model: Contact, api: self)
