@@ -58,6 +58,8 @@ gem install nylas
 
 Every resource (i.e. messages, events, contacts, etc.) is accessed via an instance of ```Nylas::API```. Before making any requests, call ```new``` and initialize the Nylas instance with your APP ID and APP Secret. Then, call ```authenticate``` followed by ```as``` and pass it your access token. The access token allows Nylas to make requests for a given email account's resources.
 
+**Note:** Set the values for the ```NYLAS_APP_ID``` and ```NYLAS_APP_SECRET``` environment variables to the Client ID and Client Secret that were assigned to your Nylas app in the Nylas dashboard. Although the naming convention differs between the dashboard and API parameters, they both mean the same thing.
+
 ```ruby
 api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'])
 
@@ -128,7 +130,7 @@ rspec spec
 
 # Contributing to the Nylas Ruby SDK
 
-We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions, or join us at our community Slack channel [here](http://slack-invite.nylas.com).
+We'd love your help making the Nylas ruby gem better. You can email us at [support@nylas.com](mailto:support@nylas.com) if you have any questions.
 
 Please sign the [Contributor License Agreement](https://goo.gl/forms/lKbET6S6iWsGoBbz2) before submitting pull requests (it's similar to other projects, like NodeJS, or Meteor).
 
