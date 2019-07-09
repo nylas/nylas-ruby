@@ -36,10 +36,10 @@ describe Nylas::API do
       api = described_class.new(client: client)
 
       hosted_auth_url = api.hosted_authentication_url(
-        "https://googs.com", "boba@boba.com"
+        redirect_uri: "https://googs.com", login_hint: "boba@boba.com"
       )
-      expected_url = "https://api.nylas.com/oauth/authorize?client_id=fake-app-id&trial=false&" \
-        "response_type=code&scope=email&login_hint=boba%40boba.com&redirect_uri=https%3A%2F%2Fgoogs.com"
+      expected_url = "https://api.nylas.com/oauth/authorize?client_id=fake-app-id&" \
+        "redirect_uri=https%3A%2F%2Fgoogs.com&response_type=code&scope=email&login_hint=boba%40boba.com"
 
       expect(hosted_auth_url).to eql(expected_url)
     end
