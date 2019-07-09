@@ -5,6 +5,22 @@ require "spec_helper"
 # This spec is the only one that should have any webmock stuff going on, everything else should use the
 # FakeAPI to see what requests were made and what they included.
 describe Nylas::API do
+  describe "#exchange_code_for_token" do
+    it "retrieves oauth token with code" do
+      client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
+      data = {
+        "client_id" => "fake-app",
+        "client_secret" => "fake-secret",
+        "grant_type" => "authorization_code",
+        "code" => "fake-code"
+      }
+      allow(client).to receive(:execute).with(method: :post, path: "/oauth/token", payload: data)
+                                        .and_return("access_token" => "fake-token")
+      api = described_class.new(client: client)
+      expect(api.exchange_code_for_token("fake-code")).to eql("fake-token")
+    end
+  end
+
   describe "#current_account" do
     it "retrieves the account for the current OAuth Access Token" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",

@@ -36,6 +36,18 @@ module Nylas
       )
     end
 
+    def exchange_code_for_token(code)
+      data = {
+        "client_id" => app_id,
+        "client_secret" => client.app_secret,
+        "grant_type" => "authorization_code",
+        "code" => code
+      }
+
+      response_json = execute(method: :post, path: "/oauth/token", payload: data)
+      response_json["access_token"]
+    end
+
     # @return [Collection<Contact>] A queryable collection of Contacts
     def contacts
       @contacts ||= Collection.new(model: Contact, api: self)
