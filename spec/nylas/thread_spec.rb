@@ -68,13 +68,13 @@ describe Nylas::Thread do
       api =  instance_double(Nylas::API, execute: "{}")
       thread = described_class.from_json('{ "id": "thread-1234" }', api: api)
       thread.update(starred: true, unread: false, folder_id: "folder-1234",
-                    label_ids: ["label-1234", "label-4567"])
+                    label_ids: %w[label-1234 label-4567])
 
       expect(api).to have_received(:execute).with(method: :put, path: "/threads/thread-1234",
                                                   payload: JSON.dump(starred: true, unread: false,
                                                                      folder_id: "folder-1234",
-                                                                     label_ids: ["label-1234",
-                                                                                 "label-4567"]))
+                                                                     label_ids: %w[label-1234
+                                                                                   label-4567]))
     end
 
     it "raises an argument error if the data has any keys that aren't allowed to be updated" do

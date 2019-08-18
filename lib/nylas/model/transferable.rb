@@ -14,10 +14,13 @@ module Nylas
         transfer_attributes
       end
 
-      private def transfer_attributes
+      private
+
+      def transfer_attributes
         self.class.attribute_recipients.each_pair do |name, recipient_names|
           value = send(:"#{name}")
           next if value.nil?
+
           recipient_names.each do |recipient_name|
             recipient = send(:"#{recipient_name}")
             transfer_to_recipient(name, value, recipient) unless recipient.nil?
@@ -25,7 +28,7 @@ module Nylas
         end
       end
 
-      private def transfer_to_recipient(name, value, recipient)
+      def transfer_to_recipient(name, value, recipient)
         if recipient.respond_to?(:each)
           recipient.each { |item| item.send(:"#{name}=", value) }
         else

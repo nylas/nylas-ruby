@@ -12,16 +12,6 @@ module Nylas
         assign(**initial_data)
       end
 
-      protected def assign(**data)
-        data.each do |attribute_name, value|
-          if respond_to?(:"#{attribute_name}=")
-            send(:"#{attribute_name}=", value)
-          else
-            Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")
-          end
-        end
-      end
-
       def attributes
         @attributes ||= Attributes.new(self.class.attribute_definitions)
       end
@@ -29,6 +19,18 @@ module Nylas
       # @return [Hash] Representation of the model with values serialized into primitives based on their Type
       def to_h
         attributes.to_h
+      end
+
+      protected
+
+      def assign(**data)
+        data.each do |attribute_name, value|
+          if respond_to?(:"#{attribute_name}=")
+            send(:"#{attribute_name}=", value)
+          else
+            Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")
+          end
+        end
       end
 
       # Methods to call when tweaking Attributable classes
