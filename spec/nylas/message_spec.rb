@@ -124,7 +124,7 @@ describe Nylas::Message do
 
   describe "#update" do
     it "let's you set the starred, unread, folder, and label ids" do
-      api =  instance_double(Nylas::API, execute: "{}")
+      api = instance_double(Nylas::API, execute: "{}")
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
 
       message.update(
@@ -148,7 +148,7 @@ describe Nylas::Message do
     end
 
     it "raises an argument error if the data has any keys that aren't allowed to be updated" do
-      api =  instance_double(Nylas::API, execute: "{}")
+      api = instance_double(Nylas::API, execute: "{}")
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
       expect do
         message.update(subject: "A new subject!")

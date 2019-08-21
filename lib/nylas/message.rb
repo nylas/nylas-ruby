@@ -8,6 +8,7 @@ module Nylas
     self.raw_mime_type = "message/rfc822"
     self.resources_path = "/messages"
     allows_operations(showable: true, listable: true, filterable: true, searchable: true, updatable: true)
+    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread].freeze
 
     attribute :id, :string
     attribute :object, :string
@@ -49,7 +50,6 @@ module Nylas
       unread
     end
 
-    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread].freeze
     def update(data)
       unupdatable_attributes = data.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
       unless unupdatable_attributes.empty?
