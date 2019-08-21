@@ -34,7 +34,10 @@ module Nylas
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
     attribute :folder, :folder
+    attribute :folder_id, :string
+
     has_n_of_attribute :labels, :label
+    has_n_of_attribute :label_ids, :string
 
     transfer :api, to: %i[events files folder labels]
 
@@ -44,6 +47,16 @@ module Nylas
 
     def unread?
       unread
+    end
+
+    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread].freeze
+    def update(data)
+      unupdatable_attributes = data.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
+      unless unupdatable_attributes.empty?
+        raise ArgumentError, "Cannot update #{unupdatable_attributes} only " \
+                             "#{UPDATABLE_ATTRIBUTES} are updatable"
+      end
+      super(data)
     end
 
     def expanded
