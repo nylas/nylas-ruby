@@ -50,13 +50,10 @@ module Nylas
       unread
     end
 
-    def update(data)
-      unupdatable_attributes = data.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
-      unless unupdatable_attributes.empty?
-        raise ArgumentError, "Cannot update #{unupdatable_attributes} only " \
-                             "#{UPDATABLE_ATTRIBUTES} are updatable"
-      end
-      super(data)
+    def update(payload)
+      check_for_update(payload)
+
+      super(payload)
     end
 
     def expanded
@@ -64,6 +61,17 @@ module Nylas
 
       assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
+    end
+
+    def check_for_update(payload)
+      unless unupdatable_attributes(payload).empty?
+        raise ArgumentError, "Cannot update #{unupdatable_attributes(payload)} only " \
+                             "#{UPDATABLE_ATTRIBUTES} are updatable"
+      end
+    end
+
+    def unupdatable_attributes(payload)
+      @unupdatable_attributes ||= payload.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
     end
   end
 end
