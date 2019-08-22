@@ -51,7 +51,10 @@ module Nylas
     end
 
     def update(payload)
-      check_for_update(payload)
+      FilterAttributes.new(
+        attributes: payload.keys,
+        allowed_attributes: UPDATABLE_ATTRIBUTES
+      ).check
 
       super(payload)
     end
@@ -61,17 +64,6 @@ module Nylas
 
       assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
-    end
-
-    def check_for_update(payload)
-      unless unupdatable_attributes(payload).empty?
-        raise ArgumentError, "Cannot update #{unupdatable_attributes(payload)} only " \
-                             "#{UPDATABLE_ATTRIBUTES} are updatable"
-      end
-    end
-
-    def unupdatable_attributes(payload)
-      @unupdatable_attributes ||= payload.keys.reject { |name| UPDATABLE_ATTRIBUTES.include?(name) }
     end
   end
 end
