@@ -122,6 +122,40 @@ describe Nylas::Message do
     end
   end
 
+  describe "#update" do
+    it "let's you set the starred, unread, folder, and label ids" do
+      api = instance_double(Nylas::API, execute: "{}")
+      message = described_class.from_json('{ "id": "message-1234" }', api: api)
+
+      message.update(
+        starred: true,
+        unread: false,
+        folder_id: "folder-1234",
+        label_ids: %w[label-1234 label-4567]
+      )
+
+      expect(api).to have_received(:execute).with(
+        method: :put, path: "/messages/message-1234",
+        payload: JSON.dump(
+          starred: true, unread: false,
+          folder_id: "folder-1234",
+          label_ids: %w[
+            label-1234
+            label-4567
+          ]
+        )
+      )
+    end
+
+    it "raises an argument error if the data has any keys that aren't allowed to be updated" do
+      api = instance_double(Nylas::API, execute: "{}")
+      message = described_class.from_json('{ "id": "message-1234" }', api: api)
+      expect do
+        message.update(subject: "A new subject!")
+      end.to raise_error ArgumentError, "Only #{described_class::UPDATABLE_ATTRIBUTES} are allowed to be sent"
+    end
+  end
+
   describe "#expanded" do
     it "fetch or return expanded version of message" do
       api = instance_double(Nylas::API, execute: "{}")

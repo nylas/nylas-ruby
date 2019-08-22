@@ -61,6 +61,7 @@ require_relative "nylas/native_authentication"
 require_relative "nylas/http_client"
 require_relative "nylas/api"
 
+require_relative "nylas/filter_attributes"
 # an SDK for interacting with the Nylas API
 # @see https://docs.nylas.com/reference
 module Nylas
