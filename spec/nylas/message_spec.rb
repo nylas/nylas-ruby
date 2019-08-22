@@ -152,8 +152,7 @@ describe Nylas::Message do
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
       expect do
         message.update(subject: "A new subject!")
-      end.to raise_error ArgumentError, "Cannot update [:subject] only " \
-                                        "#{described_class::UPDATABLE_ATTRIBUTES} are updatable"
+      end.to raise_error ArgumentError, "Only #{described_class::UPDATABLE_ATTRIBUTES} are allowed to be sent"
     end
   end
 

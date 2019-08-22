@@ -11,8 +11,7 @@ module Nylas
     def check
       return if extra_attributes.empty?
 
-      raise ArgumentError, "Cannot update #{extra_attributes} only " \
-        "#{allowed_attributes} are updatable"
+      raise ArgumentError, "Only #{allowed_attributes} are allowed to be sent"
     end
 
     private
