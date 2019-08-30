@@ -43,12 +43,22 @@ describe Nylas::Contact do
       expect(contact.emails.last.email).to eql "given@other-home.example.com"
       request = api.requests[0]
 
-      expected_payload = JSON.dump(given_name: "Given",
-                                   birthday: "2017-01-01",
-                                   emails: [{ type: "work",
-                                              email: "given@other-job.example.com" },
-                                            { type: "home",
-                                              email: "given@other-home.example.com" }])
+      expected_payload = JSON.dump(
+        given_name: "Given",
+        birthday: "2017-01-01",
+        emails: [
+          {
+            type: "work",
+            email: "given@other-job.example.com",
+            name: nil
+          },
+          {
+            type: "home",
+            email: "given@other-home.example.com",
+            name: nil
+          }
+        ]
+      )
       expect(request[:method]).to be :put
       expect(request[:path]).to eql "/contacts/1234"
       expect(request[:payload]).to eql(expected_payload)
@@ -111,15 +121,17 @@ describe Nylas::Contact do
         birthday: "1984-01-01",
         company_name: "company",
         notes: "some notes",
-        emails: [{ type: "work", email: "given@work.example.com" },
-                 { type: "home", email: "given@home.example.com" }],
+        emails: [{ type: "work", email: "given@work.example.com", name: nil },
+                 { type: "home", email: "given@home.example.com", name: nil }],
         im_addresses: [{ type: "gtalk", im_address: "given@gtalk.example.com" }],
         phone_numbers: [{ type: "mobile", number: "+1234567890" }],
-        physical_addresses: [{ format: "structured", type: "work",
+        physical_addresses: [{ city: nil, format: "structured", type: "work",
                                street_address: "123 N West St",
                                postal_code: "12345+0987", state: "CA",
                                country: "USA" }],
         web_pages: [{ type: "profile", url: "http://given.example.com" }],
+        web_page: {},
+        picture_url: nil,
         groups: [{ id: "di", object: "dnwi", account_id: "doiw", name: "nfowie", path: "fnien" }],
         source: "address_book"
       )
