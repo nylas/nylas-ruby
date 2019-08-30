@@ -25,12 +25,10 @@ module Nylas
     end
 
     def save
-      allowed_keys =  attributes.attribute_definitions.to_h.select {|k, v| !v.exclude_when.include?(:saving)}.keys
-
       result = if persisted?
                  raise ModelNotUpdatableError, self unless updatable?
 
-                 execute(method: :put, payload: attributes.serialize(keys: allowed_keys), path: resource_path)
+                 save_call
                else
                  create
                end
@@ -83,6 +81,22 @@ module Nylas
     # @return [String] JSON String of the model.
     def to_json(_opts = {})
       JSON.dump(to_h)
+    end
+
+    private
+
+    def allowed_keys_for_save
+      attributes.attribute_definitions.to_h.reject do |_k, v|
+        v.exclude_when.include?(:saving)
+      end.keys
+    end
+
+    def save_call
+      execute(
+        method: :put,
+        payload: attributes.serialize(keys: allowed_keys_for_save),
+        path: resource_path
+      )
     end
 
     # Allows you to narrow in exactly what kind of model you're working with
