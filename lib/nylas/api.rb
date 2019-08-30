@@ -45,7 +45,7 @@ module Nylas
       }
 
       response_json = execute(method: :post, path: "/oauth/token", payload: data)
-      response_json["access_token"]
+      response_json[:access_token]
     end
 
     # @return [Collection<Contact>] A queryable collection of Contacts
