@@ -25,10 +25,12 @@ module Nylas
     end
 
     def save
+      allowed_keys =  attributes.attribute_definitions.to_h.select {|k, v| !v.exclude_when.include?(:saving)}.keys
+
       result = if persisted?
                  raise ModelNotUpdatableError, self unless updatable?
 
-                 execute(method: :put, payload: attributes.serialize, path: resource_path)
+                 execute(method: :put, payload: attributes.serialize(keys: allowed_keys), path: resource_path)
                else
                  create
                end
