@@ -39,7 +39,7 @@ describe Nylas::API do
         redirect_uri: "https://googs.com", login_hint: "boba@boba.com"
       )
       expected_url = "https://api.nylas.com/oauth/authorize?client_id=fake-app-id&" \
-        "redirect_uri=https%3A%2F%2Fgoogs.com&response_type=code&scope=email&login_hint=boba%40boba.com"
+        "redirect_uri=https%3A%2F%2Fgoogs.com&response_type=code&scopes=email&login_hint=boba%40boba.com"
 
       expect(hosted_auth_url).to eql(expected_url)
     end
