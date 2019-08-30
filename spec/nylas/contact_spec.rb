@@ -137,11 +137,4 @@ describe Nylas::Contact do
       )
     end
   end
-
-  describe "#to_json" do
-    it "returns a string of JSON" do
-      contact = described_class.from_json(full_json, api: api)
-      expect(JSON.parse(contact.to_json)).to eql(JSON.parse(full_json))
-    end
-  end
 end
