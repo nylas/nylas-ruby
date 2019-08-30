@@ -127,7 +127,7 @@ describe Nylas::Message do
       it "removes `labels` from the payload" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         data = {
-          id: 'message-1234',
+          id: "message-1234",
           labels: [
             { display_name: "All Mail", id: "label-all", name: "all" }
           ]
@@ -143,7 +143,7 @@ describe Nylas::Message do
         expect(api).to have_received(:execute).with(
           method: :put, path: "/messages/message-1234",
           payload: JSON.dump(
-            id: 'message-1234',
+            id: "message-1234",
             date: 0,
             received_date: 0
           )
