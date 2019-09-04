@@ -37,7 +37,7 @@ module Nylas
     attribute :folder, :folder
     attribute :folder_id, :string
 
-    has_n_of_attribute :labels, :label
+    has_n_of_attribute :labels, :label, exclude_when: [:saving]
     has_n_of_attribute :label_ids, :string
 
     transfer :api, to: %i[events files folder labels]

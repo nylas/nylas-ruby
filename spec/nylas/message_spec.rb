@@ -122,9 +122,39 @@ describe Nylas::Message do
     end
   end
 
+  describe "#save" do
+    context "when `labels` key exists" do
+      it "removes `labels` from the payload" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        data = {
+          id: "message-1234",
+          labels: [
+            { display_name: "All Mail", id: "label-all", name: "all" }
+          ]
+        }
+
+        message = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        message.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put, path: "/messages/message-1234",
+          payload: JSON.dump(
+            id: "message-1234",
+            date: 0,
+            received_date: 0
+          )
+        )
+      end
+    end
+  end
+
   describe "#update" do
     it "let's you set the starred, unread, folder, and label ids" do
-      api = instance_double(Nylas::API, execute: "{}")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
 
       message.update(
