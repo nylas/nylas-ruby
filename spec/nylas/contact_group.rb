@@ -1,6 +1,30 @@
 # frozen_string_literal: true
 
 describe Nylas::ContactGroup do
+  it "is not filterable" do
+    expect(described_class).not_to be_filterable
+  end
+
+  it "is not creatable" do
+    expect(described_class).not_to be_creatable
+  end
+
+  it "is not updatable" do
+    expect(described_class).not_to be_updatable
+  end
+
+  it "is not destroyable" do
+    expect(described_class).not_to be_destroyable
+  end
+
+  it "is listable" do
+    expect(described_class).to be_listable
+  end
+
+  it "is showable" do
+    expect(described_class).not_to be_showable
+  end
+
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do
       api = instance_double(Nylas::API)
