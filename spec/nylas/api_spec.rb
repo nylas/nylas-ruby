@@ -5,6 +5,17 @@ require "spec_helper"
 # This spec is the only one that should have any webmock stuff going on, everything else should use the
 # FakeAPI to see what requests were made and what they included.
 describe Nylas::API do
+  describe "#contact_groups" do
+    it "returns Nylas::Collection for contact groups" do
+      client = instance_double("Nylas::HttpClient")
+      api = described_class.new(client: client)
+
+      result = api.contact_groups
+
+      expect(result).to be_a(Nylas::Collection)
+    end
+  end
+
   describe "#current_account" do
     it "retrieves the account for the current OAuth Access Token" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",
