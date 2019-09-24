@@ -21,8 +21,12 @@ describe Nylas::ContactGroup do
     expect(described_class).to be_listable
   end
 
-  it "is showable" do
+  it "is not showable" do
     expect(described_class).not_to be_showable
+  end
+
+  it "has resources_path" do
+    expect(described_class.resources_path).to eq("/contacts/groups")
   end
 
   describe ".from_json" do
