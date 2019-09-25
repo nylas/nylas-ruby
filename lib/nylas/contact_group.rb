@@ -6,12 +6,13 @@ module Nylas
   class ContactGroup
     include Model
     self.resources_path = "/contacts/groups"
+
     self.creatable = false
+    self.destroyable = false
+    self.filterable = false
     self.listable = true
     self.showable = false
-    self.filterable = false
     self.updatable = false
-    self.destroyable = false
 
     attribute :id, :string
     attribute :object, :string
