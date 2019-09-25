@@ -41,6 +41,11 @@ module Nylas
       @contacts ||= Collection.new(model: Contact, api: self)
     end
 
+    # @return [Collection<ContactGroup>] A queryable collection of Contact Groups
+    def contact_groups
+      @contact_groups ||= Collection.new(model: ContactGroup, api: self)
+    end
+
     # @return [CurrentAccount] The account details for whomevers access token is set
     def current_account
       prevent_calling_if_missing_access_token(:current_account)
