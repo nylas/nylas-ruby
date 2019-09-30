@@ -75,6 +75,7 @@ describe Nylas::Model do
       instance = FullModel.from_json('{ "date": "2017-01-01" }', api: api)
       expect(instance.date).to eql(Date.parse("2017-01-01"))
     end
+
     it "supports email address attributes" do
       instance = FullModel.from_json('{ "email_address": { "type": "home", "email": "test@example.com" } }',
                                      api: api)
