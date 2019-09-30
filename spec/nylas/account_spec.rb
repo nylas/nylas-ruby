@@ -43,6 +43,7 @@ describe Nylas::Account do
     expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/downgrade",
                                                 payload: nil)
   end
+
   it "can be upgraded" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -52,6 +53,7 @@ describe Nylas::Account do
     expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/upgrade",
                                                 payload: nil)
   end
+
   it "can revoke all tokens" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
