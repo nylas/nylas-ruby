@@ -59,6 +59,10 @@ module Nylas
       super(payload)
     end
 
+    def update_folder(folder_id)
+      update(folder_id: folder_id)
+    end
+
     def expanded
       return self unless headers.nil?
 
