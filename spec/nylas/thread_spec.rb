@@ -63,6 +63,23 @@ describe Nylas::Thread do
     expect(thread.version).to be 2
   end
 
+  describe "update_folder" do
+    it "moves thread to new `folder`" do
+      folder_id = "9999"
+      api = instance_double(Nylas::API, execute: "{}")
+      thread = described_class.from_json('{ "id": "thread-1234" }', api: api)
+      allow(api).to receive(:execute)
+
+      thread.update_folder(folder_id)
+
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        path: "/threads/thread-1234",
+        payload: { folder_id: folder_id }.to_json
+      )
+    end
+  end
+
   describe "#update" do
     it "let's you set the starred, unread, folder, and label ids" do
       api =  instance_double(Nylas::API, execute: "{}")

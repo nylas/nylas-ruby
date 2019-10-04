@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Add support to move `message` and `thread` between `folder`.
+
 ### 4.6.0 / 2019-09-25
 
 * Add support for `/contacts/groups` endpoint.

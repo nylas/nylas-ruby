@@ -45,6 +45,10 @@ module Nylas
       super(data)
     end
 
+    def update_folder(folder_id)
+      update(folder_id: folder_id)
+    end
+
     def starred?
       starred
     end
