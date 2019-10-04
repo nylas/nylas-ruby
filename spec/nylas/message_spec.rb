@@ -187,7 +187,7 @@ describe Nylas::Message do
   end
 
   describe "update_folder" do
-    it "move message to new `folder`" do
+    it "moves message to new `folder`" do
       folder_id = "9999"
       api = instance_double(Nylas::API, execute: "{}")
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
@@ -198,7 +198,7 @@ describe Nylas::Message do
       expect(api).to have_received(:execute).with(
         method: :put,
         path: "/messages/message-1234",
-        payload: { folder_id: "9999" }.to_json
+        payload: { folder_id: folder_id }.to_json
       )
     end
   end
