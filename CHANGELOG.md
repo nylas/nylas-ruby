@@ -1,6 +1,16 @@
 ### Unreleased
 
-* Nothing yet
+* Add support to move `message` and `thread` between `folder`.
+
+### 4.6.0 / 2019-09-25
+
+* Add support for `/contacts/groups` endpoint.
+* Fix issue when calling `.save` on `message` (https://github.com/nylas/nylas-ruby/pull/233)
+* Add support for Rails 6.
+* Fix issue for updating `message` with sending `label_ids` (https://github.com/nylas/nylas-ruby/pull/231)
+* Support for `when` in `Nylas::Event` for more attributes.
+* Add internal transfer api to support initialize related objects.
+* Fix encoding issues when downloading attachments.
 
 ### 4.5.0 / 2019-04-15
 

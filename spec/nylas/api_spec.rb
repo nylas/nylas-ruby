@@ -21,6 +21,17 @@ describe Nylas::API do
     end
   end
 
+  describe "#contact_groups" do
+    it "returns Nylas::Collection for contact groups" do
+      client = instance_double("Nylas::HttpClient")
+      api = described_class.new(client: client)
+
+      result = api.contact_groups
+
+      expect(result).to be_a(Nylas::Collection)
+    end
+  end
+
   describe "#current_account" do
     it "retrieves the account for the current OAuth Access Token" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",
