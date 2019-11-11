@@ -37,7 +37,9 @@ module Nylas
 
     def send!
       save
-      execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
+      message = execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
+      destroy
+      message
     end
 
     def starred?

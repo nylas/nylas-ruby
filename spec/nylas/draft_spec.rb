@@ -43,6 +43,8 @@ describe Nylas::Draft do
       expect(api).to have_received(:execute).with(method: :post, path: "/send",
                                                   payload: JSON.dump(draft_id: draft.id,
                                                                      version: draft.version))
+      expect(api).to have_received(:execute).with(method: :delete, path: "/drafts/#{draft.id}",
+      payload: {version: 6}.to_json )
     end
   end
 
