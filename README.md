@@ -39,6 +39,17 @@ To install the SDK from source, clone this repo and install with bundle.
 
     git clone https://github.com/nylas/nylas-ruby.git && cd nylas-ruby
     bundle install
+    
+## MacOS 10.11 (El Capitan) Note
+
+Apple stopped bundling OpenSSL with MacOS 10.11. However, one of the dependencies of this gem (EventMachine) requires it. If you're on El Capitan and are unable to install the gem, try running the following commands in a terminal:
+
+```
+sudo brew install openssl
+sudo brew link openssl --force
+gem install nylas
+```
+
 # Usage
 
 To use this SDK, you first need to [sign up for a free Nylas developer account](https://nylas.com/register).
@@ -67,6 +78,27 @@ To learn more about how to use the Nylas Ruby SDK, please refer to our [Ruby](ht
 # Contributing
 
 Please refer to [Contributing](Contributing.md) for information about how to make contributions to this project. We welcome questions, bug reports, and pull requests.
+
+## Setup Ruby SDK for Development
+
+Install [RubyGems](https://rubygems.org/pages/download) if you don't already have it:
+
+```shell
+gem install bundler
+gem update --system
+```
+
+Install the SDK from source
+
+```shell
+bundle install
+```
+
+You can run tests locally using ```rspec```:
+
+```shell
+rspec spec
+```
 
 # License
 
