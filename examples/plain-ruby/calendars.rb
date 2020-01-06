@@ -16,7 +16,5 @@ demonstrate { api.calendars.count }
 # Listing calendars
 demonstrate { api.calendars.limit(2).map(&:to_h) }
 
-
 # Retrieving a single calendar by ID
-example_calendar = api.calendars.first
 demonstrate { api.calendars.find(example_calendar.id).to_h }
