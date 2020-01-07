@@ -15,6 +15,7 @@ module Nylas
     attribute :calendar_id, :string
     attribute :master_event_id, :string
     attribute :message_id, :string
+    attribute :ical_uid, :string
 
     attribute :busy, :boolean
     attribute :description, :string
