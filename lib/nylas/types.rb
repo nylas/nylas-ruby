@@ -86,6 +86,7 @@ module Nylas
       end
 
       def serialize(object)
+        return nil if object.nil?
         object.to_i
       end
     end
