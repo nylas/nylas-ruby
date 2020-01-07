@@ -2,6 +2,11 @@
 
 * Add support to move `message` and `thread` between `folder`.
 
+### 4.6.1 / 2020-01-06
+
+* Fix a bug with `when` blocks when creating events
+* Add support for the Event.ical_uid field
+
 ### 4.6.0 / 2019-09-25
 
 * Add support for `/contacts/groups` endpoint.
