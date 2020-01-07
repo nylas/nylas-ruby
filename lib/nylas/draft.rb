@@ -35,6 +35,8 @@ module Nylas
 
     transfer :api, to: %i[events files folder labels]
 
+    attribute :tracking, :message_tracking
+
     def send!
       save
       execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
