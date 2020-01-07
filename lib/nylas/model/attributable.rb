@@ -2,7 +2,7 @@
 
 module Nylas
   module Model
-    # Allows defining of tyypecastable attributes on a model
+    # Allows defining of typecastable attributes on a model
     module Attributable
       def self.included(model)
         model.extend(ClassMethods)
