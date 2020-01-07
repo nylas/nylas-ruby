@@ -13,6 +13,7 @@ module Nylas
     attribute :object, :string
     attribute :account_id, :string
     attribute :calendar_id, :string
+    attribute :ical_uid, :string
     attribute :master_event_id, :string
     attribute :message_id, :string
 
