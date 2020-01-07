@@ -2,6 +2,10 @@
 
 nothing yet
 
+### 4.3.1
+
+* Add support for `ical_uid` attribute on the Event model
+
 ### 4.3.0 / 2019-03-18
 
 * Drop support for Ruby 2.2 and 2.3: they have reached end-of-life
