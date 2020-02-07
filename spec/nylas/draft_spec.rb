@@ -61,6 +61,7 @@ describe Nylas::Draft do
                body: "<h1>A draft Email</h1>",
                starred: false, unread: false,
                events: [],
+               tracking: { links: true },
                files: [{ content_type: "text/calendar", filename: nil, id: "file-abc35", size: 1264 },
                        { content_type: "application/ics", filename: "invite.ics", id: "file-xyz-9234",
                          size: 1264 }],
@@ -69,6 +70,7 @@ describe Nylas::Draft do
                         { display_name: "All Mail", id: "label-all", name: "all" }] }
 
       draft = described_class.from_json(JSON.dump(data), api: api)
+
       expect(draft.id).to eql "drft-592"
       expect(draft.account_id).to eql "acc-9987"
       expect(draft.thread_id).to eql "thread-1234"
@@ -124,6 +126,9 @@ describe Nylas::Draft do
       expect(draft.labels[1].id).to eql "label-all"
       expect(draft.labels[1].name).to eql "all"
       expect(draft.labels[1].api).to be api
+
+      expect(draft.tracking).to_not be_nil
+      expect(draft.tracking.links).to eql true
     end
   end
 end

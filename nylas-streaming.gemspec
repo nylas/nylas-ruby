@@ -10,4 +10,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "em-http-request", "~> 1.1", ">= 1.1.3"
   gem.add_runtime_dependency "nylas", "~> 4.0"
   gem.add_runtime_dependency "yajl-ruby", "~> 1.2", ">= 1.2.1"
+
+  gem.add_development_dependency "pry-byebug"
 end
