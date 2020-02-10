@@ -2,6 +2,10 @@
 
 * Add support to move `message` and `thread` between `folder`.
 
+### 4.6.2 / 2020-02-10
+
+* Fix a bug where you cannot attach a `tracking` attribute to a draft
+
 ### 4.6.1 / 2020-01-06
 
 * Fix a bug with `when` blocks when creating events
