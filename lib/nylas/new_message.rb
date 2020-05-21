@@ -15,6 +15,7 @@ module Nylas
     has_n_of_attribute :from, :email_address
     has_n_of_attribute :cc, :email_address
     has_n_of_attribute :bcc, :email_address
+    has_n_of_attribute :reply_to, :email_address
 
     attribute :subject, :string
     attribute :body, :string
