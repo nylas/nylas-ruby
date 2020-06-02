@@ -5,16 +5,20 @@ module Nylas
   class HttpClient # rubocop:disable Metrics/ClassLength
     HTTP_CODE_TO_EXCEPTIONS = {
       400 => InvalidRequest,
+      401 => UnauthorizedRequest,
       402 => MessageRejected,
       403 => AccessDenied,
       404 => ResourceNotFound,
       405 => MethodNotAllowed,
+      410 => ResourceRemoved,
+      418 => TeapotError,
       422 => MailProviderError,
       429 => SendingQuotaExceeded,
       500 => InternalError,
       501 => EndpointNotYetImplemented,
       502 => BadGateway,
-      503 => ServiceUnavailable
+      503 => ServiceUnavailable,
+      504 => RequestTimedOut,
     }.freeze
 
     ENDPOINT_TIMEOUTS = {
