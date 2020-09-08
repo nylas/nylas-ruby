@@ -27,8 +27,6 @@ module Nylas
         data.each do |attribute_name, value|
           if respond_to?(:"#{attribute_name}=")
             send(:"#{attribute_name}=", value)
-          else
-            Logging.logger.warn("#{attribute_name} is not defined as an attribute on #{self.class.name}")
           end
         end
       end

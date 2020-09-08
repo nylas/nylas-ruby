@@ -17,6 +17,8 @@ module Nylas
 
       def []=(key, value)
         data[key] = cast(key, value)
+      rescue Nylas::Registry::MissingKeyError
+        # Don't crash when a new attribute is added
       end
 
       # Merges data into the registry while casting input types correctly
