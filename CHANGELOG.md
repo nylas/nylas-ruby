@@ -1,6 +1,8 @@
-### Unreleased
+### 4.6.2 / 2020-09-08
 
 * Add support to move `message` and `thread` between `folder`.
+* Handle new attributes added to API gracefully
+* Add is_primary and other new Calendar attributes
 
 ### 4.6.1 / 2020-01-06
 
