@@ -144,8 +144,6 @@ describe Nylas::Message do
           method: :put, path: "/messages/message-1234",
           payload: JSON.dump(
             id: "message-1234",
-            date: 0,
-            received_date: 0
           )
         )
       end
