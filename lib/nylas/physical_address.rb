@@ -12,5 +12,6 @@ module Nylas
     attribute :state, :string
     attribute :city, :string
     attribute :country, :string
+    attribute :secondary_address, :string
   end
 end
