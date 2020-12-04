@@ -34,8 +34,8 @@ module Nylas
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
-    attribute :folder, :folder
     attribute :folder, :folder, exclude_when: [:saving]
+    attribute :folder_id, :string
 
     has_n_of_attribute :labels, :label, exclude_when: [:saving]
     has_n_of_attribute :label_ids, :string
