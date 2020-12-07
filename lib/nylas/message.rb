@@ -34,7 +34,7 @@ module Nylas
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
-    attribute :folder, :folder, exclude_when: [:saving]
+    attribute :folder, :folder
     attribute :folder_id, :string
 
     has_n_of_attribute :labels, :label, exclude_when: [:saving]
@@ -69,5 +69,26 @@ module Nylas
       assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
     end
+    
+    def save_call
+      handle_folder()
+
+      execute(
+        method: :put,
+        payload: attributes.serialize(keys: allowed_keys_for_save),
+        path: resource_path
+      )
+    end
+
+    def handle_folder
+      return if folder.nil?
+      
+      if folder_id.nil? && !self.to_h.dig(:folder, :id).nil?
+        self.folder_id = folder.id 
+      end
+      
+      self.folder = nil
+    end
+
   end
 end
