@@ -69,9 +69,9 @@ module Nylas
       assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
     end
-    
+
     def save_call
-      handle_folder()
+      handle_folder
 
       execute(
         method: :put,
@@ -82,13 +82,10 @@ module Nylas
 
     def handle_folder
       return if folder.nil?
-      
-      if folder_id.nil? && !self.to_h.dig(:folder, :id).nil?
-        self.folder_id = folder.id 
-      end
-      
+
+      self.folder_id = folder.id if folder_id.nil? && !self.to_h.dig(:folder, :id).nil?
+
       self.folder = nil
     end
-
   end
 end
