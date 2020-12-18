@@ -143,7 +143,7 @@ describe Nylas::Message do
         expect(api).to have_received(:execute).with(
           method: :put, path: "/messages/message-1234",
           payload: JSON.dump(
-            id: "message-1234",
+            id: "message-1234"
           )
         )
       end

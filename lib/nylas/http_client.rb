@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nylas
-  require 'yajl'
+  require "yajl"
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
@@ -135,7 +135,7 @@ module Nylas
       return response if response.is_a?(Enumerable)
 
       json = StringIO.new(response)
-      Yajl::Parser.new(:symbolize_names => true).parse(json)
+      Yajl::Parser.new(symbolize_names: true).parse(json)
     end
     inform_on :parse_response, level: :debug, also_log: { result: true }
 
