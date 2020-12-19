@@ -69,5 +69,23 @@ module Nylas
       assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
     end
+
+    def save_call
+      handle_folder
+
+      execute(
+        method: :put,
+        payload: attributes.serialize(keys: allowed_keys_for_save),
+        path: resource_path
+      )
+    end
+
+    def handle_folder
+      return if folder.nil?
+
+      self.folder_id = folder.id if folder_id.nil? && !self.to_h.dig(:folder, :id).nil?
+
+      self.folder = nil
+    end
   end
 end

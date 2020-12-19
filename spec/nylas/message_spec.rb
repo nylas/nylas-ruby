@@ -148,6 +148,56 @@ describe Nylas::Message do
         )
       end
     end
+
+    it "removes the folder node and replaces with folder_id" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      data = {
+        id: "message-1234",
+        folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
+        starred: true
+      }
+
+      message = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+
+      message.save
+
+      expect(api).to have_received(:execute).with(
+        method: :put, path: "/messages/message-1234",
+        payload: JSON.dump(
+          id: "message-1234",
+          starred: true,
+          folder_id: "folder-inbox"
+        )
+      )
+    end
+    it "does not overwrite folder_id if set" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      data = {
+        id: "message-1234",
+        folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
+        folder_id: "folder-1234",
+        starred: true
+      }
+
+      message = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+
+      message.save
+
+      expect(api).to have_received(:execute).with(
+        method: :put, path: "/messages/message-1234",
+        payload: JSON.dump(
+          id: "message-1234",
+          starred: true,
+          folder_id: "folder-1234"
+        )
+      )
+    end
   end
 
   describe "#update" do
@@ -174,7 +224,6 @@ describe Nylas::Message do
         )
       )
     end
-
     it "raises an argument error if the data has any keys that aren't allowed to be updated" do
       api = instance_double(Nylas::API, execute: "{}")
       message = described_class.from_json('{ "id": "message-1234" }', api: api)
