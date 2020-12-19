@@ -1,3 +1,13 @@
+### 4.6.3 / 2020-12-18
+
+* Remove folder on message.save for updates
+* Fix JSON parsing behavior
+* Fix rubocop warnings for http_client and spec
+* No longer rescue json parse errors, use Yajl instead of JSON for parsing responses (due to unicode issue).
+* Add specs for changes to message.save
+* Store folder id in folder_id and remove folder if present before saving.
+* Adding secondary_address field to physical address model
+
 ### 4.6.2 / 2020-09-08
 
 * Add support to move `message` and `thread` between `folder`.
