@@ -2,6 +2,7 @@
 
 module Nylas
   require "yajl"
+  require "pry"
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
@@ -82,7 +83,14 @@ module Nylas
         timeout: timeout
       )
       rest_client_execute(**request) do |response, _request, result|
-        response = parse_response(response)
+        content_type = nil
+
+        if response.headers && response.headers[:content_type]
+          content_type = response.headers[:content_type].downcase
+        end
+
+        response = parse_response(response) if content_type == "application/json"
+
         handle_failed_response(result: result, response: response)
         response
       end
