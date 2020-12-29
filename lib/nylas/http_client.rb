@@ -2,7 +2,6 @@
 
 module Nylas
   require "yajl"
-  require "pry"
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
