@@ -44,10 +44,10 @@ describe Nylas::HttpClient do
         .to_return(status: 200, body: full_json, headers: { "Content-Type" => "Application/Json" })
 
       response = nylas.execute(method: :get, path: "/contacts/1234")
-      expect(response).not_to be_a_kind_of(String)
+      expect(response).to be_a_kind_of(Hash)
     end
 
-    it "skips when content-type is not JSON" do
+    it "skips parsing when content-type is not JSON" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/contacts/1234/picture")
@@ -55,7 +55,7 @@ describe Nylas::HttpClient do
         .to_return(status: 200, body: "some values", headers: { "Content-Type" => "image/jpeg" })
 
       response = nylas.execute(method: :get, path: "/contacts/1234/picture")
-      expect(response).to be_a_kind_of(String)
+      expect(response).to eql "some values"
     end
   end
 end
