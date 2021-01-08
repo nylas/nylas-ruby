@@ -31,7 +31,7 @@ describe Nylas::HttpClient do
 
     it "raises if the JSON is unable to be deserialized" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
-      expect { nylas.parse_response("{{") }.to raise_error(Yajl::ParseError)
+      expect { nylas.parse_response("{{") }.to raise_error(Nylas::JsonParseError)
     end
   end
 

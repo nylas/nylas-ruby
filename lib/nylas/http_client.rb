@@ -143,6 +143,8 @@ module Nylas
 
       json = StringIO.new(response)
       Yajl::Parser.new(symbolize_names: true).parse(json)
+    rescue Yajl::ParseError
+      raise Nylas::JsonParseError
     end
     inform_on :parse_response, level: :debug, also_log: { result: true }
 
