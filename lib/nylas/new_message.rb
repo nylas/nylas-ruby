@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nylas
-  # Data structure for seending a message via the Nylas API
+  # Data structure for sending a message via the Nylas API
   class NewMessage
     include Model
     self.creatable = false

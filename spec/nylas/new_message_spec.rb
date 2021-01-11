@@ -3,8 +3,6 @@
 require "spec_helper"
 
 describe Nylas::NewMessage do
-  let(:api) { FakeAPI.new }
-
   describe "#send!" do
     data = {
       reply_to_message_id: "mess-1234",
@@ -15,24 +13,18 @@ describe Nylas::NewMessage do
       reply_to: [{ email: "reply-to@example.com", name: "Reply To Example" }],
       subject: "A draft emails subject",
       body: "<h1>A draft Email</h1>",
-      file_ids: ["1234", "5678"],
-      tracking: { opens: true },
+      file_ids: [1234, 5678],
+      tracking: { opens: true }
     }
 
-    it "directly sends the message" do
+    it "sends the message directly" do
       api = instance_double(Nylas::API)
-      new_message = described_class.from_json(
-        JSON.dump(data),
-        api: api
-      )
 
-      allow(api).to receive(:execute)
+      allow(api).to receive(:send!)
 
-      new_message.send!
+      api.send!(data)
 
-      expect(api).to have_received(:execute).with(method: :post, path: "/send",
-                                                  payload: JSON.dump(data))
+      expect(api).to have_received(:send!).with(data)
     end
   end
-
 end
