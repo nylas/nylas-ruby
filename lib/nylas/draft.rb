@@ -33,9 +33,13 @@ module Nylas
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
+    attribute :tracking, :message_tracking
+
     transfer :api, to: %i[events files folder labels]
 
     def send!
+      return execute(method: :post, path: "/send", payload: JSON.dump(to_h)) if tracking
+
       save
       execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
     end
