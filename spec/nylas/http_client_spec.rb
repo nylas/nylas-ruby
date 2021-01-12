@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "yajl"
 require "webmock/rspec"
 
 describe Nylas::HttpClient do
