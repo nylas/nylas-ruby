@@ -15,7 +15,7 @@ describe Nylas::HttpClient do
       "Authorization" => "Basic dG9rZW46",
       "Content-Types" => "application/json",
       "Host" => "api.nylas.com",
-      "User-Agent" => "Nylas Ruby SDK 4.6.2 - 2.7.0",
+      "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
       "X-Nylas-Api-Wrapper" => "ruby",
       "X-Nylas-Client-Id" => "id"
     }
