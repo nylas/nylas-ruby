@@ -9,19 +9,6 @@ describe Nylas::HttpClient do
     '{"snippet":"\u26a1\ufe0f Some text \ud83d","starred":false,"subject":"Updates"}'
   end
 
-  let(:headers) do
-    {
-      "Accept" => "*/*",
-      "Accept-Encoding" => "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-      "Authorization" => "Basic dG9rZW46",
-      "Content-Types" => "application/json",
-      "Host" => "api.nylas.com",
-      "User-Agent" => "Nylas Ruby SDK 4.6.2 - 2.7.0",
-      "X-Nylas-Api-Wrapper" => "ruby",
-      "X-Nylas-Client-Id" => "id"
-    }
-  end
-
   describe "#parse_response" do
     it "deserializes JSON with unicode characters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
@@ -58,7 +45,6 @@ describe Nylas::HttpClient do
       it "should return #{error} given #{code} status code" do
         nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
-          .with(headers: headers)
           .to_return(status: code, body: full_json)
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
