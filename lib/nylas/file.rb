@@ -56,7 +56,9 @@ module Nylas
     def retrieve_file
       response = api.get(path: "#{resource_path}/download")
       filename = response.headers.fetch(:content_disposition, "").gsub("attachment; filename=", "")
-      temp_file = Tempfile.new(filename, encoding: "ascii-8bit")
+      # The returned filename can be longer than 256 chars which isn't supported by rb_sysopen.
+      # 128 chars here is more than enough given that TempFile ensure the filename will be unique.
+      temp_file = Tempfile.new(filename[0..127], encoding: "ascii-8bit")
       temp_file.write(response.body)
       temp_file.seek(0)
       temp_file
