@@ -44,6 +44,19 @@ describe Nylas::Draft do
                                                   payload: JSON.dump(draft_id: draft.id,
                                                                      version: draft.version))
     end
+
+    it "includes tracking when sending the draft" do
+      api = instance_double(Nylas::API)
+      draft = described_class.from_hash({ id: "draft-1234", "version": 5 }, api: api)
+      draft.tracking = { opens: true, links: true, thread_replies: true, payload: "this is a payload" }
+      update_json = draft.to_json
+      allow(api).to receive(:execute)
+
+      draft.send!
+
+      expect(api).to have_received(:execute).with(method: :post, path: "/send",
+                                                  payload: update_json)
+    end
   end
 
   describe ".from_json" do
@@ -66,7 +79,8 @@ describe Nylas::Draft do
                          size: 1264 }],
                folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
                labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
-                        { display_name: "All Mail", id: "label-all", name: "all" }] }
+                        { display_name: "All Mail", id: "label-all", name: "all" }],
+               tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
 
       draft = described_class.from_json(JSON.dump(data), api: api)
       expect(draft.id).to eql "drft-592"
@@ -124,6 +138,11 @@ describe Nylas::Draft do
       expect(draft.labels[1].id).to eql "label-all"
       expect(draft.labels[1].name).to eql "all"
       expect(draft.labels[1].api).to be api
+
+      expect(draft.tracking.opens).to be true
+      expect(draft.tracking.links).to be true
+      expect(draft.tracking.thread_replies).to be true
+      expect(draft.tracking.payload).to eql "this is a payload"
     end
   end
 end
