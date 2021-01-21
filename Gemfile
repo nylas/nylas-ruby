@@ -2,4 +2,4 @@
 
 source "https://rubygems.org"
 
-gemspec name: "nylas-streaming"
+gemspec name: "nylas"
