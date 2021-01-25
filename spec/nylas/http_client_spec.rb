@@ -66,7 +66,7 @@ describe Nylas::HttpClient do
       it "should return #{error} given #{code} status code" do
         nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
-          .to_return(status: code, body: full_json)
+          .to_return(status: code, body: full_json, headers: { "Content-Type" => "Application/Json" })
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end
