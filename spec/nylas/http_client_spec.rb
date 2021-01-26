@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "yajl"
 require "webmock/rspec"
 
 describe Nylas::HttpClient do
@@ -18,7 +17,29 @@ describe Nylas::HttpClient do
 
     it "raises if the JSON is unable to be deserialized" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
-      expect { nylas.parse_response("{{") }.to raise_error(Yajl::ParseError)
+      expect { nylas.parse_response("{{") }.to raise_error(Nylas::JsonParseError)
+    end
+  end
+
+  describe "#execute handles content types" do
+    it "parses JSON when given content-type == application/json" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234")
+        .to_return(status: 200, body: full_json, headers: { "Content-Type" => "Application/Json" })
+
+      response = nylas.execute(method: :get, path: "/contacts/1234")
+      expect(response).to be_a_kind_of(Hash)
+    end
+
+    it "skips parsing when content-type is not JSON" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234/picture")
+        .to_return(status: 200, body: "some values", headers: { "Content-Type" => "image/jpeg" })
+
+      response = nylas.execute(method: :get, path: "/contacts/1234/picture")
+      expect(response).to eql "some values"
     end
   end
 
@@ -45,7 +66,7 @@ describe Nylas::HttpClient do
       it "should return #{error} given #{code} status code" do
         nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
-          .to_return(status: code, body: full_json)
+          .to_return(status: code, body: full_json, headers: { "Content-Type" => "Application/Json" })
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end

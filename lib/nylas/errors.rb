@@ -14,6 +14,8 @@ module Nylas
   class ModelNotUpdatableError < ModelActionError; end
   class ModelNotDestroyableError < ModelActionError; end
 
+  class JsonParseError < Error; end
+
   # Raised when attempting to set a field that is not on a model with mass assignment
   class ModelMissingFieldError < ModelActionError
     def initialize(field, model)
