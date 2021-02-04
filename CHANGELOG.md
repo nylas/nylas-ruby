@@ -1,3 +1,14 @@
+### 4.6.4 / 2021-02-03
+
+* fix failing http_client spec after merging main
+* Skip parsing response if content is not JSON
+* Add missing http status codes / errors.
+* Add reply_to to NewMessage
+* Add message tracking to drafts.
+* Truncate the returned filename so it's less than 256 characters and compatible with rb_sysopen.
+* Bump required rest client dep to >= 2.0, remove travis ci tests for rest client 1, ruby v2.3
+* Use to_json helper instead of JSON.dump.
+
 ### 4.6.3 / 2020-12-18
 
 * Remove folder on message.save for updates
