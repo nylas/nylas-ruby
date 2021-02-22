@@ -18,6 +18,7 @@ module Nylas
     attribute :content_type, :string
     attribute :filename, :string
     attribute :size, :integer
+    attribute :content_disposition, :string
 
     attr_accessor :file
     # Downloads and caches a local copy of the file.
