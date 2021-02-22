@@ -1,3 +1,8 @@
+### 4.6.5 / 2021-02-22
+
+* Add `content_disposition` field to File
+* Fix thread-safety issue in HTTP::CookieJar loading
+
 ### 4.6.4 / 2021-02-03
 
 * fix failing http_client spec after merging main
