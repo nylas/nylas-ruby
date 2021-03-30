@@ -20,9 +20,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - gemfile: rails4
-            ruby: 2.4
-
           - gemfile: rails6
             ruby: 2.5
 
