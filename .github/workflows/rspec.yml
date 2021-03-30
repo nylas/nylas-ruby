@@ -1,0 +1,50 @@
+name: rspec
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        ruby: [2.4, 2.5, 2.6, 2.7]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up RVM and Ruby from .ruby-version
+      run: |
+        curl -sSL https://get.rvm.io | bash
+        source $HOME/.rvm/scripts/rvm
+        rvm install $(cat .ruby-version) --binary
+        rvm --default use $(cat .ruby-version)
+
+    - uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - uses: actions/cache@v1
+      with:
+        path: ${{ steps.yarn-cache.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Build App
+      run: |
+        source $HOME/.rvm/scripts/rvm
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+
+    - name: Run Tests
+      run: |
+        source $HOME/.rvm/scripts/rvm
+        bundle exec rspec
