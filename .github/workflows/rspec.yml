@@ -19,7 +19,6 @@ jobs:
     strategy:
       matrix:
         gemfile: [rails4, rails5, rails6]
-        ruby-version: ['2.4', '2.5', '2.6', '2.7']
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
       BUNDLE_GEMFILE: gemfiles/Gemfile.${{ matrix.gemfile }}
 
@@ -31,7 +30,7 @@ jobs:
     # uses: ruby/setup-ruby@v1
       uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
       with:
-        ruby-version: ${{ matrix.ruby-version }}
+        ruby-version: 2.6
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Run tests
       run: bundle exec rspec
