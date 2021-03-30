@@ -21,7 +21,7 @@ jobs:
         gemfile: [rails4, rails5, rails6]
         ruby-version: ['2.4', '2.5', '2.6', '2.7']
     env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
-      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      BUNDLE_GEMFILE: gemfiles/Gemfile.${{ matrix.gemfile }}
 
     steps:
     - uses: actions/checkout@v2
