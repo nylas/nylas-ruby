@@ -4,6 +4,7 @@ module Nylas
   # Special collection for delta objects
   class DeltasCollection < Collection
     attr_accessor :deltas
+
     extend Forwardable
     def_delegators :execute, :cursor_start, :cursor_end,
                    :count, :each, :to_h, :to_a, :empty?

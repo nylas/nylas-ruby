@@ -4,6 +4,7 @@ module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
   class API
     attr_accessor :client
+
     extend Forwardable
     def_delegators :client, :execute, :get, :post, :put, :delete, :app_id
 

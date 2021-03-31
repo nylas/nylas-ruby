@@ -24,6 +24,7 @@ module Nylas
     # {Model} or Model-like thing.
     class ModelType
       attr_accessor :model
+
       def initialize(model:)
         self.model = model
       end

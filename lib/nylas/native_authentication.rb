@@ -5,6 +5,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#native-authentication-1
   class NativeAuthentication
     attr_accessor :api
+
     def initialize(api:)
       self.api = api
     end

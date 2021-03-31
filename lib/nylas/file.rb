@@ -21,6 +21,7 @@ module Nylas
     attribute :content_disposition, :string
 
     attr_accessor :file
+
     # Downloads and caches a local copy of the file.
     # @return [Tempfile] - Local copy of the file
     def download
