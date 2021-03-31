@@ -13,7 +13,7 @@ AllCops:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 110
 
 Metrics/BlockLength:
