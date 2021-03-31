@@ -20,9 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - gemfile: rails5
+            ruby: 2.5
           - gemfile: rails6
             ruby: 2.5
-
+          - gemfile: rails5
+            ruby: 2.6
           - gemfile: rails6
             ruby: 2.6
     name: Ruby ${{ matrix.ruby }}, Gemfile ${{ matrix.gemfile }}
