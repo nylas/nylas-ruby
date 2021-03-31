@@ -4,6 +4,7 @@ module Nylas
   # An enumerable for working with index and search endpoints
   class Collection
     attr_accessor :model, :api, :constraints
+
     extend Forwardable
     def_delegators :each, :map, :select, :reject, :to_a, :take
     def_delegators :to_a, :first, :last, :[]

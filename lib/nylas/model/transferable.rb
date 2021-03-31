@@ -39,6 +39,7 @@ module Nylas
       # Methods to call when tweaking Transferable classes
       module ClassMethods
         attr_accessor :attribute_recipients
+
         def init_attribute_recipients
           self.attribute_recipients ||= {}
         end
