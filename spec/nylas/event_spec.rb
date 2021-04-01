@@ -123,4 +123,30 @@ describe Nylas::Event do
       expect(event.read_only?).to eq(false)
     end
   end
+
+  describe "#rsvp" do
+    it "calls `Rsvp` with the given status and flag to notify_participants" do
+      api = instance_double(Nylas::API)
+      data = {
+        id: "event-123",
+        account_id: "acc-1234",
+        read_only: false,
+        calendar_id: "cal-0987"
+      }
+      rsvp = instance_double("Rsvp", save: nil)
+      allow(Nylas::Rsvp).to receive(:new).and_return(rsvp)
+      event = described_class.from_json(JSON.dump(data), api: api)
+
+      event.rsvp(:yes, notify_participants: true)
+
+      expect(Nylas::Rsvp).to have_received(:new).with(
+        api: api,
+        status: :yes,
+        event_id: "event-123",
+        notify_participants: true,
+        account_id: "acc-1234"
+      )
+      expect(rsvp).to have_received(:save)
+    end
+  end
 end
