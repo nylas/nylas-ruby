@@ -141,7 +141,7 @@ module Nylas
     # Retrieves the data from the API for the particular constraints
     # @return [Hash,Array]
     def execute
-      api.execute(to_be_executed)
+      api.execute(**to_be_executed)
     end
   end
 end
