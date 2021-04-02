@@ -60,7 +60,7 @@ module Nylas
     end
 
     def reload
-      assign(execute(method: :get, path: resource_path))
+      assign(**execute(method: :get, path: resource_path))
       true
     end
 

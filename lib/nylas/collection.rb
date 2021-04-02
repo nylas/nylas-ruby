@@ -21,7 +21,7 @@ module Nylas
     end
 
     def create(**attributes)
-      instance = model.new(attributes.merge(api: api))
+      instance = model.new(**attributes.merge(api: api))
       instance.save
       instance
     end
@@ -69,7 +69,7 @@ module Nylas
       return enum_for(:each) unless block_given?
 
       execute.each do |result|
-        yield(model.new(result.merge(api: api)))
+        yield(model.new(**result.merge(api: api)))
       end
     end
 
