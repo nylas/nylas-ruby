@@ -79,7 +79,7 @@ describe Nylas::Event do
 
       event = described_class.from_json(JSON.dump(data), api: api)
 
-      expect(event.busy?).to eq(true)
+      expect(event).to be_busy
     end
 
     it "returns false when busy attribute from API return false" do
@@ -92,7 +92,7 @@ describe Nylas::Event do
 
       event = described_class.from_json(JSON.dump(data), api: api)
 
-      expect(event.busy?).to eq(false)
+      expect(event).not_to be_busy
     end
   end
 
@@ -107,7 +107,7 @@ describe Nylas::Event do
 
       event = described_class.from_json(JSON.dump(data), api: api)
 
-      expect(event.read_only?).to eq(true)
+      expect(event).to be_read_only
     end
 
     it "returns false when read_only attribute from API return false" do
@@ -120,7 +120,7 @@ describe Nylas::Event do
 
       event = described_class.from_json(JSON.dump(data), api: api)
 
-      expect(event.read_only?).to eq(false)
+      expect(event).not_to be_read_only
     end
   end
 
