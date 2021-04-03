@@ -149,4 +149,33 @@ describe Nylas::Event do
       expect(rsvp).to have_received(:save)
     end
   end
+
+  describe "notify_participants" do
+    it "sends notify_participants in query params" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute)
+      data = {
+        account_id: "acc-1234",
+        read_only: false,
+        calendar_id: "cal-0987"
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+      event.notify_participants = true
+
+      event.save
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/events",
+        payload: {
+          account_id: "acc-1234",
+          calendar_id: "cal-0987",
+          read_only: false
+        }.to_json,
+        query: {
+          notify_participants: true
+        }
+      )
+    end
+  end
 end

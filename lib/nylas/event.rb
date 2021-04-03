@@ -29,6 +29,8 @@ module Nylas
     attribute :when, :when
     attribute :original_start_time, :unix_timestamp
 
+    attr_accessor :notify_participants
+
     def busy?
       busy
     end
@@ -41,6 +43,14 @@ module Nylas
       rsvp = Rsvp.new(api: api, status: status, notify_participants: notify_participants,
                       event_id: id, account_id: account_id)
       rsvp.save
+    end
+
+    private
+
+    def query_params
+      {
+        notify_participants: notify_participants
+      }
     end
   end
 end
