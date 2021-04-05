@@ -85,7 +85,7 @@ module Nylas
     def destroy
       raise ModelNotDestroyableError, self unless destroyable?
 
-      execute(method: :delete, path: resource_path)
+      execute(method: :delete, path: resource_path, query: query_params)
     end
 
     # @return [String] JSON String of the model.
