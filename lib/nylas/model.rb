@@ -39,7 +39,7 @@ module Nylas
       !id.nil?
     end
 
-    def execute(method:, payload: nil, path:, query:)
+    def execute(method:, payload: nil, path:, query: {})
       api.execute(method: method, payload: payload, path: path, query: query)
     end
 
