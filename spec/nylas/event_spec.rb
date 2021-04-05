@@ -177,5 +177,29 @@ describe Nylas::Event do
         }
       )
     end
+
+    it "sends nothing when `notify_participants` is not set" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute)
+      data = {
+        account_id: "acc-1234",
+        read_only: false,
+        calendar_id: "cal-0987"
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+
+      event.save
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/events",
+        payload: {
+          account_id: "acc-1234",
+          calendar_id: "cal-0987",
+          read_only: false
+        }.to_json,
+        query: {}
+      )
+    end
   end
 end
