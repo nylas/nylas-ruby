@@ -40,8 +40,12 @@ describe Nylas::Account do
 
     expect(account.downgrade).to be_truthy
 
-    expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/downgrade",
-                                                payload: nil)
+    expect(api).to have_received(:execute).with(
+      method: :post,
+      path: "/a/app-987/accounts/acc-1234/downgrade",
+      payload: nil,
+      query: {}
+    )
   end
 
   it "can be upgraded" do
@@ -50,8 +54,12 @@ describe Nylas::Account do
 
     expect(account.upgrade).to be_truthy
 
-    expect(api).to have_received(:execute).with(method: :post, path: "/a/app-987/accounts/acc-1234/upgrade",
-                                                payload: nil)
+    expect(api).to have_received(:execute).with(
+      method: :post,
+      path: "/a/app-987/accounts/acc-1234/upgrade",
+      payload: nil,
+      query: {}
+    )
   end
 
   it "can revoke all tokens" do
@@ -64,7 +72,8 @@ describe Nylas::Account do
     expect(api).to have_received(:execute).with(
       method: :post,
       path: "/a/app-987/accounts/acc-1234/revoke-all",
-      payload: be_json("keep_access_token" => access_token)
+      payload: be_json("keep_access_token" => access_token),
+      query: {}
     )
   end
 end

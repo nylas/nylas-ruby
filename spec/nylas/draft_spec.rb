@@ -38,11 +38,18 @@ describe Nylas::Draft do
 
       draft.send!
 
-      expect(api).to have_received(:execute).with(method: :put, path: "/drafts/#{draft.id}",
-                                                  payload: update_json)
-      expect(api).to have_received(:execute).with(method: :post, path: "/send",
-                                                  payload: JSON.dump(draft_id: draft.id,
-                                                                     version: draft.version))
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        path: "/drafts/#{draft.id}",
+        payload: update_json,
+        query: {}
+      )
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/send",
+        payload: JSON.dump(draft_id: draft.id, version: draft.version),
+        query: {}
+      )
     end
 
     it "includes tracking when sending the draft" do
@@ -54,8 +61,12 @@ describe Nylas::Draft do
 
       draft.send!
 
-      expect(api).to have_received(:execute).with(method: :post, path: "/send",
-                                                  payload: update_json)
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/send",
+        payload: update_json,
+        query: {}
+      )
     end
   end
 

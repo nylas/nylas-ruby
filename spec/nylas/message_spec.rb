@@ -141,10 +141,12 @@ describe Nylas::Message do
         message.save
 
         expect(api).to have_received(:execute).with(
-          method: :put, path: "/messages/message-1234",
+          method: :put,
+          path: "/messages/message-1234",
           payload: JSON.dump(
             id: "message-1234"
-          )
+          ),
+          query: {}
         )
       end
     end
@@ -165,12 +167,14 @@ describe Nylas::Message do
       message.save
 
       expect(api).to have_received(:execute).with(
-        method: :put, path: "/messages/message-1234",
+        method: :put,
+        path: "/messages/message-1234",
         payload: JSON.dump(
           id: "message-1234",
           starred: true,
           folder_id: "folder-inbox"
-        )
+        ),
+        query: {}
       )
     end
     it "does not overwrite folder_id if set" do
@@ -190,12 +194,14 @@ describe Nylas::Message do
       message.save
 
       expect(api).to have_received(:execute).with(
-        method: :put, path: "/messages/message-1234",
+        method: :put,
+        path: "/messages/message-1234",
         payload: JSON.dump(
           id: "message-1234",
           starred: true,
           folder_id: "folder-1234"
-        )
+        ),
+        query: {}
       )
     end
   end
@@ -213,7 +219,8 @@ describe Nylas::Message do
       )
 
       expect(api).to have_received(:execute).with(
-        method: :put, path: "/messages/message-1234",
+        method: :put,
+        path: "/messages/message-1234",
         payload: JSON.dump(
           starred: true, unread: false,
           folder_id: "folder-1234",
@@ -221,7 +228,8 @@ describe Nylas::Message do
             label-1234
             label-4567
           ]
-        )
+        ),
+        query: {}
       )
     end
     it "raises an argument error if the data has any keys that aren't allowed to be updated" do
@@ -245,7 +253,8 @@ describe Nylas::Message do
       expect(api).to have_received(:execute).with(
         method: :put,
         path: "/messages/message-1234",
-        payload: { folder_id: folder_id }.to_json
+        payload: { folder_id: folder_id }.to_json,
+        query: {}
       )
     end
   end
