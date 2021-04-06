@@ -28,6 +28,8 @@ jobs:
             ruby: 2.6
           - gemfile: rails6
             ruby: 2.6
+          - gemfile: rails6
+            ruby: 3.0
     name: Ruby ${{ matrix.ruby }}, Gemfile ${{ matrix.gemfile }}
     steps:
     - uses: actions/checkout@v2
