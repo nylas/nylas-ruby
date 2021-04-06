@@ -11,8 +11,8 @@ require "rspec-json_matcher"
 RSpec.configuration.include RSpec::JsonMatcher
 
 class FakeAPI
-  def execute(method:, path:, payload: nil)
-    requests.push(method: method, path: path, payload: payload)
+  def execute(method:, path:, payload: nil, query: {})
+    requests.push(method: method, path: path, payload: payload, query: query)
   end
 
   def requests

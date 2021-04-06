@@ -39,21 +39,31 @@ module Nylas
       !id.nil?
     end
 
-    def execute(method:, payload: nil, path:)
-      api.execute(method: method, payload: payload, path: path)
+    def execute(method:, payload: nil, path:, query: {})
+      api.execute(method: method, payload: payload, path: path, query: query)
     end
 
     def create
       raise ModelNotCreatableError, self unless creatable?
 
-      execute(method: :post, payload: attributes.serialize, path: resources_path)
+      execute(
+        method: :post,
+        payload: attributes.serialize,
+        path: resources_path,
+        query: query_params
+      )
     end
 
     def update(**data)
       raise ModelNotUpdatableError, model_class unless updatable?
 
       attributes.merge(**data)
-      execute(method: :put, payload: attributes.serialize(keys: data.keys), path: resource_path)
+      execute(
+        method: :put,
+        payload: attributes.serialize(keys: data.keys),
+        path: resource_path,
+        query: query_params
+      )
       true
     rescue Registry::MissingKeyError => e
       raise ModelMissingFieldError.new(e.key, self)
@@ -75,7 +85,7 @@ module Nylas
     def destroy
       raise ModelNotDestroyableError, self unless destroyable?
 
-      execute(method: :delete, path: resource_path)
+      execute(method: :delete, path: resource_path, query: query_params)
     end
 
     # @return [String] JSON String of the model.
@@ -97,6 +107,10 @@ module Nylas
         payload: attributes.serialize(keys: allowed_keys_for_save),
         path: resource_path
       )
+    end
+
+    def query_params
+      {}
     end
 
     # Allows you to narrow in exactly what kind of model you're working with

@@ -149,4 +149,157 @@ describe Nylas::Event do
       expect(rsvp).to have_received(:save)
     end
   end
+
+  describe "notify_participants" do
+    context "when saving" do
+      it "sends notify_participants in query params" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+        event.notify_participants = true
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :post,
+          path: "/events",
+          payload: {
+            account_id: "acc-1234",
+            calendar_id: "cal-0987",
+            read_only: false
+          }.to_json,
+          query: {
+            notify_participants: true
+          }
+        )
+      end
+
+      it "sends nothing when `notify_participants` is not set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :post,
+          path: "/events",
+          payload: {
+            account_id: "acc-1234",
+            calendar_id: "cal-0987",
+            read_only: false
+          }.to_json,
+          query: {}
+        )
+      end
+    end
+
+    context "when updating" do
+      it "sends notify_participants in query params" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute)
+        data = {
+          id: "event-8766",
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+        event.notify_participants = true
+
+        event.update(location: "Somewhere else!")
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-8766",
+          payload: {
+            location: "Somewhere else!"
+          }.to_json,
+          query: {
+            notify_participants: true
+          }
+        )
+      end
+
+      it "sends nothing when `notify_participants` is not set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute)
+        data = {
+          id: "event-8766",
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.update(location: "Somewhere else!")
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-8766",
+          payload: {
+            location: "Somewhere else!"
+          }.to_json,
+          query: {}
+        )
+      end
+    end
+
+    context "when deleting" do
+      it "sends notify_participants in query params" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute)
+        data = {
+          id: "event-8766",
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+        event.notify_participants = true
+
+        event.destroy
+
+        expect(api).to have_received(:execute).with(
+          method: :delete,
+          path: "/events/event-8766",
+          payload: nil,
+          query: {
+            notify_participants: true
+          }
+        )
+      end
+
+      it "sends nothing when `notify_participants` is not set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute)
+        data = {
+          id: "event-8766",
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.destroy
+
+        expect(api).to have_received(:execute).with(
+          method: :delete,
+          path: "/events/event-8766",
+          payload: nil,
+          query: {}
+        )
+      end
+    end
+  end
 end

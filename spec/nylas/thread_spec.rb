@@ -75,7 +75,8 @@ describe Nylas::Thread do
       expect(api).to have_received(:execute).with(
         method: :put,
         path: "/threads/thread-1234",
-        payload: { folder_id: folder_id }.to_json
+        payload: { folder_id: folder_id }.to_json,
+        query: {}
       )
     end
   end
@@ -93,13 +94,15 @@ describe Nylas::Thread do
       )
 
       expect(api).to have_received(:execute).with(
-        method: :put, path: "/threads/thread-1234",
+        method: :put,
+        path: "/threads/thread-1234",
         payload: JSON.dump(
           starred: true, unread: false,
           folder_id: "folder-1234",
           label_ids: %w[label-1234
                         label-4567]
-        )
+        ),
+        query: {}
       )
     end
 
