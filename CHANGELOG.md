@@ -1,3 +1,8 @@
+### 4.6.6 / 2021-04-06
+
+* Add suport for `notify_participants` when creating events
+* Add provider attribute to account
+
 ### 4.6.5 / 2021-02-22
 
 * Add `content_disposition` field to File
