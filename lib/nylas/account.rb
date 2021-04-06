@@ -12,6 +12,7 @@ module Nylas
     attribute :account_id, :string
     attribute :billing_state, :string
     attribute :sync_state, :string
+    attribute :provider, :string
 
     attribute :email, :string
     attribute :trial, :boolean

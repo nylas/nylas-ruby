@@ -22,9 +22,15 @@ describe Nylas::Account do
   end
 
   it "can be deserialized from JSON" do
-    json = JSON.dump(account_id: "30zipv27dtrsnkleg59mprw5p", billing_state: "paid",
-                     email: "test@example.com", id: "30zipv27dtrsnkleg59mprw5p", sync_state: "running",
-                     trial: false)
+    json = JSON.dump(
+      account_id: "30zipv27dtrsnkleg59mprw5p",
+      billing_state: "paid",
+      email: "test@example.com",
+      id: "30zipv27dtrsnkleg59mprw5p",
+      sync_state: "running",
+      trial: false,
+      provider: "gmail"
+    )
     account = described_class.from_json(json, api: nil)
     expect(account.account_id).to eql "30zipv27dtrsnkleg59mprw5p"
     expect(account.billing_state).to eql "paid"
@@ -32,6 +38,7 @@ describe Nylas::Account do
     expect(account.id).to eql "30zipv27dtrsnkleg59mprw5p"
     expect(account.sync_state).to eql "running"
     expect(account.trial).to be false
+    expect(account.provider).to eq("gmail")
   end
 
   it "can be downgraded" do
