@@ -32,7 +32,7 @@ describe Nylas::Draft do
       api = instance_double(Nylas::API)
       draft = described_class.from_hash({ id: "draft-1234", "version": 5 }, api: api)
       update_json = draft.to_json
-      allow(api).to receive(:execute)
+      allow(api).to receive(:execute).and_return({})
       allow(api).to receive(:execute).with(method: :put, path: "/drafts/draft-1234", payload: update_json)
                                      .and_return(id: "draft-1234", version: "6")
 

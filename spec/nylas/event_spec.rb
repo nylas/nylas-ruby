@@ -154,7 +154,7 @@ describe Nylas::Event do
     context "when saving" do
       it "sends notify_participants in query params" do
         api = instance_double(Nylas::API)
-        allow(api).to receive(:execute)
+        allow(api).to receive(:execute).and_return({})
         data = {
           account_id: "acc-1234",
           read_only: false,
@@ -181,7 +181,7 @@ describe Nylas::Event do
 
       it "sends nothing when `notify_participants` is not set" do
         api = instance_double(Nylas::API)
-        allow(api).to receive(:execute)
+        allow(api).to receive(:execute).and_return({})
         data = {
           account_id: "acc-1234",
           read_only: false,

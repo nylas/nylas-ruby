@@ -48,11 +48,13 @@ module Nylas
     private
 
     def query_params
-      return {} if notify_participants.nil?
-
-      {
-        notify_participants: notify_participants
-      }
+      if notify_participants.nil?
+        {}
+      else
+        {
+          notify_participants: notify_participants
+        }
+      end
     end
   end
 end

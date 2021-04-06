@@ -23,7 +23,6 @@ module Nylas
 
       # Merges data into the registry while casting input types correctly
       def merge(new_data)
-        new_data ||= {}
         new_data.each do |attribute_name, value|
           self[attribute_name] = value
         end
