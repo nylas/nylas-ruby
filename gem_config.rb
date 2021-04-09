@@ -36,8 +36,6 @@ module GemConfig
 
   def self.dev_dependencies
     [["bundler", ">= 1.3.0"],
-     ["mime-types", ">= 3.0.0"],
-     ["jeweler", "~> 2.1"],
      ["yard", "~> 0.9.0"],
      ["awesome_print", "~> 1.0"],
      ["rubocop", "~> 0.52.0"],
