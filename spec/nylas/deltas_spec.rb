@@ -6,7 +6,7 @@ describe Nylas::Deltas do
                           "object_data": { "namespace_id": "acc-2345", "account_id": "acc-2345",
                                            "object": "account", "attributes": nil, "id": "dlt-09876",
                                            "metadata": nil } }] }
-    deltas = described_class.new(data)
+    deltas = described_class.new(**data)
     expect(deltas.length).to be 1
     delta = deltas.first
     expect(delta.date).to eql(Time.at(1_514_335_663))
@@ -34,7 +34,7 @@ describe Nylas::Deltas do
                                                            "received_date": 1_514_339_675 },
                                            "id": "msg-2345", "metadata": nil } }] }
 
-    deltas = described_class.new(data)
+    deltas = described_class.new(**data)
     expect(deltas.length).to be 2
     delta = deltas.first
     expect(delta.date).to eql(Time.at(1_514_339_684))

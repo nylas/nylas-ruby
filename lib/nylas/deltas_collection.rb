@@ -34,7 +34,7 @@ module Nylas
     # Retrieves the data from the API for the particular constraints
     # @return [Detlas]
     def execute
-      self.deltas ||= Deltas.new(api.execute(to_be_executed))
+      self.deltas ||= Deltas.new(**api.execute(to_be_executed))
     end
   end
 end

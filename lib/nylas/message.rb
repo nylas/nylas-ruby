@@ -56,7 +56,7 @@ module Nylas
         allowed_attributes: UPDATABLE_ATTRIBUTES
       ).check
 
-      super(payload)
+      super(**payload)
     end
 
     def update_folder(folder_id)
@@ -66,7 +66,7 @@ module Nylas
     def expanded
       return self unless headers.nil?
 
-      assign(api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
+      assign(**api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
       self
     end
 

@@ -42,7 +42,7 @@ module Nylas
         raise ArgumentError, "Cannot update #{unupdatable_attributes} only " \
                              "#{UPDATABLE_ATTRIBUTES} are updatable"
       end
-      super(data)
+      super(**data)
     end
 
     def update_folder(folder_id)
