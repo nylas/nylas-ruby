@@ -51,6 +51,7 @@ require_relative "nylas/timespan"
 require_relative "nylas/web_page"
 require_relative "nylas/nylas_date"
 require_relative "nylas/when"
+require_relative "nylas/free_busy"
 
 # Custom collection types
 require_relative "nylas/search_collection"
