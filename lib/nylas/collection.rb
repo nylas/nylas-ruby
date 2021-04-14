@@ -133,8 +133,7 @@ module Nylas
           query: {}
         )
       )
-      instance = model.from_hash(response, api: api)
-      instance
+      model.from_hash(response, api: api)
     end
 
     # @return [Hash] Specification for request to be passed to {API#execute}
