@@ -56,6 +56,7 @@ require_relative "nylas/free_busy"
 # Custom collection types
 require_relative "nylas/search_collection"
 require_relative "nylas/deltas_collection"
+require_relative "nylas/free_busy_collection"
 
 # Models supported by the API
 require_relative "nylas/account"

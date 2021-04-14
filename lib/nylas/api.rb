@@ -151,10 +151,11 @@ module Nylas
     end
 
     def free_busy(emails:, start_time:, end_time:)
-      FreeBusy.new(api: self).fetch(
+      FreeBusyCollection.new(
+        api: self,
         emails: emails,
         start_time: start_time,
-        end_time: end_time
+        end_time: end_time,
       )
     end
 

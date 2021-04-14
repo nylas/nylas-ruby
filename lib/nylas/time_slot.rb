@@ -3,11 +3,11 @@
 module Nylas
   # Query free/busy information for a calendar during a certain time period
   # @see https://docs.nylas.com/reference#calendars-free-busy
-  class FreeBusy
+  class TimeSlot
     include Model::Attributable
-
-    attribute :email, :string
     attribute :object, :string
-    has_n_of_attribute :time_slots, :time_slot
+    attribute :status, :string
+    attribute :start_time, :integer
+    attribute :end_time, :integer
   end
 end
