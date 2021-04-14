@@ -79,7 +79,7 @@ describe Nylas::Collection do
       expected_response = example_instance_hash.merge(
         files: [
           {
-            id: 'file-id'
+            id: "file-id"
           }
         ]
       )
