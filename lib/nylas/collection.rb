@@ -127,8 +127,13 @@ module Nylas
     end
 
     def find_model(id)
-      instance = model.from_hash({ id: id }, api: api)
-      instance.reload
+      response = api.execute(
+        **to_be_executed.merge(
+          path: "#{resources_path}/#{id}",
+          query: {}
+        )
+      )
+      instance = model.from_hash(response, api: api)
       instance
     end
 
