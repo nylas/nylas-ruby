@@ -128,7 +128,7 @@ module Nylas
 
     def find_model(id)
       response = api.execute(
-        to_be_executed.merge(
+        **to_be_executed.merge(
           path: "#{resources_path}/#{id}",
           query: {}
         )
