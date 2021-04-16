@@ -56,11 +56,11 @@ describe Nylas::API do
     end
   end
 
-  describe '#free_busy' do
-    it 'returns `Nylas::FreeBusyCollection` for free busy details' do
-      emails = ['test@example.com', 'anothertest@example.com']
-      start_time = 1609439400
-      end_time = 1640975400
+  describe "#free_busy" do
+    it "returns `Nylas::FreeBusyCollection` for free busy details" do
+      emails = ["test@example.com", "anothertest@example.com"]
+      start_time = 1_609_439_400
+      end_time = 1_640_975_400
       client = Nylas::HttpClient.new(
         app_id: "not-real",
         app_secret: "also-not-real",
@@ -69,14 +69,14 @@ describe Nylas::API do
       api = described_class.new(client: client)
       free_busy_response = [
         {
-          object: 'free_busy',
-          email: 'test@example.com',
+          object: "free_busy",
+          email: "test@example.com",
           time_slots: [
             {
-              object: 'time_slot',
-              status: 'busy',
-              start_time: 1609439400,
-              end_time: 1640975400
+              object: "time_slot",
+              status: "busy",
+              start_time: 1_609_439_400,
+              end_time: 1_640_975_400
             }
           ]
         }
@@ -99,10 +99,13 @@ describe Nylas::API do
 
       expect(result).to be_a(Nylas::FreeBusyCollection)
       free_busy = result.last
-      expect(free_busy.object).to eq('free_busy')
-      expect(free_busy.email).to eq('test@example.com')
+      expect(free_busy.object).to eq("free_busy")
+      expect(free_busy.email).to eq("test@example.com")
       time_slot = free_busy.time_slots.last
-      expect(time_slot).to eq('')
+      expect(time_slot.object).to eq("time_slot")
+      expect(time_slot.status).to eq("busy")
+      expect(time_slot.start_time.to_i).to eq(start_time)
+      expect(time_slot.end_time.to_i).to eq(end_time)
     end
   end
 
