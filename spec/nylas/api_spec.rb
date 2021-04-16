@@ -56,6 +56,56 @@ describe Nylas::API do
     end
   end
 
+  describe '#free_busy' do
+    it 'returns `Nylas::FreeBusyCollection` for free busy details' do
+      emails = ['test@example.com', 'anothertest@example.com']
+      start_time = 1609439400
+      end_time = 1640975400
+      client = Nylas::HttpClient.new(
+        app_id: "not-real",
+        app_secret: "also-not-real",
+        access_token: "seriously-unreal"
+      )
+      api = described_class.new(client: client)
+      free_busy_response = [
+        {
+          object: 'free_busy',
+          email: 'test@example.com',
+          time_slots: [
+            {
+              object: 'time_slot',
+              status: 'busy',
+              start_time: 1609439400,
+              end_time: 1640975400
+            }
+          ]
+        }
+      ]
+      allow(client).to receive(:execute).with(
+        method: :post,
+        path: "/calendars/free-busy",
+        payload: {
+          emails: emails,
+          start_time: start_time,
+          end_time: end_time
+        }.to_json
+      ).and_return(free_busy_response)
+
+      result = api.free_busy(
+        emails: emails,
+        start_time: Time.at(start_time),
+        end_time: Time.at(end_time)
+      )
+
+      expect(result).to be_a(Nylas::FreeBusyCollection)
+      free_busy = result.last
+      expect(free_busy.object).to eq('free_busy')
+      expect(free_busy.email).to eq('test@example.com')
+      time_slot = free_busy.time_slots.last
+      expect(time_slot).to eq('')
+    end
+  end
+
   describe "#execute" do
     it "builds the URL based upon the api_server it was initialized with"
     it "adds the nylas headers to the request"

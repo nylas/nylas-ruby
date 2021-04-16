@@ -5,9 +5,10 @@ module Nylas
   # @see https://docs.nylas.com/reference#calendars-free-busy
   class TimeSlot
     include Model::Attributable
+
     attribute :object, :string
     attribute :status, :string
-    attribute :start_time, :integer
-    attribute :end_time, :integer
+    attribute :start_time, :unix_timestamp
+    attribute :end_time, :unix_timestamp
   end
 end
