@@ -45,6 +45,11 @@ class FullModel
   attribute :web_page, :web_page
 
   has_n_of_attribute :web_pages, :web_page
+  has_n_of_attribute :files, :file
+
+  attr_accessor :api
+
+  transfer :api, to: %i[files]
 end
 
 class NotCreatableModel

@@ -61,12 +61,38 @@ describe Nylas::Collection do
   describe "#find" do
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
-      allow(api).to receive(:execute).with(method: :get, path: "/collection/1234", payload: nil, query: {})
-                                     .and_return(example_instance_hash)
+      allow(api).to receive(:execute).with(
+        method: :get,
+        path: "/collection/1234",
+        query: {},
+        headers: {}
+      ).and_return(example_instance_hash)
 
       instance = collection.find(1234)
 
       expect(instance.id).to eql "1234"
+      expect(instance.api).to eq(api)
+    end
+
+    it "allows `api` to be sent to the related attributes" do
+      collection = described_class.new(model: FullModel, api: api)
+      expected_response = example_instance_hash.merge(
+        files: [
+          {
+            id: "file-id"
+          }
+        ]
+      )
+      allow(api).to receive(:execute).with(
+        method: :get,
+        path: "/collection/1234",
+        query: {},
+        headers: {}
+      ).and_return(expected_response)
+
+      instance = collection.find(1234)
+
+      expect(instance.files.first.api).to eq(api)
     end
   end
 

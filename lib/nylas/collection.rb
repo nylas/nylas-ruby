@@ -127,9 +127,13 @@ module Nylas
     end
 
     def find_model(id)
-      instance = model.from_hash({ id: id }, api: api)
-      instance.reload
-      instance
+      response = api.execute(
+        **to_be_executed.merge(
+          path: "#{resources_path}/#{id}",
+          query: {}
+        )
+      )
+      model.from_hash(response, api: api)
     end
 
     # @return [Hash] Specification for request to be passed to {API#execute}

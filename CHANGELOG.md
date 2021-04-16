@@ -1,3 +1,7 @@
+### Unreleased
+
+* Fix issue where download a file fetch via `find` failed #258, #287
+
 ### 4.6.6 / 2021-04-06
 
 * Add support for `notify_participants` when creating events
