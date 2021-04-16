@@ -25,7 +25,8 @@ Metrics/ParameterLists:
   Max: 8
 
 Metrics/ClassLength:
-  Max: 102
+  Exclude:
+    - "lib/nylas/api.rb"
 
 Naming/FileName:
   Exclude:
