@@ -150,6 +150,15 @@ module Nylas
       @webhooks ||= Collection.new(model: Webhook, api: as(client.app_secret))
     end
 
+    def free_busy(emails:, start_time:, end_time:)
+      FreeBusyCollection.new(
+        api: self,
+        emails: emails,
+        start_time: start_time.to_i,
+        end_time: end_time.to_i
+      )
+    end
+
     private
 
     def prevent_calling_if_missing_access_token(method_name)

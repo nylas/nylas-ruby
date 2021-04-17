@@ -24,6 +24,10 @@ Metrics/BlockLength:
 Metrics/ParameterLists:
   Max: 8
 
+Metrics/ClassLength:
+  Exclude:
+    - "lib/nylas/api.rb"
+
 Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"

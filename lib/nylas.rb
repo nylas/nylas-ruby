@@ -51,10 +51,13 @@ require_relative "nylas/timespan"
 require_relative "nylas/web_page"
 require_relative "nylas/nylas_date"
 require_relative "nylas/when"
+require_relative "nylas/free_busy"
+require_relative "nylas/time_slot"
 
 # Custom collection types
 require_relative "nylas/search_collection"
 require_relative "nylas/deltas_collection"
+require_relative "nylas/free_busy_collection"
 
 # Models supported by the API
 require_relative "nylas/account"
@@ -104,4 +107,5 @@ module Nylas
   Types.registry[:nylas_date] = NylasDateType.new
   Types.registry[:contact_group] = Types::ModelType.new(model: ContactGroup)
   Types.registry[:when] = Types::ModelType.new(model: When)
+  Types.registry[:time_slot] = Types::ModelType.new(model: TimeSlot)
 end
