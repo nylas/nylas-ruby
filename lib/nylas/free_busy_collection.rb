@@ -26,21 +26,22 @@ module Nylas
 
     attr_reader :api, :emails, :start_time, :end_time
 
+    PATH = "/calendars/free-busy"
+    private_constant :PATH
+
     def execute
       api.execute(
         method: :post,
-        path: "/calendars/free-busy",
+        path: PATH,
         payload: payload
       )
     end
 
     def payload
       JSON.dump(
-        {
-          emails: emails,
-          start_time: start_time,
-          end_time: end_time
-        }
+        emails: emails,
+        start_time: start_time,
+        end_time: end_time
       )
     end
   end
