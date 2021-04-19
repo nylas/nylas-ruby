@@ -119,7 +119,7 @@ module Nylas
     end
 
     def find_raw(id)
-      api.execute(to_be_executed.merge(path: "#{resources_path}/#{id}")).to_s
+      api.execute(**to_be_executed.merge(path: "#{resources_path}/#{id}")).to_s
     end
 
     def resources_path
