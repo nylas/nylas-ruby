@@ -1,4 +1,4 @@
-### Unreleased
+## 4.6.7 / 2021-04-22
 
 * Support for Ruby 3.
 * Add support for `/free-busy` endpoint #288
