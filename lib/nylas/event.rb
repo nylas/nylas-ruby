@@ -9,9 +9,9 @@ module Nylas
     allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
                       destroyable: true)
 
-    attribute :id, :string
-    attribute :object, :string
-    attribute :account_id, :string
+    attribute :id, :string, exclude_when: %i[saving]
+    attribute :object, :string, exclude_when: %i[saving]
+    attribute :account_id, :string, exclude_when: %i[saving]
     attribute :calendar_id, :string
     attribute :master_event_id, :string
     attribute :message_id, :string

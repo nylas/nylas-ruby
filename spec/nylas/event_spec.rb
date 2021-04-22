@@ -150,8 +150,87 @@ describe Nylas::Event do
     end
   end
 
-  describe "notify_participants" do
+  describe "account_id" do
     context "when saving" do
+      it "is excluded from payload" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          account_id: "acc-1234",
+          read_only: false,
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987",
+            read_only: false
+          }.to_json,
+          query: {}
+        )
+      end
+    end
+  end
+
+  describe "object" do
+    context "when saving" do
+      it "is excluded from payload" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          object: "event",
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987"
+          }.to_json,
+          query: {}
+        )
+      end
+    end
+  end
+
+  describe "id" do
+    context "when saving" do
+      it "is excluded from payload" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987"
+          }.to_json,
+          query: {}
+        )
+      end
+    end
+  end
+
+  describe "notify_participants" do
+    context "when creating" do
       it "sends notify_participants in query params" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
