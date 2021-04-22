@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Support for Ruby 3.
 * Add support for `/free-busy` endpoint #288
 * Fix issue where download a file fetch via `find` failed #258, #287
 
