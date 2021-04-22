@@ -6,7 +6,7 @@ module Nylas
     attr_accessor :client
 
     extend Forwardable
-    def_delegators :client, :execute, :get, :post, :put, :delete, :app_id
+    def_delegators :client, :execute, :get, :post, :put, :delete, :app_id, :api_server
 
     include Logging
 
@@ -35,6 +35,21 @@ module Nylas
         reauth_account_id: reauth_account_id,
         scopes: scopes
       )
+    end
+
+    def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil)
+      scopes = scopes.join(",") if scopes
+
+      params = {
+        client_id: app_id,
+        redirect_uri: redirect_uri,
+        response_type: response_type,
+        scopes: scopes,
+        login_hint: login_hint
+      }
+      params[:state] = state if state
+
+      api_server + "/oauth/authorize?" + URI.encode_www_form(params)
     end
 
     def exchange_code_for_token(code)
