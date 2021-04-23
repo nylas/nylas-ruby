@@ -49,7 +49,7 @@ module Nylas
       }
       params[:state] = state if state
 
-      api_server + "/oauth/authorize?" + URI.encode_www_form(params)
+      "#{api_server}/oauth/authorize?#{URI.encode_www_form(params)}"
     end
 
     def exchange_code_for_token(code)
