@@ -26,11 +26,20 @@ describe Nylas::API do
       it "returns url for hosted_authentication" do
         api = described_class.new(app_id: "2454354")
 
-        hosted_auth_url = api.authentication_url(redirect_uri: "http://example.com", scopes: ["email"])
+        hosted_auth_url = api.authentication_url(
+          redirect_uri: "http://example.com",
+          scopes: %w[email calendar],
+          login_hint: "email@example.com",
+          state: "some-state"
+        )
 
-        expected_url = "https://api.nylas.com/oauth/authorize?"\
-        "client_id=2454354&redirect_uri=http%3A%2F%2Fexample.com&response_type=code"\
-        "&scopes=email&login_hint"
+        expected_url = "https://api.nylas.com/oauth/authorize"\
+        "?client_id=2454354"\
+        "&redirect_uri=http%3A%2F%2Fexample.com"\
+        "&response_type=code"\
+        "&login_hint=email%40example.com"\
+        "&state=some-state"\
+        "&scopes=email%2Ccalendar"
         expect(hosted_auth_url).to eq expected_url
       end
     end
@@ -50,6 +59,22 @@ describe Nylas::API do
         expect do
           api.authentication_url(redirect_uri: "http://example.com")
         end.to raise_error(ArgumentError, /scopes/)
+      end
+
+      it "generates wrong url if scopes and redirect_uri is nil" do
+        api = described_class.new(app_id: "2454354")
+
+        hosted_auth_url = api.authentication_url(
+          redirect_uri: nil,
+          scopes: nil
+        )
+
+        expected_url = "https://api.nylas.com/oauth/authorize"\
+        "?client_id=2454354"\
+        "&redirect_uri"\
+        "&response_type=code"\
+        "&login_hint"
+        expect(hosted_auth_url).to eq(expected_url)
       end
     end
   end

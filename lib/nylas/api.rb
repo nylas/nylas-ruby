@@ -38,16 +38,14 @@ module Nylas
     end
 
     def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil)
-      scopes = scopes.join(",") if scopes
-
       params = {
         client_id: app_id,
         redirect_uri: redirect_uri,
         response_type: response_type,
-        scopes: scopes,
         login_hint: login_hint
       }
       params[:state] = state if state
+      params[:scopes] = scopes.join(",") if scopes
 
       "#{api_server}/oauth/authorize?#{URI.encode_www_form(params)}"
     end
