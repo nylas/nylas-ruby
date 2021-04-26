@@ -21,6 +21,64 @@ describe Nylas::API do
     end
   end
 
+  describe "#authentication_url" do
+    context "with required parameters" do
+      it "returns url for hosted_authentication" do
+        api = described_class.new(app_id: "2454354")
+
+        hosted_auth_url = api.authentication_url(
+          redirect_uri: "http://example.com",
+          scopes: %w[email calendar],
+          login_hint: "email@example.com",
+          state: "some-state"
+        )
+
+        expected_url = "https://api.nylas.com/oauth/authorize"\
+        "?client_id=2454354"\
+        "&redirect_uri=http%3A%2F%2Fexample.com"\
+        "&response_type=code"\
+        "&login_hint=email%40example.com"\
+        "&state=some-state"\
+        "&scopes=email%2Ccalendar"
+        expect(hosted_auth_url).to eq expected_url
+      end
+    end
+
+    context "when required parameter are missing" do
+      it "throws argument error if redirect uri is mising" do
+        api = described_class.new(app_id: "2454354")
+
+        expect do
+          api.authentication_url(scopes: ["email"])
+        end.to raise_error(ArgumentError, /redirect_uri/)
+      end
+
+      it "throws argument error if scopes is mising" do
+        api = described_class.new(app_id: "2454354")
+
+        expect do
+          api.authentication_url(redirect_uri: "http://example.com")
+        end.to raise_error(ArgumentError, /scopes/)
+      end
+
+      it "generates wrong url if scopes and redirect_uri is nil" do
+        api = described_class.new(app_id: "2454354")
+
+        hosted_auth_url = api.authentication_url(
+          redirect_uri: nil,
+          scopes: nil
+        )
+
+        expected_url = "https://api.nylas.com/oauth/authorize"\
+        "?client_id=2454354"\
+        "&redirect_uri"\
+        "&response_type=code"\
+        "&login_hint"
+        expect(hosted_auth_url).to eq(expected_url)
+      end
+    end
+  end
+
   describe "#contact_groups" do
     it "returns Nylas::Collection for contact groups" do
       client = instance_double("Nylas::HttpClient")
