@@ -74,6 +74,22 @@ describe Nylas::Collection do
       expect(instance.api).to eq(api)
     end
 
+    it "retrieves a single object, with `view` argument in query if given" do
+      collection = described_class.new(model: FullModel, api: api)
+      allow(api).to receive(:execute).and_return(example_instance_hash)
+
+      instance = collection.expanded.find(1234)
+
+      expect(instance.id).to eql "1234"
+      expect(instance.api).to eq(api)
+      expect(api).to have_received(:execute).with(
+        method: :get,
+        path: "/collection/1234",
+        query: { view: "expanded" },
+        headers: {}
+      )
+    end
+
     it "allows `api` to be sent to the related attributes" do
       collection = described_class.new(model: FullModel, api: api)
       expected_response = example_instance_hash.merge(
