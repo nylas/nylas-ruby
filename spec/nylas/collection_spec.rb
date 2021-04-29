@@ -74,7 +74,7 @@ describe Nylas::Collection do
       expect(instance.api).to eq(api)
     end
 
-    it "retrieves a single object, with `view` argument in query if given" do
+    it "retrieves a single object with `view` argument in query if clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).and_return(example_instance_hash)
 
