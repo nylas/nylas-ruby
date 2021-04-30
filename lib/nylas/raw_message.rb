@@ -11,8 +11,12 @@ module Nylas
     end
 
     def send!
-      Message.new(api.execute(method: :post, path: "/send", payload: mime_compatible_string,
-                              headers: { "Content-type" => "message/rfc822" }).merge(api: api))
+      Message.new(**api.execute(
+        method: :post,
+        path: "/send",
+        payload: mime_compatible_string,
+        headers: { "Content-type" => "message/rfc822" }
+      ).merge(api: api))
     end
   end
 end
