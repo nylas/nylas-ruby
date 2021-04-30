@@ -27,6 +27,7 @@ Metrics/ParameterLists:
 Metrics/ClassLength:
   Exclude:
     - "lib/nylas/api.rb"
+    - "lib/nylas/collection.rb"
 
 Naming/FileName:
   Exclude:

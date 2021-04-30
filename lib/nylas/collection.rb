@@ -130,7 +130,7 @@ module Nylas
       response = api.execute(
         **to_be_executed.merge(
           path: "#{resources_path}/#{id}",
-          query: {}
+          query: view_query
         )
       )
       model.from_hash(response, api: api)
@@ -146,6 +146,16 @@ module Nylas
     # @return [Hash,Array]
     def execute
       api.execute(**to_be_executed)
+    end
+
+    private
+
+    def view_query
+      if constraints.view
+        { view: constraints.view }
+      else
+        {}
+      end
     end
   end
 end
