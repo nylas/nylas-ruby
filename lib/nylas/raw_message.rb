@@ -15,8 +15,11 @@ module Nylas
         method: :post,
         path: "/send",
         payload: mime_compatible_string,
-        headers: { "Content-type" => "message/rfc822" }
+        headers: HEADERS
       ).merge(api: api))
     end
+
+    HEADERS = { "Content-type" => "message/rfc822" }.freeze
+    private_constant :HEADERS
   end
 end
