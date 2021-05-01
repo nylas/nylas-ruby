@@ -9,7 +9,6 @@ describe Nylas::RawMessage do
         "To: You <#{ENV.fetch('NYLAS_EXAMPLE_EMAIL', 'not-real@example.com')}>\n\n" \
         "This is the body of the message sent as a raw mime!"
       api = FakeAPI.new
-      # collection = Nylas::Message.new(model: FullModel, api: api)
       example_instance_hash = { id: "1234" }
       allow(api).to receive(:execute).and_return(example_instance_hash)
       message = described_class.new(message_string, api: api)
