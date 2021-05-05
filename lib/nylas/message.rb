@@ -37,7 +37,7 @@ module Nylas
     attribute :folder, :folder
     attribute :folder_id, :string
 
-    has_n_of_attribute :labels, :label, exclude_when: [:saving]
+    has_n_of_attribute :labels, :label, read_only: true
     has_n_of_attribute :label_ids, :string
 
     transfer :api, to: %i[events files folder labels]
@@ -75,7 +75,7 @@ module Nylas
 
       execute(
         method: :put,
-        payload: attributes.serialize(keys: allowed_keys_for_save),
+        payload: attributes.serialize,
         path: resource_path
       )
     end

@@ -13,9 +13,9 @@ module Nylas
     self.updatable = true
     self.destroyable = true
 
-    attribute :id, :string, exclude_when: %i[creating updating]
+    attribute :id, :string, read_only: true
     attribute :object, :string, default: "contact"
-    attribute :account_id, :string, exclude_when: %i[creating updating]
+    attribute :account_id, :string, read_only: true
 
     attribute :given_name, :string
     attribute :middle_name, :string

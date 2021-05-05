@@ -4,11 +4,11 @@ module Nylas
   module Model
     # Allows models to have an attribute which is a lists of another type of thing
     class ListAttributeDefinition
-      attr_accessor :type_name, :exclude_when, :default
+      attr_accessor :type_name, :read_only, :default
 
-      def initialize(type_name:, exclude_when:, default:)
+      def initialize(type_name:, read_only:, default:)
         self.type_name = type_name
-        self.exclude_when = exclude_when
+        self.read_only = read_only
         self.default = default
       end
 

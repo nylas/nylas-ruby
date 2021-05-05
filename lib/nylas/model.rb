@@ -95,16 +95,10 @@ module Nylas
 
     private
 
-    def allowed_keys_for_save
-      attributes.attribute_definitions.to_h.reject do |_k, v|
-        v.exclude_when.include?(:saving)
-      end.keys
-    end
-
     def save_call
       execute(
         method: :put,
-        payload: attributes.serialize(keys: allowed_keys_for_save),
+        payload: attributes.serialize,
         path: resource_path
       )
     end

@@ -6,11 +6,11 @@ module Nylas
     class AttributeDefinition
       extend Forwardable
       def_delegators :type, :cast, :serialize
-      attr_accessor :type_name, :exclude_when, :default
+      attr_accessor :type_name, :read_only, :default
 
-      def initialize(type_name:, exclude_when:, default:)
+      def initialize(type_name:, read_only:, default:)
         self.type_name = type_name
-        self.exclude_when = exclude_when
+        self.read_only = read_only
         self.default = default
       end
 
