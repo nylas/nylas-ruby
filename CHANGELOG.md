@@ -1,6 +1,9 @@
 ### Unreleased
 
+* Fix issue sending message using raw mime type. #294
+* Support for `messages.expanded.find(id)` to return expanded message. #293
 * Add support for hosted authentication #292
+* Fix bug to not send `id`, `object` and `account_id` on events update call #291
 
 ### 4.6.7 / 2021-04-22
 
