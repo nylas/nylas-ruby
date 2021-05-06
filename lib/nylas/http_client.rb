@@ -31,6 +31,7 @@ module Nylas
       "/delta/longpoll" => 3650,
       "/delta/streaming" => 3650
     }.freeze
+    SUPPORTED_API_VERSION = "2.2"
 
     include Logging
     attr_accessor :api_server, :service_domain
@@ -137,6 +138,7 @@ module Nylas
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
         "X-Nylas-Client-Id" => @app_id,
+        "Nylas-API-Version" => SUPPORTED_API_VERSION,
         "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
         "Content-types" => "application/json"
       }
