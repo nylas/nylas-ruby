@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Send `Nylas-API-Version` header to API with latest supported version. #296
 * Fix issue sending message using raw mime type. #294
 * Support for `messages.expanded.find(id)` to return expanded message. #293
 * Add support for hosted authentication #292

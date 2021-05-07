@@ -43,6 +43,24 @@ describe Nylas::HttpClient do
     end
   end
 
+  describe "#execute" do
+    it "includes Nylas API Version in headers" do
+      supported_api_version = "2.2"
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      allow(RestClient::Request).to receive(:execute)
+
+      nylas.execute(method: :get, path: "/contacts/1234/picture")
+
+      expect(RestClient::Request).to have_received(:execute).with(
+        headers: hash_including("Nylas-API-Version" => supported_api_version),
+        method: :get,
+        payload: nil,
+        timeout: 230,
+        url: "https://token:@api.nylas.com/contacts/1234/picture"
+      )
+    end
+  end
+
   describe "HTTP errors" do
     http_codes_errors = {
       400 => Nylas::InvalidRequest,
