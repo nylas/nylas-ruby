@@ -1,4 +1,4 @@
-### Unreleased
+### 5.0.0 / 2021-05-07
 
 * Send `Nylas-API-Version` header to API with latest supported version. #296
 * Fix issue sending message using raw mime type. #294
