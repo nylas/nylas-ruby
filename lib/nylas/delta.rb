@@ -6,6 +6,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#deltas
   class Delta
     include Model::Attributable
+
     attribute :id, :string
     attribute :type, :string
     attribute :object, :string
@@ -42,8 +43,10 @@ module Nylas
              else
                data
              end
+
+      data = data.merge(data[:attributes]) if data[:attributes]
       data[:object_attributes] = data.delete(:attributes)
-      super(data)
+      super(**data)
     end
   end
 end
