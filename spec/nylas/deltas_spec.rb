@@ -118,15 +118,14 @@ describe Nylas::Deltas do
     expect(message_delta.model).to be_a(Nylas::Message)
     expect(message_delta.id).to eq("message-id")
     expect(message_delta.account_id).to eq("acc-id")
-    # expect(message_delta.model).to eq(Nylas::Message)
-    #
-    # expect(event_delta.object_attributes).not_to eq(nil)
-    # expect(event_delta.object_attributes_with_ids).to eq(
-    # {
-    # account_id: 'acc-id',
-    # object: 'event',
-    # id: 'event-id'
-    # }
-    # )
+    expect(event_delta.object_attributes).not_to eq(nil)
+    expect(event_delta.object_attributes_with_ids).to eq(
+      account_id: "acc-id",
+      object: "event",
+      id: "event-id"
+    )
+    expect(event_delta.model).to be_a(Nylas::Event)
+    expect(event_delta.id).to eq("event-id")
+    expect(event_delta.account_id).to eq("acc-id")
   end
 end
