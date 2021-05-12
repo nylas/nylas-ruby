@@ -25,8 +25,6 @@ module Nylas
       @model ||= Types.registry[object.to_sym].cast(object_attributes_with_ids)
     end
 
-    private
-
     def object_attributes_with_ids
       (object_attributes || {}).merge(id: id, account_id: account_id)
     end
