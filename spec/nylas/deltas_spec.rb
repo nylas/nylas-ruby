@@ -109,7 +109,12 @@ describe Nylas::Deltas do
     message_delta = deltas.first
     expect(message_delta.object).to eq("message")
     expect(message_delta.object_attributes).not_to eq(nil)
-    expect(message_delta.object_attributes_with_ids).to eq(
+    expect(message_delta.object_attributes_with_ids).to include(
+      account_id: "acc-id",
+      object: "message",
+      id: "message-id"
+    )
+    expect(message_delta.model.attributes.to_h).to include(
       account_id: "acc-id",
       object: "message",
       id: "message-id"
@@ -120,12 +125,17 @@ describe Nylas::Deltas do
     event_delta = deltas.last
     expect(event_delta.object).to eq("event")
     expect(event_delta.object_attributes).not_to eq(nil)
-    expect(event_delta.object_attributes_with_ids).to eq(
+    expect(event_delta.object_attributes_with_ids).to include(
       account_id: "acc-id",
       object: "event",
       id: "event-id"
     )
     expect(event_delta.model).to be_a(Nylas::Event)
+    expect(event_delta.model.attributes.to_h).to include(
+      account_id: "acc-id",
+      object: "event",
+      id: "event-id"
+    )
     expect(event_delta.id).to eq("event-id")
     expect(event_delta.account_id).to eq("acc-id")
   end
