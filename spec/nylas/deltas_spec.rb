@@ -137,4 +137,69 @@ describe Nylas::Deltas do
     expect(event_delta.id).to eq("event-id")
     expect(event_delta.account_id).to eq("acc-id")
   end
+
+  it "parses deltas if `attributes` is `nil`" do
+    data = {
+      "deltas": [
+        {
+          object: "message",
+          attributes: nil
+        }
+      ]
+    }
+
+    deltas = described_class.new(**data)
+
+    expect(deltas.count).to eq(1)
+    delta = deltas.last
+    expect(delta.model).to be_a(Nylas::Message)
+    expect(delta.attributes.to_h).to eq(
+      object: "message"
+    )
+  end
+
+  it "parses deltas if `attributes` is not present" do
+    data = {
+      "deltas": [
+        {
+          id: "some-id",
+          object: "event"
+        }
+      ]
+    }
+
+    deltas = described_class.new(**data)
+
+    expect(deltas.count).to eq(1)
+    delta = deltas.last
+    expect(delta.id).to eq("some-id")
+    expect(delta.model).to be_a(Nylas::Event)
+    expect(delta.attributes.to_h).to eq(
+      id: "some-id",
+      object: "event"
+    )
+  end
+
+  it "parses deltas if `attributes` is empty hash" do
+    data = {
+      "deltas": [
+        {
+          id: "some-id",
+          object: "message",
+          attributes: {}
+        }
+      ]
+    }
+
+    deltas = described_class.new(**data)
+
+    expect(deltas.count).to eq(1)
+    delta = deltas.last
+    expect(delta.id).to eq("some-id")
+    expect(delta.model).to be_a(Nylas::Message)
+    expect(delta.attributes.to_h).to eq(
+      id: "some-id",
+      object: "message"
+    )
+  end
 end
