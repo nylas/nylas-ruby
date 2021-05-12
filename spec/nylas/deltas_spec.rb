@@ -83,7 +83,7 @@ describe Nylas::Deltas do
     expect(delta.model.received_date).to eql Time.at(1_514_339_665)
   end
 
-  it "parse stream data from multiple changes" do
+  it "parses stream data from multiple changes" do
     data = {
       "deltas": [
         {
