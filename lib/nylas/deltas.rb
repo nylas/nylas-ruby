@@ -14,6 +14,6 @@ module Nylas
     attribute :cursor_end, :string
 
     extend Forwardable
-    def_delegators :deltas, :count, :length, :each, :map, :first, :to_a, :empty?
+    def_delegators :deltas, :count, :length, :each, :map, :first, :last, :to_a, :empty?
   end
 end
