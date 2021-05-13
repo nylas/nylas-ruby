@@ -8,7 +8,7 @@ module Nylas
 
     include Model::Attributable
 
-    attribute :object, :string
+    attribute :object, :string, read_only: true
 
     # when object == 'date'
     attribute :date, :date
