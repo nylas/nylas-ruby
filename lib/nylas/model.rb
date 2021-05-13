@@ -48,7 +48,7 @@ module Nylas
 
       execute(
         method: :post,
-        payload: attributes.serialize,
+        payload: attributes.serialize_for_api,
         path: resources_path,
         query: query_params
       )
@@ -60,7 +60,7 @@ module Nylas
       attributes.merge(**data)
       execute(
         method: :put,
-        payload: attributes.serialize(keys: data.keys),
+        payload: attributes.serialize_for_api(keys: data.keys),
         path: resource_path,
         query: query_params
       )
@@ -98,7 +98,7 @@ module Nylas
     def save_call
       execute(
         method: :put,
-        payload: attributes.serialize,
+        payload: attributes.serialize_for_api,
         path: resource_path
       )
     end

@@ -30,7 +30,6 @@ module Nylas
 
       def to_h(keys: attribute_definitions.keys)
         keys.each_with_object({}) do |key, casted_data|
-          next if attribute_definitions[key].read_only == true
           value = attribute_definitions[key].serialize(self[key])
           casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
@@ -38,6 +37,12 @@ module Nylas
 
       def serialize(keys: attribute_definitions.keys)
         JSON.dump(to_h(keys: keys))
+      end
+
+      def serialize_for_api(keys: attribute_definitions.keys)
+        api_keys = keys.delete_if { |key| attribute_definitions[key].read_only == true }
+
+        serialize(keys: api_keys)
       end
 
       private

@@ -75,7 +75,7 @@ module Nylas
 
       execute(
         method: :put,
-        payload: attributes.serialize,
+        payload: attributes.serialize_for_api,
         path: resource_path
       )
     end
