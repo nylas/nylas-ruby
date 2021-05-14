@@ -9,12 +9,12 @@ describe Nylas::Model::Attributes do
         id: 1234,
         string: "a-test-string",
         read_only_attribute: "a read-only-attribute",
-        multiple_read_only_attributes: [
-          "read-only-value-1",
-          "read-only-value-2"
+        multiple_read_only_attributes: %w[
+          read-only-value-1
+          read-only-value-2
         ]
       }.to_json
-      api = double("API")
+      api = instance_double("API")
       instance = FullModel.from_json(test_json, api: api)
 
       result = instance.attributes.serialize_for_api
