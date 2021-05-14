@@ -43,9 +43,11 @@ class FullModel
   attribute :physical_address, :physical_address
   attribute :string, :string
   attribute :web_page, :web_page
+  attribute :read_only_attribute, :string, read_only: true
 
   has_n_of_attribute :web_pages, :web_page
   has_n_of_attribute :files, :file
+  has_n_of_attribute :multiple_read_only_attributes, :string, read_only: true
 
   attr_accessor :api
 
