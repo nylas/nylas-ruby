@@ -53,7 +53,7 @@ module Nylas
     end
 
     def destroy
-      execute(method: :delete, path: resource_path, payload: attributes.serialize(keys: [:version]))
+      execute(method: :delete, path: resource_path, payload: attributes.serialize_for_api(keys: [:version]))
     end
   end
 end

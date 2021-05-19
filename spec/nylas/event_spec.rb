@@ -248,7 +248,6 @@ describe Nylas::Event do
           method: :post,
           path: "/events",
           payload: {
-            account_id: "acc-1234",
             calendar_id: "cal-0987",
             read_only: false
           }.to_json,
@@ -274,7 +273,6 @@ describe Nylas::Event do
           method: :post,
           path: "/events",
           payload: {
-            account_id: "acc-1234",
             calendar_id: "cal-0987",
             read_only: false
           }.to_json,

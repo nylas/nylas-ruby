@@ -13,8 +13,12 @@ module Nylas
     attr_accessor :notify_participants
 
     def save
-      api.execute(method: :post, path: "/send-rsvp", payload: attributes.serialize,
-                  query: { notify_participants: notify_participants })
+      api.execute(
+        method: :post,
+        path: "/send-rsvp",
+        payload: attributes.serialize_for_api,
+        query: { notify_participants: notify_participants }
+      )
     end
   end
 end
