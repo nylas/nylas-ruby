@@ -29,6 +29,11 @@ Metrics/ClassLength:
     - "lib/nylas/api.rb"
     - "lib/nylas/collection.rb"
 
+
+Metrics/ModuleLength:
+  Exclude:
+    - "lib/nylas/model.rb"
+
 Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"
