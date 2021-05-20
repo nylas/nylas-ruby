@@ -43,10 +43,10 @@ module Nylas
         JSON.dump(to_h(keys: keys, update_all: update_all))
       end
 
-      def serialize_for_api(keys: attribute_definitions.keys)
+      def serialize_for_api(keys: attribute_definitions.keys, update_all: false)
         api_keys = keys.delete_if { |key| attribute_definitions[key].read_only == true }
 
-        serialize(keys: api_keys)
+        serialize(keys: api_keys, update_all: update_all)
       end
 
       private
