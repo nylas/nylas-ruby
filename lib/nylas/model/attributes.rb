@@ -28,15 +28,19 @@ module Nylas
         end
       end
 
-      def to_h(keys: attribute_definitions.keys)
+      def to_h(keys: attribute_definitions.keys, update_all: false)
         keys.each_with_object({}) do |key, casted_data|
           value = attribute_definitions[key].serialize(self[key])
-          casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
+          if update_all
+            casted_data[key] = value
+          else
+            casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
+          end
         end
       end
 
-      def serialize(keys: attribute_definitions.keys)
-        JSON.dump(to_h(keys: keys))
+      def serialize(keys: attribute_definitions.keys, update_all: false)
+        JSON.dump(to_h(keys: keys, update_all: update_all))
       end
 
       def serialize_for_api(keys: attribute_definitions.keys)

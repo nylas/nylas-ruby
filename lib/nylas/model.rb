@@ -69,6 +69,21 @@ module Nylas
       raise ModelMissingFieldError.new(e.key, self)
     end
 
+    def update_all_attributes(**data)
+      raise ModelNotUpdatableError, model_class unless updatable?
+
+      attributes.merge(**data)
+      execute(
+        method: :put,
+        payload: attributes.serialize(keys: data.keys, update_all: true),
+        path: resource_path,
+        query: query_params
+      )
+      true
+    rescue Registry::MissingKeyError => e
+      raise ModelMissingFieldError.new(e.key, self)
+    end
+
     def reload
       assign(**execute(method: :get, path: resource_path))
       true
