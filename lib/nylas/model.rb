@@ -75,7 +75,7 @@ module Nylas
 
                  execute(
                    method: :put,
-                   payload: attributes.serialize_for_api(update_all: true),
+                   payload: attributes.serialize_all_for_api,
                    path: resource_path
                  )
                else
@@ -91,7 +91,7 @@ module Nylas
       attributes.merge(**data)
       execute(
         method: :put,
-        payload: attributes.serialize_for_api(keys: data.keys, update_all: true),
+        payload: attributes.serialize_all_for_api(keys: data.keys),
         path: resource_path,
         query: query_params
       )
