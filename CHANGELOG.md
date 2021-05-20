@@ -1,7 +1,7 @@
 ### Unreleased
 
-* Support for `update_all_attributes` which will send `nil` and empty values
-  to the server to update them. #299
+* Add `save_all_attributes` and `update_all_attributes` methods to support
+  nullifying attributes. #299
 
 ### 5.0.0 / 2021-05-07
 
