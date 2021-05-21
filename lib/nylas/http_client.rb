@@ -104,8 +104,14 @@ module Nylas
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
     def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
-      headers[:params] = query
       url ||= url_for_path(path)
+
+      # Add parameters using the uri module as it allows us to make custom rules
+      uri = URI.parse(url)
+      params = URI.decode_www_form(uri.query || '') + query.to_a
+      uri.query = URI.encode_www_form(params)
+      url = uri.to_s
+
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
