@@ -27,6 +27,7 @@ module Nylas
     attribute :status, :string
     attribute :title, :string
     attribute :when, :when
+    attribute :metadata, :hash
     attribute :original_start_time, :unix_timestamp
 
     attr_accessor :notify_participants
