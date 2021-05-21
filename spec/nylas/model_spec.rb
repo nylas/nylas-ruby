@@ -81,11 +81,13 @@ describe Nylas::Model do
 
     it "raises a NotImplementedError exception if the model is flagged as not updatable" do
       instance = NotUpdatableModel.from_hash({ id: "model-1234" }, api: api)
+
       expect { instance.save_all_attributes }.to raise_error(Nylas::ModelNotUpdatableError)
     end
 
     it "raises a ModelNotCreatable exception if the model is new and is flagged as not creatable" do
       instance = NotCreatableModel.from_hash({}, api: api)
+
       expect { instance.save_all_attributes }.to raise_error(Nylas::ModelNotCreatableError)
     end
   end
@@ -119,12 +121,14 @@ describe Nylas::Model do
 
     it "raises a NotImplementedError exception if the model is flagged as read only" do
       instance = NotUpdatableModel.from_json(example_instance_json, api: api)
+
       expect { instance.update_all_attributes(name: "other") }.to raise_error(Nylas::ModelNotUpdatableError)
     end
 
     it "raises a MissingFieldError if attempting to set a field that does not exist" do
       expected_message = "fake_attribute is not a valid attribute for FullModel"
       instance = FullModel.new
+
       expect do
         instance.update_all_attributes(fake_attribute: "not real")
       end.to raise_error(Nylas::ModelMissingFieldError, expected_message)
