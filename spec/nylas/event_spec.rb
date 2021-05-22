@@ -34,6 +34,9 @@ describe Nylas::Event do
           end_time: 1_511_306_400,
           object: "timespan",
           start_time: 1_511_303_400
+        },
+        metadata: {
+          "event_type": "gathering"
         }
       }
 
@@ -65,6 +68,7 @@ describe Nylas::Event do
       expect(event.when.end_time).to eql Time.at(1_511_306_400)
       expect(event.when).to cover(Time.at(1_511_306_400))
       expect(event.when).not_to cover(Time.at(1_511_306_401))
+      expect(event.metadata[:event_type]).to eql "gathering"
     end
   end
 
