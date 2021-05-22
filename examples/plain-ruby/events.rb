@@ -30,8 +30,15 @@ demonstrate { api.events.create(title: "A fun event!", location: "The Party Zone
 example_event = api.events.where(location: "The Party Zone").last
 
 # Updating an event
-demonstrate { example_event.update(location: "Somewhere else!") }
+demonstrate do  example_event.update(
+  location: "Somewhere else!",
+  metadata: {
+    event_type: "gathering"
+  }
+)
+end
 demonstrate { api.events.find(example_event.id).location }
+demonstrate { api.events.where(metadata_pair:{"event_type": "gathering"}).metadata[:event_type] }
 
 # Deleting an event
 demonstrate { example_event.destroy }
