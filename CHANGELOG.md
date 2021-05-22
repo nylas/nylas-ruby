@@ -1,3 +1,7 @@
+### Unreleased
+* Add `metadata` field in the Event model to support new Event metadata feature
+* Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`
+
 ### 5.0.0 / 2021-05-07
 
 * Send `Nylas-API-Version` header to API with latest supported version. #296
