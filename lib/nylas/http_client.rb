@@ -107,18 +107,19 @@ module Nylas
       url ||= url_for_path(path)
 
       # Add parameters using the uri module as it allows us to make custom rules
-      uri = URI.parse(url)
-      if query.has_key?(:metadata_pair)
-        pairs = []
-        query[:metadata_pair].each do |key, value|
-          puts "Here's the #{key} and it's value is: #{value}"
-          pairs.append("#{key}:#{value}")
+      unless query.empty?
+        uri = URI.parse(url)
+        if query.has_key?(:metadata_pair)
+          pairs = []
+          query[:metadata_pair].each do |key, value|
+            pairs.append("#{key}:#{value}")
+          end
+          query[:metadata_pair] = pairs
         end
-        query[:metadata_pair] = pairs
+        params = URI.decode_www_form(uri.query || '') + query.to_a
+        uri.query = URI.encode_www_form(params)
+        url = uri.to_s
       end
-      params = URI.decode_www_form(uri.query || '') + query.to_a
-      uri.query = URI.encode_www_form(params)
-      url = uri.to_s
 
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
