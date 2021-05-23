@@ -44,6 +44,97 @@ describe Nylas::Model do
     end
   end
 
+  describe "#save_all_attributes" do
+    it "sends call with all attributes including `nil`" do
+      allow(api).to receive(:execute).and_return({})
+      params = {
+        id: 1234
+      }
+      instance = FullModel.from_json(params.to_json, api: api)
+      instance.location = nil
+      instance.string = ""
+
+      instance.save_all_attributes
+
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        payload: {
+          id: "1234",
+          date: nil,
+          email_address: {},
+          im_address: {},
+          nylas_date: {},
+          phone_number: {},
+          physical_address: {},
+          string: "",
+          web_page: {},
+          location: nil,
+          web_pages: [],
+          files: []
+        }.to_json,
+        path: "/collection/1234",
+        query: {}
+      )
+      expect(instance.location).to eq(nil)
+      expect(instance.string).to eq("")
+    end
+
+    it "raises a NotImplementedError exception if the model is flagged as not updatable" do
+      instance = NotUpdatableModel.from_hash({ id: "model-1234" }, api: api)
+
+      expect { instance.save_all_attributes }.to raise_error(Nylas::ModelNotUpdatableError)
+    end
+
+    it "raises a ModelNotCreatable exception if the model is new and is flagged as not creatable" do
+      instance = NotCreatableModel.from_hash({}, api: api)
+
+      expect { instance.save_all_attributes }.to raise_error(Nylas::ModelNotCreatableError)
+    end
+  end
+
+  describe "#update_all_attributes" do
+    it "sends update call with all attributes including `nil`" do
+      allow(api).to receive(:execute)
+      model_data = {
+        id: 1234,
+        location: "A test location",
+        string: "A Test String"
+      }
+      instance = FullModel.from_json(model_data.to_json, api: api)
+      update_params = {
+        id: "1234",
+        location: nil,
+        string: ""
+      }
+
+      instance.update_all_attributes(**update_params)
+
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        payload: update_params.to_json,
+        path: "/collection/1234",
+        query: {}
+      )
+      expect(instance.location).to eq(nil)
+      expect(instance.string).to eq("")
+    end
+
+    it "raises a NotImplementedError exception if the model is flagged as read only" do
+      instance = NotUpdatableModel.from_json(example_instance_json, api: api)
+
+      expect { instance.update_all_attributes(name: "other") }.to raise_error(Nylas::ModelNotUpdatableError)
+    end
+
+    it "raises a MissingFieldError if attempting to set a field that does not exist" do
+      expected_message = "fake_attribute is not a valid attribute for FullModel"
+      instance = FullModel.new
+
+      expect do
+        instance.update_all_attributes(fake_attribute: "not real")
+      end.to raise_error(Nylas::ModelMissingFieldError, expected_message)
+    end
+  end
+
   describe "#reload" do
     it "does not explode if using an invalid attribute" do
       allow(api).to receive(:execute).and_return(fake_attribute: "not real")

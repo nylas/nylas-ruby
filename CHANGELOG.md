@@ -1,3 +1,8 @@
+### Unreleased
+
+* Add `save_all_attributes` and `update_all_attributes` methods to support
+  nullifying attributes. #299
+
 ### 5.0.0 / 2021-05-07
 
 * Send `Nylas-API-Version` header to API with latest supported version. #296
