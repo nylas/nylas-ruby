@@ -105,16 +105,7 @@ module Nylas
 
     def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
       url ||= url_for_path(path)
-
-      # Add parameters using the uri module as it allows us to make custom rules
-      unless query.empty?
-        uri = URI.parse(url)
-        query = custom_params(query)
-        params = URI.decode_www_form(uri.query || "") + query.to_a
-        uri.query = URI.encode_www_form(params)
-        url = uri.to_s
-      end
-
+      url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
@@ -191,6 +182,19 @@ module Nylas
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
+    end
+
+    # Add parameters using the uri module as it allows us to handle special cases
+    def add_query_params_to_url(url, query)
+      unless query.empty?
+        uri = URI.parse(url)
+        query = custom_params(query)
+        params = URI.decode_www_form(uri.query || "") + query.to_a
+        uri.query = URI.encode_www_form(params)
+        url = uri.to_s
+      end
+
+      url
     end
 
     # Process any URL parameter that requires a special case
