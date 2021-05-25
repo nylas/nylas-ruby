@@ -1,6 +1,8 @@
 ### Unreleased
-* Add `metadata` field in the Event model to support new Event metadata feature
-* Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair`
+* Add `metadata` field in the Event model to support new Event metadata feature #300
+* Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair` #300
+* Add `save_all_attributes` and `update_all_attributes` methods to support
+  nullifying attributes. #299
 
 ### 5.0.0 / 2021-05-07
 

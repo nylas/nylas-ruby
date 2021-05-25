@@ -44,6 +44,7 @@ class FullModel
   attribute :string, :string
   attribute :web_page, :web_page
   attribute :read_only_attribute, :string, read_only: true
+  attribute :location, :string
 
   has_n_of_attribute :web_pages, :web_page
   has_n_of_attribute :files, :file
