@@ -131,7 +131,7 @@ describe Nylas::HttpClient do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       metadata_pair = { key1: "value1", key2: "value2", key3: "value3" }
       request = nylas.build_request(method: :get, path: path, query: { metadata_pair: metadata_pair })
-      
+
       expected_params = "?metadata_pair=key1:value1&metadata_pair=key2:value2&metadata_pair=key3:value3"
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
