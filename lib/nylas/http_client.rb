@@ -104,8 +104,8 @@ module Nylas
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
     def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
-      headers[:params] = query
       url ||= url_for_path(path)
+      url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
@@ -182,6 +182,30 @@ module Nylas
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
+    end
+
+    def add_query_params_to_url(url, query)
+      unless query.empty?
+        uri = URI.parse(url)
+        query = custom_params(query)
+        params = URI.decode_www_form(uri.query || "") + query.to_a
+        uri.query = URI.encode_www_form(params)
+        url = uri.to_s
+      end
+
+      url
+    end
+
+    def custom_params(query)
+      # Convert hash to "<key>:<value>" form for metadata_pair query
+      if query.key?(:metadata_pair)
+        pairs = query[:metadata_pair].map do |key, value|
+          "#{key}:#{value}"
+        end
+        query[:metadata_pair] = pairs
+      end
+
+      query
     end
   end
 end
