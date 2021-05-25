@@ -184,7 +184,6 @@ module Nylas
       raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
     end
 
-    # Add parameters using the uri module as it allows us to handle special cases
     def add_query_params_to_url(url, query)
       unless query.empty?
         uri = URI.parse(url)
@@ -197,15 +196,15 @@ module Nylas
       url
     end
 
-    # Process any URL parameter that requires a special case
     def custom_params(query)
+      # Convert hash to "<key>:<value>" form for metadata_pair query
       if query.key?(:metadata_pair)
-        pairs = []
-        query[:metadata_pair].each do |key, value|
-          pairs.append("#{key}:#{value}")
+        pairs = query[:metadata_pair].map do |key, value|
+          "#{key}:#{value}"
         end
         query[:metadata_pair] = pairs
       end
+
       query
     end
   end
