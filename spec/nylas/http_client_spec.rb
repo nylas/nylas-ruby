@@ -104,14 +104,16 @@ describe Nylas::HttpClient do
     it "one query parameter" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { param: "value" })
-      expect(CGI.unescape(request[:url])).to eql(url + path + "?param=value")
+      expected_params = "?param=value"
+      expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
 
     it "multiple query parameters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       params = { id: "1234", limit: 100, offset: 0, view: "count" }
       request = nylas.build_request(method: :get, path: path, query: params)
-      expect(CGI.unescape(request[:url])).to eql(url + path + "?id=1234&limit=100&offset=0&view=count")
+      expected_params = "?id=1234&limit=100&offset=0&view=count"
+      expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
 
     it "array of query parameter values" do
