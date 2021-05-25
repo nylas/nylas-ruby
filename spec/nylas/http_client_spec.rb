@@ -98,12 +98,14 @@ describe Nylas::HttpClient do
     it "no query parameters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: {})
+
       expect(CGI.unescape(request[:url])).to eql(url + path)
     end
 
     it "one query parameter" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { param: "value" })
+
       expected_params = "?param=value"
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
@@ -112,6 +114,7 @@ describe Nylas::HttpClient do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       params = { id: "1234", limit: 100, offset: 0, view: "count" }
       request = nylas.build_request(method: :get, path: path, query: params)
+
       expected_params = "?id=1234&limit=100&offset=0&view=count"
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
@@ -119,6 +122,7 @@ describe Nylas::HttpClient do
     it "array of query parameter values" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { metadata_key: %w[key1 key2 key3] })
+
       expected_params = "?metadata_key=key1&metadata_key=key2&metadata_key=key3"
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
@@ -127,6 +131,7 @@ describe Nylas::HttpClient do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       metadata_pair = { key1: "value1", key2: "value2", key3: "value3" }
       request = nylas.build_request(method: :get, path: path, query: { metadata_pair: metadata_pair })
+      
       expected_params = "?metadata_pair=key1:value1&metadata_pair=key2:value2&metadata_pair=key3:value3"
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
