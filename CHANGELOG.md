@@ -3,6 +3,7 @@
 * Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair` #300
 * Add `save_all_attributes` and `update_all_attributes` methods to support
   nullifying attributes. #299
+* Fix issue where files couldn't be attached to drafts #302
 
 ### 5.0.0 / 2021-05-07
 
