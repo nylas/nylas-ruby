@@ -30,12 +30,22 @@ module Nylas
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file
+    has_n_of_attribute :file_ids, :string
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
     attribute :tracking, :message_tracking
 
     transfer :api, to: %i[events files folder labels]
+
+    def create
+      unless files.nil? || files.empty?
+        f = files.map(&:id)
+        self.file_ids = f
+      end
+
+      super
+    end
 
     def send!
       return execute(method: :post, path: "/send", payload: to_json) if tracking
