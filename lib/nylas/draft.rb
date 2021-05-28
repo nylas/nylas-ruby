@@ -39,25 +39,19 @@ module Nylas
     transfer :api, to: %i[events files folder labels]
 
     def create
-      unless files.nil? || files.empty?
-        extract_file_ids
-      end
-
+      extract_file_ids unless files.nil? || files.empty?
       super
     end
 
     def save_call
-      unless files.nil? || files.empty?
-        extract_file_ids
-      end
-
+      extract_file_ids unless files.nil? || files.empty?
       super
     end
 
     def update(**data)
       unless files.nil? || files.empty?
         extract_file_ids
-        data[:file_ids] = self.file_ids;
+        data[:file_ids] = file_ids
       end
 
       super
