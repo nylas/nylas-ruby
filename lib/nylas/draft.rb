@@ -40,8 +40,24 @@ module Nylas
 
     def create
       unless files.nil? || files.empty?
-        f = files.map(&:id)
-        self.file_ids = f
+        extract_file_ids
+      end
+
+      super
+    end
+
+    def save_call
+      unless files.nil? || files.empty?
+        extract_file_ids
+      end
+
+      super
+    end
+
+    def update(**data)
+      unless files.nil? || files.empty?
+        extract_file_ids
+        data[:file_ids] = self.file_ids;
       end
 
       super
@@ -64,6 +80,13 @@ module Nylas
 
     def destroy
       execute(method: :delete, path: resource_path, payload: attributes.serialize_for_api(keys: [:version]))
+    end
+
+    private
+
+    def extract_file_ids
+      f = files.map(&:id)
+      self.file_ids = f
     end
   end
 end
