@@ -81,7 +81,7 @@ describe Nylas::HttpClient do
     }
 
     http_codes_errors.each do |code, error|
-      it "should return #{error} given #{code} status code when no content-type defined" do
+      it "should return #{error} given #{code} status code when no content-type present" do
         error_json = {
           "message": "Invalid datetime value z for start_time",
           "type": "invalid_request_error"
