@@ -81,10 +81,30 @@ describe Nylas::HttpClient do
     }
 
     http_codes_errors.each do |code, error|
-      it "should return #{error} given #{code} status code" do
+      it "should return #{error} given #{code} status code when no content-type defined" do
+        error_json = {
+          "message": "Invalid datetime value z for start_time",
+          "type": "invalid_request_error"
+        }.to_json
+
         nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
-          .to_return(status: code, body: full_json, headers: { "Content-Type" => "Application/Json" })
+          .to_return(status: code, body: error_json)
+
+        expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
+      end
+    end
+
+    http_codes_errors.each do |code, error|
+      it "should return #{error} given #{code} status code when content-type is json" do
+        error_json = {
+          "message": "Invalid datetime value z for start_time",
+          "type": "invalid_request_error"
+        }.to_json
+
+        nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+        stub_request(:get, "https://api.nylas.com/contacts")
+          .to_return(status: code, body: error_json, headers: { "Content-Type" => "Application/Json" })
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end

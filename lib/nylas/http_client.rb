@@ -162,8 +162,14 @@ module Nylas
     private
 
     def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
-      ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: headers, timeout: timeout, &block)
+      ::RestClient::Request.execute(
+        method: method,
+        url: url,
+        payload: payload,
+        headers: headers,
+        timeout: timeout,
+        &block
+      )
     end
 
     inform_on :rest_client_execute, level: :debug,
@@ -171,18 +177,36 @@ module Nylas
 
     def handle_failed_response(result:, response:)
       http_code = result.code.to_i
+      return if http_code == 200
 
       handle_anticipated_failure_mode(http_code: http_code, response: response)
       raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
     end
 
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Style/GuardClause
     def handle_anticipated_failure_mode(http_code:, response:)
-      return if http_code == 200
-      return unless response.is_a?(Hash)
-
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
+
+      if response.is_a?(Hash)
+        raise exception.new(
+          response[:type],
+          response[:message],
+          response.fetch(:server_error, nil)
+        )
+      end
+
+      if response.is_a?(RestClient::Response)
+        response = parse_response(response)
+        raise exception.new(
+          response[:type],
+          response[:message],
+          response.fetch(:server_error, nil)
+        )
+      end
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Style/GuardClause
 
     def add_query_params_to_url(url, query)
       unless query.empty?

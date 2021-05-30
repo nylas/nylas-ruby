@@ -193,7 +193,7 @@ describe Nylas::Collection do
         allow(model).to receive(:resources_path)
         collection = described_class.new(model: model, api: api)
         stub_request(:get, "https://api.nylas.com/search?limit=100&offset=0&q=%7B%7D")
-          .to_return(status: code, body: {}.to_json, headers: { "Content-Type" => "Application/Json" })
+          .to_return(status: code, body: {}.to_json)
 
         expect do
           collection.search({}).last
