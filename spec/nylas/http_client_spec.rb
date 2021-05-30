@@ -93,9 +93,7 @@ describe Nylas::HttpClient do
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end
-    end
 
-    http_codes_errors.each do |code, error|
       it "should return #{error} given #{code} status code when content-type is json" do
         error_json = {
           "message": "Invalid datetime value z for start_time",
