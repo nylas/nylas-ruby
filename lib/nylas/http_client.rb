@@ -183,30 +183,16 @@ module Nylas
       raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
     end
 
-    # rubocop:disable Metrics/MethodLength
-    # rubocop:disable Style/GuardClause
     def handle_anticipated_failure_mode(http_code:, response:)
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
+      response = parse_response(response)
 
-      if response.is_a?(Hash)
-        raise exception.new(
-          response[:type],
-          response[:message],
-          response.fetch(:server_error, nil)
-        )
-      end
-
-      if response.is_a?(RestClient::Response)
-        response = parse_response(response)
-        raise exception.new(
-          response[:type],
-          response[:message],
-          response.fetch(:server_error, nil)
-        )
-      end
+      raise exception.new(
+        response[:type],
+        response[:message],
+        response.fetch(:server_error, nil)
+      )
     end
-    # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Style/GuardClause
 
     def add_query_params_to_url(url, query)
       unless query.empty?
