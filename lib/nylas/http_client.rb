@@ -177,13 +177,13 @@ module Nylas
 
     def handle_failed_response(result:, response:)
       http_code = result.code.to_i
-      return if http_code == 200
 
       handle_anticipated_failure_mode(http_code: http_code, response: response)
       raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
     end
 
     def handle_anticipated_failure_mode(http_code:, response:)
+      return if http_code == 200
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       response = parse_response(response)
 
