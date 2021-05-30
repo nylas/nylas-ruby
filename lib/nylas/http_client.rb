@@ -162,14 +162,8 @@ module Nylas
     private
 
     def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
-      ::RestClient::Request.execute(
-        method: method,
-        url: url,
-        payload: payload,
-        headers: headers,
-        timeout: timeout,
-        &block
-      )
+      ::RestClient::Request.execute(method: method, url: url, payload: payload,
+                                    headers: headers, timeout: timeout, &block)
     end
 
     inform_on :rest_client_execute, level: :debug,
