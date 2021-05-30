@@ -30,6 +30,7 @@ class FullModel
   self.filterable = true
   self.updatable = true
   self.destroyable = true
+  self.searchable = true
 
   self.resources_path = "/collection"
 
