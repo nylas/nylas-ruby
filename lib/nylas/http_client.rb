@@ -178,6 +178,7 @@ module Nylas
 
     def handle_anticipated_failure_mode(http_code:, response:)
       return if http_code == 200
+
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       response = parse_response(response)
 
