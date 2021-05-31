@@ -178,10 +178,15 @@ module Nylas
 
     def handle_anticipated_failure_mode(http_code:, response:)
       return if http_code == 200
-      return unless response.is_a?(Hash)
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      raise exception.new(response[:type], response[:message], response.fetch(:server_error, nil))
+      parsed_response = parse_response(response)
+
+      raise exception.new(
+        parsed_response[:type],
+        parsed_response[:message],
+        parsed_response.fetch(:server_error, nil)
+      )
     end
 
     def add_query_params_to_url(url, query)

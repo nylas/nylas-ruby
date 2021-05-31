@@ -165,4 +165,40 @@ describe Nylas::Collection do
       expect(collection.where(id: "1234").count).to be 1
     end
   end
+
+  describe "HTTP errors" do
+    http_codes_errors = {
+      400 => Nylas::InvalidRequest,
+      401 => Nylas::UnauthorizedRequest,
+      402 => Nylas::MessageRejected,
+      403 => Nylas::AccessDenied,
+      404 => Nylas::ResourceNotFound,
+      405 => Nylas::MethodNotAllowed,
+      410 => Nylas::ResourceRemoved,
+      418 => Nylas::TeapotError,
+      422 => Nylas::MailProviderError,
+      429 => Nylas::SendingQuotaExceeded,
+      500 => Nylas::InternalError,
+      501 => Nylas::EndpointNotYetImplemented,
+      502 => Nylas::BadGateway,
+      503 => Nylas::ServiceUnavailable,
+      504 => Nylas::RequestTimedOut
+    }
+
+    http_codes_errors.each do |code, error|
+      it "raises error if API returns #{error} with #{code}" do
+        api = Nylas::API.new
+        model = instance_double("Model")
+        allow(model).to receive(:searchable?).and_return(true)
+        allow(model).to receive(:resources_path)
+        collection = described_class.new(model: model, api: api)
+        stub_request(:get, "https://api.nylas.com/search?limit=100&offset=0&q=%7B%7D")
+          .to_return(status: code, body: {}.to_json)
+
+        expect do
+          collection.search({}).last
+        end.to raise_error(error)
+      end
+    end
+  end
 end
