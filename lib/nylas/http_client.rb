@@ -180,12 +180,12 @@ module Nylas
       return if http_code == 200
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      response = parse_response(response)
+      parsed_response = parse_response(response)
 
       raise exception.new(
-        response[:type],
-        response[:message],
-        response.fetch(:server_error, nil)
+        parsed_response[:type],
+        parsed_response[:message],
+        parsed_response.fetch(:server_error, nil)
       )
     end
 
