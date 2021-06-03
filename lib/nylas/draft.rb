@@ -39,10 +39,13 @@ module Nylas
     transfer :api, to: %i[events files folder labels]
 
     def update(**data)
-      unless files.nil? || files.empty?
-        extract_file_ids
-        data[:file_ids] = file_ids
-      end
+      extract_file_ids!
+
+      super(**data.merge(file_ids: file_ids))
+    end
+
+    def create
+      extract_file_ids!
 
       super
     end
@@ -68,21 +71,16 @@ module Nylas
 
     private
 
-    def create
-      extract_file_ids
-      super
-    end
-
     def save_call
-      extract_file_ids
+      extract_file_ids!
+
       super
     end
 
-    def extract_file_ids
-      return if files.nil? || files.empty?
+    def extract_file_ids!
+      files = self.files || []
 
-      f = files.map(&:id)
-      self.file_ids = f
+      self.file_ids = files.map(&:id)
     end
   end
 end
