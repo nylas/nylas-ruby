@@ -40,8 +40,9 @@ module Nylas
 
     def update(**data)
       extract_file_ids!
+      data[:file_ids] = file_ids
 
-      super(**data.merge(file_ids: file_ids))
+      super
     end
 
     def create
