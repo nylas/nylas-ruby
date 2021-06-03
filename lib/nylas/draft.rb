@@ -80,6 +80,7 @@ module Nylas
 
     def extract_file_ids
       return if files.nil? || files.empty?
+
       f = files.map(&:id)
       self.file_ids = f
     end
