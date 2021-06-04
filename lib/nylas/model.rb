@@ -64,7 +64,6 @@ module Nylas
         path: resource_path,
         query: query_params
       )
-      true
     rescue Registry::MissingKeyError => e
       raise ModelMissingFieldError.new(e.key, self)
     end
