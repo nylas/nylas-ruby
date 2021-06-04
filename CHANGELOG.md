@@ -4,6 +4,8 @@
 * Add `save_all_attributes` and `update_all_attributes` methods to support
   nullifying attributes. #299
 * Fix issue where files couldn't be attached to drafts #302
+* Fix exception raise when content-type is not JSON #303
+* Fix issue where draft version wouldn't update after `update` or `save` #304
 
 ### 5.0.0 / 2021-05-07
 
