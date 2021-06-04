@@ -42,7 +42,10 @@ module Nylas
       extract_file_ids!
       data[:file_ids] = file_ids
 
-      super
+      response = super
+      return unless response[:version]
+
+      self.version = response[:version]
     end
 
     def create
