@@ -27,6 +27,165 @@ describe Nylas::Draft do
     expect(described_class).to be_destroyable
   end
 
+  describe "update" do
+    context "when `files` key exists" do
+      it "removes `files` from the payload and sets the proper file_ids key" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        file = Nylas::File.new(id: "abc-123")
+        data = {
+          id: "draft-1234",
+          files: [file]
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.update(**data)
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/drafts/draft-1234",
+          payload: JSON.dump(
+            id: "draft-1234",
+            file_ids: ["abc-123"]
+          ),
+          query: {}
+        )
+      end
+    end
+
+    context "when `files` key does not exists" do
+      it "does nothing" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        data = {
+          id: "draft-1234"
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.update(**data)
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/drafts/draft-1234",
+          payload: JSON.dump(
+            id: "draft-1234"
+          ),
+          query: {}
+        )
+      end
+    end
+  end
+
+  describe "#create" do
+    context "when `files` key exists" do
+      it "removes `files` from the payload and sets the proper file_ids key" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        file = Nylas::File.new(id: "abc-123")
+        data = {
+          id: "draft-1234",
+          files: [file]
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.create
+
+        expect(api).to have_received(:execute).with(
+          method: :post,
+          path: "/drafts",
+          payload: JSON.dump(
+            id: "draft-1234",
+            file_ids: ["abc-123"]
+          ),
+          query: {}
+        )
+      end
+    end
+
+    context "when `files` key does not exists" do
+      it "does nothing" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        data = {
+          id: "draft-1234"
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.create
+
+        expect(api).to have_received(:execute).with(
+          method: :post,
+          path: "/drafts",
+          payload: JSON.dump(
+            id: "draft-1234"
+          ),
+          query: {}
+        )
+      end
+    end
+  end
+
+  describe "save" do
+    context "when `files` key exists" do
+      it "removes `files` from the payload and sets the proper file_ids key" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        file = Nylas::File.new(id: "abc-123")
+        data = {
+          id: "draft-1234",
+          files: [file]
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/drafts/draft-1234",
+          payload: JSON.dump(
+            id: "draft-1234",
+            file_ids: ["abc-123"]
+          ),
+          query: {}
+        )
+      end
+    end
+
+    context "when `files` key does not exists" do
+      it "does nothing" do
+        api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+        data = {
+          id: "draft-1234"
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/drafts/draft-1234",
+          payload: JSON.dump(
+            id: "draft-1234"
+          ),
+          query: {}
+        )
+      end
+    end
+  end
+
   describe "#send!" do
     it "saves and sends the draft" do
       api = instance_double(Nylas::API)

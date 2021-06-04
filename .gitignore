@@ -9,6 +9,7 @@ Gemfile.lock
 gemfiles/*.lock
 InstalledFiles
 .idea/
+*.iml
 _yardoc
 coverage
 doc/

@@ -29,13 +29,27 @@ module Nylas
     attribute :unread, :boolean
 
     has_n_of_attribute :events, :event
-    has_n_of_attribute :files, :file
+    has_n_of_attribute :files, :file, read_only: true
+    has_n_of_attribute :file_ids, :string
     attribute :folder, :folder
     has_n_of_attribute :labels, :label
 
     attribute :tracking, :message_tracking
 
     transfer :api, to: %i[events files folder labels]
+
+    def update(**data)
+      extract_file_ids!
+      data[:file_ids] = file_ids
+
+      super
+    end
+
+    def create
+      extract_file_ids!
+
+      super
+    end
 
     def send!
       return execute(method: :post, path: "/send", payload: to_json) if tracking
@@ -54,6 +68,20 @@ module Nylas
 
     def destroy
       execute(method: :delete, path: resource_path, payload: attributes.serialize_for_api(keys: [:version]))
+    end
+
+    private
+
+    def save_call
+      extract_file_ids!
+
+      super
+    end
+
+    def extract_file_ids!
+      files = self.files || []
+
+      self.file_ids = files.map(&:id)
     end
   end
 end
