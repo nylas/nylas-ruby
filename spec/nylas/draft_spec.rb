@@ -78,6 +78,28 @@ describe Nylas::Draft do
         )
       end
     end
+
+    context "when update is successful" do
+      it "updates the local draft object version number" do
+        expected_response = {
+          id: "draft-1234",
+          version: 1
+        }
+        api = instance_double(Nylas::API, execute: expected_response)
+        data = {
+          id: "draft-1234",
+          version: 0
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.update(**data)
+
+        expect(draft.version).to eq(1)
+      end
+    end
   end
 
   describe "#create" do
@@ -182,6 +204,27 @@ describe Nylas::Draft do
           ),
           query: {}
         )
+      end
+    end
+
+    context "when save is successful" do
+      it "updates the local draft object version number" do
+        expected_response = {
+          id: "draft-1234",
+          version: 1
+        }
+        api = instance_double(Nylas::API, execute: expected_response)
+        data = {
+          id: "draft-1234"
+        }
+        draft = described_class.from_json(
+          JSON.dump(data),
+          api: api
+        )
+
+        draft.save
+
+        expect(draft.version).to eq(1)
       end
     end
   end
