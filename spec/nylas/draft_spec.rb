@@ -232,7 +232,7 @@ describe Nylas::Draft do
       update_json = draft.to_json
       allow(api).to receive(:execute).and_return({})
       allow(api).to receive(:execute).with(method: :put, path: "/drafts/draft-1234", payload: update_json)
-        .and_return(id: "draft-1234", version: "6")
+                                     .and_return(id: "draft-1234", version: "6")
 
       draft.send!
 
@@ -286,10 +286,10 @@ describe Nylas::Draft do
                files: [{ content_type: "text/calendar", filename: nil, id: "file-abc35", size: 1264 },
                        { content_type: "application/ics", filename: "invite.ics", id: "file-xyz-9234",
                          size: 1264 }],
-                         folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
-                         labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
-                                  { display_name: "All Mail", id: "label-all", name: "all" }],
-      tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
+               folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
+               labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
+                        { display_name: "All Mail", id: "label-all", name: "all" }],
+               tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
 
       draft = described_class.from_json(JSON.dump(data), api: api)
       expect(draft.id).to eql "drft-592"
