@@ -58,12 +58,14 @@ module Nylas
       raise ModelNotUpdatableError, model_class unless updatable?
 
       attributes.merge(**data)
-      execute(
+      result = execute(
         method: :put,
         payload: attributes.serialize_for_api(keys: data.keys),
         path: resource_path,
         query: query_params
       )
+      attributes.merge(result) if result
+      true
     rescue Registry::MissingKeyError => e
       raise ModelMissingFieldError.new(e.key, self)
     end
@@ -88,12 +90,13 @@ module Nylas
       raise ModelNotUpdatableError, model_class unless updatable?
 
       attributes.merge(**data)
-      execute(
+      result = execute(
         method: :put,
         payload: attributes.serialize_all_for_api(keys: data.keys),
         path: resource_path,
         query: query_params
       )
+      attributes.merge(result) if result
       true
     rescue Registry::MissingKeyError => e
       raise ModelMissingFieldError.new(e.key, self)

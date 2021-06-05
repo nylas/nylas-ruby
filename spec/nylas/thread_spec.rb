@@ -83,7 +83,7 @@ describe Nylas::Thread do
 
   describe "#update" do
     it "let's you set the starred, unread, folder, and label ids" do
-      api =  instance_double(Nylas::API, execute: "{}")
+      api =  instance_double(Nylas::API, execute: {})
       thread = described_class.from_json('{ "id": "thread-1234" }', api: api)
 
       thread.update(

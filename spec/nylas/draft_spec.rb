@@ -79,26 +79,24 @@ describe Nylas::Draft do
       end
     end
 
-    context "when update is successful" do
-      it "updates the local draft object version number" do
-        expected_response = {
-          id: "draft-1234",
-          version: 1
-        }
-        api = instance_double(Nylas::API, execute: expected_response)
-        data = {
-          id: "draft-1234",
-          version: 0
-        }
-        draft = described_class.from_json(
-          JSON.dump(data),
-          api: api
-        )
+    it "updates the local draft object version number on update" do
+      expected_response = {
+        id: "draft-1234",
+        version: 1
+      }
+      api = instance_double(Nylas::API, execute: expected_response)
+      data = {
+        id: "draft-1234",
+        version: 0
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
 
-        draft.update(**data)
+      draft.update(**data)
 
-        expect(draft.version).to eq(1)
-      end
+      expect(draft.version).to eq(1)
     end
   end
 
@@ -207,25 +205,23 @@ describe Nylas::Draft do
       end
     end
 
-    context "when save is successful" do
-      it "updates the local draft object version number" do
-        expected_response = {
-          id: "draft-1234",
-          version: 1
-        }
-        api = instance_double(Nylas::API, execute: expected_response)
-        data = {
-          id: "draft-1234"
-        }
-        draft = described_class.from_json(
-          JSON.dump(data),
-          api: api
-        )
+    it "updates the local draft object version number on save" do
+      expected_response = {
+        id: "draft-1234",
+        version: 1
+      }
+      api = instance_double(Nylas::API, execute: expected_response)
+      data = {
+        id: "draft-1234"
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
 
-        draft.save
+      draft.save
 
-        expect(draft.version).to eq(1)
-      end
+      expect(draft.version).to eq(1)
     end
   end
 
@@ -236,7 +232,7 @@ describe Nylas::Draft do
       update_json = draft.to_json
       allow(api).to receive(:execute).and_return({})
       allow(api).to receive(:execute).with(method: :put, path: "/drafts/draft-1234", payload: update_json)
-                                     .and_return(id: "draft-1234", version: "6")
+        .and_return(id: "draft-1234", version: "6")
 
       draft.send!
 
@@ -290,10 +286,10 @@ describe Nylas::Draft do
                files: [{ content_type: "text/calendar", filename: nil, id: "file-abc35", size: 1264 },
                        { content_type: "application/ics", filename: "invite.ics", id: "file-xyz-9234",
                          size: 1264 }],
-               folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
-               labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
-                        { display_name: "All Mail", id: "label-all", name: "all" }],
-               tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
+                         folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
+                         labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
+                                  { display_name: "All Mail", id: "label-all", name: "all" }],
+      tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
 
       draft = described_class.from_json(JSON.dump(data), api: api)
       expect(draft.id).to eql "drft-592"
