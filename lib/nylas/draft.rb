@@ -39,6 +39,7 @@ module Nylas
     transfer :api, to: %i[events files folder labels]
 
     def update(**data)
+      self.files = data[:files] if data[:files]
       extract_file_ids!
       data[:file_ids] = file_ids
 

@@ -28,26 +28,25 @@ describe Nylas::Draft do
   end
 
   describe "update" do
-    context "when `files` key exists" do
-      it "removes `files` from the payload and sets the proper file_ids key" do
+    context "with `files` key" do
+      it "if `files` present, remove from the payload and sets the proper file_ids key" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         file = Nylas::File.new(id: "abc-123")
         data = {
-          id: "draft-1234",
-          files: [file]
+          id: "draft-1234"
         }
         draft = described_class.from_json(
           JSON.dump(data),
           api: api
         )
 
-        draft.update(**data)
+        draft.update(subject: "Updated subject", files: [file])
 
         expect(api).to have_received(:execute).with(
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
-            id: "draft-1234",
+            subject: "Updated subject",
             file_ids: ["abc-123"]
           ),
           query: {}
@@ -56,7 +55,7 @@ describe Nylas::Draft do
     end
 
     context "when `files` key does not exists" do
-      it "does nothing" do
+      it "does not set the file_ids key or make any further changes to the payload" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         data = {
           id: "draft-1234"
@@ -66,17 +65,37 @@ describe Nylas::Draft do
           api: api
         )
 
-        draft.update(**data)
+        draft.update(subject: "Updated subject")
 
         expect(api).to have_received(:execute).with(
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
-            id: "draft-1234"
+            subject: "Updated subject"
           ),
           query: {}
         )
       end
+    end
+
+    it "updates the local draft object version number on update" do
+      expected_response = {
+        id: "draft-1234",
+        version: 1
+      }
+      api = instance_double(Nylas::API, execute: expected_response)
+      data = {
+        id: "draft-1234",
+        version: 0
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+
+      draft.update(**data)
+
+      expect(draft.version).to eq(1)
     end
   end
 
@@ -183,6 +202,25 @@ describe Nylas::Draft do
           query: {}
         )
       end
+    end
+
+    it "updates the local draft object version number on save" do
+      expected_response = {
+        id: "draft-1234",
+        version: 1
+      }
+      api = instance_double(Nylas::API, execute: expected_response)
+      data = {
+        id: "draft-1234"
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+
+      draft.save
+
+      expect(draft.version).to eq(1)
     end
   end
 
