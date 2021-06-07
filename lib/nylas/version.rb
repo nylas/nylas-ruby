@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Nylas
-  VERSION = "4.6.5"
+  VERSION = "5.1.0"
 end
