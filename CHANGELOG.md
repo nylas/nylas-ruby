@@ -1,8 +1,9 @@
-### Unreleased
-* Add `metadata` field in the Event model to support new Event metadata feature #300
-* Add support for filtering `metadata` using `metadata_key`, `metadata_value`, and `metadata_pair` #300
+### 5.1.0 / 2021-06-07
+* Add support for read only attributes #298
 * Add `save_all_attributes` and `update_all_attributes` methods to support
   nullifying attributes. #299
+* Add support new `Event` metadata feature #300  
+* Fix attributes assignment for `Delta` #297  
 * Fix issue where files couldn't be attached to drafts #302
 * Fix exception raise when content-type is not JSON #303
 * Fix issue where draft version wouldn't update after `update` or `save` #304
