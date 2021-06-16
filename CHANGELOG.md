@@ -1,3 +1,6 @@
+### Unreleased
+* Add support for `Room Resource`  #307
+
 ### 5.1.0 / 2021-06-07
 * Add support for read only attributes #298
 * Add `save_all_attributes` and `update_all_attributes` methods to support
