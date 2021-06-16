@@ -123,6 +123,11 @@ module Nylas
       @messages ||= Collection.new(model: Message, api: self)
     end
 
+    # @return[Collection<RoomResource>] A queryable collection of {RoomResource} objects
+    def room_resources
+      @room_resources ||= Collection.new(model: RoomResource, api: self)
+    end
+
     # Revokes access to the Nylas API for the given access token
     # @return [Boolean]
     def revoke(access_token)

@@ -69,6 +69,7 @@ require_relative "nylas/deltas"
 require_relative "nylas/delta"
 require_relative "nylas/draft"
 require_relative "nylas/message"
+require_relative "nylas/room_resource"
 require_relative "nylas/new_message"
 require_relative "nylas/raw_message"
 require_relative "nylas/thread"
@@ -94,6 +95,7 @@ module Nylas
   Types.registry[:folder] = Types::ModelType.new(model: Folder)
   Types.registry[:im_address] = Types::ModelType.new(model: IMAddress)
   Types.registry[:label] = Types::ModelType.new(model: Label)
+  Types.registry[:room_resource] = Types::ModelType.new(model: RoomResource)
   Types.registry[:message] = Types::ModelType.new(model: Message)
   Types.registry[:message_headers] = MessageHeadersType.new
   Types.registry[:message_tracking] = Types::ModelType.new(model: MessageTracking)
