@@ -42,4 +42,20 @@ describe Nylas::RoomResource do
       expect(label.floor_number).to eql "2"
     end
   end
+
+  context "when getting" do
+    it "makes a call to the /resources endpoint" do
+      api = instance_double(Nylas::API, execute: "{}")
+      resource = Nylas::Collection.new(model: described_class, api: api)
+
+      api.execute(resource.to_be_executed)
+
+      expect(api).to have_received(:execute).with(
+        method: :get,
+        path: "/resources",
+        headers: {},
+        query: { limit: 100, offset: 0 }
+      )
+    end
+  end
 end
