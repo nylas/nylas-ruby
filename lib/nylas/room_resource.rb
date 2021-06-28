@@ -6,7 +6,7 @@ module Nylas
   class RoomResource
     include Model
     self.resources_path = "/resources"
-    allows_operations(listable: true, showable: true)
+    allows_operations(listable: true)
 
     attribute :object, :string, read_only: true
     attribute :email, :string, read_only: true

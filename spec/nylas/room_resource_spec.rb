@@ -17,6 +17,10 @@ describe Nylas::RoomResource do
     expect(described_class).not_to be_destroyable
   end
 
+  it "is not showable" do
+    expect(described_class).not_to be_showable
+  end
+
   it "is listable" do
     expect(described_class).to be_listable
   end
@@ -31,15 +35,15 @@ describe Nylas::RoomResource do
                        "floor_name": "Office",
                        "floor_number": "2")
 
-      label = described_class.from_json(json, api: nil)
+      resource = described_class.from_json(json, api: nil)
 
-      expect(label.object).to eql "room_resource"
-      expect(label.email).to eql "training-room@outlook.com"
-      expect(label.name).to eql "Microsoft Training Room"
-      expect(label.building).to eql "Seattle"
-      expect(label.capacity).to eql "5"
-      expect(label.floor_name).to eql "Office"
-      expect(label.floor_number).to eql "2"
+      expect(resource.object).to eql "room_resource"
+      expect(resource.email).to eql "training-room@outlook.com"
+      expect(resource.name).to eql "Microsoft Training Room"
+      expect(resource.building).to eql "Seattle"
+      expect(resource.capacity).to eql "5"
+      expect(resource.floor_name).to eql "Office"
+      expect(resource.floor_number).to eql "2"
     end
   end
 
