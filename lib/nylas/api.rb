@@ -16,13 +16,11 @@ module Nylas
     # @param access_token [String] (Optional) Your users access token.
     # @param api_server [String] (Optional) Which Nylas API Server to connect to. Only change this if
     #                            you're using a self-hosted Nylas instance.
-    # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::API]
     def initialize(client: nil, app_id: nil, app_secret: nil, access_token: nil,
-                   api_server: "https://api.nylas.com", service_domain: "api.nylas.com")
+                   api_server: "https://api.nylas.com")
       self.client = client || HttpClient.new(app_id: app_id, app_secret: app_secret,
-                                             access_token: access_token, api_server: api_server,
-                                             service_domain: service_domain)
+                                             access_token: access_token, api_server: api_server)
     end
 
     # @return [String] A Nylas access token for that particular user.
