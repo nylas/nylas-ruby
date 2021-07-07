@@ -1,5 +1,6 @@
 ### Unreleased
-- Fix issue where "302 Redirect" response codes were treated as errors #306
+* Add support for `Room Resource`  #307
+* Fix issue where "302 Redirect" response codes were treated as errors #306
 
 ### 5.1.0 / 2021-06-07
 * Add support for read only attributes #298
