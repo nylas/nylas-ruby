@@ -1,3 +1,6 @@
+### Unreleased
+- Fix issue where "302 Redirect" response codes were treated as errors #306
+
 ### 5.1.0 / 2021-06-07
 * Add support for read only attributes #298
 * Add `save_all_attributes` and `update_all_attributes` methods to support
