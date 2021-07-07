@@ -59,6 +59,16 @@ describe Nylas::HttpClient do
         url: "https://token:@api.nylas.com/contacts/1234/picture"
       )
     end
+
+    it "handles redirect correctly" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/oauth/authorize")
+        .to_return(status: 302, body: "")
+
+      response = nylas.execute(method: :get, path: "/oauth/authorize")
+      expect(response).to eq("")
+    end
   end
 
   describe "HTTP errors" do

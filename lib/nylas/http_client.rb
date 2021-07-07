@@ -5,6 +5,8 @@ module Nylas
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
+    HTTP_SUCCESS_CODES = [200, 302].freeze
+
     HTTP_CODE_TO_EXCEPTIONS = {
       400 => InvalidRequest,
       401 => UnauthorizedRequest,
@@ -177,7 +179,7 @@ module Nylas
     end
 
     def handle_anticipated_failure_mode(http_code:, response:)
-      return if http_code == 200
+      return if HTTP_SUCCESS_CODES.include?(http_code)
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       parsed_response = parse_response(response)
