@@ -34,7 +34,7 @@ module Nylas
     SUPPORTED_API_VERSION = "2.2"
 
     include Logging
-    attr_accessor :api_server, :service_domain
+    attr_accessor :api_server
     attr_writer :default_headers
     attr_reader :access_token
     attr_reader :app_id
@@ -45,10 +45,8 @@ module Nylas
     # @param access_token [String] (Optional) Your users access token.
     # @param api_server [String] (Optional) Which Nylas API Server to connect to. Only change this if
     #                            you're using a self-hosted Nylas instance.
-    # @param service_domain [String] (Optional) Host you are authenticating OAuth against.
     # @return [Nylas::HttpClient]
-    def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com",
-                   service_domain: "api.nylas.com")
+    def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com")
       unless api_server.include?("://")
         raise "When overriding the Nylas API server address, you must include https://"
       end
@@ -57,13 +55,12 @@ module Nylas
       @access_token = access_token
       @app_secret = app_secret
       @app_id = app_id
-      @service_domain = service_domain
     end
 
     # @return [Nylas::HttpClient[]
     def as(access_token)
       HttpClient.new(app_id: app_id, access_token: access_token,
-                     app_secret: app_secret, api_server: api_server, service_domain: service_domain)
+                     app_secret: app_secret, api_server: api_server)
     end
 
     # Sends a request to the Nylas API and rai
