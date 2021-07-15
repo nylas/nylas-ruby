@@ -67,6 +67,8 @@ module Nylas
       return self unless headers.nil?
 
       assign(**api.execute(method: :get, path: resource_path, query: { view: "expanded" }))
+      # Transfer reference to the API to attributes that need it
+      transfer_attributes
       self
     end
 

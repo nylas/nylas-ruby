@@ -278,5 +278,23 @@ describe Nylas::Message do
       expect(message.expanded.headers.message_id).to eql "<84umizq7c4jtrew491brpa6iu-0@example.com>"
       expect(message.expanded.headers.references[0]).to eql "<evh5uy0shhpm5d0le89goor17-0@example.com>"
     end
+    it "transfers api to attributes that need it" do
+      api = instance_double(Nylas::API, execute: "{}")
+      message = described_class.from_json('{ "id": "message-1234" }', api: api)
+      data = { id: "draft-1234",
+               headers: { "In-Reply-To": "<evh5uy0shhpm5d0le89goor17-0@example.com>",
+                          "Message-Id": "<84umizq7c4jtrew491brpa6iu-0@example.com>",
+                          "References": ["<evh5uy0shhpm5d0le89goor17-0@example.com>"] },
+               files: [{ content_type: "text/calendar", filename: nil, id: "file-abc35", size: 1264 }] }
+
+      allow(api).to receive(:execute).with(method: :get,
+                                           path: "/messages/message-1234",
+                                           query: { view: "expanded" })
+                                     .and_return(data)
+      message.expanded
+
+      expect(message.files.first.api).not_to be_nil
+      expect(message.expanded.files.first.api).not_to be_nil
+    end
   end
 end
