@@ -1,31 +1,33 @@
-### Unreleased
-* Add support for `Room Resource`  #307
-* Fix issue where "302 Redirect" response codes were treated as errors #306
-* Fix issue where `api` value was overriden when calling `message.expanded` #311
+# Changelog
+
+### 5.2.0 / 2021-06-07
+* Add support for `Room Resource`
+* Fix issue where "302 Redirect" response codes were treated as errors
+* Fix issue where `api` value was overriden when calling `message.expanded`
 
 ### 5.1.0 / 2021-06-07
-* Add support for read only attributes #298
+* Add support for read only attributes
 * Add `save_all_attributes` and `update_all_attributes` methods to support
-  nullifying attributes. #299
-* Add support new `Event` metadata feature #300  
-* Fix attributes assignment for `Delta` #297  
-* Fix issue where files couldn't be attached to drafts #302
-* Fix exception raise when content-type is not JSON #303
-* Fix issue where draft version wouldn't update after `update` or `save` #304
+  nullifying attributes.
+* Add support new `Event` metadata feature  
+* Fix attributes assignment for `Delta`  
+* Fix issue where files couldn't be attached to drafts
+* Fix exception raise when content-type is not JSON
+* Fix issue where draft version wouldn't update after `update` or `save`
 
 ### 5.0.0 / 2021-05-07
 
-* Send `Nylas-API-Version` header to API with latest supported version. #296
-* Fix issue sending message using raw mime type. #294
-* Support for `messages.expanded.find(id)` to return expanded message. #293
-* Add support for hosted authentication #292
-* Fix bug to not send `id`, `object` and `account_id` on events update call #291
+* Send `Nylas-API-Version` header to API with latest supported version.
+* Fix issue sending message using raw mime type.
+* Support for `messages.expanded.find(id)` to return expanded message.
+* Add support for hosted authentication
+* Fix bug to not send `id`, `object` and `account_id` on events update call
 
 ### 4.6.7 / 2021-04-22
 
 * Support for Ruby 3.
-* Add support for `/free-busy` endpoint #288
-* Fix issue where download a file fetch via `find` failed #258, #287
+* Add support for `/free-busy` endpoint
+* Fix issue where download a file fetch via `find` failed,
 
 ### 4.6.6 / 2021-04-06
 
