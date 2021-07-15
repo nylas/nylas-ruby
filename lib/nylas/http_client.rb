@@ -86,14 +86,12 @@ module Nylas
         timeout: timeout
       )
       rest_client_execute(**request) do |response, _request, result|
-        content_type = nil
-
-        if response.headers && response.headers[:content_type]
-          content_type = response.headers[:content_type].downcase
+        # Try to parse all responses as JSON, since api.nylas.com content-type can be flaky
+        begin
+          response = parse_response(response)
+        rescue Nylas::JsonParseError
         end
-
-        response = parse_response(response) if content_type == "application/json"
-
+        
         handle_failed_response(result: result, response: response)
         response
       end
