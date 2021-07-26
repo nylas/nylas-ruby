@@ -15,7 +15,7 @@ describe Nylas::Delta do
       headers: {
         "In-Reply-To": "In-Reply-To",
         "Message-Id": "Message-Id",
-        References: ["References-01", "References-02"]
+        References: %w[References-01 References-02]
       },
       object_attributes:
       {
@@ -23,7 +23,7 @@ describe Nylas::Delta do
         {
           "In-Reply-To": "In-Reply-To",
           "Message-Id": "Message-Id",
-          References: ["References-01", "References-02"]
+          References: %w[References-01 References-02]
         },
         object: :attributes
       }
@@ -42,13 +42,13 @@ describe Nylas::Delta do
     expect(delta.metadata).to eq(key: :value)
     expect(delta.headers.in_reply_to).to eq("In-Reply-To")
     expect(delta.headers.message_id).to eq("Message-Id")
-    expect(delta.headers.references).to eq(["References-01", "References-02"])
+    expect(delta.headers.references).to eq(%w[References-01 References-02])
     expect(delta.object_attributes).to eq(
       headers:
       {
         "In-Reply-To": "In-Reply-To",
         "Message-Id": "Message-Id",
-        References: ["References-01", "References-02"]
+        References: %w[References-01 References-02]
       },
       object: :attributes
     )
