@@ -12,7 +12,17 @@ describe Nylas::Delta do
       namespace_id: "namespace-id",
       date: 1_609_439_400,
       metadata: { key: :value },
-      object_attributes: { object: :attributes }
+      headers: { "In-Reply-To": "In-Reply-To", "Message-Id": "Message-Id", References: ["References-01", "References-02"] },
+      object_attributes:
+      {
+        headers:
+        {
+          "In-Reply-To": "In-Reply-To",
+          "Message-Id": "Message-Id",
+          References: ["References-01", "References-02"]
+        },
+        object: :attributes
+      }
     }
 
     delta = described_class.new(**data)
@@ -26,7 +36,18 @@ describe Nylas::Delta do
     expect(delta.namespace_id).to eq("namespace-id")
     expect(delta.date).to eq(Time.at(1_609_439_400))
     expect(delta.metadata).to eq(key: :value)
-    expect(delta.object_attributes).to eq(object: :attributes)
+    expect(delta.headers.in_reply_to).to eq("In-Reply-To")
+    expect(delta.headers.message_id).to eq("Message-Id")
+    expect(delta.headers.references).to eq(["References-01", "References-02"])
+    expect(delta.object_attributes).to eq(
+      headers:
+      {
+        "In-Reply-To": "In-Reply-To",
+        "Message-Id": "Message-Id",
+        References: ["References-01", "References-02"]
+      },
+      object: :attributes
+    )
   end
 
   describe "#model" do
