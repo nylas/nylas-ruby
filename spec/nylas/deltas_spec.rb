@@ -118,13 +118,21 @@ describe Nylas::Deltas do
       account_id: "acc-id",
       object: "message",
       id: "message-id",
-      headers: { "In-Reply-To": "<evh5uy0shhpm5d0le89goor17-0@example.com>", "Message-Id": "<84umizq7c4jtrew491brpa6iu-0@example.com>", References: ["<evh5uy0shhpm5d0le89goor17-0@example.com>"] }
+      headers: {
+        "In-Reply-To": "<evh5uy0shhpm5d0le89goor17-0@example.com>",
+        "Message-Id": "<84umizq7c4jtrew491brpa6iu-0@example.com>",
+        References: ["<evh5uy0shhpm5d0le89goor17-0@example.com>"]
+      }
     )
     expect(message_delta.model.attributes.to_h).to include(
       account_id: "acc-id",
       object: "message",
       id: "message-id",
-      headers: { in_reply_to: "<evh5uy0shhpm5d0le89goor17-0@example.com>", message_id: "<84umizq7c4jtrew491brpa6iu-0@example.com>", references: ["<evh5uy0shhpm5d0le89goor17-0@example.com>"] }
+      headers: {
+        in_reply_to: "<evh5uy0shhpm5d0le89goor17-0@example.com>",
+        message_id: "<84umizq7c4jtrew491brpa6iu-0@example.com>",
+        references: ["<evh5uy0shhpm5d0le89goor17-0@example.com>"]
+      }
     )
     expect(message_delta.model).to be_a(Nylas::Message)
     expect(message_delta.id).to eq("message-id")

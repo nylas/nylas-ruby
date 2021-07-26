@@ -12,7 +12,11 @@ describe Nylas::Delta do
       namespace_id: "namespace-id",
       date: 1_609_439_400,
       metadata: { key: :value },
-      headers: { "In-Reply-To": "In-Reply-To", "Message-Id": "Message-Id", References: ["References-01", "References-02"] },
+      headers: {
+        "In-Reply-To": "In-Reply-To",
+        "Message-Id": "Message-Id",
+        References: ["References-01", "References-02"]
+      },
       object_attributes:
       {
         headers:
