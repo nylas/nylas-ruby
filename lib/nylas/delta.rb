@@ -15,6 +15,8 @@ module Nylas
     attribute :namespace_id, :string
     attribute :account_id, :string
 
+    attribute :headers, :message_headers
+
     attribute :date, :unix_timestamp
     attribute :metadata, :hash
     attribute :object_attributes, :hash
