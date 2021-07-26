@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fix issue where `Delta` did not have a header attribute for expanded headers
+
 ### 5.2.0 / 2021-06-07
 * Add support for `Room Resource`
 * Fix issue where "302 Redirect" response codes were treated as errors
