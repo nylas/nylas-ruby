@@ -185,6 +185,7 @@ module Nylas
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       raise exception.new(http_code, response) unless response.is_a?(Hash)
+      
       raise exception.new(
         response[:type],
         response[:message],
