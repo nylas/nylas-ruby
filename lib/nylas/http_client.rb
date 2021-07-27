@@ -179,12 +179,11 @@ module Nylas
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      parsed_response = parse_response(response)
-
+      raise exception.new(http_code, response) unless response.is_a?(Hash)
       raise exception.new(
-        parsed_response[:type],
-        parsed_response[:message],
-        parsed_response.fetch(:server_error, nil)
+        response[:type],
+        response[:message],
+        response.fetch(:server_error, nil)
       )
     end
 
