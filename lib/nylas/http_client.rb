@@ -92,7 +92,12 @@ module Nylas
           content_type = response.headers[:content_type].downcase
         end
 
-        response = parse_response(response) if content_type == "application/json"
+        begin
+          response = parse_response(response) if content_type == "application/json"
+        rescue Nylas::JsonParseError
+          handle_failed_response(result: result, response: response)
+          raise
+        end
 
         handle_failed_response(result: result, response: response)
         response
