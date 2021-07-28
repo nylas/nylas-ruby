@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Fix issue where `Delta` did not have a header attribute for expanded headers
+* Fix issue where server errors are not reported if HTML is returned
 
 ### 5.2.0 / 2021-06-07
 * Add support for `Room Resource`
