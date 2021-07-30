@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Nylas
   # Structure to represent a the Neural Optical Character Recognition object.
   # @see https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/#ocr-response
@@ -10,7 +11,7 @@ module Nylas
                    ignore_images: nil,
                    ignore_tables: nil,
                    remove_conclusion_phrases: nil,
-                   images_as_markdown:nil,
+                   images_as_markdown: nil,
                    parse_contact: nil)
       @ignore_links = ignore_links
       @ignore_images = ignore_images

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Nylas
-  # Structure to represent a the Neural Optical Character Recognition object.
-  # @see https://developer.nylas.com/docs/intelligence/optical-charecter-recognition/#ocr-response
+  # Structure to represent a the Neural Categorize object.
+  # @see https://developer.nylas.com/docs/intelligence/categorizer/#categorize-message-response
   class Categorize
     include Model::Attributable
 
@@ -10,5 +12,3 @@ module Nylas
     has_n_of_attribute :subcategories, :string
   end
 end
-
-
