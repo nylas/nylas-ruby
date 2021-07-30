@@ -5,7 +5,7 @@ module Nylas
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
-    HTTP_SUCCESS_CODES = [200, 302].freeze
+    HTTP_SUCCESS_CODES = [200, 201, 302].freeze
 
     HTTP_CODE_TO_EXCEPTIONS = {
       400 => InvalidRequest,
