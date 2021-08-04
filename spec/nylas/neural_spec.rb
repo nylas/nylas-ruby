@@ -8,7 +8,7 @@ describe Nylas::Neural do
           account_id: "account123",
           body: "<img src='cid:1781777f666586677621' /> This is the body",
           conversation:
-            "<img src='cid:1781777f666586677621' /> This is the conversation",
+            "<img src='cid:1781777f666586677621' /> Conversation",
           date: 1624029503,
           from: [
             {
@@ -47,8 +47,7 @@ describe Nylas::Neural do
       expect(clean_conversation.length).to be(1)
       expect(clean_conversation[0].id).to eql("abc123")
       expect(clean_conversation[0].body).to eql("<img src='cid:1781777f666586677621' /> This is the body")
-      expect(clean_conversation[0].conversation).to
-      eql("<img src='cid:1781777f666586677621' /> This is the conversation")
+      expect(clean_conversation[0].conversation).to eql("<img src='cid:1781777f666586677621' /> Conversation")
       expect(clean_conversation[0].model_version).to eql("0.0.1")
     end
 
@@ -156,7 +155,7 @@ describe Nylas::Neural do
             <div>swag@nylas.com</div><img src='https://example.com/logo.png'
             alt='https://example.com/link.html'></a>",
           signature:
-            "Nylas Swag\n\nSoftware Engineer\n\n123-456-8901\n\nswag@nylas.com",
+            "Nylas Swag\n\nSoftware Engineer\n\n123-456-8901\nswag@nylas.com",
           contacts: {
             job_titles: ["Software Engineer"],
             links: [
@@ -210,8 +209,7 @@ describe Nylas::Neural do
       )
 
       expect(signature.length).to be(1)
-      expect(signature[0].signature).to
-      eql("Nylas Swag\n\nSoftware Engineer\n\n123-456-8901\n\nswag@nylas.com")
+      expect(signature[0].signature).to eql("Nylas Swag\n\nSoftware Engineer\n\n123-456-8901\nswag@nylas.com")
       expect(signature[0].model_version).to eql("0.0.1")
       expect(signature[0].contacts.job_titles).to eql(["Software Engineer"])
       expect(signature[0].contacts.phone_numbers).to eql(["123-456-8901"])
