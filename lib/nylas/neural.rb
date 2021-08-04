@@ -78,6 +78,7 @@ module Nylas
       )
     end
 
+    # For Ruby < 3.0 support, as it doesn't support Hash.except
     def delete_from_hash(hash, to_delete)
       hash.delete(to_delete)
       hash

@@ -14,8 +14,7 @@ module Nylas
     attr_accessor :api
 
     def to_contact_object
-      contact = {}
-      contact = contact.merge(convert_names, convert_emails, convert_phone_numbers, convert_links)
+      contact = merge_multiple_hashes([convert_names, convert_emails, convert_phone_numbers, convert_links])
       contact[:job_title] = job_titles[0] unless job_titles.nil?
       Contact.new(**contact.merge(api: api))
     end
@@ -64,6 +63,16 @@ module Nylas
         contact[:web_pages].push(type: type, url: link.url)
       end
       contact
+    end
+
+    # For Ruby 2.5 support as it doesn't support multiple hashes to merge at once
+    def merge_multiple_hashes(hashes_to_merge)
+      hash = {}
+      hashes_to_merge.each do |new_hash|
+        hash = hash.merge(new_hash)
+      end
+
+      hash
     end
   end
 end
