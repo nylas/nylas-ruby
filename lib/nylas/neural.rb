@@ -58,9 +58,9 @@ module Nylas
 
     def clean_conversation(message_ids, options = nil)
       body = { message_id: message_ids }
-      body = body.merge(options.to_hash.except(:parse_contact)) unless options.nil?
-      response = request(NeuralCleanConversation.resources_path, body)
+      body = body.merge(delete_from_hash(options.to_hash, :parse_contact)) unless options.nil?
 
+      response = request(NeuralCleanConversation.resources_path, body)
       collection = []
       response.each do |conversation|
         collection.push(NeuralCleanConversation.new(**conversation.merge(api: api)))
@@ -76,6 +76,11 @@ module Nylas
         path: path,
         payload: JSON.dump(body)
       )
+    end
+
+    def delete_from_hash(hash, to_delete)
+      hash.delete(to_delete)
+      hash
     end
   end
 end
