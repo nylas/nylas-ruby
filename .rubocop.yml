@@ -38,6 +38,10 @@ Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"
 
+Style/NumericLiterals:
+  Exclude:
+    - "spec/nylas/neural_spec.rb"
+
 RSpec/MultipleExpectations:
   Enabled: false
 
