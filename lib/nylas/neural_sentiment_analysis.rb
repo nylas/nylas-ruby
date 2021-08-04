@@ -11,7 +11,7 @@ module Nylas
     attribute :account_id, :string
     attribute :sentiment, :string
     attribute :sentiment_score, :float
-    attribute :processed_length, :float
+    attribute :processed_length, :integer
     attribute :text, :string
   end
 end
