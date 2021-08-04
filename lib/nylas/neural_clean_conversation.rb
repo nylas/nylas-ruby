@@ -7,7 +7,7 @@ module Nylas
     include Model
     self.resources_path = "/neural/conversation"
     allows_operations(listable: true)
-    IMAGE_REGEX = /[(']cid:(.*?)[)']/
+    IMAGE_REGEX = /[(']cid:(.*?)[)']/.freeze
 
     attribute :conversation, :string
     attribute :model_version, :string
