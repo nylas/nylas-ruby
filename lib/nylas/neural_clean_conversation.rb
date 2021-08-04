@@ -7,7 +7,7 @@ module Nylas
     include Model
     self.resources_path = "/neural/conversation"
     allows_operations(listable: true)
-    IMAGE_REGEX = /[\(']cid:(.*?)[\)']/
+    IMAGE_REGEX = /[(']cid:(.*?)[)']/
 
     attribute :conversation, :string
     attribute :model_version, :string
@@ -18,6 +18,7 @@ module Nylas
     # an array of File objects returned from the File API
     def extract_images
       return if conversation.nil?
+
       files = []
       matches = conversation.scan(IMAGE_REGEX)
       matches.each do |match|
