@@ -28,6 +28,7 @@ module Nylas
     attribute :title, :string
     attribute :when, :when
     attribute :metadata, :hash
+    attribute :conferencing, :event_conferencing
     attribute :original_start_time, :unix_timestamp
 
     attr_accessor :notify_participants
