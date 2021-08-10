@@ -37,6 +37,17 @@ describe Nylas::Event do
         },
         metadata: {
           "event_type": "gathering"
+        },
+        conferencing: {
+          provider: "Zoom Meeting",
+          details: {
+            url: "https://us02web.zoom.us/j/****************",
+            meeting_code: "213",
+            password: "xyz",
+            phone: [
+              "+11234567890"
+            ]
+          }
         }
       }
 
@@ -69,6 +80,11 @@ describe Nylas::Event do
       expect(event.when).to cover(Time.at(1_511_306_400))
       expect(event.when).not_to cover(Time.at(1_511_306_401))
       expect(event.metadata[:event_type]).to eql "gathering"
+      expect(event.conferencing.provider).to eql "Zoom Meeting"
+      expect(event.conferencing.details.url).to eql "https://us02web.zoom.us/j/****************"
+      expect(event.conferencing.details.meeting_code).to eql "213"
+      expect(event.conferencing.details.password).to eql "xyz"
+      expect(event.conferencing.details.phone).to eql ["+11234567890"]
     end
   end
 
