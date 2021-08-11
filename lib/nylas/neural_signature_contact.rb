@@ -13,6 +13,9 @@ module Nylas
 
     attr_accessor :api
 
+    # Creates a Nylas contact object compatible with the contact endpoints.
+    # Please note if multiple names or multiple job titles were parsed only
+    # the first set are used.
     def to_contact_object
       contact = merge_multiple_hashes([convert_names, convert_emails, convert_phone_numbers, convert_links])
       contact[:job_title] = job_titles[0] unless job_titles.nil?
@@ -25,8 +28,8 @@ module Nylas
       return if names.nil?
 
       contact = {}
-      contact[:given_name] = names[0].first_name
-      contact[:surname] = names[0].last_name
+      contact[:given_name] = names[0].first_name unless names[0].first_name.to_s.empty?
+      contact[:surname] = names[0].last_name unless names[0].last_name.to_s.empty?
       contact
     end
 
