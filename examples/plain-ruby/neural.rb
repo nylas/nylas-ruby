@@ -32,7 +32,7 @@ demonstrate { ocr.to_h }
 categorize_list = api.neural.categorize([message_id])
 demonstrate { categorize_list[0].to_h }
 # Re-categorize the message to a different category
-categorize = categorize.recategorize("conversation")
+categorize = categorize_list[0].recategorize("conversation")
 demonstrate { categorize.to_h }
 
 # Clean the conversation of a message
