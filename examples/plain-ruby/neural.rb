@@ -24,9 +24,13 @@ contact = signatures[0].contacts.to_contact_object
 demonstrate { contact.to_h }
 
 # Perform OCR request on a page (with a page range)
-file_id = api.files.first.id
-ocr = api.neural.ocr_request(file_id, [2,3])
-demonstrate { ocr.to_h }
+begin
+  file_id = api.files.first.id
+  ocr = api.neural.ocr_request(file_id, [2,3])
+  demonstrate { ocr.to_h }
+rescue Nylas::Error
+  puts "No file found or file found was not compatible with the OCR endpoint"
+end
 
 # Perform category analysis on a message
 categorize_list = api.neural.categorize([message_id])
