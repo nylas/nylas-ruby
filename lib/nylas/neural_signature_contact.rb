@@ -28,8 +28,8 @@ module Nylas
       return if names.nil?
 
       contact = {}
-      contact[:given_name] = names[0].first_name unless names[0].first_name.to_s.empty?
-      contact[:surname] = names[0].last_name unless names[0].last_name.to_s.empty?
+      contact[:given_name] = names[0].first_name if names[0].first_name
+      contact[:surname] = names[0].last_name if names[0].last_name
       contact
     end
 
