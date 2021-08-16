@@ -31,7 +31,9 @@ module Nylas
       def to_h(keys: attribute_definitions.keys)
         keys.each_with_object({}) do |key, casted_data|
           value = attribute_definitions[key].serialize(self[key])
-          casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty?)
+          # If the value is an empty hash but we specify that it is valid (via default value), serialize it
+          casted_data[key] = value unless value.nil? || (value.respond_to?(:empty?) && value.empty? &&
+            !(attribute_definitions[key].default == value && value.is_a?(Hash)))
         end
       end
 
