@@ -55,6 +55,7 @@ require_relative "nylas/free_busy"
 require_relative "nylas/time_slot"
 require_relative "nylas/event_conferencing"
 require_relative "nylas/event_conferencing_details"
+require_relative "nylas/event_conferencing_autocreate"
 
 # Custom collection types
 require_relative "nylas/search_collection"
@@ -114,4 +115,5 @@ module Nylas
   Types.registry[:time_slot] = Types::ModelType.new(model: TimeSlot)
   Types.registry[:event_conferencing] = Types::ModelType.new(model: EventConferencing)
   Types.registry[:event_conferencing_details] = Types::ModelType.new(model: EventConferencingDetails)
+  Types.registry[:event_conferencing_autocreate] = Types::ModelType.new(model: EventConferencingAutocreate)
 end

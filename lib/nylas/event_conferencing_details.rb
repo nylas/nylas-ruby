@@ -12,4 +12,3 @@ module Nylas
     has_n_of_attribute :phone, :string
   end
 end
-

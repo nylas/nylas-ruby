@@ -41,6 +41,17 @@ module Nylas
       read_only
     end
 
+    def save
+      if conferencing
+        body = to_h
+        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
+          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
+        end
+      end
+
+      super
+    end
+
     def rsvp(status, notify_participants:)
       rsvp = Rsvp.new(api: api, status: status, notify_participants: notify_participants,
                       event_id: id, account_id: account_id)

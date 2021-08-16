@@ -7,5 +7,6 @@ module Nylas
     include Model::Attributable
     attribute :provider, :string
     attribute :details, :event_conferencing_details
+    attribute :autocreate, :event_conferencing_autocreate
   end
 end
