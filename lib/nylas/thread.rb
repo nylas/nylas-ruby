@@ -23,6 +23,7 @@ module Nylas
     has_n_of_attribute :labels, :label
     has_n_of_attribute :folders, :folder
     has_n_of_attribute :message_ids, :string
+    has_n_of_attribute :messages, :message
     has_n_of_attribute :participants, :participant
     attribute :snippet, :string
     attribute :starred, :boolean

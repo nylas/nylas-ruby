@@ -4,6 +4,7 @@
 * Fix issue where `Delta` did not have a header attribute for expanded headers
 * Fix ArgumentError when calling `Nylas::API#send!` due to missing double splat (**)
 * Fix issue where server errors are not reported if HTML is returned
+* Fix issue where expanded `Thread` objects were not returning messages
 
 ### 5.2.0 / 2021-06-07
 * Add support for `Room Resource`
