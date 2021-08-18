@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Nylas
-  # Structure to represent a the Neural Categorize object.
+  # Structure to represent the Neural Categorize object.
   # @see https://developer.nylas.com/docs/intelligence/categorizer/#categorize-message-response
   class Categorize
     include Model::Attributable
