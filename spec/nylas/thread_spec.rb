@@ -25,6 +25,12 @@ describe Nylas::Thread do
                                { display_name: "Inbox", id: "folder-inbox", name: "inbox" }],
                      last_message_received_timestamp: 1_510_080_143, last_message_sent_timestamp: nil,
                      last_message_timestamp: 1_510_080_143, message_ids: ["mess-0987"],
+                     messages: [{ account_id: "acc-1234", bcc: [], cc: [], date: 1_510_080_788, files: [],
+                                  from: [{ email: "andy-noreply@google.com", name: "Andy" }],
+                                  id: "message-123", labels: [], object: "message", reply_to: [],
+                                  snippet: "One", starred: false, subject: "Thread Test",
+                                  thread_id: "thread-2345", to: [{ email: "hellocohere@gmail.com",
+                                                                   name: "John Smith" }], unread: false }],
                      object: "thread", participants: [{ email: "hellocohere@gmail.com", name: "" },
                                                       { email: "andy-noreply@google.com",
                                                         name: "Andy from Google" }],
@@ -49,6 +55,13 @@ describe Nylas::Thread do
 
     expect(thread.last_message_received_timestamp).to eql Time.at(1_510_080_143)
     expect(thread.last_message_timestamp).to eql Time.at(1_510_080_143)
+
+    expect(thread.messages[0].account_id).to eql "acc-1234"
+    expect(thread.messages[0].thread_id).to eql "thread-2345"
+    expect(thread.messages[0].object).to eql "message"
+    expect(thread.messages[0].subject).to eql "Thread Test"
+    expect(thread.messages[0].from[0].email).to eql "andy-noreply@google.com"
+    expect(thread.messages[0].to[0].email).to eql "hellocohere@gmail.com"
 
     expect(thread.message_ids).to eql(["mess-0987"])
     expect(thread.object).to eql "thread"

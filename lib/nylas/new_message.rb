@@ -26,7 +26,7 @@ module Nylas
     attribute :tracking, :message_tracking
 
     def send!
-      Message.new(api.execute(method: :post, path: "/send", payload: to_json).merge(api: api))
+      Message.new(**api.execute(method: :post, path: "/send", payload: to_json).merge(api: api))
     end
   end
 end
