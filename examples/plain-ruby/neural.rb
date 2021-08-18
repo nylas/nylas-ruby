@@ -18,18 +18,24 @@ demonstrate { sentiments[0].to_h }
 # Perform extracting a signature and parsing its contact information
 signatures = api.neural.extract_signature([message_id])
 demonstrate { signatures[0].to_h }
-demonstrate { signatures[0].to_h }
 # Convert the parsed contact to a Nylas contact object
 contact = signatures[0].contacts.to_contact_object
 demonstrate { contact.to_h }
 
 # Perform OCR request on a page (with a page range)
-begin
-  file_id = api.files.first.id
-  ocr = api.neural.ocr_request(file_id, [2,3])
-  demonstrate { ocr.to_h }
-rescue Nylas::Error
-  puts "No file found or file found was not compatible with the OCR endpoint"
+file = api.files.first
+if file.nil?
+  puts "No file was found"
+else
+  begin
+    file_id = api.files.first.id
+    # Optionally you can add a range, like below, of the pages OCR can be performed on
+    # Also just pass in the file ID without a range to perform OCR on all pages
+    ocr = api.neural.ocr_request(file_id, [1])
+    demonstrate { ocr.to_h }
+  rescue Nylas::Error => e
+    puts "#{e.class}: #{e.message}"
+  end
 end
 
 # Perform category analysis on a message
