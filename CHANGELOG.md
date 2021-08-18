@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add support for Neural API
 * Fix issue where `Delta` did not have a header attribute for expanded headers
 * Fix ArgumentError when calling `Nylas::API#send!` due to missing double splat (**)
 * Fix issue where server errors are not reported if HTML is returned
