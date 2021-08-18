@@ -25,7 +25,7 @@ module Nylas
     private
 
     def convert_names
-      return if names.nil?
+      return {} if names.empty?
 
       contact = {}
       contact[:given_name] = names[0].first_name if names[0].first_name
@@ -34,7 +34,7 @@ module Nylas
     end
 
     def convert_emails
-      return if emails.nil?
+      return {} if emails.empty?
 
       contact = {}
       contact[:emails] = []
@@ -45,7 +45,7 @@ module Nylas
     end
 
     def convert_phone_numbers
-      return if phone_numbers.nil?
+      return {} if phone_numbers.empty?
 
       contact = {}
       contact[:phone_numbers] = []
@@ -56,7 +56,7 @@ module Nylas
     end
 
     def convert_links
-      return if links.nil?
+      return {} if links.empty?
 
       contact = {}
       contact[:web_pages] = []
