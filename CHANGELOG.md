@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fix update draft failing if version is not explicitly set
+
 ### 5.3.0 / 2021-08-18
 * Add support for Neural API
 * Fix issue where `Delta` did not have a header attribute for expanded headers

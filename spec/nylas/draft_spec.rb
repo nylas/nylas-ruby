@@ -97,6 +97,34 @@ describe Nylas::Draft do
 
       expect(draft.version).to eq(1)
     end
+
+    it "sends the version number if the user does not manually add it" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      data = {
+        id: "draft-1234",
+        subject: "This is a draft",
+        version: 0
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+      updated = {
+        subject: "This is an updated draft"
+      }
+
+      draft.update(**updated)
+
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        path: "/drafts/draft-1234",
+        payload: JSON.dump(
+          subject: "This is an updated draft",
+          version: 0
+        ),
+        query: {}
+      )
+    end
   end
 
   describe "#create" do
