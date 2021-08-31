@@ -5,6 +5,11 @@ require_relative '../helpers'
 api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'],
                      access_token: ENV['NYLAS_ACCESS_TOKEN'])
 
+# Creating a draft
+demonstrate do
+  example_draft = api.drafts.create(subject: "A new draft!")
+  example_draft.to_h
+end
 
 # Retrieving a count of drafts
 demonstrate { api.drafts.count }
@@ -15,12 +20,6 @@ example_draft =  api.drafts.first
 
 # Retrieving a particular drafts
 demonstrate { api.drafts.find(example_draft.id) }
-
-# Creating a draft
-demonstrate do
-  example_draft = api.drafts.create(subject: "A new draft!")
-  example_draft.to_h
-end
 
 # Sending a draft
 demonstrate do
