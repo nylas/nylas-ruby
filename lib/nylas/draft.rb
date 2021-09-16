@@ -56,9 +56,8 @@ module Nylas
     end
 
     def send!
-      return execute(method: :post, path: "/send", payload: to_json) if tracking
+      return execute(method: :post, path: "/send", payload: to_json) if tracking || !id
 
-      save
       execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
     end
 
