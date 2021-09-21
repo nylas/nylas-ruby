@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Fix update draft failing if version is not explicitly set
+* Fix draft `.send` logic
 
 ### 5.3.0 / 2021-08-18
 * Add support for Neural API
