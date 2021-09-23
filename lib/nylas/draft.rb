@@ -39,9 +39,12 @@ module Nylas
     transfer :api, to: %i[events files folder labels]
 
     def update(**data)
+      # If files are provided, replace files with file IDs
       self.files = data[:files] if data[:files]
       extract_file_ids!
       data[:file_ids] = file_ids
+      # If version is not provided, add version or request will fail
+      data[:version] = version unless data[:version]
 
       super
     end
@@ -53,9 +56,8 @@ module Nylas
     end
 
     def send!
-      return execute(method: :post, path: "/send", payload: to_json) if tracking
+      return execute(method: :post, path: "/send", payload: to_json) if tracking || !id
 
-      save
       execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
     end
 

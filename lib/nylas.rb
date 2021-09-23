@@ -78,6 +78,19 @@ require_relative "nylas/raw_message"
 require_relative "nylas/thread"
 require_relative "nylas/webhook"
 
+# Neural specific types
+require_relative "nylas/neural"
+require_relative "nylas/neural_sentiment_analysis"
+require_relative "nylas/neural_ocr"
+require_relative "nylas/neural_categorizer"
+require_relative "nylas/neural_clean_conversation"
+require_relative "nylas/neural_contact_link"
+require_relative "nylas/neural_contact_name"
+require_relative "nylas/neural_signature_contact"
+require_relative "nylas/neural_signature_extraction"
+require_relative "nylas/neural_message_options"
+require_relative "nylas/categorize"
+
 require_relative "nylas/native_authentication"
 
 require_relative "nylas/http_client"
@@ -116,4 +129,9 @@ module Nylas
   Types.registry[:event_conferencing] = Types::ModelType.new(model: EventConferencing)
   Types.registry[:event_conferencing_details] = Types::ModelType.new(model: EventConferencingDetails)
   Types.registry[:event_conferencing_autocreate] = Types::ModelType.new(model: EventConferencingAutocreate)
+  Types.registry[:neural] = Types::ModelType.new(model: Neural)
+  Types.registry[:categorize] = Types::ModelType.new(model: Categorize)
+  Types.registry[:neural_signature_contact] = Types::ModelType.new(model: NeuralSignatureContact)
+  Types.registry[:neural_contact_link] = Types::ModelType.new(model: NeuralContactLink)
+  Types.registry[:neural_contact_name] = Types::ModelType.new(model: NeuralContactName)
 end

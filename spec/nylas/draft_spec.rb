@@ -97,6 +97,34 @@ describe Nylas::Draft do
 
       expect(draft.version).to eq(1)
     end
+
+    it "sends the version number if the user does not manually add it" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      data = {
+        id: "draft-1234",
+        subject: "This is a draft",
+        version: 0
+      }
+      draft = described_class.from_json(
+        JSON.dump(data),
+        api: api
+      )
+      updated = {
+        subject: "This is an updated draft"
+      }
+
+      draft.update(**updated)
+
+      expect(api).to have_received(:execute).with(
+        method: :put,
+        path: "/drafts/draft-1234",
+        payload: JSON.dump(
+          subject: "This is an updated draft",
+          version: 0
+        ),
+        query: {}
+      )
+    end
   end
 
   describe "#create" do
@@ -225,26 +253,22 @@ describe Nylas::Draft do
   end
 
   describe "#send!" do
-    it "saves and sends the draft" do
+    it "sends the payload if the draft was not created on the server" do
       api = instance_double(Nylas::API)
-      draft = described_class.from_hash({ id: "draft-1234", "version": 5 }, api: api)
+      draft = described_class.from_hash({ reply_to_message_id: "mess-1234",
+                                          to: [{ email: "to@example.com", name: "To Example" }],
+                                          from: [{ email: "from@example.com", name: "From Example" }],
+                                          subject: "A draft emails subject", body: "<h1>A draft Email</h1>" },
+                                        api: api)
       update_json = draft.to_json
-      allow(api).to receive(:execute).and_return({})
-      allow(api).to receive(:execute).with(method: :put, path: "/drafts/draft-1234", payload: update_json)
-                                     .and_return(id: "draft-1234", version: "6")
+      allow(api).to receive(:execute)
 
       draft.send!
 
       expect(api).to have_received(:execute).with(
-        method: :put,
-        path: "/drafts/#{draft.id}",
-        payload: update_json,
-        query: {}
-      )
-      expect(api).to have_received(:execute).with(
         method: :post,
         path: "/send",
-        payload: JSON.dump(draft_id: draft.id, version: draft.version),
+        payload: update_json,
         query: {}
       )
     end

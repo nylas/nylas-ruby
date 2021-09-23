@@ -144,5 +144,16 @@ module Nylas
       end
     end
     Types.registry[:boolean] = BooleanType.new
+
+    # Type for attributes represented as floats.
+    class FloatType < ValueType
+      # @param value [Object] Strictly casts the passed in value to a boolean (must be true, not "" or 1)
+      def cast(value)
+        return nil if value.nil?
+
+        value.to_f
+      end
+    end
+    Types.registry[:float] = FloatType.new
   end
 end
