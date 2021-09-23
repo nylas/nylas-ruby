@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add support for Event Conferencing
 * Fix update draft failing if version is not explicitly set
 * Fix draft `.send` logic
 

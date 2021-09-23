@@ -37,6 +37,17 @@ describe Nylas::Event do
         },
         metadata: {
           "event_type": "gathering"
+        },
+        conferencing: {
+          provider: "Zoom Meeting",
+          details: {
+            url: "https://us02web.zoom.us/j/****************",
+            meeting_code: "213",
+            password: "xyz",
+            phone: [
+              "+11234567890"
+            ]
+          }
         }
       }
 
@@ -69,6 +80,11 @@ describe Nylas::Event do
       expect(event.when).to cover(Time.at(1_511_306_400))
       expect(event.when).not_to cover(Time.at(1_511_306_401))
       expect(event.metadata[:event_type]).to eql "gathering"
+      expect(event.conferencing.provider).to eql "Zoom Meeting"
+      expect(event.conferencing.details.url).to eql "https://us02web.zoom.us/j/****************"
+      expect(event.conferencing.details.meeting_code).to eql "213"
+      expect(event.conferencing.details.password).to eql "xyz"
+      expect(event.conferencing.details.phone).to eql ["+11234567890"]
     end
   end
 
@@ -229,6 +245,109 @@ describe Nylas::Event do
           }.to_json,
           query: {}
         )
+      end
+
+      it "sends the conferencing autocreate object even if settings is empty" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          conferencing: {
+            provider: "Zoom meetings",
+            autocreate: {
+              settings: {}
+            }
+          }
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987",
+            conferencing: {
+              provider: "Zoom meetings",
+              autocreate: {
+                settings: {}
+              }
+            }
+          }.to_json,
+          query: {}
+        )
+      end
+
+      it "sends the conferencing object if details alone is set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          conferencing: {
+            provider: "Zoom meetings",
+            details: {
+              url: "https://us02web.zoom.us/j/****************",
+              meeting_code: "213",
+              password: "xyz",
+              phone: [
+                "+11234567890"
+              ]
+            }
+          }
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987",
+            conferencing: {
+              provider: "Zoom meetings",
+              details: {
+                meeting_code: "213",
+                password: "xyz",
+                url: "https://us02web.zoom.us/j/****************",
+                phone: [
+                  "+11234567890"
+                ]
+              }
+            }
+          }.to_json,
+          query: {}
+        )
+      end
+
+      it "throws an error if both conferencing details and autocreate are set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          conferencing: {
+            provider: "Zoom meetings",
+            details: {
+              url: "https://us02web.zoom.us/j/****************",
+              meeting_code: "213",
+              password: "xyz",
+              phone: [
+                "+11234567890"
+              ]
+            },
+            autocreate: {
+              settings: {}
+            }
+          }
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+        error = "Cannot set both 'details' and 'autocreate' in conferencing object."
+
+        expect { event.save }.to raise_error(ArgumentError, error)
       end
     end
   end

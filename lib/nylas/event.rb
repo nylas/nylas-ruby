@@ -28,6 +28,7 @@ module Nylas
     attribute :title, :string
     attribute :when, :when
     attribute :metadata, :hash
+    attribute :conferencing, :event_conferencing
     attribute :original_start_time, :unix_timestamp
 
     attr_accessor :notify_participants
@@ -38,6 +39,17 @@ module Nylas
 
     def read_only?
       read_only
+    end
+
+    def save
+      if conferencing
+        body = to_h
+        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
+          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
+        end
+      end
+
+      super
     end
 
     def rsvp(status, notify_participants:)

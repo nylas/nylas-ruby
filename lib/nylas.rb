@@ -53,6 +53,9 @@ require_relative "nylas/nylas_date"
 require_relative "nylas/when"
 require_relative "nylas/free_busy"
 require_relative "nylas/time_slot"
+require_relative "nylas/event_conferencing"
+require_relative "nylas/event_conferencing_details"
+require_relative "nylas/event_conferencing_autocreate"
 
 # Custom collection types
 require_relative "nylas/search_collection"
@@ -123,6 +126,9 @@ module Nylas
   Types.registry[:contact_group] = Types::ModelType.new(model: ContactGroup)
   Types.registry[:when] = Types::ModelType.new(model: When)
   Types.registry[:time_slot] = Types::ModelType.new(model: TimeSlot)
+  Types.registry[:event_conferencing] = Types::ModelType.new(model: EventConferencing)
+  Types.registry[:event_conferencing_details] = Types::ModelType.new(model: EventConferencingDetails)
+  Types.registry[:event_conferencing_autocreate] = Types::ModelType.new(model: EventConferencingAutocreate)
   Types.registry[:neural] = Types::ModelType.new(model: Neural)
   Types.registry[:categorize] = Types::ModelType.new(model: Categorize)
   Types.registry[:neural_signature_contact] = Types::ModelType.new(model: NeuralSignatureContact)
