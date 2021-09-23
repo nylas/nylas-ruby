@@ -26,6 +26,7 @@ module Nylas
       def assign(**data)
         data.each do |attribute_name, value|
           next if value.nil?
+
           if respond_to?(:"#{attribute_name}=")
             send(:"#{attribute_name}=", value)
           end
