@@ -17,7 +17,7 @@ module Nylas
 
     # Instantiates a new model
     def new(**attributes)
-      model.new(**attributes.merge(api: api))
+      model.new(attributes.merge(api: api))
     end
 
     def create(**attributes)
