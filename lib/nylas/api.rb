@@ -126,6 +126,11 @@ module Nylas
       @room_resources ||= Collection.new(model: RoomResource, api: self)
     end
 
+    # @return[Neural] A {Neural} object that provides
+    def neural
+      @neural ||= Neural.new(api: self)
+    end
+
     # Revokes access to the Nylas API for the given access token
     # @return [Boolean]
     def revoke(access_token)

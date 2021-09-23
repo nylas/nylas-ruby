@@ -38,6 +38,9 @@ Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"
 
+Style/NumericLiterals:
+  Enabled: false
+
 RSpec/MultipleExpectations:
   Enabled: false
 

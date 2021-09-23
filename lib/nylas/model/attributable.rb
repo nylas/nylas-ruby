@@ -64,6 +64,21 @@ module Nylas
           end
         end
 
+        # Allows a class to inherit parent's attributes
+        def inherit_attributes
+          return if superclass.nil?
+
+          parent_attributes = superclass.attribute_definitions
+          parent_attributes.each do |parent_attribute|
+            name = parent_attribute[0]
+            attr = parent_attribute[1]
+            next if attribute_definitions.key?(name)
+
+            attribute_definitions[name] = attr
+            define_accessors(name)
+          end
+        end
+
         def attribute_definitions
           @attribute_definitions ||= Registry.new
         end
