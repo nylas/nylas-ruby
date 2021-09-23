@@ -280,6 +280,49 @@ describe Nylas::Event do
         )
       end
 
+      it "sends the conferencing object if details alone is set" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          conferencing: {
+            provider: "Zoom meetings",
+            details: {
+              url: "https://us02web.zoom.us/j/****************",
+              meeting_code: "213",
+              password: "xyz",
+              phone: [
+                "+11234567890"
+              ]
+            }
+          }
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          method: :put,
+          path: "/events/event-id",
+          payload: {
+            calendar_id: "cal-0987",
+            conferencing: {
+              provider: "Zoom meetings",
+              details: {
+                meeting_code: "213",
+                password: "xyz",
+                url: "https://us02web.zoom.us/j/****************",
+                phone: [
+                  "+11234567890"
+                ]
+              }
+            }
+          }.to_json,
+          query: {}
+        )
+      end
+
       it "throws an error if both conferencing details and autocreate are set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
