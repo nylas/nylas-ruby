@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 5.4.0 / 2021-09-23
 * Add support for Event Conferencing
 * Fix update draft failing if version is not explicitly set
 * Fix draft `.send` logic
