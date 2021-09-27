@@ -56,9 +56,11 @@ module Nylas
     end
 
     def send!
-      return execute(method: :post, path: "/send", payload: to_json) if tracking || !id
+      return execute(method: :post, path: "/send", payload: to_json) unless id
 
-      execute(method: :post, path: "/send", payload: JSON.dump(draft_id: id, version: version))
+      data = { draft_id: id, version: version }
+      data[:tracking] = tracking.to_h if tracking
+      execute(method: :post, path: "/send", payload: JSON.dump(data))
     end
 
     def starred?

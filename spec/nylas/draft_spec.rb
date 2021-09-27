@@ -277,7 +277,6 @@ describe Nylas::Draft do
       api = instance_double(Nylas::API)
       draft = described_class.from_hash({ id: "draft-1234", "version": 5 }, api: api)
       draft.tracking = { opens: true, links: true, thread_replies: true, payload: "this is a payload" }
-      update_json = draft.to_json
       allow(api).to receive(:execute)
 
       draft.send!
@@ -285,7 +284,11 @@ describe Nylas::Draft do
       expect(api).to have_received(:execute).with(
         method: :post,
         path: "/send",
-        payload: update_json,
+        payload: JSON.dump(
+          draft_id: "draft-1234",
+          version: 5,
+          tracking: draft.tracking.to_h
+        ),
         query: {}
       )
     end
