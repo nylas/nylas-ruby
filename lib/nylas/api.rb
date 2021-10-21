@@ -83,7 +83,7 @@ module Nylas
 
     # @return [Collection<Calendar>] A queryable collection of {Calendar}s
     def calendars
-      @calendars ||= Collection.new(model: Calendar, api: self)
+      @calendars ||= CalendarCollection.new(model: Calendar, api: self)
     end
 
     # @return [DeltasCollection<Delta>] A queryable collection of Deltas, which are themselves a collection.
