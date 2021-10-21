@@ -126,6 +126,11 @@ module Nylas
       @room_resources ||= Collection.new(model: RoomResource, api: self)
     end
 
+    # @return[Collection<RoomResource>] A queryable collection of {Scheduler} objects
+    def scheduler
+      @scheduler ||= Collection.new(model: Scheduler, api: self)
+    end
+
     # @return[Neural] A {Neural} object that provides
     def neural
       @neural ||= Neural.new(api: self)
