@@ -171,6 +171,7 @@ module Nylas
       @webhooks ||= Collection.new(model: Webhook, api: as(client.app_secret))
     end
 
+    # TODO::Move this into calendar collection
     def free_busy(emails:, start_time:, end_time:)
       FreeBusyCollection.new(
         api: self,
