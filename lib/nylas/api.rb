@@ -133,7 +133,7 @@ module Nylas
 
     # @return [Collection<Component>] A queryable collection of {Component}s
     def components
-      @components ||= Collection.new(model: Component, api: as(client.app_secret))
+      @components ||= ComponentCollection.new(model: Component, api: as(client.app_secret))
     end
 
     # Revokes access to the Nylas API for the given access token

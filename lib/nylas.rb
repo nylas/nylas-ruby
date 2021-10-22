@@ -35,7 +35,6 @@ require_relative "nylas/model"
 # Attribute types supported by the API
 require_relative "nylas/email_address"
 require_relative "nylas/event"
-require_relative "nylas/event_collection"
 require_relative "nylas/file"
 require_relative "nylas/folder"
 require_relative "nylas/im_address"
@@ -59,9 +58,11 @@ require_relative "nylas/event_conferencing_autocreate"
 require_relative "nylas/component"
 
 # Custom collection types
+require_relative "nylas/event_collection"
 require_relative "nylas/search_collection"
 require_relative "nylas/deltas_collection"
 require_relative "nylas/free_busy_collection"
+require_relative "nylas/component_collection"
 
 # Models supported by the API
 require_relative "nylas/account"
