@@ -13,11 +13,14 @@ demonstrate { api.components }
 
 # Retrieving a particular component
 example_component = api.components.last
-demonstrate { api.events.find(example_component.id).to_h }
+demonstrate { api.components.find(example_component.id).to_h }
 
 # Editing a particular component
-example_component.name = "New Updated Ruby Name"
-demonstrate { api.events.save }
+demonstrate do  example_component.update(
+  name: "New Updated Ruby Name"
+)
+end
+demonstrate { example_component.name }
 
 # Delete a component
 demonstrate { example_component.destroy }
