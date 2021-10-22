@@ -17,6 +17,7 @@ module Nylas
     attribute :public_account_id, :string
     attribute :public_token_id, :string
     attribute :public_application_id, :string
+    attribute :access_token, :string
     attribute :created_at, :date
     attribute :updated_at, :date
 
