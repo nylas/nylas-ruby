@@ -23,6 +23,7 @@ module Nylas
 
     def get_available_calendars
       raise ArgumentError, "Cannot get calendars for a page without an ID." if id.nil?
+
       api.execute(
         method: :get,
         path: "/manage/pages/#{id}/calendars"
@@ -31,9 +32,10 @@ module Nylas
 
     def upload_image(content_type:, object_name:)
       raise ArgumentError, "Cannot upload an image to a page without an ID." if id.nil?
+
       payload = {
         contentType: content_type,
-        objectName: object_name,
+        objectName: object_name
       }
       api.execute(
         method: :put,
