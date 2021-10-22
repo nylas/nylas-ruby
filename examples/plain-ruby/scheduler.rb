@@ -7,7 +7,7 @@ nylas = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_S
                      access_token: ENV['NYLAS_ACCESS_TOKEN'])
 
 # Create a scheduler page
-demonstrate { nylas.scheduler.create("access_tokens": [ENV['NYLAS_ACCESS_TOKEN']], name: "Ruby SDK Example", slug: "ruby_example_#{Time.now.to_i}") }
+demonstrate { nylas.scheduler.create(access_tokens: [ENV['NYLAS_ACCESS_TOKEN']], name: "Ruby SDK Example", slug: "ruby_example_#{Time.now.to_i}") }
 
 # List all scheduler pages
 demonstrate { nylas.scheduler }
