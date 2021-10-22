@@ -67,6 +67,7 @@ module Nylas
 
       open_hours_emails.each do |email|
         next if emails.include?(email) || free_busy_emails.include?(email)
+
         raise ArgumentError, "Open Hours cannot contain an email not present in the main email list or
 the free busy email list."
       end
