@@ -46,21 +46,8 @@ describe Nylas::Scheduler do
         access_token: "seriously-unreal"
       )
       api = Nylas::API.new(client: client)
-      data = {
-        id: 123,
-        app_client_id: "test-client-id",
-        app_organization_id: 0,
-        config: {
-          timezone: "America/Los_Angeles"
-        },
-        edit_token: "token",
-        name: "Test",
-        slug: "test-slug",
-        created_at: "2021-06-24",
-        modified_at: "2021-06-24"
-      }
 
-      scheduler = described_class.from_json(JSON.dump(data), api: api)
+      scheduler = api.scheduler
 
       expect(scheduler.api.client.api_server).to eql "https://api.schedule.nylas.com"
     end
