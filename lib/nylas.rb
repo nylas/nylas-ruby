@@ -56,6 +56,7 @@ require_relative "nylas/time_slot"
 require_relative "nylas/event_conferencing"
 require_relative "nylas/event_conferencing_details"
 require_relative "nylas/event_conferencing_autocreate"
+require_relative "nylas/component"
 
 # Custom collection types
 require_relative "nylas/search_collection"
