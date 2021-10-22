@@ -24,7 +24,10 @@ module Nylas
 
     def initialize(**initial_data)
       super(**initial_data)
-      self.class.resources_path = "/component/#{api.client.app_id}"
+    end
+
+    def resources_path(*)
+      "/component/#{api.client.app_id}"
     end
   end
 end
