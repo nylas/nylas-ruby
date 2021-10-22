@@ -7,7 +7,7 @@ module Nylas
     allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
                       destroyable: true)
 
-    attribute :id, :string
+    attribute :id, :string, read_only: true
     attribute :account_id, :string
     attribute :name, :string
     attribute :type, :string
@@ -16,10 +16,10 @@ module Nylas
     attribute :settings, :hash
     attribute :public_account_id, :string
     attribute :public_token_id, :string
-    attribute :public_application_id, :string
+    attribute :public_application_id, :string, read_only: true
     attribute :access_token, :string
-    attribute :created_at, :date
-    attribute :updated_at, :date
+    attribute :created_at, :date, read_only: true
+    attribute :updated_at, :date, read_only: true
 
     has_n_of_attribute :allowed_domains, :string
 
