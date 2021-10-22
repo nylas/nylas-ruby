@@ -13,4 +13,3 @@ module Nylas
     has_n_of_attribute :days, :integer
   end
 end
-

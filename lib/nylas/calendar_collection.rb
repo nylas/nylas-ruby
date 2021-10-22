@@ -66,7 +66,9 @@ module Nylas
       emails = merge_arrays(emails) if emails[0].is_a?(Array)
 
       open_hours_emails.each do |email|
-        raise ArgumentError, "Open Hours cannot contain an email not present in the main email list or the free busy email list." unless emails.include?(email) || free_busy_emails.include?(email)
+        next if emails.include?(email) || free_busy_emails.include?(email)
+        raise ArgumentError, "Open Hours cannot contain an email not present in the main email list or
+the free busy email list."
       end
     end
 
@@ -93,6 +95,5 @@ module Nylas
       end
       list
     end
-
   end
 end

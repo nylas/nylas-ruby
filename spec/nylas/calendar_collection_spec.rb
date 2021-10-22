@@ -24,7 +24,7 @@ describe Nylas::CalendarCollection do
         days: [0],
         timezone: "America/Chicago",
         start: "10:00",
-        end:  "14:00"
+        end: "14:00"
       )
 
       calendar_collection.availability(
@@ -76,7 +76,7 @@ describe Nylas::CalendarCollection do
         days: [0],
         timezone: "America/Chicago",
         start: "10:00",
-        end:  "14:00"
+        end: "14:00"
       )
 
       calendar_collection.consecutive_availability(
@@ -128,7 +128,7 @@ describe Nylas::CalendarCollection do
         days: [0],
         timezone: "America/Chicago",
         start: "10:00",
-        end:  "14:00"
+        end: "14:00"
       )
 
       expect do
@@ -139,7 +139,6 @@ describe Nylas::CalendarCollection do
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
           buffer: 5,
-          round_robin: "max-fairness",
           free_busy: [free_busy],
           open_hours: [open_hours]
         )
