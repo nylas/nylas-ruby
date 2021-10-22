@@ -82,9 +82,6 @@ describe Nylas::Component do
           settings: { foo: "bar" },
           public_account_id: "account-123",
           public_token_id: "token-123",
-          public_application_id: "application-123",
-          created_at: "2021-08-24",
-          updated_at: "2021-08-24",
           allowed_domains: ["www.nylas.com"]
         ),
         query: {}
@@ -122,7 +119,6 @@ describe Nylas::Component do
         method: :put,
         path: "/component/not-real/abc-123",
         payload: JSON.dump(
-          id: "abc-123",
           account_id: "account-123",
           name: "test-component",
           type: "agenda",
@@ -131,9 +127,6 @@ describe Nylas::Component do
           settings: { foo: "bar" },
           public_account_id: "account-123",
           public_token_id: "token-123",
-          public_application_id: "application-123",
-          created_at: "2021-08-24",
-          updated_at: "2021-08-24",
           allowed_domains: ["www.nylas.com"]
         ),
         query: {}
