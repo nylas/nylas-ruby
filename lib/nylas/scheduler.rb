@@ -21,11 +21,6 @@ module Nylas
 
     has_n_of_attribute :access_tokens, :string
 
-    def initialize(**initial_data)
-      super(**initial_data)
-      api.client.api_server = "https://api.schedule.nylas.com"
-    end
-
     def get_available_calendars
       raise ArgumentError, "Cannot get calendars for a page without an ID." if id.nil?
       api.execute(
