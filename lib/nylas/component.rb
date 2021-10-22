@@ -23,10 +23,6 @@ module Nylas
 
     has_n_of_attribute :allowed_domains, :string
 
-    def initialize(**initial_data)
-      super(**initial_data)
-    end
-
     def resources_path(*)
       "/component/#{api.client.app_id}"
     end
