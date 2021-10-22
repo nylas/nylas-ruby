@@ -79,21 +79,20 @@ describe Nylas::CalendarCollection do
         end:  "14:00"
       )
 
-      calendar_collection.availability(
+      calendar_collection.consecutive_availability(
         duration_minutes: 30,
         interval: 5,
         start_time: 1590454800,
         end_time: 1590780800,
         emails: [["one@example.com"], %w[two@example.com three@example.com]],
         buffer: 5,
-        round_robin: "max-fairness",
         free_busy: [free_busy],
         open_hours: [open_hours]
       )
 
       expect(api).to have_received(:execute).with(
         method: :post,
-        path: "/calendars/availability",
+        path: "/calendars/availability/consecutive",
         payload: JSON.dump(
           duration_minutes: 30,
           interval: 5,
@@ -101,7 +100,6 @@ describe Nylas::CalendarCollection do
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
           buffer: 5,
-          round_robin: "max-fairness",
           free_busy: [free_busy],
           open_hours: [open_hours]
         )
@@ -134,7 +132,7 @@ describe Nylas::CalendarCollection do
       )
 
       expect do
-        calendar_collection.availability(
+        calendar_collection.consecutive_availability(
           duration_minutes: 30,
           interval: 5,
           start_time: 1590454800,
