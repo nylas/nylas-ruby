@@ -6,7 +6,7 @@ api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SEC
 
 # Create a component
 # NOTE: you will need to fill in the account_id and, if not set, the access_token
-demonstrate { api.components.create(title: "Ruby Component Test", type: "agenda", public_account_id: "ACCOUNT_ID", access_token: ENV['NYLAS_ACCESS_TOKEN']) }
+demonstrate { api.components.create(name: "Ruby Component Test", type: "agenda", public_account_id: "ACCOUNT_ID", access_token: ENV['NYLAS_ACCESS_TOKEN']) }
 
 # Get all components
 demonstrate { api.components }
