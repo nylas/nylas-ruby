@@ -86,7 +86,7 @@ module Nylas
     def extract_file_ids!
       files = self.files || []
 
-      self.file_ids = files.map(&:id)
+      self.file_ids ||= files.map(&:id)
     end
   end
 end
