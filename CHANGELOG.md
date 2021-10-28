@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add support for `File` delete operation
 * Fix issue where `file_ids` get reset to empty
 
 ### 5.4.1 / 2021-09-27
