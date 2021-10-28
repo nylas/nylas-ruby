@@ -83,7 +83,7 @@ module Nylas
 
     # @return [Collection<Calendar>] A queryable collection of {Calendar}s
     def calendars
-      @calendars ||= Collection.new(model: Calendar, api: self)
+      @calendars ||= CalendarCollection.new(model: Calendar, api: self)
     end
 
     # @return [DeltasCollection<Delta>] A queryable collection of Deltas, which are themselves a collection.
@@ -184,6 +184,7 @@ module Nylas
       @webhooks ||= Collection.new(model: Webhook, api: as(client.app_secret))
     end
 
+    # TODO: Move this into calendar collection
     def free_busy(emails:, start_time:, end_time:)
       FreeBusyCollection.new(
         api: self,

@@ -3,6 +3,7 @@
 ### Unreleased
 * Add Component CRUD Support
 * Add Scheduler support
+* Add support for calendar availability
 * Add support for `File` delete operation
 * Fix issue where `file_ids` get reset to empty
 
