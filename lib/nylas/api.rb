@@ -126,9 +126,22 @@ module Nylas
       @room_resources ||= Collection.new(model: RoomResource, api: self)
     end
 
+    # @return[Collection<Scheduler>] A queryable collection of {Scheduler} objects
+    def scheduler
+      # Make a deep copy of the API as the scheduler API uses a different base URL
+      scheduler_api = Marshal.load(Marshal.dump(self))
+      scheduler_api.client.api_server = "https://api.schedule.nylas.com"
+      @scheduler ||= Collection.new(model: Scheduler, api: scheduler_api)
+    end
+
     # @return[Neural] A {Neural} object that provides
     def neural
       @neural ||= Neural.new(api: self)
+    end
+
+    # @return [Collection<Component>] A queryable collection of {Component}s
+    def components
+      @components ||= ComponentCollection.new(model: Component, api: as(client.app_secret))
     end
 
     # Revokes access to the Nylas API for the given access token
