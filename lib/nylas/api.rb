@@ -139,6 +139,11 @@ module Nylas
       @neural ||= Neural.new(api: self)
     end
 
+    # @return [Collection<Component>] A queryable collection of {Component}s
+    def components
+      @components ||= ComponentCollection.new(model: Component, api: as(client.app_secret))
+    end
+
     # Revokes access to the Nylas API for the given access token
     # @return [Boolean]
     def revoke(access_token)
