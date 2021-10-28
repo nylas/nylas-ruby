@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add Scheduler support
 * Add support for `File` delete operation
 * Fix issue where `file_ids` get reset to empty
 
