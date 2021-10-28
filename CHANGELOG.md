@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add support for `File` delete operation
+
 ### 5.4.1 / 2021-09-27
 * Fix draft send method to send existing draft when tracking is enabled
 
