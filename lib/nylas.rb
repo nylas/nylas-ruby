@@ -79,6 +79,7 @@ require_relative "nylas/new_message"
 require_relative "nylas/raw_message"
 require_relative "nylas/thread"
 require_relative "nylas/webhook"
+require_relative "nylas/scheduler"
 
 # Neural specific types
 require_relative "nylas/neural"
@@ -92,6 +93,7 @@ require_relative "nylas/neural_signature_contact"
 require_relative "nylas/neural_signature_extraction"
 require_relative "nylas/neural_message_options"
 require_relative "nylas/categorize"
+require_relative "nylas/scheduler_config"
 
 require_relative "nylas/native_authentication"
 
@@ -136,4 +138,5 @@ module Nylas
   Types.registry[:neural_signature_contact] = Types::ModelType.new(model: NeuralSignatureContact)
   Types.registry[:neural_contact_link] = Types::ModelType.new(model: NeuralContactLink)
   Types.registry[:neural_contact_name] = Types::ModelType.new(model: NeuralContactName)
+  Types.registry[:scheduler_config] = Types::ModelType.new(model: SchedulerConfig)
 end

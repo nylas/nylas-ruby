@@ -2,6 +2,9 @@
 
 ### Unreleased
 * Add Component CRUD Support
+* Add Scheduler support
+* Add support for `File` delete operation
+* Fix issue where `file_ids` get reset to empty
 
 ### 5.4.1 / 2021-09-27
 * Fix draft send method to send existing draft when tracking is enabled
