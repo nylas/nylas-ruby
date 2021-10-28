@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 5.5.0 / 2021-10-28
 * Add Component CRUD Support
 * Add Scheduler support
 * Add support for calendar availability
