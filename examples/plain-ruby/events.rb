@@ -52,7 +52,7 @@ demonstrate { api.events.where(metadata_pair:{"event_type": "gathering"}).last.m
 #   },
 #   notifications: [{
 #     type: "email",
-#     minutes_before_event: "600",
+#     minutes_before_event: 600,
 #     subject: "Test Event Notification",
 #     body: "Reminding you about our meeting."
 #   }]
