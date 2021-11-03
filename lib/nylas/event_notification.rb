@@ -15,4 +15,3 @@ module Nylas
     attribute :message, :string
   end
 end
-
