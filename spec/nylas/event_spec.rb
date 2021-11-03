@@ -36,7 +36,7 @@ describe Nylas::Event do
           start_time: 1_511_303_400
         },
         metadata: {
-          "event_type": "gathering"
+          event_type: "gathering"
         },
         conferencing: {
           provider: "Zoom Meeting",
@@ -48,7 +48,13 @@ describe Nylas::Event do
               "+11234567890"
             ]
           }
-        }
+        },
+        notifications: [{
+          type: "email",
+          minutes_before_event: "60",
+          subject: "Test Event Notification",
+          body: "Reminding you about our meeting."
+        }]
       }
 
       event = described_class.from_json(JSON.dump(data), api: api)
@@ -85,6 +91,10 @@ describe Nylas::Event do
       expect(event.conferencing.details.meeting_code).to eql "213"
       expect(event.conferencing.details.password).to eql "xyz"
       expect(event.conferencing.details.phone).to eql ["+11234567890"]
+      expect(event.notifications[0].type).to eql "email"
+      expect(event.notifications[0].minutes_before_event).to be 60
+      expect(event.notifications[0].subject).to eql "Test Event Notification"
+      expect(event.notifications[0].body).to eql "Reminding you about our meeting."
     end
   end
 
