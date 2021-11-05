@@ -56,6 +56,7 @@ require_relative "nylas/open_hours"
 require_relative "nylas/event_conferencing"
 require_relative "nylas/event_conferencing_details"
 require_relative "nylas/event_conferencing_autocreate"
+require_relative "nylas/event_notification"
 require_relative "nylas/component"
 
 # Custom collection types
@@ -135,6 +136,7 @@ module Nylas
   Types.registry[:event_conferencing] = Types::ModelType.new(model: EventConferencing)
   Types.registry[:event_conferencing_details] = Types::ModelType.new(model: EventConferencingDetails)
   Types.registry[:event_conferencing_autocreate] = Types::ModelType.new(model: EventConferencingAutocreate)
+  Types.registry[:event_notification] = Types::ModelType.new(model: EventNotification)
   Types.registry[:neural] = Types::ModelType.new(model: Neural)
   Types.registry[:categorize] = Types::ModelType.new(model: Categorize)
   Types.registry[:neural_signature_contact] = Types::ModelType.new(model: NeuralSignatureContact)

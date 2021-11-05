@@ -38,7 +38,28 @@ demonstrate do  example_event.update(
 )
 end
 demonstrate { api.events.find(example_event.id).location }
-demonstrate { api.events.where(metadata_pair:{"event_type": "gathering"}).metadata[:event_type] }
+demonstrate { api.events.where(metadata_pair:{"event_type": "gathering"}).last.metadata[:event_type] }
+
+# TODO::Uncomment below when job status support is implemented
+#   as we can't delete an event with conferencing/notifications
+#   until the job status is complete.
+#
+# Adding conferencing and notifications
+# demonstrate do  example_event.update(
+#   conferencing:{
+#     provider: "Zoom Meeting",
+#     autocreate:{}
+#   },
+#   notifications: [{
+#     type: "email",
+#     minutes_before_event: 600,
+#     subject: "Test Event Notification",
+#     body: "Reminding you about our meeting."
+#   }]
+# )
+# end
+#
+# TODO::Add some sort of loop until
 
 # Deleting an event
 demonstrate { example_event.destroy }
