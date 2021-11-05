@@ -14,10 +14,38 @@ describe Nylas::API do
         "grant_type" => "authorization_code",
         "code" => "fake-code"
       }
+      response = {
+        account_id: "account-id",
+        email_address: "fake@email.com",
+        provider: "yahoo",
+        token_type: "barer",
+        access_token: "fake-token"
+      }
       allow(client).to receive(:execute).with(method: :post, path: "/oauth/token", payload: data)
-                                        .and_return(access_token: "fake-token")
+                                        .and_return(response)
       api = described_class.new(client: client)
       expect(api.exchange_code_for_token("fake-code")).to eql("fake-token")
+    end
+
+    it "retrieves full response from the server" do
+      client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
+      data = {
+        "client_id" => "fake-app",
+        "client_secret" => "fake-secret",
+        "grant_type" => "authorization_code",
+        "code" => "fake-code"
+      }
+      response = {
+        account_id: "account-id",
+        email_address: "fake@email.com",
+        provider: "yahoo",
+        token_type: "barer",
+        access_token: "fake-token"
+      }
+      allow(client).to receive(:execute).with(method: :post, path: "/oauth/token", payload: data)
+                                        .and_return(response)
+      api = described_class.new(client: client)
+      expect(api.exchange_code_for_token("fake-code", return_full_response: true)).to eql(response)
     end
   end
 
