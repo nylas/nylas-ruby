@@ -45,7 +45,7 @@ describe Nylas::API do
       allow(client).to receive(:execute).with(method: :post, path: "/oauth/token", payload: data)
                                         .and_return(response)
       api = described_class.new(client: client)
-      expect(api.exchange_code_for_token("fake-code", true)).to eql(response)
+      expect(api.exchange_code_for_token("fake-code", return_full_response: true)).to eql(response)
     end
   end
 

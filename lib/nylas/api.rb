@@ -52,7 +52,7 @@ module Nylas
     # @param code [String] The authorization code to exchange
     # @param return_full_response [Boolean] If true, returns the full response body instead of just the token
     # @return [String | Hash] Returns just the access token as a string, or the full response as a hash
-    def exchange_code_for_token(code, return_full_response = false)
+    def exchange_code_for_token(code, return_full_response: false)
       data = {
         "client_id" => app_id,
         "client_secret" => client.app_secret,
