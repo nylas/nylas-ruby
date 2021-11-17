@@ -85,7 +85,7 @@ module Nylas
       @accounts ||= Collection.new(model: Account, api: as(client.app_secret))
     end
 
-    # @return [Collection<Calendar>] A queryable collection of {Calendar}s
+    # @return [CalendarCollection<Calendar>] A queryable collection of {Calendar}s
     def calendars
       @calendars ||= CalendarCollection.new(model: Calendar, api: self)
     end
@@ -100,7 +100,7 @@ module Nylas
       @drafts ||= Collection.new(model: Draft, api: self)
     end
 
-    # @return [Collection<Event>] A queryable collection of {Event}s
+    # @return [EventCollection<Event>] A queryable collection of {Event}s
     def events
       @events ||= EventCollection.new(model: Event, api: self)
     end
@@ -130,12 +130,12 @@ module Nylas
       @room_resources ||= Collection.new(model: RoomResource, api: self)
     end
 
-    # @return[Collection<Scheduler>] A queryable collection of {Scheduler} objects
+    # @return[SchedulerCollection<Scheduler>] A queryable collection of {Scheduler} objects
     def scheduler
       # Make a deep copy of the API as the scheduler API uses a different base URL
       scheduler_api = Marshal.load(Marshal.dump(self))
       scheduler_api.client.api_server = "https://api.schedule.nylas.com"
-      @scheduler ||= Collection.new(model: Scheduler, api: scheduler_api)
+      @scheduler ||= SchedulerCollection.new(model: Scheduler, api: scheduler_api)
     end
 
     # @return[Neural] A {Neural} object that provides

@@ -66,6 +66,7 @@ require_relative "nylas/deltas_collection"
 require_relative "nylas/free_busy_collection"
 require_relative "nylas/calendar_collection"
 require_relative "nylas/component_collection"
+require_relative "nylas/scheduler_collection"
 
 # Models supported by the API
 require_relative "nylas/account"
