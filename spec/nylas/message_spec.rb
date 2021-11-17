@@ -30,7 +30,8 @@ describe Nylas::Message do
                          size: 1264 }],
                folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
                labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
-                        { display_name: "All Mail", id: "label-all", name: "all" }] }
+                        { display_name: "All Mail", id: "label-all", name: "all" }],
+               metadata: { key: "value" } }
 
       message = described_class.from_json(JSON.dump(data), api: api)
       expect(message.id).to eql "mess-8766"
@@ -119,6 +120,8 @@ describe Nylas::Message do
       expect(message.labels[1].id).to eql "label-all"
       expect(message.labels[1].name).to eql "all"
       expect(message.labels[1].api).to be api
+
+      expect(message.metadata).to include(key: "value")
     end
   end
 

@@ -8,7 +8,7 @@ module Nylas
     self.raw_mime_type = "message/rfc822"
     self.resources_path = "/messages"
     allows_operations(showable: true, listable: true, filterable: true, searchable: true, updatable: true)
-    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread].freeze
+    UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread metadata].freeze
 
     attribute :id, :string
     attribute :object, :string
@@ -36,6 +36,7 @@ module Nylas
     has_n_of_attribute :files, :file
     attribute :folder, :folder
     attribute :folder_id, :string
+    attribute :metadata, :hash
 
     has_n_of_attribute :labels, :label, read_only: true
     has_n_of_attribute :label_ids, :string
