@@ -28,7 +28,7 @@ module Nylas
       result = if persisted?
                  raise ModelNotUpdatableError, self unless updatable?
 
-                 save_call
+                 update_call(attributes.serialize_for_api)
                else
                  create
                end
@@ -119,14 +119,6 @@ module Nylas
     end
 
     private
-
-    def save_call
-      execute(
-        method: :put,
-        payload: attributes.serialize_for_api,
-        path: resource_path
-      )
-    end
 
     def update_call(payload)
       result = execute(

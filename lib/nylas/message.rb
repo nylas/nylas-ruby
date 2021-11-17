@@ -73,14 +73,10 @@ module Nylas
       self
     end
 
-    def save_call
+    def save
       handle_folder
 
-      execute(
-        method: :put,
-        payload: attributes.serialize_for_api,
-        path: resource_path
-      )
+      super
     end
 
     def handle_folder
