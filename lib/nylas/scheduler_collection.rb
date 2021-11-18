@@ -52,7 +52,7 @@ module Nylas
       booking_response = api.execute(
         method: :post,
         path: "/schedule/#{slug}/timeslots",
-        payload: JSON.dump(timeslot)
+        payload: JSON.dump(timeslot.to_h)
       )
 
       SchedulerBookingConfirmation.new(**booking_response.merge(api: api))
