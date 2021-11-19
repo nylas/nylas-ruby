@@ -49,10 +49,15 @@ module Nylas
     # @param timeslot [SchedulerBookingRequest] The time slot booking request
     # @return [SchedulerBookingConfirmation] Returns the booking confirmation
     def book_time_slot(slug, timeslot)
+      payload = timeslot.to_h
+      # The booking endpoint requires additional_values and additional_emails
+      # to exist regardless if they are empty or not
+      payload[:additional_values] = {} unless payload[:additional_values]
+      payload[:additional_emails] = [] unless payload[:additional_emails]
       booking_response = api.execute(
         method: :post,
         path: "/schedule/#{slug}/timeslots",
-        payload: JSON.dump(timeslot.to_h)
+        payload: JSON.dump(payload)
       )
 
       SchedulerBookingConfirmation.new(**booking_response.merge(api: api))
