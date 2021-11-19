@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Add support for event notifications
+* Add more Scheduler support
 * Modify `exchange_code_for_token` to allow returning a full body
 
 ### 5.5.0 / 2021-10-28
