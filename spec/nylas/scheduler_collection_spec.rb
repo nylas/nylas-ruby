@@ -35,7 +35,7 @@ describe Nylas::SchedulerCollection do
         app_client_id: "test-client-id",
         app_organization_id: 0,
         config: {
-          timezone: "America/Los_Angeles",
+          timezone: "America/Los_Angeles"
         },
         edit_token: "token",
         name: "Test",
@@ -181,7 +181,8 @@ describe Nylas::SchedulerCollection do
               start: 1636728347,
               end: 1636731958,
               emails: ["recipient@example.com"]
-            }
+            },
+            additional_emails: []
           )
         )
       end
