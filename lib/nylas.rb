@@ -66,6 +66,7 @@ require_relative "nylas/deltas_collection"
 require_relative "nylas/free_busy_collection"
 require_relative "nylas/calendar_collection"
 require_relative "nylas/component_collection"
+require_relative "nylas/scheduler_collection"
 
 # Models supported by the API
 require_relative "nylas/account"
@@ -97,6 +98,9 @@ require_relative "nylas/neural_signature_extraction"
 require_relative "nylas/neural_message_options"
 require_relative "nylas/categorize"
 require_relative "nylas/scheduler_config"
+require_relative "nylas/scheduler_time_slot"
+require_relative "nylas/scheduler_booking_request"
+require_relative "nylas/scheduler_booking_confirmation"
 
 require_relative "nylas/native_authentication"
 
@@ -143,4 +147,5 @@ module Nylas
   Types.registry[:neural_contact_link] = Types::ModelType.new(model: NeuralContactLink)
   Types.registry[:neural_contact_name] = Types::ModelType.new(model: NeuralContactName)
   Types.registry[:scheduler_config] = Types::ModelType.new(model: SchedulerConfig)
+  Types.registry[:scheduler_time_slot] = Types::ModelType.new(model: SchedulerTimeSlot)
 end

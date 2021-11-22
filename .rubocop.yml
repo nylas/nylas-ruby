@@ -41,8 +41,7 @@ Naming/FileName:
     - "lib/nylas-streaming.rb"
 
 Naming/AccessorMethodName:
-  Exclude:
-    - "lib/nylas/scheduler.rb"
+  Enabled: false
 
 Style/NumericLiterals:
   Enabled: false

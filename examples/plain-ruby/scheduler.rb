@@ -29,5 +29,50 @@ demonstrate { example_scheduler.get_available_calendars }
 # Upload an image
 demonstrate { example_scheduler.upload_image(content_type: "image/png", object_name: "test.png") }
 
+# Get Google Availability
+begin
+  demonstrate { nylas.scheduler.get_google_availability }
+rescue Nylas::Error => e
+  puts "#{e.class}: #{e.message}"
+end
+
+# Get Office 365 Availability
+begin
+  demonstrate { nylas.scheduler.get_office_365_availability }
+rescue Nylas::Error => e
+  puts "#{e.class}: #{e.message}"
+end
+
+# Get a Scheduler page by Slug
+demonstrate { nylas.scheduler.get_page_slug(example_scheduler.slug) }
+
+# Get all available time slots
+available_timeslots = nylas.scheduler.get_available_time_slots(example_scheduler.slug)
+demonstrate { available_timeslots.inspect }
+
+# Book a timeslot
+booking_request = Nylas::SchedulerBookingRequest.new(
+  additional_values: {
+    important: "true"
+  },
+  email: "recipient@example.com",
+  locale: "en_US",
+  name: "John Doe",
+  timezone: "America/New_York",
+  slot: available_timeslots[0]
+)
+booking_confirmation = nylas.scheduler.book_time_slot(example_scheduler.slug, booking_request)
+demonstrate { booking_confirmation.inspect }
+
+# Cancel a booking
+demonstrate { nylas.scheduler.cancel_booking(example_scheduler.slug, booking_confirmation.edit_hash, "Was just a test.") }
+
+# Confirm a booking (Expect an error because we already cancelled this meeting)
+begin
+  demonstrate { nylas.scheduler.confirm_booking(example_scheduler.slug, booking_confirmation.edit_hash) }
+rescue Nylas::Error => e
+  puts "#{e.class}: #{e.message}"
+end
+
 # Delete a scheduler page
 demonstrate { example_scheduler.destroy }

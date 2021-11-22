@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Add support for event notifications
+* Add more Scheduler support
 * Add metadata support for `Calendar`, `Message` and `Account`
 * Modify `exchange_code_for_token` to allow returning a full body
 
