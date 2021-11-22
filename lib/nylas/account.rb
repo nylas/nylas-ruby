@@ -7,15 +7,17 @@ module Nylas
     include Model
     self.listable = true
     self.showable = true
+    self.updatable = true
 
-    attribute :id, :string
-    attribute :account_id, :string
-    attribute :billing_state, :string
-    attribute :sync_state, :string
-    attribute :provider, :string
+    attribute :id, :string, read_only: true
+    attribute :account_id, :string, read_only: true
+    attribute :billing_state, :string, read_only: true
+    attribute :sync_state, :string, read_only: true
+    attribute :provider, :string, read_only: true
 
-    attribute :email, :string
-    attribute :trial, :boolean
+    attribute :email, :string, read_only: true
+    attribute :trial, :boolean, read_only: true
+    attribute :metadata, :hash
 
     def upgrade
       response = execute(method: :post, path: "#{resource_path}/upgrade")

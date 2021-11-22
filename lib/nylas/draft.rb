@@ -75,13 +75,13 @@ module Nylas
       execute(method: :delete, path: resource_path, payload: attributes.serialize_for_api(keys: [:version]))
     end
 
-    private
-
-    def save_call
+    def save
       extract_file_ids!
 
       super
     end
+
+    private
 
     def extract_file_ids!
       files = self.files || []

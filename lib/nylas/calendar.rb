@@ -6,7 +6,8 @@ module Nylas
   class Calendar
     include Model
     self.resources_path = "/calendars"
-    allows_operations(listable: true, filterable: true, showable: true)
+    allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
+                      destroyable: true)
 
     attribute :id, :string
     attribute :account_id, :string
@@ -20,6 +21,7 @@ module Nylas
     attribute :timezone, :string
 
     attribute :read_only, :boolean
+    attribute :metadata, :hash
 
     def read_only?
       read_only == true

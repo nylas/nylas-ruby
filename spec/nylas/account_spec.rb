@@ -9,10 +9,6 @@ describe Nylas::Account do
     expect(described_class).not_to be_creatable
   end
 
-  it "is not updatable" do
-    expect(described_class).not_to be_updatable
-  end
-
   it "is not destroyable" do
     expect(described_class).not_to be_destroyable
   end
@@ -29,7 +25,10 @@ describe Nylas::Account do
       id: "30zipv27dtrsnkleg59mprw5p",
       sync_state: "running",
       trial: false,
-      provider: "gmail"
+      provider: "gmail",
+      metadata: {
+        key: "value"
+      }
     )
     account = described_class.from_json(json, api: nil)
     expect(account.account_id).to eql "30zipv27dtrsnkleg59mprw5p"
@@ -39,6 +38,28 @@ describe Nylas::Account do
     expect(account.sync_state).to eql "running"
     expect(account.trial).to be false
     expect(account.provider).to eq("gmail")
+    expect(account.metadata).to include(key: "value")
+  end
+
+  it "can update metadata" do
+    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    account = described_class.from_json('{ "id": "acc-1234" }', api: api)
+
+    account.metadata = {
+      key: "value"
+    }
+    account.save
+
+    expect(api).to have_received(:execute).with(
+      method: :put,
+      path: "/a/app-987/accounts/acc-1234",
+      payload: JSON.dump(
+        metadata: {
+          key: "value"
+        }
+      ),
+      query: {}
+    )
   end
 
   it "can be downgraded" do
