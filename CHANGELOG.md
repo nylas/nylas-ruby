@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fix bug where updating an Event results in an API error
+
 ### 5.6.0 / 2021-11-22
 * Add support for event notifications
 * Add more Scheduler support
