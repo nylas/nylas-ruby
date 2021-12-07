@@ -20,6 +20,9 @@ module Nylas
       def deseralize(object)
         object
       end
+
+      def serialize_for_api(object)
+        serialize(object)
       end
     end
 
@@ -47,6 +50,10 @@ module Nylas
 
       def serialize(object)
         object.to_h
+      end
+
+      def serialize_for_api(object)
+        object.to_h(enforce_read_only: true) unless object.nil?
       end
 
       def cast(value)

@@ -18,9 +18,17 @@ module Nylas
         list.map { |item| type.cast(item) }
       end
 
-      def serialize(list)
+      def serialize(list, enforce_read_only: false)
         list = default if list.nil? || list.empty?
-        list.map { |item| type.serialize(item) }
+        if enforce_read_only
+          list.map { |item| type.serialize_for_api(item) }
+        else
+          list.map { |item| type.serialize(item) }
+        end
+      end
+
+      def serialize_for_api(list)
+        serialize(list, enforce_read_only: true)
       end
 
       def type
