@@ -7,6 +7,6 @@ module Nylas
     attribute :name, :string
     attribute :email, :string
     attribute :comment, :string
-    attribute :status, :string
+    attribute :status, :string, read_only: true
   end
 end
