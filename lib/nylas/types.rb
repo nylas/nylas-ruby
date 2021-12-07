@@ -7,8 +7,24 @@ module Nylas
       @registry ||= Registry.new
     end
 
+    # Base type for attributes
+    class ValueType
+      def cast(object)
+        object
+      end
+
+      def serialize(object)
+        object
+      end
+
+      def deseralize(object)
+        object
+      end
+      end
+    end
+
     # Casts/Serializes data that is persisted and used natively as a Hash
-    class HashType
+    class HashType < ValueType
       def serialize(object)
         object.to_h
       end
@@ -22,7 +38,7 @@ module Nylas
 
     # Type for attributes that are persisted in the API as a hash but exposed in ruby as a particular
     # {Model} or Model-like thing.
-    class ModelType
+    class ModelType < ValueType
       attr_accessor :model
 
       def initialize(model:)
@@ -56,23 +72,8 @@ module Nylas
       end
     end
 
-    # Type for attributes that do not require casting/serializing/deserializing.
-    class ValueType
-      def cast(object)
-        object
-      end
-
-      def serialize(object)
-        object
-      end
-
-      def deseralize(object)
-        object
-      end
-    end
-
     # Type for attributes represented as a unix timestamp in the API and Time in Ruby
-    class UnixTimestampType
+    class UnixTimestampType < ValueType
       def cast(object)
         return object if object.is_a?(Time) || object.nil?
         return Time.at(object.to_i) if object.is_a?(String)
