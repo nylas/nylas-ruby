@@ -43,14 +43,19 @@ module Nylas
         casted_data
       end
 
-      def serialize(keys: attribute_definitions.keys)
-        JSON.dump(to_h(keys: keys))
+      # Serialize the object
+      # @param keys [Array<String>] The keys included
+      # @param enforce_read_only [Boolean] Whether to enforce read_only property (serializing for API)
+      # @return [String] The serialized object as a JSON string
+      def serialize(keys: attribute_definitions.keys, enforce_read_only: false)
+        JSON.dump(to_h(keys: keys, enforce_read_only: enforce_read_only))
       end
 
+      # Serialize the object to an API-compatible JSON string
+      # @param keys [Array<String>] The keys included
+      # @return [String] The serialized object as a JSON string
       def serialize_for_api(keys: attribute_definitions.keys)
-        api_keys = keys.delete_if { |key| attribute_definitions[key].read_only == true }
-
-        serialize(keys: api_keys)
+        serialize(keys: keys, enforce_read_only: true)
       end
 
       def serialize_all_for_api(keys: attribute_definitions.keys)
