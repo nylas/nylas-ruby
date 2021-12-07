@@ -45,6 +45,7 @@ module Nylas
       attr_accessor :model
 
       def initialize(model:)
+        super()
         self.model = model
       end
 
@@ -53,7 +54,7 @@ module Nylas
       end
 
       def serialize_for_api(object)
-        object.to_h(enforce_read_only: true) unless object.nil?
+        object&.to_h(enforce_read_only: true)
       end
 
       def cast(value)
