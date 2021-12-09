@@ -1,7 +1,7 @@
 # Changelog
 
 ### Unreleased
-* Enabled support for adding metadata to a new `Message`/`Draft`
+* Enabled support for adding metadata to a `NewMessage`/`Draft`
 
 ### 5.6.0 / 2021-11-22
 * Add support for event notifications
