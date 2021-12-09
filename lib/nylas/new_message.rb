@@ -20,6 +20,7 @@ module Nylas
     attribute :subject, :string
     attribute :body, :string
     attribute :reply_to_message_id, :string
+    attribute :metadata, :hash
 
     has_n_of_attribute :file_ids, :string
 
