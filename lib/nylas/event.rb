@@ -31,6 +31,7 @@ module Nylas
     attribute :conferencing, :event_conferencing
     has_n_of_attribute :notifications, :event_notification
     attribute :original_start_time, :unix_timestamp
+    attribute :job_status_id, :string, read_only: true
 
     attr_accessor :notify_participants
 

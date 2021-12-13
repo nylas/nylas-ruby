@@ -30,6 +30,7 @@ module Nylas
     attribute :office_location, :string
     attribute :notes, :string
     attribute :source, :string
+    attribute :job_status_id, :string, read_only: true
 
     has_n_of_attribute :groups, :contact_group
     has_n_of_attribute :emails, :email_address
