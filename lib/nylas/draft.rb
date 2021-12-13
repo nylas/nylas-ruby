@@ -27,6 +27,7 @@ module Nylas
     attribute :body, :string
     attribute :starred, :boolean
     attribute :unread, :boolean
+    attribute :metadata, :hash
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file, read_only: true

@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Enabled support for adding metadata to a `NewMessage`/`Draft`
 * Fix bug where updating an Event results in an API error
 
 ### 5.6.0 / 2021-11-22

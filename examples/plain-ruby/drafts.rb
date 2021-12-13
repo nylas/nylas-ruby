@@ -24,7 +24,8 @@ demonstrate { api.drafts.find(example_draft.id) }
 # Sending a draft
 demonstrate do
   draft = api.drafts.create(to: [{ email: ENV.fetch('NYLAS_EXAMPLE_EMAIL', 'not-a-real-email@example.com')}],
-                            subject: "A new draft!")
+                            subject: "A new draft!",
+                            metadata: {test: "yes"})
   draft.send!
 end
 
