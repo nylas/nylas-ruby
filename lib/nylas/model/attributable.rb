@@ -17,8 +17,8 @@ module Nylas
       end
 
       # @return [Hash] Representation of the model with values serialized into primitives based on their Type
-      def to_h
-        attributes.to_h
+      def to_h(enforce_read_only: false)
+        attributes.to_h(enforce_read_only: enforce_read_only)
       end
 
       protected

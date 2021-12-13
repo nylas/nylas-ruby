@@ -5,7 +5,7 @@ module Nylas
     # Define a particular attribute for a given model
     class AttributeDefinition
       extend Forwardable
-      def_delegators :type, :cast, :serialize
+      def_delegators :type, :cast, :serialize, :serialize_for_api
       attr_accessor :type_name, :read_only, :default
 
       def initialize(type_name:, read_only:, default:)
