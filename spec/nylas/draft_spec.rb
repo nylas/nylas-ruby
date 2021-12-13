@@ -315,6 +315,7 @@ describe Nylas::Draft do
                folder: { display_name: "Inbox", id: "folder-inbox", name: "inbox" },
                labels: [{ display_name: "Inbox", id: "label-inbox", name: "inbox" },
                         { display_name: "All Mail", id: "label-all", name: "all" }],
+               metadata: { test: "yes" },
                tracking: { opens: true, links: true, thread_replies: true, payload: "this is a payload" } }
 
       draft = described_class.from_json(JSON.dump(data), api: api)
@@ -373,6 +374,8 @@ describe Nylas::Draft do
       expect(draft.labels[1].id).to eql "label-all"
       expect(draft.labels[1].name).to eql "all"
       expect(draft.labels[1].api).to be api
+
+      expect(draft.metadata).to eq(test: "yes")
 
       expect(draft.tracking.opens).to be true
       expect(draft.tracking.links).to be true
