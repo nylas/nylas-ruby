@@ -20,5 +20,6 @@ module Nylas
 
     attribute :name, :string
     attribute :display_name, :string
+    attribute :job_status_id, :string, read_only: true
   end
 end

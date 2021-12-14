@@ -36,6 +36,7 @@ module Nylas
     has_n_of_attribute :labels, :label
 
     attribute :tracking, :message_tracking
+    attribute :job_status_id, :string, read_only: true
 
     transfer :api, to: %i[events files folder labels]
 

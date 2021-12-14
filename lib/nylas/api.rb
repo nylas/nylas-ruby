@@ -130,6 +130,11 @@ module Nylas
       @room_resources ||= Collection.new(model: RoomResource, api: self)
     end
 
+    # @return[Collection<JobStatus>] A queryable collection of {JobStatus} objects
+    def job_statuses
+      @job_statuses ||= Collection.new(model: JobStatus, api: self)
+    end
+
     # @return[SchedulerCollection<Scheduler>] A queryable collection of {Scheduler} objects
     def scheduler
       # Make a deep copy of the API as the scheduler API uses a different base URL

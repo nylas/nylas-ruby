@@ -22,6 +22,7 @@ module Nylas
 
     attribute :read_only, :boolean
     attribute :metadata, :hash
+    attribute :job_status_id, :string, read_only: true
 
     def read_only?
       read_only == true
