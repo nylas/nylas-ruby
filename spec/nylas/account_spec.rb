@@ -100,4 +100,18 @@ describe Nylas::Account do
       query: {}
     )
   end
+
+  it "can be destroyed" do
+    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    account = described_class.from_json('{ "id": "acc-1234" }', api: api)
+
+    expect(account.destroy).to be_truthy
+
+    expect(api).to have_received(:execute).with(
+      method: :delete,
+      path: "/a/app-987/accounts/acc-1234",
+      payload: nil,
+      query: {}
+    )
+  end
 end
