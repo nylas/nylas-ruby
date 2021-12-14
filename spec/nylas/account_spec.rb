@@ -9,10 +9,6 @@ describe Nylas::Account do
     expect(described_class).not_to be_creatable
   end
 
-  it "is not destroyable" do
-    expect(described_class).not_to be_destroyable
-  end
-
   it "is listable" do
     expect(described_class).to be_listable
   end
