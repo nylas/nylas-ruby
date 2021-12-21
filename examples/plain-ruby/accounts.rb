@@ -20,3 +20,6 @@ demonstrate { account.to_h }
 demonstrate { account.upgrade }
 demonstrate { account.to_h }
 
+# Get token info for access token
+demonstrate { api.accounts.first.token_info(ENV['NYLAS_ACCESS_TOKEN']).to_h }
+

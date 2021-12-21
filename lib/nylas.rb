@@ -85,6 +85,7 @@ require_relative "nylas/thread"
 require_relative "nylas/webhook"
 require_relative "nylas/scheduler"
 require_relative "nylas/job_status"
+require_relative "nylas/token_info"
 
 # Neural specific types
 require_relative "nylas/neural"
