@@ -195,6 +195,53 @@ describe Nylas::API do
     end
   end
 
+  describe "application details" do
+    it "gets the application details" do
+      client = Nylas::HttpClient.new(
+        app_id: "not-real",
+        app_secret: "also-not-real"
+      )
+      api = described_class.new(client: client)
+      application_details_response = {
+        application_name: "My New App Name",
+        icon_url: "http://localhost/icon.png",
+        redirect_uris: %w[http://localhost/callback]
+      }
+      stub_request(:get, "https://api.nylas.com/a/not-real")
+        .to_return(status: 200, body: application_details_response.to_json, headers: { "content-type" => "application/json" })
+
+      app_details = api.application_details
+
+      expect(app_details).to be_a(Nylas::ApplicationDetail)
+      expect(app_details.application_name).to eq("My New App Name")
+      expect(app_details.icon_url).to eq("http://localhost/icon.png")
+      expect(app_details.redirect_uris).to eq(%w[http://localhost/callback])
+    end
+
+    it "updates the application details" do
+      application_details_response = {
+        application_name: "Updated App Name",
+        icon_url: "http://localhost/updated_icon.png",
+        redirect_uris: %w[http://localhost/callback http://localhost/updated]
+      }
+      app_details = Nylas::ApplicationDetail.new
+      app_details.application_name = "Updated App Name"
+      app_details.icon_url = "http://localhost/updated_icon.png"
+      app_details.redirect_uris = %w[http://localhost/callback http://localhost/updated]
+      client = Nylas::HttpClient.new(
+        app_id: "not-real",
+        app_secret: "also-not-real"
+      )
+      api = described_class.new(client: client)
+      stub_request(:put, "https://api.nylas.com/a/not-real")
+        .to_return(status: 200, body: application_details_response.to_json, headers: { "content-type" => "application/json" })
+
+      updated_app_details = api.update_application_details(app_details)
+
+      expect(updated_app_details).to be_a(Nylas::ApplicationDetail)
+    end
+  end
+
   describe "#execute" do
     it "builds the URL based upon the api_server it was initialized with"
     it "adds the nylas headers to the request"
