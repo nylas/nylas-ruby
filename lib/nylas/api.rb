@@ -171,7 +171,11 @@ module Nylas
     # @param application_details [ApplicationDetail] The updated application details
     # @return [ApplicationDetails] The updated application details, returned from the server
     def update_application_details(application_details)
-      response = client.as(client.app_secret).execute(method: :put, path: "/a/#{app_id}", payload: JSON.dump(application_details.to_h))
+      response = client.as(client.app_secret).execute(
+        method: :put,
+        path: "/a/#{app_id}",
+        payload: JSON.dump(application_details.to_h)
+      )
       ApplicationDetail.new(**response)
     end
 

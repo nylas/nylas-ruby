@@ -208,7 +208,11 @@ describe Nylas::API do
         redirect_uris: %w[http://localhost/callback]
       }
       stub_request(:get, "https://api.nylas.com/a/not-real")
-        .to_return(status: 200, body: application_details_response.to_json, headers: { "content-type" => "application/json" })
+        .to_return(
+          status: 200,
+          body: application_details_response.to_json,
+          headers: { "content-type" => "application/json" }
+        )
 
       app_details = api.application_details
 
@@ -234,7 +238,11 @@ describe Nylas::API do
       )
       api = described_class.new(client: client)
       stub_request(:put, "https://api.nylas.com/a/not-real")
-        .to_return(status: 200, body: application_details_response.to_json, headers: { "content-type" => "application/json" })
+        .to_return(
+          status: 200,
+          body: application_details_response.to_json,
+          headers: { "content-type" => "application/json" }
+        )
 
       updated_app_details = api.update_application_details(app_details)
 
