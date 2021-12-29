@@ -60,7 +60,34 @@ module Nylas
       rsvp.save
     end
 
+    # Generate an ICS file server-side, from an Event
+    # @param ics_options [ICSOptions] Optional configuration for the ICS file
+    # @return [String] String for writing directly into an ICS file
+    def generate_ics(ics_options = nil)
+      raise ArgumentError, "Cannot generate an ICS file for an event without a Calendar ID" unless calendar_id
+
+      payload = build_generate_ics_request
+      payload["ics_options"] = ics_options.to_h if ics_options
+      response = api.execute(
+        method: :post,
+        path:  "#{resources_path}/to-ics",
+        payload: JSON.dump(payload)
+      )
+
+      response[:ics]
+    end
+
     private
+
+    def build_generate_ics_request
+      payload = {}
+      if id
+        payload[:event_id] = id
+      else
+        payload = to_h(enforce_read_only: true)
+      end
+      payload
+    end
 
     def query_params
       if notify_participants.nil?
