@@ -85,6 +85,7 @@ require_relative "nylas/thread"
 require_relative "nylas/webhook"
 require_relative "nylas/scheduler"
 require_relative "nylas/job_status"
+require_relative "nylas/ics_options"
 
 # Neural specific types
 require_relative "nylas/neural"
@@ -150,4 +151,5 @@ module Nylas
   Types.registry[:scheduler_config] = Types::ModelType.new(model: SchedulerConfig)
   Types.registry[:scheduler_time_slot] = Types::ModelType.new(model: SchedulerTimeSlot)
   Types.registry[:job_status] = Types::ModelType.new(model: JobStatus)
+  Types.registry[:ics_options] = Types::ModelType.new(model: ICSOptions)
 end
