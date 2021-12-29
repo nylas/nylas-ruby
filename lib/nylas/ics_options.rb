@@ -11,4 +11,3 @@ module Nylas
     attribute :prodid, :string
   end
 end
-

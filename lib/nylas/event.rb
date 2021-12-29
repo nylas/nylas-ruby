@@ -71,7 +71,7 @@ module Nylas
       payload["ics_options"] = ics_options.to_h if ics_options
       response = api.execute(
         method: :post,
-        path:  "#{resources_path}/to-ics",
+        path: "#{resources_path}/to-ics",
         payload: JSON.dump(payload)
       )
 
