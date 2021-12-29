@@ -512,4 +512,89 @@ describe Nylas::Event do
       end
     end
   end
+
+  describe "generating an ICS" do
+    it "sends the event ID if set" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute).and_return({})
+      data = {
+        id: "event-id",
+        calendar_id: "cal-0987",
+        title: "An Event",
+        when: {
+          end_time: 1_511_306_400,
+          start_time: 1_511_303_400
+        }
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+
+      event.generate_ics
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/events/to-ics",
+        payload: {
+          event_id: "event-id"
+        }.to_json
+      )
+    end
+
+    it "sends the event object if event id is not set" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute).and_return({})
+      data = {
+        calendar_id: "cal-0987",
+        title: "An Event",
+        when: {
+          end_time: 1_511_306_400,
+          start_time: 1_511_303_400
+        }
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+
+      event.generate_ics
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/events/to-ics",
+        payload: {
+          calendar_id: "cal-0987",
+          title: "An Event",
+          when: {
+            start_time: 1_511_303_400,
+            end_time: 1_511_306_400
+          }
+        }.to_json
+      )
+    end
+
+    it "throws an error if event has no calendar ID set" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute).and_return({})
+      data = {
+        title: "An Event",
+        when: {
+          end_time: 1_511_306_400,
+          start_time: 1_511_303_400
+        }
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+      error = "Cannot generate an ICS file for an event without a Calendar ID or when set"
+
+      expect { event.generate_ics }.to raise_error(ArgumentError, error)
+    end
+
+    it "throws an error if event has no when object set" do
+      api = instance_double(Nylas::API)
+      allow(api).to receive(:execute).and_return({})
+      data = {
+        calendar_id: "cal-0987",
+        title: "An Event"
+      }
+      event = described_class.from_json(JSON.dump(data), api: api)
+      error = "Cannot generate an ICS file for an event without a Calendar ID or when set"
+
+      expect { event.generate_ics }.to raise_error(ArgumentError, error)
+    end
+  end
 end
