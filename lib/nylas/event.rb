@@ -64,7 +64,8 @@ module Nylas
     # @param ics_options [ICSOptions] Optional configuration for the ICS file
     # @return [String] String for writing directly into an ICS file
     def generate_ics(ics_options = nil)
-      raise ArgumentError, "Cannot generate an ICS file for an event without a Calendar ID" unless calendar_id
+      raise ArgumentError, "Cannot generate an ICS file for an event without a Calendar ID or when set" unless
+        calendar_id && self.when
 
       payload = build_generate_ics_request
       payload["ics_options"] = ics_options.to_h if ics_options
