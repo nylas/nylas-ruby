@@ -104,4 +104,30 @@ describe Nylas::Account do
       query: {}
     )
   end
+
+  it "can return token information" do
+    api = instance_double("Nylas::API", app_id: "app-987")
+    account = described_class.from_json('{ "id": "acc-1234" }', api: api)
+    token_info_response = {
+      scopes: "email.send,email.modify,calendar",
+      state: "valid",
+      created_at: 1622492343,
+      updated_at: 1622492343
+    }
+    allow(api).to receive(:execute).and_return(token_info_response)
+
+    token_info = account.token_info("test-token")
+
+    expect(api).to have_received(:execute).with(
+      method: :post,
+      path: "/a/app-987/accounts/acc-1234/token-info",
+      payload: be_json("access_token" => "test-token"),
+      query: {}
+    )
+    expect(token_info.scopes).to be("email.send,email.modify,calendar")
+    expect(token_info.state).to be("valid")
+    expect(token_info.created_at).to eql(Time.at(1622492343))
+    expect(token_info.updated_at).to eql(Time.at(1622492343))
+    expect(token_info.valid?).to be(true)
+  end
 end
