@@ -160,6 +160,25 @@ module Nylas
       response.code == 200 && response.empty?
     end
 
+    # Returns the application details
+    # @return [ApplicationDetail] The application details
+    def application_details
+      response = client.as(client.app_secret).execute(method: :get, path: "/a/#{app_id}")
+      ApplicationDetail.new(**response)
+    end
+
+    # Updates the application details
+    # @param application_details [ApplicationDetail] The updated application details
+    # @return [ApplicationDetails] The updated application details, returned from the server
+    def update_application_details(application_details)
+      response = client.as(client.app_secret).execute(
+        method: :put,
+        path: "/a/#{app_id}",
+        payload: JSON.dump(application_details.to_h)
+      )
+      ApplicationDetail.new(**response)
+    end
+
     # Returns list of IP addresses
     # @return [Hash]
     # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
@@ -177,7 +196,7 @@ module Nylas
     end
 
     # Allows you to get an API that acts as a different user but otherwise has the same settings
-    # @param [String] Oauth Access token or app secret used to authenticate with the API
+    # @param access_token [String] Oauth Access token or app secret used to authenticate with the API
     # @return [API]
     def as(access_token)
       API.new(client: client.as(access_token))
