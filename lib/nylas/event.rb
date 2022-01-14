@@ -60,7 +60,46 @@ module Nylas
       rsvp.save
     end
 
+    # Generate an ICS file server-side, from an Event
+    # @param ical_uid [String] Unique identifier used events across calendaring systems
+    # @param method [String] Description of invitation and response methods for attendees
+    # @param prodid [String] Company-specific unique product identifier
+    # @return [String] String for writing directly into an ICS file
+    def generate_ics(ical_uid: nil, method: nil, prodid: nil)
+      raise ArgumentError, "Cannot generate an ICS file for an event without a Calendar ID or when set" unless
+        calendar_id && self.when
+
+      payload = build_ics_event_payload(ical_uid, method, prodid)
+      response = api.execute(
+        method: :post,
+        path: "#{resources_path}/to-ics",
+        payload: JSON.dump(payload)
+      )
+
+      response[:ics]
+    end
+
     private
+
+    def build_ics_event_payload(ical_uid, method, prodid)
+      payload = {}
+      if id
+        payload[:event_id] = id
+      else
+        payload = to_h(enforce_read_only: true)
+      end
+      ics_options = build_ics_options_payload(ical_uid, method, prodid)
+      payload["ics_options"] = ics_options unless ics_options.empty?
+      payload
+    end
+
+    def build_ics_options_payload(ical_uid, method, prodid)
+      payload = {}
+      payload["ical_uid"] = ical_uid if ical_uid
+      payload["method"] = method if method
+      payload["prodid"] = prodid if prodid
+      payload
+    end
 
     def query_params
       if notify_participants.nil?

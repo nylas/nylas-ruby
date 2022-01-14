@@ -71,3 +71,11 @@ event.rsvp(:yes, notify_participants: true)
 event.rsvp(:no, notify_participants: true)
 event.rsvp(:maybe, notify_participants: true)
 
+# Generating an ICS File
+demonstrate { event.generate_ics }
+
+demonstrate { event.generate_ics(
+  ical_uid: "test_uuid",
+  method: "add",
+  prodid: "test_prodid"
+) }

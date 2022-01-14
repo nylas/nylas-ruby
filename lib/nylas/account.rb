@@ -37,6 +37,15 @@ module Nylas
       response[:success]
     end
 
+    # Return information about an account's access token
+    # @param access_token [String] The access token to inquire about
+    # @return [TokenInfo] The access token information
+    def token_info(access_token)
+      payload = JSON.dump(access_token: access_token)
+      response = execute(method: :post, path: "#{resource_path}/token-info", payload: payload)
+      TokenInfo.new(**response)
+    end
+
     def self.resources_path(api:)
       "/a/#{api.app_id}/accounts"
     end
