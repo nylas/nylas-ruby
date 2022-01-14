@@ -113,6 +113,7 @@ describe Nylas::Account do
       payload: nil,
       query: {}
     )
+  end
 
   it "can return token information" do
     api = instance_double("Nylas::API", app_id: "app-987")
