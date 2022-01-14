@@ -9,10 +9,6 @@ describe Nylas::Account do
     expect(described_class).not_to be_creatable
   end
 
-  it "is not destroyable" do
-    expect(described_class).not_to be_destroyable
-  end
-
   it "is listable" do
     expect(described_class).to be_listable
   end
@@ -101,6 +97,20 @@ describe Nylas::Account do
       method: :post,
       path: "/a/app-987/accounts/acc-1234/revoke-all",
       payload: be_json("keep_access_token" => access_token),
+      query: {}
+    )
+  end
+
+  it "can be destroyed" do
+    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    account = described_class.from_json('{ "id": "acc-1234" }', api: api)
+
+    expect(account.destroy).to be_truthy
+
+    expect(api).to have_received(:execute).with(
+      method: :delete,
+      path: "/a/app-987/accounts/acc-1234",
+      payload: nil,
       query: {}
     )
   end

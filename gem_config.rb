@@ -38,8 +38,8 @@ module GemConfig
     [["bundler", ">= 1.3.0"],
      ["yard", "~> 0.9.0"],
      ["awesome_print", "~> 1.0"],
-     ["rubocop", "~> 0.52.0"],
-     ["rubocop-rspec", "~> 1.20.1"],
+     ["rubocop", "~> 1.24.1"],
+     ["rubocop-rspec", "~> 2.7.0"],
      ["overcommit", "~> 0.41"]] + testing_and_debugging_dependencies
   end
 

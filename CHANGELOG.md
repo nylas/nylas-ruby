@@ -1,6 +1,8 @@
 # Changelog
 
 ### Unreleased
+* Add job status support
+* Enable account deletion
 * Add `Event` to ICS support
 * Added support for getting access token information
 * Improved support for Application Details

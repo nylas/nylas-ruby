@@ -11,4 +11,3 @@ module Nylas
     has_n_of_attribute :redirect_uris, :string
   end
 end
-
