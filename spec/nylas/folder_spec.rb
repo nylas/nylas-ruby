@@ -43,7 +43,8 @@ describe Nylas::Folder do
 
     it "sends a PUT when updating an existing folder" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
-      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234", object: "folder")
+      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234",
+                       object: "folder")
       folder = described_class.from_json(json, api: api)
       allow(api).to receive(:execute).and_return({})
 
@@ -63,7 +64,8 @@ describe Nylas::Folder do
 
     it "sends a PUT when saving an existing folder" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
-      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234", object: "folder")
+      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234",
+                       object: "folder")
       folder = described_class.from_json(json, api: api)
       allow(api).to receive(:execute).and_return({})
 
@@ -82,7 +84,8 @@ describe Nylas::Folder do
 
     it "sends a DELETE when deleting an existing folder" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
-      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234", object: "folder")
+      json = JSON.dump(id: "folder_id", display_name: "All Mail", name: "all", account_id: "acc-234",
+                       object: "folder")
       folder = described_class.from_json(json, api: api)
       allow(api).to receive(:execute).and_return({})
 
