@@ -6,6 +6,7 @@
 * Add `Event` to ICS support
 * Added support for getting access token information
 * Improved support for Application Details
+* Fix saving and deleting `Folder` objects
 
 ### 5.6.1 / 2021-12-13
 * Enabled support for adding metadata to a `NewMessage`/`Draft`

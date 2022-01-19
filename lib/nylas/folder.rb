@@ -13,10 +13,9 @@ module Nylas
     self.updatable = true
     self.destroyable = true
 
-    attribute :id, :string
-    attribute :account_id, :string
-
-    attribute :object, :string
+    attribute :id, :string, read_only: true
+    attribute :account_id, :string, read_only: true
+    attribute :object, :string, read_only: true
 
     attribute :name, :string
     attribute :display_name, :string
