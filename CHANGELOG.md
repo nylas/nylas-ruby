@@ -1,11 +1,11 @@
 # Changelog
 
-### Unreleased
+### 5.7.0 / 2022-01-21
 * Add job status support
-* Enable account deletion
 * Add `Event` to ICS support
-* Added support for getting access token information
+* Add support for getting access token information
 * Improved support for Application Details
+* Enable ability to delete `Account` objects
 * Fix saving and deleting `Folder` objects
 
 ### 5.6.1 / 2021-12-13
