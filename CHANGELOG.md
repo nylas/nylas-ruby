@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Improved support for `Webhook` objects
+
 ### 5.7.0 / 2022-01-21
 * Add job status support
 * Add `Event` to ICS support
