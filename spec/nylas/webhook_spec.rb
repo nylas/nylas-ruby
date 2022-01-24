@@ -31,7 +31,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -53,7 +53,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -82,13 +82,13 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
       webhook = described_class.from_json(JSON.dump(data), api: api)
 
-      webhook.update(state: "inactive")
+      webhook.update(state: WebhookState::INACTIVE)
 
       expect(api).to have_received(:execute).with(
         method: :put,
@@ -107,7 +107,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -126,7 +126,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -153,7 +153,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -180,7 +180,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: ["event.created"],
+        triggers: [WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
