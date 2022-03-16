@@ -8,11 +8,13 @@ module Nylas
                      interval:,
                      start_time:,
                      end_time:,
-                     emails:,
+                     emails: [],
                      buffer: nil,
                      round_robin: nil,
                      free_busy: [],
-                     open_hours: [])
+                     open_hours: [],
+                     calendars: [])
+      validate_calendars_or_emails(calendars, emails)
       validate_open_hours(emails, free_busy, open_hours) unless open_hours.empty?
 
       execute_availability("/calendars/availability",
@@ -24,17 +26,20 @@ module Nylas
                            buffer: buffer,
                            round_robin: round_robin,
                            free_busy: free_busy,
-                           open_hours: open_hours)
+                           open_hours: open_hours,
+                           calendars: calendars)
     end
 
     def consecutive_availability(duration_minutes:,
                                  interval:,
                                  start_time:,
                                  end_time:,
-                                 emails:,
+                                 emails: [],
                                  buffer: nil,
                                  free_busy: [],
-                                 open_hours: [])
+                                 open_hours: [],
+                                 calendars: [])
+      validate_calendars_or_emails(emails, calendars)
       validate_open_hours(emails, free_busy, open_hours) unless open_hours.empty?
 
       execute_availability("/calendars/availability/consecutive",
@@ -45,7 +50,8 @@ module Nylas
                            emails: emails,
                            buffer: buffer,
                            free_busy: free_busy,
-                           open_hours: open_hours)
+                           open_hours: open_hours,
+                           calendars: calendars)
     end
 
     private
@@ -56,6 +62,12 @@ module Nylas
         path: path,
         payload: JSON.dump(payload)
       )
+    end
+
+    def validate_calendars_or_emails(calendars, emails)
+      if calendars.empty? && emails.empty?
+        raise ArgumentError, "You must provide at least one of 'emails' or 'calendars'"
+      end
     end
 
     def validate_open_hours(emails, free_busy, open_hours)

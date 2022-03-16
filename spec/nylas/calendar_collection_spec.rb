@@ -51,7 +51,8 @@ describe Nylas::CalendarCollection do
           buffer: 5,
           round_robin: "max-fairness",
           free_busy: [free_busy],
-          open_hours: [open_hours]
+          open_hours: [open_hours],
+          calendars: []
         )
       )
     end
@@ -101,7 +102,8 @@ describe Nylas::CalendarCollection do
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
           buffer: 5,
           free_busy: [free_busy],
-          open_hours: [open_hours]
+          open_hours: [open_hours],
+          calendars: []
         )
       )
     end
@@ -140,9 +142,25 @@ describe Nylas::CalendarCollection do
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
           buffer: 5,
           free_busy: [free_busy],
-          open_hours: [open_hours]
+          open_hours: [open_hours],
+          calendars: []
         )
       end.to raise_error(ArgumentError)
     end
+  end
+
+  it "throws an error if at least one of 'emails' or 'calendars' is not provided" do
+    api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+    calendar_collection = described_class.new(model: Nylas::Calendar, api: api)
+
+    expect do
+      calendar_collection.consecutive_availability(
+        duration_minutes: 30,
+        interval: 5,
+        start_time: 1590454800,
+        end_time: 1590780800,
+        buffer: 5,
+      )
+    end.to raise_error(ArgumentError)
   end
 end
