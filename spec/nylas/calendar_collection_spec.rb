@@ -29,7 +29,7 @@ describe Nylas::CalendarCollection do
 
       calendar_collection.availability(
         duration_minutes: 30,
-        interval: 5,
+        interval_minutes: 5,
         start_time: 1590454800,
         end_time: 1590780800,
         emails: ["swag@nylas.com"],
@@ -44,7 +44,7 @@ describe Nylas::CalendarCollection do
         path: "/calendars/availability",
         payload: JSON.dump(
           duration_minutes: 30,
-          interval: 5,
+          interval_minutes: 5,
           start_time: 1590454800,
           end_time: 1590780800,
           emails: ["swag@nylas.com"],
@@ -81,7 +81,7 @@ describe Nylas::CalendarCollection do
 
       calendar_collection.consecutive_availability(
         duration_minutes: 30,
-        interval: 5,
+        interval_minutes: 5,
         start_time: 1590454800,
         end_time: 1590780800,
         emails: [["one@example.com"], %w[two@example.com three@example.com]],
@@ -95,7 +95,7 @@ describe Nylas::CalendarCollection do
         path: "/calendars/availability/consecutive",
         payload: JSON.dump(
           duration_minutes: 30,
-          interval: 5,
+          interval_minutes: 5,
           start_time: 1590454800,
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
@@ -134,7 +134,7 @@ describe Nylas::CalendarCollection do
       expect do
         calendar_collection.consecutive_availability(
           duration_minutes: 30,
-          interval: 5,
+          interval_minutes: 5,
           start_time: 1590454800,
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
