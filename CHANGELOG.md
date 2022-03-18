@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 5.8.0 / 2022-03-18
 * Improved support for `Webhook` objects
 * Support `calendars` for availability methods
 * Fix `interval_minutes` keyword for availability methods
