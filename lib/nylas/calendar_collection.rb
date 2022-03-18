@@ -65,9 +65,9 @@ module Nylas
     end
 
     def validate_calendars_or_emails(calendars, emails)
-      if calendars.empty? && emails.empty?
-        raise ArgumentError, "You must provide at least one of 'emails' or 'calendars'"
-      end
+      return unless calendars.empty? && emails.empty?
+
+      raise ArgumentError, "You must provide at least one of 'emails' or 'calendars'"
     end
 
     def validate_open_hours(emails, free_busy, open_hours)
