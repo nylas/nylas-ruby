@@ -5,7 +5,7 @@ module Nylas
   # @see https://developer.nylas.com/docs/connectivity/calendar
   class CalendarCollection < Collection
     def availability(duration_minutes:,
-                     interval:,
+                     interval_minutes:,
                      start_time:,
                      end_time:,
                      emails: [],
@@ -19,7 +19,7 @@ module Nylas
 
       execute_availability("/calendars/availability",
                            duration_minutes: duration_minutes,
-                           interval: interval,
+                           interval_minutes: interval_minutes,
                            start_time: start_time,
                            end_time: end_time,
                            emails: emails,
@@ -31,7 +31,7 @@ module Nylas
     end
 
     def consecutive_availability(duration_minutes:,
-                                 interval:,
+                                 interval_minutes:,
                                  start_time:,
                                  end_time:,
                                  emails: [],
@@ -44,7 +44,7 @@ module Nylas
 
       execute_availability("/calendars/availability/consecutive",
                            duration_minutes: duration_minutes,
-                           interval: interval,
+                           interval_minutes: interval_minutes,
                            start_time: start_time,
                            end_time: end_time,
                            emails: emails,
