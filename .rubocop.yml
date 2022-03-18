@@ -31,6 +31,9 @@ Metrics/ClassLength:
     - "lib/nylas/api.rb"
     - "lib/nylas/collection.rb"
 
+Metrics/MethodLength:
+  Exclude:
+    - "lib/nylas/calendar_collection.rb"
 
 Metrics/ModuleLength:
   Exclude:
