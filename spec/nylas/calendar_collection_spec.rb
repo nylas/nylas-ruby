@@ -156,10 +156,10 @@ describe Nylas::CalendarCollection do
     expect do
       calendar_collection.consecutive_availability(
         duration_minutes: 30,
-        interval: 5,
+        interval_minutes: 5,
         start_time: 1590454800,
         end_time: 1590780800,
-        buffer: 5,
+        buffer: 5
       )
     end.to raise_error(ArgumentError)
   end
