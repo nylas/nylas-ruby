@@ -33,7 +33,7 @@ module Nylas
       "/delta/longpoll" => 3650,
       "/delta/streaming" => 3650
     }.freeze
-    SUPPORTED_API_VERSION = "2.2"
+    SUPPORTED_API_VERSION = "2.5"
 
     include Logging
     attr_accessor :api_server
