@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Enable Nylas API v2.5 support
+
 ### 5.8.0 / 2022-03-18
 * Improved support for `Webhook` objects
 * Support `calendars` for availability methods

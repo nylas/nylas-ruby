@@ -45,7 +45,7 @@ describe Nylas::HttpClient do
 
   describe "#execute" do
     it "includes Nylas API Version in headers" do
-      supported_api_version = "2.2"
+      supported_api_version = "2.5"
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       allow(RestClient::Request).to receive(:execute)
 
