@@ -115,7 +115,7 @@ module Nylas
     def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
       url ||= url_for_path(path)
       url = add_query_params_to_url(url, query)
-      resulting_headers = default_headers.merge(headers, auth_header)
+      resulting_headers = default_headers.merge(headers).merge(auth_header)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
 
