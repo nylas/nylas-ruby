@@ -135,7 +135,7 @@ module Nylas
       @job_statuses ||= Collection.new(model: JobStatus, api: self)
     end
 
-    # @return[OutboxCollection] A queryable collection of {OutboxMessage} objects
+    # @return[OutboxCollection] A collection of Outbox operations
     def outbox
       @outbox ||= Outbox.new(api: self)
     end
@@ -148,7 +148,7 @@ module Nylas
       @scheduler ||= SchedulerCollection.new(model: Scheduler, api: scheduler_api)
     end
 
-    # @return[Neural] A {Neural} object that provides
+    # @return[Neural] A collection of Neural operations
     def neural
       @neural ||= Neural.new(api: self)
     end
