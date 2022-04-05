@@ -15,6 +15,7 @@ module Nylas
     attribute :billing_state, :string, read_only: true
     attribute :sync_state, :string, read_only: true
     attribute :provider, :string, read_only: true
+    attribute :authentication_type, :string, read_only: true
 
     attribute :email, :string, read_only: true
     attribute :trial, :boolean, read_only: true
