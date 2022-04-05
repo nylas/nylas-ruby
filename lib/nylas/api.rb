@@ -135,6 +135,11 @@ module Nylas
       @job_statuses ||= Collection.new(model: JobStatus, api: self)
     end
 
+    # @return[OutboxCollection] A queryable collection of {OutboxMessage} objects
+    def outbox
+      @outbox ||= OutboxCollection.new(model: OutboxMessage, api: self)
+    end
+
     # @return[SchedulerCollection<Scheduler>] A queryable collection of {Scheduler} objects
     def scheduler
       # Make a deep copy of the API as the scheduler API uses a different base URL
