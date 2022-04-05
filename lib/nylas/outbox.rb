@@ -23,7 +23,7 @@ module Nylas
     # rubocop:enable Layout/LineLength
     def send(draft, send_at: nil, retry_limit_datetime: nil)
       message = draft.to_h(enforce_read_only: true)
-      message.merge(validate_set_date_time(send_at, retry_limit_datetime))
+      message.merge!(validate_set_date_time(send_at, retry_limit_datetime))
       outbox_response = api.execute(
         method: :post,
         path: outbox_path,
@@ -43,12 +43,12 @@ module Nylas
     # rubocop:enable Layout/LineLength
     def update(job_status_id, message: nil, send_at: nil, retry_limit_datetime: nil)
       payload = {}
-      payload.merge(message.to_h(enforce_read_only: true)) if message
-      payload.merge(validate_set_date_time(send_at, retry_limit_datetime))
+      payload.merge!(message.to_h(enforce_read_only: true)) if message
+      payload.merge!(validate_set_date_time(send_at, retry_limit_datetime))
       outbox_response = api.execute(
         method: :patch,
         path: "#{outbox_path}/#{job_status_id}",
-        payload: JSON.dump(message)
+        payload: JSON.dump(payload)
       )
 
       OutboxJobStatus.new(**outbox_response)
