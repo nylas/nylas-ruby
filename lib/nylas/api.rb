@@ -132,7 +132,7 @@ module Nylas
 
     # @return[Collection<JobStatus>] A queryable collection of {JobStatus} objects
     def job_statuses
-      @job_statuses ||= Collection.new(model: JobStatus, api: self)
+      @job_statuses ||= JobStatusCollection.new(model: JobStatus, api: self)
     end
 
     # @return[OutboxCollection] A collection of Outbox operations

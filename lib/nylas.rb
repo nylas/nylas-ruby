@@ -67,6 +67,7 @@ require_relative "nylas/free_busy_collection"
 require_relative "nylas/calendar_collection"
 require_relative "nylas/component_collection"
 require_relative "nylas/scheduler_collection"
+require_relative "nylas/job_status_collection"
 require_relative "nylas/outbox"
 
 # Models supported by the API
