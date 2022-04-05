@@ -20,6 +20,7 @@ describe Nylas::Account do
       email: "test@example.com",
       id: "30zipv27dtrsnkleg59mprw5p",
       sync_state: "running",
+      authentication_type: "password",
       trial: false,
       provider: "gmail",
       metadata: {
@@ -32,6 +33,7 @@ describe Nylas::Account do
     expect(account.email).to eql "test@example.com"
     expect(account.id).to eql "30zipv27dtrsnkleg59mprw5p"
     expect(account.sync_state).to eql "running"
+    expect(account.authentication_type).to eql "password"
     expect(account.trial).to be false
     expect(account.provider).to eq("gmail")
     expect(account.metadata).to include(key: "value")

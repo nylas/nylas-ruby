@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Add Outbox support
+* Add new `authentication_type` field in Account
 * Enable Nylas API v2.5 support
 
 ### 5.8.0 / 2022-03-18
