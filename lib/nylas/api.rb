@@ -137,7 +137,7 @@ module Nylas
 
     # @return[OutboxCollection] A queryable collection of {OutboxMessage} objects
     def outbox
-      @outbox ||= OutboxCollection.new(model: OutboxMessage, api: self)
+      @outbox ||= Outbox.new(api: self)
     end
 
     # @return[SchedulerCollection<Scheduler>] A queryable collection of {Scheduler} objects

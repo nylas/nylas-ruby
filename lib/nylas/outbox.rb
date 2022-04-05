@@ -3,7 +3,13 @@
 module Nylas
   # Methods for Outbox functionality
   # @see https://developer.nylas.com/docs/api/#tag--Outbox
-  class OutboxCollection < Collection
+  class Outbox
+    attr_accessor :api
+
+    def initialize(api:)
+      self.api = api
+    end
+
     def outbox_path
       @outbox_path ||= "/v2/outbox"
     end
