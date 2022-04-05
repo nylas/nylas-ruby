@@ -3,13 +3,18 @@
 module Nylas
   # Ruby representation of a Nylas Outbox Job Status object
   # @see https://developer.nylas.com/docs/api/#post/v2/outbox
-  class OutboxJobStatus
-    include Model::Attributable
+  class OutboxJobStatus < JobStatus
+    include Model
 
-    attribute :job_status_id, :string
-    attribute :account_id, :string
-    attribute :status, :string
+    attribute :send_at, :unix_timestamp
+    attribute :original_send_at, :unix_timestamp
+    attribute :message_id, :string
+    attribute :thread_id, :string
     attribute :original_data, :outbox_message
+
+    transfer :api, to: %i[original_data]
+
+    inherit_attributes
   end
 end
 
