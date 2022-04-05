@@ -23,8 +23,7 @@ module Nylas
     # rubocop:enable Layout/LineLength
     def send(draft, send_at: nil, retry_limit_datetime: nil)
       message = draft.to_h(enforce_read_only: true)
-      message[:send_at] = send_at unless send_at.nil?
-      message[:retry_limit_datetime] = retry_limit_datetime unless retry_limit_datetime.nil?
+      message.merge(validate_set_date_time(send_at, retry_limit_datetime))
       outbox_response = api.execute(
         method: :post,
         path: outbox_path,
@@ -44,8 +43,7 @@ module Nylas
     # rubocop:enable Layout/LineLength
     def update(job_status_id, draft, send_at: nil, retry_limit_datetime: nil)
       message = draft.to_h(enforce_read_only: true)
-      message[:send_at] = send_at unless send_at.nil?
-      message[:retry_limit_datetime] = retry_limit_datetime unless retry_limit_datetime.nil?
+      message.merge(validate_set_date_time(send_at, retry_limit_datetime))
       outbox_response = api.execute(
         method: :patch,
         path: "#{outbox_path}/#{job_status_id}",
@@ -87,6 +85,31 @@ module Nylas
         path: "#{outbox_path}/onboard/subuser",
         payload: JSON.dump({ email: email })
       )
+    end
+
+    private
+
+    def validate_set_date_time(send_at, retry_limit_datetime)
+      hash = {}
+      hash[:send_at] = validate_send_at(send_at) if send_at
+      if retry_limit_datetime
+        hash[:retry_limit_datetime] = validate_retry_limit_datetime(send_at, retry_limit_datetime)
+      end
+
+      hash
+    end
+
+    def validate_send_at(send_at)
+      return send_at unless send_at != 0 && (send_at < Time.now.to_i)
+
+      raise ArgumentError, "Cannot set message to be sent at a time before the current time."
+    end
+
+    def validate_retry_limit_datetime(send_at, retry_limit_datetime)
+      valid_send_at = send_at && send_at != 0 ? send_at : Time.now.to_i
+      return retry_limit_datetime unless retry_limit_datetime != 0 && (retry_limit_datetime < valid_send_at)
+
+      raise ArgumentError, "Cannot set message to stop retrying before time to send at."
     end
   end
 end
