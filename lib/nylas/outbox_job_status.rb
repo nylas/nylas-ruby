@@ -17,4 +17,3 @@ module Nylas
     inherit_attributes
   end
 end
-

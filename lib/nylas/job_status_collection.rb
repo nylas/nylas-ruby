@@ -13,7 +13,7 @@ module Nylas
       )
 
       object_type = response[:object]
-      return OutboxJobStatus.from_hash(response, api:api) if object_type == "message"
+      return OutboxJobStatus.from_hash(response, api: api) if object_type == "message"
 
       model.from_hash(response, api: api)
     end

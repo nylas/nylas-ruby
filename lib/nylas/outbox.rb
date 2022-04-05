@@ -114,4 +114,3 @@ module Nylas
     end
   end
 end
-
