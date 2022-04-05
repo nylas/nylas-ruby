@@ -36,14 +36,15 @@ module Nylas
     # rubocop:disable Layout/LineLength
     # Update a scheduled Outbox message
     # @param job_status_id [String] The ID of the outbox job status
-    # @param draft [Draft, OutboxMessage] The message object with updated values
+    # @param message [Draft, OutboxMessage] The message object with updated values
     # @param send_at [Numeric] The date and time to send the message. If not set, Outbox will send this message immediately.
     # @param retry_limit_datetime [Numeric] The date and time to stop retry attempts for a message. If not set, it defaults to 24 hours after send_at.
     # @return [OutboxJobStatus] The updated outbox job status status and message data
     # rubocop:enable Layout/LineLength
-    def update(job_status_id, draft, send_at: nil, retry_limit_datetime: nil)
-      message = draft.to_h(enforce_read_only: true)
-      message.merge(validate_set_date_time(send_at, retry_limit_datetime))
+    def update(job_status_id, message: nil, send_at: nil, retry_limit_datetime: nil)
+      payload = {}
+      payload.merge(message.to_h(enforce_read_only: true)) if message
+      payload.merge(validate_set_date_time(send_at, retry_limit_datetime))
       outbox_response = api.execute(
         method: :patch,
         path: "#{outbox_path}/#{job_status_id}",
