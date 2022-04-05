@@ -16,17 +16,18 @@ day_after = tomorrow + 1
 # Send the message to the outbox
 outbox_job_status = demonstrate { api.outbox.send(draft, send_at: tomorrow.to_time.to_i, retry_limit_datetime: day_after.to_time.to_i) }
 
-# Update the outbox message using the OutboxMessage object returned by the OutboxJobStatus object
-demonstrate do
-  outbox_message = outbox_job_status.original_data
-  outbox_message.subject = "Updated Subject"
-  api.outbox.update(outbox_job_status.job_status_id, outbox_message)
-end
-
-# Or, you can update the draft directly and use that object
+# You can update the draft directly and use that object
 demonstrate do
   draft.subject = "Another Updated Subject"
-  api.outbox.update(outbox_job_status.job_status_id, draft)
+  api.outbox.update(outbox_job_status.job_status_id, message: draft)
+end
+
+# Or, you can update the outbox message using the OutboxMessage object directly in the Job Status
+demonstrate do
+  job_status = api.job_statuses.find(outbox_job_status.job_status_id)
+  message = job_status.original_data
+  message.subject = "Updated Subject"
+  api.outbox.update(outbox_job_status.job_status_id, message: message)
 end
 
 # Delete the outbox draft status
