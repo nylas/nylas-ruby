@@ -6,6 +6,8 @@ require "date"
 describe Nylas::Outbox do
   let(:api) { instance_double(Nylas::API) }
   let(:outbox) { described_class.new(api: api) }
+  let(:tomorrow) { Date.today + 1 }
+  let(:day_after) { Date.today + 2 }
 
   before do
     allow(api).to receive(:execute).and_return({})
@@ -17,8 +19,6 @@ describe Nylas::Outbox do
                        subject: "A new draft!",
                        metadata: { sdk: "Ruby SDK" })
     end
-    let(:tomorrow) { Date.today + 1 }
-    let(:day_after) { Date.today + 2 }
 
     it "sends a POST request on send" do
       outbox.send(draft, send_at: tomorrow.to_time.to_i, retry_limit_datetime: day_after.to_time.to_i)
@@ -38,7 +38,8 @@ describe Nylas::Outbox do
 
     it "sends a PATCH request on update" do
       draft.subject = "Updated subject"
-      outbox.update("job-status-id", draft,
+      outbox.update("job-status-id",
+                    message: draft,
                     send_at: tomorrow.to_time.to_i,
                     retry_limit_datetime: day_after.to_time.to_i)
 
@@ -90,6 +91,24 @@ describe Nylas::Outbox do
           email: "not-a-real-email@example.com"
         }.to_json
       )
+    end
+  end
+
+  describe "date validation" do
+    let(:epoch1990) { 636309514 }
+
+    it "throws an error when sendAt to older than today" do
+      expect { outbox.update("id", send_at: epoch1990) }.to raise_error(ArgumentError)
+    end
+
+    it "throws an error when retryLimitDatetime to older than sendAt" do
+      expect do
+        outbox.update("id", send_at: day_after.to_time.to_i, retry_limit_datetime: tomorrow.to_time.to_i)
+      end.to raise_error(ArgumentError)
+    end
+
+    it "throws an error when retryLimitDatetime to older than today without sendAt date" do
+      expect { outbox.update("id", retry_limit_datetime: epoch1990) }.to raise_error(ArgumentError)
     end
   end
 end
