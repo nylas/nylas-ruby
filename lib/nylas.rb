@@ -29,6 +29,8 @@ require_relative "nylas/registry"
 require_relative "nylas/types"
 require_relative "nylas/constraints"
 
+require_relative "nylas/http_client"
+require_relative "nylas/api"
 require_relative "nylas/collection"
 require_relative "nylas/model"
 
@@ -111,9 +113,6 @@ require_relative "nylas/scheduler_booking_request"
 require_relative "nylas/scheduler_booking_confirmation"
 
 require_relative "nylas/native_authentication"
-
-require_relative "nylas/http_client"
-require_relative "nylas/api"
 
 require_relative "nylas/filter_attributes"
 # an SDK for interacting with the Nylas API

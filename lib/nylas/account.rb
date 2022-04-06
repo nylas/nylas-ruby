@@ -9,6 +9,7 @@ module Nylas
     self.showable = true
     self.updatable = true
     self.destroyable = true
+    self.auth_method = HttpClient::AuthMethod::BASIC
 
     attribute :id, :string, read_only: true
     attribute :account_id, :string, read_only: true
