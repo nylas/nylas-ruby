@@ -5,6 +5,11 @@ module Nylas
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
+    module AuthMethod
+      BEARER = 1
+      BASIC = 2
+    end
+
     HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
 
     HTTP_CODE_TO_EXCEPTIONS = {
@@ -32,10 +37,6 @@ module Nylas
       "/delta" => 3650,
       "/delta/longpoll" => 3650,
       "/delta/streaming" => 3650
-    }.freeze
-
-    AUTH_METHOD = {
-      "Bearer" => 1
     }.freeze
 
     SUPPORTED_API_VERSION = "2.5"
