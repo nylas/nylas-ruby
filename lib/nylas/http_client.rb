@@ -116,7 +116,15 @@ module Nylas
     inform_on :execute, level: :debug,
                         also_log: { result: true, values: %i[method url path headers query payload] }
 
-    def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, auth_method: nil)
+    def build_request(
+      method:,
+      path: nil,
+      headers: {},
+      query: {},
+      payload: nil,
+      timeout: nil,
+      auth_method: nil
+    )
       url ||= url_for_path(path)
       url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(auth_method))
