@@ -2,6 +2,7 @@
 
 module Nylas
   require "yajl"
+  require "base64"
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
@@ -223,8 +224,15 @@ module Nylas
       query
     end
 
-    def auth_header
-      authorization_string = "Bearer #{access_token}"
+    def auth_header(auth_method)
+      authorization_string = case auth_method
+                             when AuthMethod::BEARER
+                               "Bearer #{access_token}"
+                             when AuthMethod::BASIC
+                               "Basic #{Base64.encode64("#{access_token}:")}"
+                             else
+                               "Bearer #{access_token}"
+                             end
 
       { "Authorization" => authorization_string }
     end
