@@ -5,8 +5,8 @@ require_relative '../helpers'
 api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'])
 
 # Create a component
-# NOTE: you will need to fill in the account_id and, if not set, the access_token
-demonstrate { api.components.create(name: "Ruby Component Test", type: "agenda", public_account_id: "ACCOUNT_ID", access_token: ENV['NYLAS_ACCESS_TOKEN']) }
+# NOTE: you will need to set the account_id and the access_token
+demonstrate { api.components.create(name: "Ruby Component Test", type: "agenda", public_account_id: ENV['NYLAS_ACCOUNT_ID'], access_token: ENV['NYLAS_ACCESS_TOKEN']) }
 
 # Get all components
 demonstrate { api.components }
