@@ -108,7 +108,7 @@ module Nylas
     end
 
     def auth_method
-      self.class.auth_method(api: api) || HttpClient::AuthMethod::BEARER
+      self.class.auth_method(api: api)
     end
 
     def destroy
@@ -189,7 +189,7 @@ module Nylas
       end
 
       def auth_method(*)
-        @auth_method
+        @auth_method || HttpClient::AuthMethod::BEARER
       end
 
       def exposable_as_raw?
