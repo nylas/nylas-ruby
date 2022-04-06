@@ -5,7 +5,7 @@ module Nylas
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   class HttpClient # rubocop:disable Metrics/ClassLength
-    HTTP_SUCCESS_CODES = [200, 201, 302].freeze
+    HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
 
     HTTP_CODE_TO_EXCEPTIONS = {
       400 => InvalidRequest,
@@ -33,6 +33,11 @@ module Nylas
       "/delta/longpoll" => 3650,
       "/delta/streaming" => 3650
     }.freeze
+
+    AUTH_METHOD = {
+      "Bearer" => 1
+    }.freeze
+
     SUPPORTED_API_VERSION = "2.5"
 
     include Logging
@@ -110,7 +115,7 @@ module Nylas
     def build_request(method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil)
       url ||= url_for_path(path)
       url = add_query_params_to_url(url, query)
-      resulting_headers = default_headers.merge(headers)
+      resulting_headers = default_headers.merge(headers).merge(auth_header)
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
 
@@ -215,6 +220,12 @@ module Nylas
       end
 
       query
+    end
+
+    def auth_header
+      authorization_string = "Bearer #{access_token}"
+
+      { "Authorization" => authorization_string }
     end
   end
 end

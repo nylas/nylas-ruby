@@ -67,6 +67,8 @@ require_relative "nylas/free_busy_collection"
 require_relative "nylas/calendar_collection"
 require_relative "nylas/component_collection"
 require_relative "nylas/scheduler_collection"
+require_relative "nylas/job_status_collection"
+require_relative "nylas/outbox"
 
 # Models supported by the API
 require_relative "nylas/account"
@@ -87,6 +89,9 @@ require_relative "nylas/scheduler"
 require_relative "nylas/job_status"
 require_relative "nylas/token_info"
 require_relative "nylas/application_details"
+require_relative "nylas/outbox_message"
+require_relative "nylas/outbox_job_status"
+require_relative "nylas/send_grid_verified_status"
 
 # Neural specific types
 require_relative "nylas/neural"
@@ -152,4 +157,5 @@ module Nylas
   Types.registry[:scheduler_config] = Types::ModelType.new(model: SchedulerConfig)
   Types.registry[:scheduler_time_slot] = Types::ModelType.new(model: SchedulerTimeSlot)
   Types.registry[:job_status] = Types::ModelType.new(model: JobStatus)
+  Types.registry[:outbox_message] = Types::ModelType.new(model: OutboxMessage)
 end

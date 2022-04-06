@@ -15,7 +15,7 @@ module Nylas
     attribute :object, :string, read_only: true
     attribute :status, :string, read_only: true
     attribute :created_at, :unix_timestamp, read_only: true
-    attribute :original_data, :message, read_only: true
+    attribute :reason, :string, read_only: true
 
     # Returns the status of a job as a boolean
     # @return [Boolean] If the job was successful

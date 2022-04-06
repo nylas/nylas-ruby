@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add Outbox support
 * Add new `authentication_type` field in Account
 * Enable Nylas API v2.5 support
 
