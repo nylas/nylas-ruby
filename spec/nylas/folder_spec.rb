@@ -31,6 +31,7 @@ describe Nylas::Folder do
       folder.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :post,
         path: "/folders",
         payload: {
@@ -53,6 +54,7 @@ describe Nylas::Folder do
       )
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/folders/folder_id",
         payload: {
@@ -72,6 +74,7 @@ describe Nylas::Folder do
       folder.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/folders/folder_id",
         payload: {
@@ -92,6 +95,7 @@ describe Nylas::Folder do
       folder.destroy
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :delete,
         path: "/folders/folder_id",
         payload: nil,

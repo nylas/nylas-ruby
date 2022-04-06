@@ -71,6 +71,7 @@ describe Nylas::Component do
       component.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :post,
         path: "/component/not-real",
         payload: JSON.dump(
@@ -116,6 +117,7 @@ describe Nylas::Component do
       scheduler.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :put,
         path: "/component/not-real/abc-123",
         payload: JSON.dump(

@@ -144,6 +144,7 @@ describe Nylas::Message do
         message.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/messages/message-1234",
           payload: JSON.dump(
@@ -170,6 +171,7 @@ describe Nylas::Message do
       message.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/messages/message-1234",
         payload: JSON.dump(
@@ -197,6 +199,7 @@ describe Nylas::Message do
       message.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/messages/message-1234",
         payload: JSON.dump(
@@ -222,6 +225,7 @@ describe Nylas::Message do
       )
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/messages/message-1234",
         payload: JSON.dump(
@@ -254,6 +258,7 @@ describe Nylas::Message do
       message.update_folder(folder_id)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/messages/message-1234",
         payload: { folder_id: folder_id }.to_json,

@@ -86,6 +86,7 @@ describe Nylas::Thread do
       thread.update_folder(folder_id)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/threads/thread-1234",
         payload: { folder_id: folder_id }.to_json,
@@ -107,6 +108,7 @@ describe Nylas::Thread do
       )
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/threads/thread-1234",
         payload: JSON.dump(

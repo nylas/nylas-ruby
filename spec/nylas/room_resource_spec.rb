@@ -55,6 +55,7 @@ describe Nylas::RoomResource do
       api.execute(resource.to_be_executed)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :get,
         path: "/resources",
         headers: {},

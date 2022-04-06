@@ -62,6 +62,7 @@ describe Nylas::Webhook do
       webhook.create
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :post,
         path: "/a/app-987/webhooks",
         payload: JSON.dump(
@@ -91,6 +92,7 @@ describe Nylas::Webhook do
       webhook.update(state: WebhookState::INACTIVE)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :put,
         path: "/a/app-987/webhooks/webhook-123",
         payload: JSON.dump(
@@ -135,6 +137,7 @@ describe Nylas::Webhook do
       webhook.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :post,
         path: "/a/app-987/webhooks",
         payload: JSON.dump(
@@ -162,6 +165,7 @@ describe Nylas::Webhook do
       webhook.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :put,
         path: "/a/app-987/webhooks/webhook-123",
         payload: JSON.dump(
@@ -189,6 +193,7 @@ describe Nylas::Webhook do
       webhook.destroy
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BASIC,
         method: :delete,
         path: "/a/app-987/webhooks/webhook-123",
         payload: nil,

@@ -43,6 +43,7 @@ describe Nylas::Draft do
         draft.update(subject: "Updated subject", files: [file])
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
@@ -68,6 +69,7 @@ describe Nylas::Draft do
         draft.update(subject: "Updated subject")
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
@@ -116,6 +118,7 @@ describe Nylas::Draft do
       draft.update(**updated)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/drafts/draft-1234",
         payload: JSON.dump(
@@ -144,6 +147,7 @@ describe Nylas::Draft do
         draft.create
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :post,
           path: "/drafts",
           payload: JSON.dump(
@@ -169,6 +173,7 @@ describe Nylas::Draft do
         draft.create
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :post,
           path: "/drafts",
           payload: JSON.dump(
@@ -197,6 +202,7 @@ describe Nylas::Draft do
         draft.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
@@ -222,6 +228,7 @@ describe Nylas::Draft do
         draft.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/drafts/draft-1234",
           payload: JSON.dump(
@@ -266,6 +273,7 @@ describe Nylas::Draft do
       draft.send!
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :post,
         path: "/send",
         payload: update_json,
@@ -282,6 +290,7 @@ describe Nylas::Draft do
       draft.send!
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :post,
         path: "/send",
         payload: JSON.dump(

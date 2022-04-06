@@ -79,6 +79,7 @@ describe Nylas::Scheduler do
       scheduler.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :post,
         path: "/manage/pages",
         payload: JSON.dump(
@@ -123,6 +124,7 @@ describe Nylas::Scheduler do
       scheduler.save
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         path: "/manage/pages/123",
         payload: JSON.dump(
