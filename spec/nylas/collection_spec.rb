@@ -16,8 +16,13 @@ describe Nylas::Collection do
   describe "#each" do
     it "Returns an enumerable for a single page of results, filtered by `offset` and `limit` and `where`" do
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }, headers: {})
-        .and_return([example_instance_hash])
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { limit: 100, offset: 0 },
+          headers: {}
+        ).and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
 
@@ -28,8 +33,13 @@ describe Nylas::Collection do
 
     it "allows you to use a block directly" do
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0 }, headers: {})
-        .and_return([example_instance_hash])
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { limit: 100, offset: 0 },
+          headers: {}
+        ).and_return([example_instance_hash])
 
       collection = described_class.new(model: FullModel, api: api)
 
@@ -46,13 +56,23 @@ describe Nylas::Collection do
   describe "#find_each" do
     it "iterates over every page filtered based on `limit` and `where`" do
       collection = described_class.new(model: FullModel, api: api)
-      allow(api).to receive(:execute).with(method: :get, path: "/collection",
-                                           query: { limit: 100, offset: 0 }, headers: {})
-                                     .and_return(Array.new(100) { example_instance_hash })
+      allow(api).to receive(:execute)
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { limit: 100, offset: 0 },
+          headers: {}
+        ).and_return(Array.new(100) { example_instance_hash })
 
-      allow(api).to receive(:execute).with(method: :get, path: "/collection",
-                                           query: { limit: 100, offset: 100 }, headers: {})
-                                     .and_return(Array.new(50) { example_instance_hash })
+      allow(api).to receive(:execute)
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { limit: 100, offset: 100 },
+          headers: {}
+        ).and_return(Array.new(50) { example_instance_hash })
 
       expect(collection.find_each.to_a.size).to be 150
     end
@@ -62,6 +82,7 @@ describe Nylas::Collection do
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :get,
         path: "/collection/1234",
         query: {},
@@ -83,6 +104,7 @@ describe Nylas::Collection do
       expect(instance.id).to eql "1234"
       expect(instance.api).to eq(api)
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :get,
         path: "/collection/1234",
         query: { view: "expanded" },
@@ -99,6 +121,7 @@ describe Nylas::Collection do
       expect(instance.id).to eql "1234"
       expect(instance.api).to eq(api)
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :get,
         path: "/collection/1234",
         query: {},
@@ -116,6 +139,7 @@ describe Nylas::Collection do
         ]
       )
       allow(api).to receive(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :get,
         path: "/collection/1234",
         query: {},
@@ -147,8 +171,13 @@ describe Nylas::Collection do
     it "returns collection count" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute)
-        .with(method: :get, path: "/collection", query: { limit: 100, offset: 0, view: "count" }, headers: {})
-        .and_return(count: 1)
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { limit: 100, offset: 0, view: "count" },
+          headers: {}
+        ).and_return(count: 1)
 
       expect(collection.count).to be 1
     end
@@ -156,11 +185,13 @@ describe Nylas::Collection do
     it "returns collection count filtered by `where`" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute)
-        .with(method: :get,
-              path: "/collection",
-              query: { id: "1234", limit: 100, offset: 0, view: "count" },
-              headers: {})
-        .and_return(count: 1)
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :get,
+          path: "/collection",
+          query: { id: "1234", limit: 100, offset: 0, view: "count" },
+          headers: {}
+        ).and_return(count: 1)
 
       expect(collection.where(id: "1234").count).to be 1
     end
@@ -191,6 +222,7 @@ describe Nylas::Collection do
         model = instance_double("Model")
         allow(model).to receive(:searchable?).and_return(true)
         allow(model).to receive(:resources_path)
+        allow(model).to receive(:auth_method)
         collection = described_class.new(model: model, api: api)
         stub_request(:get, "https://api.nylas.com/search?limit=100&offset=0&q=%7B%7D")
           .to_return(status: code, body: {}.to_json)

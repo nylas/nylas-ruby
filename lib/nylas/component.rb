@@ -6,6 +6,7 @@ module Nylas
     include Model
     allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
                       destroyable: true)
+    self.auth_method = HttpClient::AuthMethod::BASIC
 
     attribute :id, :string, read_only: true
     attribute :account_id, :string

@@ -196,6 +196,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-id",
           payload: {
@@ -223,6 +224,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-id",
           payload: {
@@ -248,6 +250,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-id",
           payload: {
@@ -275,6 +278,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-id",
           payload: {
@@ -313,6 +317,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-id",
           payload: {
@@ -378,6 +383,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :post,
           path: "/events",
           payload: {
@@ -403,6 +409,7 @@ describe Nylas::Event do
         event.save
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :post,
           path: "/events",
           payload: {
@@ -430,6 +437,7 @@ describe Nylas::Event do
         event.update(location: "Somewhere else!")
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-8766",
           payload: {
@@ -455,6 +463,7 @@ describe Nylas::Event do
         event.update(location: "Somewhere else!")
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :put,
           path: "/events/event-8766",
           payload: {
@@ -481,6 +490,7 @@ describe Nylas::Event do
         event.destroy
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :delete,
           path: "/events/event-8766",
           payload: nil,
@@ -504,6 +514,7 @@ describe Nylas::Event do
         event.destroy
 
         expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
           method: :delete,
           path: "/events/event-8766",
           payload: nil,

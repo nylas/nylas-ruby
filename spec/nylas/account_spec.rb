@@ -49,6 +49,7 @@ describe Nylas::Account do
     account.save
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :put,
       path: "/a/app-987/accounts/acc-1234",
       payload: JSON.dump(
@@ -67,6 +68,7 @@ describe Nylas::Account do
     expect(account.downgrade).to be_truthy
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :post,
       path: "/a/app-987/accounts/acc-1234/downgrade",
       payload: nil,
@@ -81,6 +83,7 @@ describe Nylas::Account do
     expect(account.upgrade).to be_truthy
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :post,
       path: "/a/app-987/accounts/acc-1234/upgrade",
       payload: nil,
@@ -96,6 +99,7 @@ describe Nylas::Account do
     expect(account.revoke_all(keep_access_token: access_token)).to be_truthy
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :post,
       path: "/a/app-987/accounts/acc-1234/revoke-all",
       payload: be_json("keep_access_token" => access_token),
@@ -110,6 +114,7 @@ describe Nylas::Account do
     expect(account.destroy).to be_truthy
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :delete,
       path: "/a/app-987/accounts/acc-1234",
       payload: nil,
@@ -131,6 +136,7 @@ describe Nylas::Account do
     token_info = account.token_info("test-token")
 
     expect(api).to have_received(:execute).with(
+      auth_method: Nylas::HttpClient::AuthMethod::BASIC,
       method: :post,
       path: "/a/app-987/accounts/acc-1234/token-info",
       payload: be_json("access_token" => "test-token"),

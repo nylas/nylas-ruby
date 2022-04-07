@@ -7,14 +7,29 @@ describe Nylas::DeltasCollection do
     it "supports iterating until the responses are empty" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute)
-        .with(path: "/delta", method: :get, query: { cursor: "1", limit: 100, offset: 0 }, headers: {})
-        .and_return(deltas: [{ object: "draft" }], cursor_start: "1", cursor_end: "2")
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          path: "/delta",
+          method: :get,
+          query: { cursor: "1", limit: 100, offset: 0 },
+          headers: {}
+        ).and_return(deltas: [{ object: "draft" }], cursor_start: "1", cursor_end: "2")
       allow(api).to receive(:execute)
-        .with(path: "/delta", method: :get, query: { cursor: "2", limit: 100, offset: 0 }, headers: {})
-        .and_return(deltas: [{ object: "message" }], cursor_start: "2", cursor_end: "3")
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          path: "/delta",
+          method: :get,
+          query: { cursor: "2", limit: 100, offset: 0 },
+          headers: {}
+        ).and_return(deltas: [{ object: "message" }], cursor_start: "2", cursor_end: "3")
       allow(api).to receive(:execute)
-        .with(path: "/delta", method: :get, query: { cursor: "3", limit: 100, offset: 0 }, headers: {})
-        .and_return(deltas: [], cursor_start: "3", cursor_end: "4")
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          path: "/delta",
+          method: :get,
+          query: { cursor: "3", limit: 100, offset: 0 },
+          headers: {}
+        ).and_return(deltas: [], cursor_start: "3", cursor_end: "4")
 
       deltas = described_class.new(api: api).since("1")
       all_deltas = deltas.find_each.map(&:to_h)
@@ -33,8 +48,13 @@ describe Nylas::DeltasCollection do
         .and_return(cursor: "4")
 
       allow(api).to receive(:execute)
-        .with(path: "/delta", method: :get, query: { cursor: "4", limit: 100, offset: 0 }, headers: {})
-        .and_return(deltas: [], cursor_start: "4", cursor_end: "5")
+        .with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          path: "/delta",
+          method: :get,
+          query: { cursor: "4", limit: 100, offset: 0 },
+          headers: {}
+        ).and_return(deltas: [], cursor_start: "4", cursor_end: "5")
 
       deltas = described_class.new(api: api).latest
       expect(deltas).to be_empty

@@ -39,8 +39,8 @@ module Nylas
       !id.nil?
     end
 
-    def execute(method:, payload: nil, path:, query: {})
-      api.execute(method: method, payload: payload, path: path, query: query)
+    def execute(method:, payload: nil, path:, query: {}, auth_method: self.auth_method)
+      api.execute(method: method, payload: payload, path: path, query: query, auth_method: auth_method)
     end
 
     def create
@@ -107,6 +107,10 @@ module Nylas
       self.class.resources_path(api: api)
     end
 
+    def auth_method
+      self.class.auth_method(api: api)
+    end
+
     def destroy
       raise ModelNotDestroyableError, self unless destroyable?
 
@@ -138,7 +142,7 @@ module Nylas
     module ClassMethods
       attr_accessor :raw_mime_type, :creatable, :showable, :filterable, :searchable, :listable, :updatable,
                     :destroyable
-      attr_writer :resources_path
+      attr_writer :resources_path, :auth_method
 
       def allows_operations(creatable: false, showable: false, listable: false, filterable: false,
                             searchable: false, updatable: false, destroyable: false)
@@ -182,6 +186,10 @@ module Nylas
 
       def resources_path(*)
         @resources_path
+      end
+
+      def auth_method(*)
+        @auth_method || HttpClient::AuthMethod::BEARER
       end
 
       def exposable_as_raw?

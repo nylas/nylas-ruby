@@ -57,6 +57,7 @@ describe Nylas::Model do
       instance.save_all_attributes
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         payload: {
           id: "1234",
@@ -110,6 +111,7 @@ describe Nylas::Model do
       instance.update_all_attributes(**update_params)
 
       expect(api).to have_received(:execute).with(
+        auth_method: Nylas::HttpClient::AuthMethod::BEARER,
         method: :put,
         payload: update_params.to_json,
         path: "/collection/1234",

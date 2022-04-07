@@ -168,7 +168,11 @@ module Nylas
     # Returns the application details
     # @return [ApplicationDetail] The application details
     def application_details
-      response = client.as(client.app_secret).execute(method: :get, path: "/a/#{app_id}")
+      response = client.as(client.app_secret).execute(
+        method: :get,
+        path: "/a/#{app_id}",
+        auth_method: HttpClient::AuthMethod::BASIC
+      )
       ApplicationDetail.new(**response)
     end
 
@@ -179,7 +183,8 @@ module Nylas
       response = client.as(client.app_secret).execute(
         method: :put,
         path: "/a/#{app_id}",
-        payload: JSON.dump(application_details.to_h)
+        payload: JSON.dump(application_details.to_h),
+        auth_method: HttpClient::AuthMethod::BASIC
       )
       ApplicationDetail.new(**response)
     end
@@ -189,7 +194,7 @@ module Nylas
     # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
     def ip_addresses
       path = "/a/#{app_id}/ip_addresses"
-      client.as(client.app_secret).get(path: path)
+      client.as(client.app_secret).get(path: path, auth_method: HttpClient::AuthMethod::BASIC)
     end
 
     # @param message [Hash, String, #send!]
