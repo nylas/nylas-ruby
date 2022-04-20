@@ -16,6 +16,7 @@ describe Nylas::Event do
         participants: [
           {
             comment: "Let me think on it",
+            phone_number: "+14160000000",
             email: "participant@example.com",
             name: "Participant",
             status: "noreply"
@@ -69,6 +70,7 @@ describe Nylas::Event do
       expect(event.description).to eql "an event"
       expect(event.owner).to eql '"owner" <owner@example.com>'
       expect(event.participants[0].comment).to eql "Let me think on it"
+      expect(event.participants[0].phone_number).to eql "+14160000000"
       expect(event.participants[0].email).to eql "participant@example.com"
       expect(event.participants[0].name).to eql "Participant"
       expect(event.participants[0].status).to eql "noreply"
