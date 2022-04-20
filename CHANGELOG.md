@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Add missing `phone_number` field in `Participant`
 * Fix `NoMethodError` when calling `NewMessage#send!`
 
 ### 5.9.0 / 2022-04-07
