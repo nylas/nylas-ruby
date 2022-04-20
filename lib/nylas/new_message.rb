@@ -26,8 +26,14 @@ module Nylas
 
     attribute :tracking, :message_tracking
 
+    # Sends the new message
+    # @return [Message] The sent message
+    # @raise [RuntimeError] if the API response data was not a hash
     def send!
-      Message.new(**api.execute(method: :post, path: "/send", payload: to_json).merge(api: api))
+      message_data = api.execute(method: :post, path: "/send", payload: to_json)
+      raise "Unexpected response from the server, data received not a Message" unless message_data.is_a?(Hash)
+
+      Message.from_hash(message_data, api: api)
     end
   end
 end

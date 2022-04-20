@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fix `NoMethodError` when calling `NewMessage#send!`
+
 ### 5.9.0 / 2022-04-07
 * Add Outbox support
 * Add new `authentication_type` field in Account
