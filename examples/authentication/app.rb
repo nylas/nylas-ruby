@@ -9,7 +9,7 @@ use OmniAuth::Builder do
   provider :google_oauth2, ENV['GOOGLE_CLIENT_ID'], ENV['GOOGLE_CLIENT_SECRET'],
     { name: 'google', access_type: :offline, approval_prompt: "force", prompt: 'consent',
       scope: ['email', 'profile', 'https://mail.google.com/',
-              'https://www.google.com/m8/feeds/',
+              'https://www.googleapis.com/auth/contacts',
               'calendar'].join(', ') }
 end
 get "/" do
