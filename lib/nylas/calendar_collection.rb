@@ -25,8 +25,8 @@ module Nylas
                            emails: emails,
                            buffer: buffer,
                            round_robin: round_robin,
-                           free_busy: free_busy,
-                           open_hours: open_hours,
+                           free_busy: free_busy.map(&:to_h),
+                           open_hours: open_hours.map(&:to_h),
                            calendars: calendars)
     end
 
@@ -49,8 +49,8 @@ module Nylas
                            end_time: end_time,
                            emails: emails,
                            buffer: buffer,
-                           free_busy: free_busy,
-                           open_hours: open_hours,
+                           free_busy: free_busy.map(&:to_h),
+                           open_hours: open_hours.map(&:to_h),
                            calendars: calendars)
     end
 
