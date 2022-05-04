@@ -50,8 +50,28 @@ describe Nylas::CalendarCollection do
           emails: ["swag@nylas.com"],
           buffer: 5,
           round_robin: "max-fairness",
-          free_busy: [free_busy],
-          open_hours: [open_hours],
+          free_busy: [
+            {
+              email: "swag@nylas.com",
+              time_slots: [
+                {
+                  object: "time_slot",
+                  status: "busy",
+                  start_time: 1_609_439_400,
+                  end_time: 1_640_975_400
+                }
+              ]
+            }
+          ],
+          open_hours: [
+            {
+              timezone: "America/Chicago",
+              start: "10:00",
+              end: "14:00",
+              emails: ["swag@nylas.com"],
+              days: [0]
+            }
+          ],
           calendars: []
         )
       )
@@ -101,8 +121,28 @@ describe Nylas::CalendarCollection do
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
           buffer: 5,
-          free_busy: [free_busy],
-          open_hours: [open_hours],
+          free_busy: [
+            {
+              email: "swag@nylas.com",
+              time_slots: [
+                {
+                  object: "time_slot",
+                  status: "busy",
+                  start_time: 1_609_439_400,
+                  end_time: 1_640_975_400
+                }
+              ]
+            }
+          ],
+          open_hours: [
+            {
+              timezone: "America/Chicago",
+              start: "10:00",
+              end: "14:00",
+              emails: %w[one@example.com two@example.com three@example.com swag@nylas.com],
+              days: [0]
+            }
+          ],
           calendars: []
         )
       )
