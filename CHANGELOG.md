@@ -1,7 +1,8 @@
 # Changelog
 
-### Unreleased
+### 5.9.2 / 2022-05-04
 * Fix calendar availability not serializing `FreeBusy` and `OpenHours` properly
+* Fix Authentication demo app using deprecated Google scopes
 
 ### 5.9.1 / 2022-04-20
 * Add missing `phone_number` field in `Participant`
