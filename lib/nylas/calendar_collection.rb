@@ -4,6 +4,18 @@ module Nylas
   # Additional methods for some of Calendar's other functionality
   # @see https://developer.nylas.com/docs/connectivity/calendar
   class CalendarCollection < Collection
+    # Check multiple calendars to find available time slots for a single meeting
+    # @param duration_minutes [Integer] The total number of minutes the event should last
+    # @param interval_minutes [Integer] How many minutes it should check for availability
+    # @param start_time [Integer] The timestamp for the beginning of the event
+    # @param end_time [Integer] The timestamp for the end of the event
+    # @param emails [Array<String>] Emails on the same domain to check
+    # @param buffer [Integer] The amount of buffer time in minutes that you want around existing meetings
+    # @param round_robin [String] Finds available meeting times in a round-robin style
+    # @param free_busy [Array<Nylas::FreeBusy>] A list of free-busy data for users not in your organization
+    # @param open_hours [Array<Nylas::OpenHours>] Additional times email accounts are available
+    # @param calendars [Array] Check account and calendar IDs for free/busy status
+    # @return [Hash] The availability information; a list of time slots where all participants are available
     def availability(duration_minutes:,
                      interval_minutes:,
                      start_time:,
@@ -30,6 +42,17 @@ module Nylas
                            calendars: calendars)
     end
 
+    # Check multiple calendars to find availability for multiple meetings with several participants
+    # @param duration_minutes [Integer] The total number of minutes the event should last
+    # @param interval_minutes [Integer] How many minutes it should check for availability
+    # @param start_time [Integer] The timestamp for the beginning of the event
+    # @param end_time [Integer] The timestamp for the end of the event
+    # @param emails [Array<Array<String>>] Emails on the same domain to check
+    # @param buffer [Integer] The amount of buffer time in minutes that you want around existing meetings
+    # @param free_busy [Array<Nylas::FreeBusy>] A list of free-busy data for users not in your organization
+    # @param open_hours [Array<Nylas::OpenHours>] Additional times email accounts are available
+    # @param calendars [Array] Check account and calendar IDs for free/busy status
+    # @return [Hash] The availability information; a list of all possible groupings that share time slots
     def consecutive_availability(duration_minutes:,
                                  interval_minutes:,
                                  start_time:,
