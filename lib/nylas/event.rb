@@ -16,7 +16,9 @@ module Nylas
     attribute :master_event_id, :string
     attribute :message_id, :string
     attribute :ical_uid, :string
+    attribute :event_collection_id, :string
 
+    attribute :capacity, :integer
     attribute :busy, :boolean
     attribute :description, :string
     attribute :location, :string
@@ -30,6 +32,7 @@ module Nylas
     attribute :metadata, :hash
     attribute :conferencing, :event_conferencing
     has_n_of_attribute :notifications, :event_notification
+    has_n_of_attribute :round_robin_order, :string
     attribute :original_start_time, :unix_timestamp
     attribute :job_status_id, :string, read_only: true
 
