@@ -10,5 +10,7 @@ module Nylas
     attribute :status, :string
     attribute :start_time, :unix_timestamp
     attribute :end_time, :unix_timestamp
+    attribute :capacity, :time_slot_capacity
+    has_n_of_attribute :emails, :string
   end
 end
