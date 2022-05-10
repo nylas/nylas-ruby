@@ -12,6 +12,7 @@ module Nylas
     # @param emails [Array<String>] Emails on the same domain to check
     # @param buffer [Integer] The amount of buffer time in minutes that you want around existing meetings
     # @param round_robin [String] Finds available meeting times in a round-robin style
+    # @param event_collection_id [String] Unique identifier for a collection of events that are created
     # @param free_busy [Array<Nylas::FreeBusy>] A list of free-busy data for users not in your organization
     # @param open_hours [Array<Nylas::OpenHours>] Additional times email accounts are available
     # @param calendars [Array] Check account and calendar IDs for free/busy status
@@ -23,6 +24,7 @@ module Nylas
                      emails: [],
                      buffer: nil,
                      round_robin: nil,
+                     event_collection_id: nil,
                      free_busy: [],
                      open_hours: [],
                      calendars: [])
@@ -37,6 +39,7 @@ module Nylas
                            emails: emails,
                            buffer: buffer,
                            round_robin: round_robin,
+                           event_collection_id: event_collection_id,
                            free_busy: free_busy.map(&:to_h),
                            open_hours: open_hours.map(&:to_h),
                            calendars: calendars)
