@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 describe Nylas::Account do
-  it "is not filterable" do
-    expect(described_class).not_to be_filterable
+  it "is filterable" do
+    expect(described_class).to be_filterable
   end
 
   it "is not creatable" do
