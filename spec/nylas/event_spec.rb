@@ -366,6 +366,49 @@ describe Nylas::Event do
 
         expect { event.save }.to raise_error(ArgumentError, error)
       end
+
+      it "throws an error if capacity is less than the amount of participants" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          capacity: 1,
+          participants: [{ email: "person1@email.com" }, { email: "person2@email.com" }]
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+        error = "The number of participants in the event exceeds the set capacity."
+
+        expect { event.save }.to raise_error(ArgumentError, error)
+      end
+
+      it "does not throw an error if capacity is -1" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          capacity: -1,
+          participants: [{ email: "person1@email.com" }, { email: "person2@email.com" }]
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        expect { event.save }.not_to raise_error
+      end
+
+      it "does not throw an error if capacity is set but participants are less than capacity" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          id: "event-id",
+          calendar_id: "cal-0987",
+          capacity: 3,
+          participants: [{ email: "person1@email.com" }, { email: "person2@email.com" }]
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        expect { event.save }.not_to raise_error
+      end
     end
   end
 

@@ -18,7 +18,12 @@ describe Nylas::FreeBusyCollection do
               object: "time_slot",
               status: "busy",
               start_time: 1_609_439_400,
-              end_time: 1_640_975_400
+              end_time: 1_640_975_400,
+              capacity: {
+                event_id: "abc-123",
+                current_capacity: 2,
+                max_capacity: 5
+              }
             }
           ]
         },
@@ -45,6 +50,9 @@ describe Nylas::FreeBusyCollection do
       expect(first_result_time_slot.status).to eq("busy")
       expect(first_result_time_slot.start_time.to_i).to eq(1_609_439_400)
       expect(first_result_time_slot.end_time.to_i).to eq(1_640_975_400)
+      expect(first_result_time_slot.capacity.event_id).to eq("abc-123")
+      expect(first_result_time_slot.capacity.current_capacity).to eq(2)
+      expect(first_result_time_slot.capacity.max_capacity).to eq(5)
       last_result = result.last
       expect(last_result.object).to eq("free_busy")
       expect(last_result.email).to eq("anothertest@example.com")
