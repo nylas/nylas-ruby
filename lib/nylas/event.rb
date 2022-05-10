@@ -16,7 +16,9 @@ module Nylas
     attribute :master_event_id, :string
     attribute :message_id, :string
     attribute :ical_uid, :string
+    attribute :event_collection_id, :string
 
+    attribute :capacity, :integer
     attribute :busy, :boolean
     attribute :description, :string
     attribute :location, :string
@@ -30,6 +32,7 @@ module Nylas
     attribute :metadata, :hash
     attribute :conferencing, :event_conferencing
     has_n_of_attribute :notifications, :event_notification
+    has_n_of_attribute :round_robin_order, :string
     attribute :original_start_time, :unix_timestamp
     attribute :job_status_id, :string, read_only: true
 
@@ -44,12 +47,7 @@ module Nylas
     end
 
     def save
-      if conferencing
-        body = to_h
-        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
-          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
-        end
-      end
+      validate
 
       super
     end
@@ -80,6 +78,18 @@ module Nylas
     end
 
     private
+
+    def validate
+      if conferencing
+        body = to_h
+        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
+          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
+        end
+      end
+      return unless capacity && capacity != -1 && participants && participants.length > capacity
+
+      raise ArgumentError, "The number of participants in the event exceeds the set capacity."
+    end
 
     def build_ics_event_payload(ical_uid, method, prodid)
       payload = {}
