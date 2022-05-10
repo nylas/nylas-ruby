@@ -35,6 +35,7 @@ describe Nylas::CalendarCollection do
         emails: ["swag@nylas.com"],
         buffer: 5,
         round_robin: "max-fairness",
+        event_collection_id: "abc-123",
         free_busy: [free_busy],
         open_hours: [open_hours]
       )
@@ -50,6 +51,7 @@ describe Nylas::CalendarCollection do
           emails: ["swag@nylas.com"],
           buffer: 5,
           round_robin: "max-fairness",
+          event_collection_id: "abc-123",
           free_busy: [
             {
               email: "swag@nylas.com",
