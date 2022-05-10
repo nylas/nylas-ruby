@@ -47,12 +47,7 @@ module Nylas
     end
 
     def save
-      if conferencing
-        body = to_h
-        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
-          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
-        end
-      end
+      validate
 
       super
     end
@@ -83,6 +78,18 @@ module Nylas
     end
 
     private
+
+    def validate
+      if conferencing
+        body = to_h
+        if body.dig(:conferencing, :details) && body.dig(:conferencing, :autocreate)
+          raise ArgumentError, "Cannot set both 'details' and 'autocreate' in conferencing object."
+        end
+      end
+      return unless capacity && capacity != -1 && participants && participants.length > capacity
+
+      raise ArgumentError, "The number of participants in the event exceeds the set capacity."
+    end
 
     def build_ics_event_payload(ical_uid, method, prodid)
       payload = {}
