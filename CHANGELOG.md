@@ -1,7 +1,8 @@
 # Changelog
 
-### Unreleased
+### 5.10.0 / 2022-05-10
 * Support collective and group events
+* Fix `ModelNotFilterableError` when querying for accounts with metadata
 
 ### 5.9.2 / 2022-05-04
 * Fix calendar availability not serializing `FreeBusy` and `OpenHours` properly
