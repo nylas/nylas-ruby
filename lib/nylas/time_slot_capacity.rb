@@ -11,4 +11,3 @@ module Nylas
     attribute :max_capacity, :integer
   end
 end
-
