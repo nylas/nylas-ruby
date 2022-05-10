@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Support collective and group events
+
 ### 5.9.2 / 2022-05-04
 * Fix calendar availability not serializing `FreeBusy` and `OpenHours` properly
 * Fix Authentication demo app using deprecated Google scopes
