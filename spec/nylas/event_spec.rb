@@ -415,6 +415,71 @@ describe Nylas::Event do
     end
   end
 
+  describe "reminder_minutes" do
+    context "when saving" do
+      it "is formatted properly if set to a numeric value" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          reminder_minutes: "20"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :post,
+          path: "/events",
+          payload: {
+            reminder_minutes: "[20]"
+          }.to_json,
+          query: {}
+        )
+      end
+
+      it "is left as-is if user already formatted properly" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          reminder_minutes: "[20]"
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :post,
+          path: "/events",
+          payload: {
+            reminder_minutes: "[20]"
+          }.to_json,
+          query: {}
+        )
+      end
+
+      it "does not send reminder_minutes if unset" do
+        api = instance_double(Nylas::API)
+        allow(api).to receive(:execute).and_return({})
+        data = {
+          reminder_minutes: ""
+        }
+        event = described_class.from_json(JSON.dump(data), api: api)
+
+        event.save
+
+        expect(api).to have_received(:execute).with(
+          auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+          method: :post,
+          path: "/events",
+          payload: {}.to_json,
+          query: {}
+        )
+      end
+    end
+  end
+
   describe "notify_participants" do
     context "when creating" do
       it "sends notify_participants in query params" do
