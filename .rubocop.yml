@@ -26,11 +26,6 @@ Metrics/ParameterLists:
   Exclude:
     - "lib/nylas/calendar_collection.rb"
 
-Metrics/ClassLength:
-  Exclude:
-    - "lib/nylas/api.rb"
-    - "lib/nylas/collection.rb"
-
 Metrics/MethodLength:
   Exclude:
     - "lib/nylas/calendar_collection.rb"
@@ -42,6 +37,9 @@ Metrics/ModuleLength:
 Naming/FileName:
   Exclude:
     - "lib/nylas-streaming.rb"
+
+Metrics/ClassLength:
+  Enabled: false
 
 Naming/AccessorMethodName:
   Enabled: false
