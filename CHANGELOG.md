@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add support for event reminders
+
 ### 5.10.0 / 2022-05-10
 * Support collective and group events
 * Fix `ModelNotFilterableError` when querying for accounts with metadata
