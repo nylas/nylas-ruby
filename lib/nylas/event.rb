@@ -34,6 +34,8 @@ module Nylas
     has_n_of_attribute :notifications, :event_notification
     has_n_of_attribute :round_robin_order, :string
     attribute :original_start_time, :unix_timestamp
+    attribute :reminder_minutes, :string
+    attribute :reminder_method, :string
     attribute :job_status_id, :string, read_only: true
 
     attr_accessor :notify_participants
@@ -48,6 +50,7 @@ module Nylas
 
     def save
       validate
+      format_reminder_minutes
 
       super
     end
@@ -109,6 +112,13 @@ module Nylas
       payload["method"] = method if method
       payload["prodid"] = prodid if prodid
       payload
+    end
+
+    # Formats the reminder minute field to match the API format: "[%d]"
+    def format_reminder_minutes
+      return if reminder_minutes.nil? || reminder_minutes.empty? || reminder_minutes.match(/\[\d+\]/)
+
+      self.reminder_minutes = "[#{reminder_minutes}]"
     end
 
     def query_params
