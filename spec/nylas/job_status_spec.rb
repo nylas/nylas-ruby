@@ -34,7 +34,10 @@ describe Nylas::JobStatus do
         id: "test_id",
         job_status_id: "test_job_status_id",
         object: "message",
-        status: "successful"
+        status: "successful",
+        metadata: {
+          message_id: "nylas_message_id"
+        }
       )
       job_status = described_class.from_json(json, api: nil)
       expect(job_status.id).to eql "test_id"
@@ -44,6 +47,7 @@ describe Nylas::JobStatus do
       expect(job_status.created_at).to eql(Time.at(1622846160))
       expect(job_status.object).to eql "message"
       expect(job_status.status).to eql "successful"
+      expect(job_status.metadata).to eq(message_id: "nylas_message_id")
     end
   end
 
