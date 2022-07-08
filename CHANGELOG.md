@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Add support for event reminders
+* Add `metadata` field to `JobStatus`
 
 ### 5.10.0 / 2022-05-10
 * Support collective and group events
