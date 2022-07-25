@@ -8,7 +8,7 @@ module Nylas
 
       def initialize(attribute_definitions)
         @attribute_definitions = attribute_definitions
-        @data = Registry.new(default_attributes)
+        @data = Registry.new(default_attributes, attribute_definitions)
       end
 
       def [](key)

@@ -19,9 +19,10 @@ module Nylas
     extend Forwardable
     def_delegators :registry_data, :keys, :each, :reduce, :key?
 
-    def initialize(initial_data = {})
+    def initialize(initial_data = {}, definitions = nil)
       self.registry_data = initial_data.each.each_with_object({}) do |(key, value), registry|
-        registry[key] = value
+        default_value = definitions ? definitions[key].default : nil
+        registry[key] = value.nil? ? default_value : value
       end
     end
 
