@@ -43,10 +43,10 @@ module Nylas
         login_hint: login_hint,
       }
 
-      params[:provider] = provider if provider
-      params[:redirect_on_error] = redirect_on_error if redirect_on_error
       params[:state] = state if state
       params[:scopes] = scopes.join(",") if scopes
+      params[:provider] = provider if provider
+      params[:redirect_on_error] = redirect_on_error if redirect_on_error
 
       "#{api_server}/oauth/authorize?#{URI.encode_www_form(params)}"
     end

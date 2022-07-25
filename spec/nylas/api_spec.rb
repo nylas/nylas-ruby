@@ -71,6 +71,30 @@ describe Nylas::API do
         expect(hosted_auth_url).to eq expected_url
       end
     end
+    context "with required and optional parameters" do
+      it "returns url for hosted_authentication with optional parameters" do 
+        api = described_class.new(app_id:"2454354")
+
+        hosted_auth_url = api.authentication_url(
+          redirect_uri: "http://example.com",
+          scopes: %w[email calendar],
+          login_hint: "email@example.com",
+          state: "some-state",
+          provider: "gmail",
+          redirect_on_error:true
+        )
+
+        expected_url="https://api.nylas.com/oauth/authorize"\
+        "?client_id=2454354"\
+        "&redirect_uri=http%3A%2F%2Fexample.com"\
+        "&response_type=code"\
+        "&login_hint=email%40example.com"\
+        "&state=some-state"\
+        "&scopes=email%2Ccalendar"\
+        "provider=gmail"\
+        "redirect_on_error=true"
+
+        expect(hosted_auth_url).to eq expected_url
 
     context "when required parameter are missing" do
       it "throws argument error if redirect uri is mising" do
