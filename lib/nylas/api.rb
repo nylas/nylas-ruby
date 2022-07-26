@@ -35,12 +35,12 @@ module Nylas
       )
     end
 
-    def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil,provider:nil,redirect_on_error:nil)
+    def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil, provider: nil, redirect_on_error: nil)
       params = {
         client_id: app_id,
         redirect_uri: redirect_uri,
         response_type: response_type,
-        login_hint: login_hint,
+        login_hint: login_hint
       }
 
       params[:state] = state if state
