@@ -45,7 +45,7 @@ module Nylas
       payload[:round_robin] = round_robin if round_robin
       payload[:event_collection_id] = event_collection_id if event_collection_id
 
-      execute_availability("/calendars/availability", payload)
+      execute_availability("/calendars/availability", **payload)
     end
 
     # Check multiple calendars to find availability for multiple meetings with several participants
@@ -83,7 +83,7 @@ module Nylas
       }
       payload[:buffer] = buffer if buffer
 
-      execute_availability("/calendars/availability/consecutive", payload)
+      execute_availability("/calendars/availability/consecutive", **payload)
     end
 
     private
