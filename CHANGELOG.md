@@ -1,5 +1,9 @@
 # Changelog
 
+### Unreleased
+* Add missing hosted authentication parameters
+* Fix calendar availability failing when `round_robin` is `nil`
+
 ### 5.11.0 / 2022-07-08
 * Add support for event reminders
 * Add `metadata` field to `JobStatus`

@@ -31,18 +31,21 @@ module Nylas
       validate_calendars_or_emails(calendars, emails)
       validate_open_hours(emails, free_busy, open_hours) unless open_hours.empty?
 
-      execute_availability("/calendars/availability",
-                           duration_minutes: duration_minutes,
-                           interval_minutes: interval_minutes,
-                           start_time: start_time,
-                           end_time: end_time,
-                           emails: emails,
-                           buffer: buffer,
-                           round_robin: round_robin,
-                           event_collection_id: event_collection_id,
-                           free_busy: free_busy.map(&:to_h),
-                           open_hours: open_hours.map(&:to_h),
-                           calendars: calendars)
+      payload = {
+        duration_minutes: duration_minutes,
+        interval_minutes: interval_minutes,
+        start_time: start_time,
+        end_time: end_time,
+        emails: emails,
+        free_busy: free_busy.map(&:to_h),
+        open_hours: open_hours.map(&:to_h),
+        calendars: calendars
+      }
+      payload[:buffer] = buffer if buffer
+      payload[:round_robin] = round_robin if round_robin
+      payload[:event_collection_id] = event_collection_id if event_collection_id
+
+      execute_availability("/calendars/availability", **payload)
     end
 
     # Check multiple calendars to find availability for multiple meetings with several participants
@@ -68,16 +71,19 @@ module Nylas
       validate_calendars_or_emails(emails, calendars)
       validate_open_hours(emails, free_busy, open_hours) unless open_hours.empty?
 
-      execute_availability("/calendars/availability/consecutive",
-                           duration_minutes: duration_minutes,
-                           interval_minutes: interval_minutes,
-                           start_time: start_time,
-                           end_time: end_time,
-                           emails: emails,
-                           buffer: buffer,
-                           free_busy: free_busy.map(&:to_h),
-                           open_hours: open_hours.map(&:to_h),
-                           calendars: calendars)
+      payload = {
+        duration_minutes: duration_minutes,
+        interval_minutes: interval_minutes,
+        start_time: start_time,
+        end_time: end_time,
+        emails: emails,
+        free_busy: free_busy.map(&:to_h),
+        open_hours: open_hours.map(&:to_h),
+        calendars: calendars
+      }
+      payload[:buffer] = buffer if buffer
+
+      execute_availability("/calendars/availability/consecutive", **payload)
     end
 
     private

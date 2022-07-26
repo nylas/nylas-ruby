@@ -49,9 +49,6 @@ describe Nylas::CalendarCollection do
           start_time: 1590454800,
           end_time: 1590780800,
           emails: ["swag@nylas.com"],
-          buffer: 5,
-          round_robin: "max-fairness",
-          event_collection_id: "abc-123",
           free_busy: [
             {
               email: "swag@nylas.com",
@@ -74,6 +71,37 @@ describe Nylas::CalendarCollection do
               days: [0]
             }
           ],
+          calendars: [],
+          buffer: 5,
+          round_robin: "max-fairness",
+          event_collection_id: "abc-123"
+        )
+      )
+    end
+
+    it "optional params are omitted when getting single availability" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      calendar_collection = described_class.new(model: Nylas::Calendar, api: api)
+
+      calendar_collection.availability(
+        duration_minutes: 30,
+        interval_minutes: 5,
+        start_time: 1590454800,
+        end_time: 1590780800,
+        emails: ["swag@nylas.com"]
+      )
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/calendars/availability",
+        payload: JSON.dump(
+          duration_minutes: 30,
+          interval_minutes: 5,
+          start_time: 1590454800,
+          end_time: 1590780800,
+          emails: ["swag@nylas.com"],
+          free_busy: [],
+          open_hours: [],
           calendars: []
         )
       )
@@ -122,7 +150,6 @@ describe Nylas::CalendarCollection do
           start_time: 1590454800,
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
-          buffer: 5,
           free_busy: [
             {
               email: "swag@nylas.com",
@@ -145,6 +172,35 @@ describe Nylas::CalendarCollection do
               days: [0]
             }
           ],
+          calendars: [],
+          buffer: 5
+        )
+      )
+    end
+
+    it "optional params are omitted when getting multiple availability" do
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"))
+      calendar_collection = described_class.new(model: Nylas::Calendar, api: api)
+
+      calendar_collection.consecutive_availability(
+        duration_minutes: 30,
+        interval_minutes: 5,
+        start_time: 1590454800,
+        end_time: 1590780800,
+        emails: [["swag@nylas.com"]]
+      )
+
+      expect(api).to have_received(:execute).with(
+        method: :post,
+        path: "/calendars/availability/consecutive",
+        payload: JSON.dump(
+          duration_minutes: 30,
+          interval_minutes: 5,
+          start_time: 1590454800,
+          end_time: 1590780800,
+          emails: [["swag@nylas.com"]],
+          free_busy: [],
+          open_hours: [],
           calendars: []
         )
       )
