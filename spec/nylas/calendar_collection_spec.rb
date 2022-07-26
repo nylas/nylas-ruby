@@ -150,7 +150,6 @@ describe Nylas::CalendarCollection do
           start_time: 1590454800,
           end_time: 1590780800,
           emails: [["one@example.com"], %w[two@example.com three@example.com]],
-          buffer: 5,
           free_busy: [
             {
               email: "swag@nylas.com",
@@ -173,7 +172,8 @@ describe Nylas::CalendarCollection do
               days: [0]
             }
           ],
-          calendars: []
+          calendars: [],
+          buffer: 5
         )
       )
     end
