@@ -37,6 +37,7 @@ module Nylas
     attribute :folder, :folder
     attribute :folder_id, :string
     attribute :metadata, :hash
+    attribute :reply_to_message_id, :string, read_only: true
     attribute :job_status_id, :string, read_only: true
 
     has_n_of_attribute :labels, :label, read_only: true
