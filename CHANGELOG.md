@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 5.12.0 / 2022-07-29
 * Add missing hosted authentication parameters
 * Add `reply_to_message_id` field in `Messages`
 * Fix calendar availability failing when `round_robin` is `nil`
