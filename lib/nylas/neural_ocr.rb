@@ -6,7 +6,7 @@ module Nylas
   class NeuralOcr < File
     include Model
     self.resources_path = "/neural/ocr"
-    allows_operations(listable: true)
+    self.listable = true
 
     has_n_of_attribute :ocr, :string
     attribute :processed_pages, :integer

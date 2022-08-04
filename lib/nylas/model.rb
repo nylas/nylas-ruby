@@ -20,8 +20,8 @@ module Nylas
       model.extend(ClassMethods)
       model.extend(Forwardable)
       model.def_delegators :model_class, :creatable?, :filterable?, :listable?, :searchable?, :showable?,
-      model.allows_operations
                            :updatable?, :destroyable?, :id_listable?
+      model.init_operations
     end
 
     def save
@@ -144,16 +144,15 @@ module Nylas
                     :destroyable, :id_listable
       attr_writer :resources_path, :auth_method
 
-      def allows_operations(creatable: false, showable: false, listable: false, filterable: false,
-                            searchable: false, updatable: false, destroyable: false)
-
-        self.creatable ||= creatable
-        self.showable ||= showable
-        self.listable ||= listable
-        self.filterable ||= filterable
-        self.searchable ||= searchable
-        self.updatable ||= updatable
-        self.destroyable ||= destroyable
+      def init_operations
+        self.creatable = false
+        self.showable = false
+        self.listable = false
+        self.filterable = false
+        self.searchable = false
+        self.updatable = false
+        self.destroyable = false
+        self.id_listable = false
       end
 
       def creatable?

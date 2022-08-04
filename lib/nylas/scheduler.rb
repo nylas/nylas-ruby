@@ -6,8 +6,12 @@ module Nylas
   class Scheduler
     include Model
     self.resources_path = "/manage/pages"
-    allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
-                      destroyable: true)
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.updatable = true
+    self.destroyable = true
 
     attribute :id, :integer, read_only: true
     attribute :app_client_id, :string

@@ -6,7 +6,7 @@ module Nylas
   class JobStatus
     include Model
     self.resources_path = "/job-statuses"
-    allows_operations(listable: true)
+    self.listable = true
 
     attribute :id, :string, read_only: true
     attribute :account_id, :string, read_only: true

@@ -6,7 +6,12 @@ module Nylas
   class File
     include Model
     self.resources_path = "/files"
-    allows_operations(listable: true, showable: true, filterable: true, creatable: true, destroyable: true)
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.destroyable = true
+    self.id_listable = true
 
     attribute :id, :string
     attribute :account_id, :string

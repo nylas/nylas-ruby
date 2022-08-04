@@ -6,8 +6,13 @@ module Nylas
   class Event
     include Model
     self.resources_path = "/events"
-    allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
-                      destroyable: true)
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.updatable = true
+    self.destroyable = true
+    self.id_listable = true
 
     attribute :id, :string, read_only: true
     attribute :object, :string, read_only: true

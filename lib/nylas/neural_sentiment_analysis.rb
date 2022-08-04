@@ -6,7 +6,7 @@ module Nylas
   class NeuralSentimentAnalysis
     include Model
     self.resources_path = "/neural/sentiment"
-    allows_operations(listable: true)
+    self.listable = true
 
     attribute :account_id, :string
     attribute :sentiment, :string

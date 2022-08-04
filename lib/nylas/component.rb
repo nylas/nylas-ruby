@@ -4,8 +4,12 @@ module Nylas
   # Structure to represent a the Component Schema.
   class Component
     include Model
-    allows_operations(creatable: true, listable: true, filterable: true, showable: true, updatable: true,
-                      destroyable: true)
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.updatable = true
+    self.destroyable = true
     self.auth_method = HttpClient::AuthMethod::BASIC
 
     attribute :id, :string, read_only: true

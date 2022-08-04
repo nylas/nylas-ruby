@@ -12,6 +12,7 @@ module Nylas
     self.filterable = false
     self.updatable = true
     self.destroyable = true
+    self.id_listable = true
 
     attribute :id, :string
     attribute :account_id, :string
