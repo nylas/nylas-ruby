@@ -7,7 +7,12 @@ module Nylas
     include Model
     self.raw_mime_type = "message/rfc822"
     self.resources_path = "/messages"
-    allows_operations(showable: true, listable: true, filterable: true, searchable: true, updatable: true)
+    self.listable = true
+    self.showable = true
+    self.filterable = true
+    self.updatable = true
+    self.searchable = true
+    self.id_listable = true
     UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread metadata].freeze
 
     attribute :id, :string

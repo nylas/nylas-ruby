@@ -5,7 +5,7 @@ module Nylas
   # @see https://docs.nylas.com/reference#rsvping-to-invitations
   class Rsvp
     include Model
-    allows_operations(creatable: true)
+    self.creatable = true
 
     attribute :account_id, :string
     attribute :event_id, :string

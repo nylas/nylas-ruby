@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add support for getting `ids` for collections not supported by the API
+
 ### 5.12.0 / 2022-07-29
 * Add missing hosted authentication parameters
 * Add `reply_to_message_id` field in `Messages`

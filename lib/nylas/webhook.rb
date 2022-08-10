@@ -41,8 +41,11 @@ module Nylas
   # @see https://docs.nylas.com/reference#webhooks
   class Webhook
     include Model
-    allows_operations(creatable: true, listable: true, showable: true, updatable: true,
-                      destroyable: true)
+    self.creatable = true
+    self.listable = true
+    self.showable = true
+    self.updatable = true
+    self.destroyable = true
     self.auth_method = HttpClient::AuthMethod::BASIC
     attribute :id, :string, read_only: true
     attribute :application_id, :string, read_only: true

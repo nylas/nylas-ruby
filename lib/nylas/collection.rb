@@ -61,7 +61,14 @@ module Nylas
 
     # @return [Array<String>]
     def ids
-      self.class.new(model: model, api: api, constraints: constraints.merge(view: "ids")).execute
+      collection = self.class.new(model: model, api: api, constraints: constraints)
+
+      if model.id_listable
+        collection.constraints = collection.constraints.merge(view: "ids")
+        collection.execute
+      else
+        collection.execute.map { |entry| entry[:id] }
+      end
     end
 
     # Iterates over a single page of results based upon current pagination settings

@@ -6,7 +6,7 @@ module Nylas
   class NeuralCategorizer < Message
     include Model
     self.resources_path = "/neural/categorize"
-    allows_operations(listable: true)
+    self.listable = true
 
     attribute :categorizer, :categorize
     # Overrides Message's label attribute as currently categorize returns

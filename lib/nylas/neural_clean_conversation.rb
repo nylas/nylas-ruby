@@ -6,7 +6,7 @@ module Nylas
   class NeuralCleanConversation < Message
     include Model
     self.resources_path = "/neural/conversation"
-    allows_operations(listable: true)
+    self.listable = true
     IMAGE_REGEX = /[(']cid:(.*?)[)']/.freeze
 
     attribute :conversation, :string
