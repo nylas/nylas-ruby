@@ -74,7 +74,7 @@ module Nylas
         collection.constraints = collection.constraints.merge(view: "ids")
         collection.execute
       else
-        collection.execute.map { |entry| entry[:id] }
+        collection.find_each.map(&:id)
       end
     end
 
