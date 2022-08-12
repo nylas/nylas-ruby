@@ -1,7 +1,7 @@
 # Changelog
 
 ### Unreleased
-* Add support for getting `ids` for collections not supported by the API
+* Add support for getting `ids` and `count` for collections not supported by the API
 
 ### 5.12.0 / 2022-07-29
 * Add missing hosted authentication parameters
