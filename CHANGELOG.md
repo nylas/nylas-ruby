@@ -1,7 +1,8 @@
 # Changelog
 
-### Unreleased
+### 5.12.1 / 2022-08-12
 * Add support for getting `ids` and `count` for collections not supported by the API
+* Fix Ruby 3.x compatibility for expanding keyword arguments
 
 ### 5.12.0 / 2022-07-29
 * Add missing hosted authentication parameters
