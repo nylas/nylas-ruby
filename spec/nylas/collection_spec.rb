@@ -169,6 +169,7 @@ describe Nylas::Collection do
 
   describe "#count" do
     it "returns collection count" do
+      FullModel.countable = true
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute)
         .with(
@@ -194,6 +195,23 @@ describe Nylas::Collection do
         ).and_return(count: 1)
 
       expect(collection.where(id: "1234").count).to be 1
+    end
+
+    describe "models that are not countable" do
+      it "still returns collection count" do
+        FullModel.countable = false
+        collection = described_class.new(model: FullModel, api: api)
+        allow(api).to receive(:execute)
+          .with(
+            auth_method: Nylas::HttpClient::AuthMethod::BEARER,
+            method: :get,
+            path: "/collection",
+            query: { limit: 100, offset: 0 },
+            headers: {}
+          ).and_return([{ id: "abc123" }])
+
+        expect(collection.count).to be 1
+      end
     end
   end
 
