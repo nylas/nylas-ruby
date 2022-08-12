@@ -13,6 +13,7 @@ module Nylas
     self.updatable = true
     self.destroyable = true
     self.id_listable = true
+    self.countable = true
 
     attribute :id, :string, read_only: true
     attribute :account_id, :string, read_only: true

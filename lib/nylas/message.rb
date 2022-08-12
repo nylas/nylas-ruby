@@ -13,6 +13,7 @@ module Nylas
     self.updatable = true
     self.searchable = true
     self.id_listable = true
+    self.countable = true
     UPDATABLE_ATTRIBUTES = %i[label_ids folder_id starred unread metadata].freeze
 
     attribute :id, :string
