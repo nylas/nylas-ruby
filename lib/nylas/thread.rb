@@ -10,6 +10,7 @@ module Nylas
     self.filterable = true
     self.updatable = true
     self.id_listable = true
+    self.countable = true
 
     self.resources_path = "/threads"
 

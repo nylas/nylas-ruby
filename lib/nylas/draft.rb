@@ -12,6 +12,7 @@ module Nylas
     self.updatable = true
     self.destroyable = true
     self.id_listable = true
+    self.countable = true
 
     attribute :id, :string
     attribute :object, :string
