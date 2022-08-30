@@ -52,6 +52,7 @@ module GemConfig
      ["webmock", "~> 3.0"],
      ["faker", "~> 1.8"],
      ["informed", "~> 1.0"],
-     ["simplecov", "~> 0.21.2"]]
+     ["simplecov", "~> 0.21.2"],
+     ["simplecov-cobertura", "~> 2.1.0"]]
   end
 end
