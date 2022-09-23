@@ -40,6 +40,7 @@ module GemConfig
      ["awesome_print", "~> 1.0"],
      ["rubocop", "~> 1.24.1"],
      ["rubocop-rspec", "~> 2.7.0"],
+     ["tzinfo", ">=2.0.5"],
      ["overcommit", "~> 0.41"]] + testing_and_debugging_dependencies
   end
 
