@@ -21,11 +21,13 @@ module Nylas
 
     # when object == 'time'
     attribute :time, :unix_timestamp
+    # Timezone must be set to a valid IANA database timezone name
     attribute :timezone, :string
 
     # when object == 'timespan'
     attribute :start_time, :unix_timestamp
     attribute :end_time, :unix_timestamp
+    # Both timezone fields must be set to a valid IANA database timezone name
     attribute :start_timezone, :string
     attribute :end_timezone, :string
 
@@ -50,6 +52,9 @@ module Nylas
       end
     end
 
+    # Validates the When object
+    # @return [Boolean] True if the When is valid
+    # @raise [ArgumentError] If any of the timezone fields are not valid IANA database names
     def valid?
       validate_timezone(timezone) if timezone
       validate_timezone(start_timezone) if start_timezone
@@ -64,7 +69,7 @@ module Nylas
       return if TZInfo::Timezone.all_identifiers.include?(timezone_var)
 
       raise ArgumentError,
-            format("The timezone provided (%s) is not a valid IANA timezone formatted string", timezone_var)
+            format("The timezone provided (%s) is not a valid IANA timezone database name", timezone_var)
     end
   end
 end
