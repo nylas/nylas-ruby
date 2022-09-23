@@ -19,10 +19,13 @@ module Nylas
 
     # when object == 'time'
     attribute :time, :unix_timestamp
+    attribute :timezone, :string
 
     # when object == 'timespan'
     attribute :start_time, :unix_timestamp
     attribute :end_time, :unix_timestamp
+    attribute :start_timezone, :string
+    attribute :end_timezone, :string
 
     def_delegators :range, :cover?
 
