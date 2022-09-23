@@ -50,10 +50,12 @@ module Nylas
       end
     end
 
-    def validate
+    def valid?
       validate_timezone(timezone) if timezone
       validate_timezone(start_timezone) if start_timezone
       validate_timezone(end_timezone) if end_timezone
+
+      true
     end
 
     private
