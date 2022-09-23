@@ -3,6 +3,8 @@
 module Nylas
   # Structure to represent all the Nylas time types.
   # @see https://docs.nylas.com/reference#section-time
+  require "tzinfo"
+
   class When
     extend Forwardable
 
@@ -46,6 +48,21 @@ module Nylas
       when "time"
         Range.new(time, time)
       end
+    end
+
+    def validate
+      validate_timezone(timezone) if timezone
+      validate_timezone(start_timezone) if start_timezone
+      validate_timezone(end_timezone) if end_timezone
+    end
+
+    private
+
+    def validate_timezone(timezone_var)
+      return if TZInfo::Timezone.all_identifiers.include?(timezone_var)
+
+      raise ArgumentError,
+            format("The timezone provided (%s) is not a valid IANA timezone formatted string", timezone_var)
     end
   end
 end
