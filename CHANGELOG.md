@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add timezone fields to the `When` class
+
 ### 5.12.1 / 2022-08-12
 * Add support for getting `ids` and `count` for collections not supported by the API
 * Fix Ruby 3.x compatibility for expanding keyword arguments

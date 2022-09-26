@@ -72,6 +72,7 @@ Style/Documentation:
     - 'spec/**/*'
     - 'test/**/*'
     - 'lib/nylas/http_client.rb'
+    - 'lib/nylas/when.rb'
 
 # Offense count: 1
 # Cop supports --auto-correct.
