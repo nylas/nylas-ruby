@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Add timezone fields to the `When` class
+* Adds visibility attribute to `Event` class
 
 ### 5.12.1 / 2022-08-12
 * Add support for getting `ids` and `count` for collections not supported by the API
@@ -88,8 +89,8 @@
 * Add support for read only attributes
 * Add `save_all_attributes` and `update_all_attributes` methods to support
   nullifying attributes.
-* Add support new `Event` metadata feature  
-* Fix attributes assignment for `Delta`  
+* Add support new `Event` metadata feature
+* Fix attributes assignment for `Delta`
 * Fix issue where files couldn't be attached to drafts
 * Fix exception raise when content-type is not JSON
 * Fix issue where draft version wouldn't update after `update` or `save`
