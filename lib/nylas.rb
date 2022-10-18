@@ -116,6 +116,10 @@ require_relative "nylas/scheduler_booking_confirmation"
 require_relative "nylas/native_authentication"
 
 require_relative "nylas/filter_attributes"
+
+# Middleware specific
+require_relative "nylas/services/routes"
+
 # an SDK for interacting with the Nylas API
 # @see https://docs.nylas.com/reference
 module Nylas
