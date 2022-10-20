@@ -29,6 +29,7 @@ module Nylas
     attribute :read_only, :boolean
     attribute :metadata, :hash
     attribute :job_status_id, :string, read_only: true
+    attribute :color, :integer, read_only: true
 
     def read_only?
       read_only == true
@@ -39,6 +40,7 @@ module Nylas
     end
 
     def events
+      event = api.events
       api.events.where(calendar_id: id)
     end
   end
