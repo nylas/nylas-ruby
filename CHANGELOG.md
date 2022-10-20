@@ -3,6 +3,7 @@
 ### Unreleased
 * Add timezone fields to the `When` class
 * Adds visibility attribute to `Event` class
+* Add support for calendar colors (for Microsoft calendars)
 
 ### 5.12.1 / 2022-08-12
 * Add support for getting `ids` and `count` for collections not supported by the API
