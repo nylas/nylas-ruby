@@ -40,7 +40,6 @@ module Nylas
     end
 
     def events
-      event = api.events
       api.events.where(calendar_id: id)
     end
   end

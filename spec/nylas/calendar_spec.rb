@@ -2,7 +2,7 @@
 
 describe Nylas::Calendar do
   describe "JSONs" do
-    let(:calendar) {
+    let(:calendar) do
       api = instance_double(Nylas::API)
       data = {
         id: "cal-8766",
@@ -22,7 +22,7 @@ describe Nylas::Calendar do
       }
 
       described_class.from_json(JSON.dump(data), api: api)
-    }
+    end
 
     it "Deserializes all the attributes into Ruby objects" do
       expect(calendar.id).to eql "cal-8766"
