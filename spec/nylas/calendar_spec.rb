@@ -16,7 +16,7 @@ describe Nylas::Calendar do
         metadata: {
           lang: "ruby"
         },
-        color: 1,
+        hex_color: "#0099EE",
         is_primary: false,
         read_only: true
       }
@@ -34,7 +34,7 @@ describe Nylas::Calendar do
       expect(calendar.timezone).to eql "America/New_York"
       expect(calendar.job_status_id).to eql "job-1234"
       expect(calendar.metadata).to eq(lang: "ruby")
-      expect(calendar.color).to be 1
+      expect(calendar.hex_color).to eql "#0099EE"
       expect(calendar.is_primary).to be false
       expect(calendar.read_only).to be true
     end
@@ -76,7 +76,7 @@ describe Nylas::Calendar do
         metadata: {
           lang: "ruby"
         },
-        color: 1,
+        hex_color: "#0099EE",
         is_primary: false,
         read_only: true
       }
@@ -92,7 +92,7 @@ describe Nylas::Calendar do
       expect(calendar.timezone).to eql "America/New_York"
       expect(calendar.job_status_id).to eql "job-1234"
       expect(calendar.metadata).to eq(lang: "ruby")
-      expect(calendar.color).to be 1
+      expect(calendar.hex_color).to eql "#0099EE"
       expect(calendar.is_primary).to be false
       expect(calendar.read_only).to be true
     end
