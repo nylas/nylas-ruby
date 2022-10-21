@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 5.13.0 / 2022-10-21
 * Add timezone fields to the `When` class
 * Adds visibility attribute to `Event` class
 * Add support for calendar colors (for Microsoft calendars)
