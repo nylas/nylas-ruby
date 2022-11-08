@@ -32,6 +32,24 @@ describe Nylas::HttpClient do
       expect(response).to be_a_kind_of(Hash)
     end
 
+    it "throws an error if content-type == application/json but response is not a json" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234")
+        .to_return(status: 200, body: "abc", headers: { "Content-Type" => "Application/Json" })
+
+      expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::JsonParseError)
+    end
+
+    it "still throws an API error if content-type == application/json but response is not a json" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234")
+        .to_return(status: 400, body: "abc", headers: { "Content-Type" => "Application/Json" })
+
+      expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::InvalidRequest)
+    end
+
     it "skips parsing when content-type is not JSON" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -138,6 +156,25 @@ describe Nylas::HttpClient do
                                 rate_limit: 500,
                                 rate_limit_reset: 10
                               )))
+    end
+
+    it "handles hash responses and parses the error properly" do
+      error_hash = {
+        message: "Too many requests",
+        type: "invalid_request_error"
+      }
+      response = {
+        response: error_hash,
+        request: {},
+        result: {
+          code: 400
+        }
+      }
+
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      allow(nylas).to receive(:rest_client_execute).and_return(response)
+
+      expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(Nylas::InvalidRequest)
     end
   end
 
