@@ -157,25 +157,6 @@ describe Nylas::HttpClient do
                                 rate_limit_reset: 10
                               )))
     end
-
-    it "handles hash responses and parses the error properly" do
-      error_hash = {
-        message: "Too many requests",
-        type: "invalid_request_error"
-      }
-      response = {
-        response: error_hash,
-        request: {},
-        result: {
-          code: 400
-        }
-      }
-
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
-      allow(nylas).to receive(:rest_client_execute).and_return(response)
-
-      expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(Nylas::InvalidRequest)
-    end
   end
 
   describe "building URL with query params" do
