@@ -117,6 +117,28 @@ describe Nylas::HttpClient do
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end
     end
+
+    it "extracts rate limit responses properly" do
+      error_json = {
+        "message": "Too many requests",
+        "type": "invalid_request_error"
+      }.to_json
+      error_headers = {
+        "X-RateLimit-Limit": "500",
+        "X-RateLimit-Reset": "10"
+      }
+
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      stub_request(:get, "https://api.nylas.com/contacts")
+        .to_return(status: 429, body: error_json, headers: error_headers)
+
+      expect { nylas.execute(method: :get, path: "/contacts") }
+        .to raise_error(an_instance_of(Nylas::SendingQuotaExceeded)
+                         .and(having_attributes(
+                                rate_limit: 500,
+                                rate_limit_reset: 10
+                              )))
+    end
   end
 
   describe "building URL with query params" do
