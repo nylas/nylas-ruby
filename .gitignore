@@ -27,3 +27,4 @@ tags
 TAGS
 *.swp
 vendor/
+out
