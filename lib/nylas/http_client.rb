@@ -224,16 +224,20 @@ module Nylas
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       case response
       when Hash
-        raise exception.new(
-          response[:type],
-          response[:message],
-          response.fetch(:server_error, nil)
-        )
+        raise error_hash_to_exception(exception, response)
       when RestClient::Response
         raise exception.parse_error_response(response)
       else
         raise exception.new(http_code, response)
       end
+    end
+
+    def error_hash_to_exception(exception, response)
+      exception.new(
+        response[:type],
+        response[:message],
+        response.fetch(:server_error, nil)
+      )
     end
 
     def add_query_params_to_url(url, query)
