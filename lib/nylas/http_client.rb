@@ -222,13 +222,18 @@ module Nylas
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      raise exception.new(http_code, response) unless response.is_a?(Hash)
-
-      raise exception.new(
-        response[:type],
-        response[:message],
-        response.fetch(:server_error, nil)
-      )
+      case response
+      when Hash
+        raise exception.new(
+          response[:type],
+          response[:message],
+          response.fetch(:server_error, nil)
+        )
+      when RestClient::Response
+        raise exception.parse_error_response(response)
+      else
+        raise exception.new(http_code, response)
+      end
     end
 
     def add_query_params_to_url(url, query)

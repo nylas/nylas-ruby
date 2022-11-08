@@ -46,6 +46,15 @@ module Nylas
       self.server_error = server_error
     end
 
+    def self.parse_error_response(response)
+      new(
+        response["type"],
+        response["message"],
+        response["server_error"]
+      )
+    end
+  end
+
   # Error class representing a 429 error response, with details on the rate limit
   class RateLimitError < APIError
     attr_accessor :rate_limit
