@@ -222,9 +222,18 @@ module Nylas
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
       exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
-      raise exception.new(http_code, response) unless response.is_a?(Hash)
+      case response
+      when Hash
+        raise error_hash_to_exception(exception, response)
+      when RestClient::Response
+        raise exception.parse_error_response(response)
+      else
+        raise exception.new(http_code, response)
+      end
+    end
 
-      raise exception.new(
+    def error_hash_to_exception(exception, response)
+      exception.new(
         response[:type],
         response[:message],
         response.fetch(:server_error, nil)

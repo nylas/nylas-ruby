@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Added support for rate limit errors
+
 ### 5.13.0 / 2022-10-21
 * Add timezone fields to the `When` class
 * Adds visibility attribute to `Event` class

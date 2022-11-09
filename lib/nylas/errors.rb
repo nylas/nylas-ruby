@@ -45,7 +45,54 @@ module Nylas
       self.message = message
       self.server_error = server_error
     end
+
+    def self.parse_error_response(response)
+      new(
+        response["type"],
+        response["message"],
+        response["server_error"]
+      )
+    end
   end
+
+  # Error class representing a 429 error response, with details on the rate limit
+  class RateLimitError < APIError
+    attr_accessor :rate_limit
+    attr_accessor :rate_limit_reset
+
+    RATE_LIMIT_LIMIT_HEADER = "x_ratelimit_limit"
+    RATE_LIMIT_RESET_HEADER = "x_ratelimit_reset"
+
+    def initialize(type, message, server_error = nil, rate_limit = nil, rate_limit_reset = nil)
+      super(type, message, server_error)
+      self.rate_limit = rate_limit
+      self.rate_limit_reset = rate_limit_reset
+    end
+
+    def self.parse_error_response(response)
+      rate_limit, rate_limit_rest = extract_rate_limit_details(response)
+
+      new(
+        response["type"],
+        response["message"],
+        response["server_error"],
+        rate_limit,
+        rate_limit_rest
+      )
+    end
+
+    def self.extract_rate_limit_details(response)
+      return nil, nil unless response.respond_to?(:headers)
+
+      rate_limit = response.headers[RATE_LIMIT_LIMIT_HEADER.to_sym].to_i
+      rate_limit_rest = response.headers[RATE_LIMIT_RESET_HEADER.to_sym].to_i
+
+      [rate_limit, rate_limit_rest]
+    end
+
+    private_class_method :extract_rate_limit_details
+  end
+
   AccessDenied = Class.new(APIError)
   ResourceNotFound = Class.new(APIError)
   MethodNotAllowed = Class.new(APIError)
@@ -55,7 +102,7 @@ module Nylas
   TeapotError = Class.new(APIError)
   RequestTimedOut = Class.new(APIError)
   MessageRejected = Class.new(APIError)
-  SendingQuotaExceeded = Class.new(APIError)
+  SendingQuotaExceeded = Class.new(RateLimitError)
   ServiceUnavailable = Class.new(APIError)
   BadGateway = Class.new(APIError)
   InternalError = Class.new(APIError)

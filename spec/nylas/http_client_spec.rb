@@ -32,6 +32,24 @@ describe Nylas::HttpClient do
       expect(response).to be_a_kind_of(Hash)
     end
 
+    it "throws an error if content-type == application/json but response is not a json" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234")
+        .to_return(status: 200, body: "abc", headers: { "Content-Type" => "Application/Json" })
+
+      expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::JsonParseError)
+    end
+
+    it "still throws an API error if content-type == application/json but response is not a json" do
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+
+      stub_request(:get, "https://api.nylas.com/contacts/1234")
+        .to_return(status: 400, body: "abc", headers: { "Content-Type" => "Application/Json" })
+
+      expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::InvalidRequest)
+    end
+
     it "skips parsing when content-type is not JSON" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -116,6 +134,28 @@ describe Nylas::HttpClient do
 
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end
+    end
+
+    it "extracts rate limit responses properly" do
+      error_json = {
+        "message": "Too many requests",
+        "type": "invalid_request_error"
+      }.to_json
+      error_headers = {
+        "X-RateLimit-Limit": "500",
+        "X-RateLimit-Reset": "10"
+      }
+
+      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      stub_request(:get, "https://api.nylas.com/contacts")
+        .to_return(status: 429, body: error_json, headers: error_headers)
+
+      expect { nylas.execute(method: :get, path: "/contacts") }
+        .to raise_error(an_instance_of(Nylas::SendingQuotaExceeded)
+                         .and(having_attributes(
+                                rate_limit: 500,
+                                rate_limit_reset: 10
+                              )))
     end
   end
 
