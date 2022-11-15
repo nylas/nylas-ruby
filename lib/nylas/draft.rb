@@ -34,6 +34,7 @@ module Nylas
     attribute :starred, :boolean
     attribute :unread, :boolean
     attribute :metadata, :hash
+    attribute :sendnow, :boolean
 
     has_n_of_attribute :events, :event
     has_n_of_attribute :files, :file, read_only: true
@@ -64,11 +65,12 @@ module Nylas
     end
 
     def send!
-      return execute(method: :post, path: "/send", payload: to_json) unless id
+      query = sendnow ? { sendnow: sendnow } : {}
+      return execute(method: :post, path: "/send", payload: to_json, query: query) unless id
 
       data = { draft_id: id, version: version }
       data[:tracking] = tracking.to_h if tracking
-      execute(method: :post, path: "/send", payload: JSON.dump(data))
+      execute(method: :post, path: "/send", payload: JSON.dump(data), query: query)
     end
 
     def starred?
