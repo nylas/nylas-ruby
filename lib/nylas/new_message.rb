@@ -21,7 +21,7 @@ module Nylas
     attribute :body, :string
     attribute :reply_to_message_id, :string
     attribute :metadata, :hash
-    has_n_of_attribute :sendnow, :boolean
+    attribute :sendnow, :boolean
 
     has_n_of_attribute :file_ids, :string
 
