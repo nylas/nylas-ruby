@@ -120,6 +120,7 @@ require_relative "nylas/filter_attributes"
 # Middleware specific
 require_relative "nylas/services/routes"
 require_relative "nylas/server-bindings/rack_binding"
+require_relative "nylas/services/tunnel"
 
 # an SDK for interacting with the Nylas API
 # @see https://docs.nylas.com/reference
