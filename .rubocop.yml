@@ -29,6 +29,11 @@ Metrics/ParameterLists:
 Metrics/MethodLength:
   Exclude:
     - "lib/nylas/calendar_collection.rb"
+    - "lib/nylas/services/tunnel.rb"
+
+Metrics/AbcSize:
+  Exclude:
+    - "lib/nylas/services/tunnel.rb"
 
 Metrics/ModuleLength:
   Exclude:
