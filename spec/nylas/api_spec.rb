@@ -82,7 +82,8 @@ describe Nylas::API do
           login_hint: "email@example.com",
           state: "some-state",
           provider: "gmail",
-          redirect_on_error: true
+          redirect_on_error: true,
+          disable_provider_selection: true
         )
 
         expected_url = "https://api.nylas.com/oauth/authorize"\
@@ -93,7 +94,8 @@ describe Nylas::API do
         "&state=some-state"\
         "&scopes=email%2Ccalendar"\
         "&provider=gmail"\
-        "&redirect_on_error=true"
+        "&redirect_on_error=true"\
+        "&disable_provider_selection=true"
         expect(hosted_auth_url).to eq expected_url
       end
     end

@@ -36,7 +36,7 @@ module Nylas
     end
 
     def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil,
-                           provider: nil, redirect_on_error: nil)
+                           provider: nil, redirect_on_error: nil, disable_provider_selection: nil)
       params = {
         client_id: app_id,
         redirect_uri: redirect_uri,
@@ -48,6 +48,7 @@ module Nylas
       params[:scopes] = scopes.join(",") if scopes
       params[:provider] = provider if provider
       params[:redirect_on_error] = redirect_on_error if redirect_on_error
+      params[:disable_provider_selection] = disable_provider_selection if disable_provider_selection
 
       "#{api_server}/oauth/authorize?#{URI.encode_www_form(params)}"
     end
