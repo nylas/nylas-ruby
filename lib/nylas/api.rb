@@ -37,12 +37,8 @@ module Nylas
 
     def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil,
                            provider: nil, redirect_on_error: nil, disable_provider_selection: nil)
-      params = {
-        client_id: app_id,
-        redirect_uri: redirect_uri,
-        response_type: response_type,
-        login_hint: login_hint
-      }
+      params = { client_id: app_id, redirect_uri: redirect_uri, response_type: response_type,
+                 login_hint: login_hint }
 
       params[:state] = state if state
       params[:scopes] = scopes.join(",") if scopes
