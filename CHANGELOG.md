@@ -1,7 +1,9 @@
 # Changelog
 
-### Unreleased
+### 5.14.0 / 2022-12-16
 * Added support for rate limit errors
+* Added `disable_provider_selection` option for building auth URL
+* Improved performance by skipping creating instance of StringIO before parsing JSON
 
 ### 5.13.0 / 2022-10-21
 * Add timezone fields to the `When` class
