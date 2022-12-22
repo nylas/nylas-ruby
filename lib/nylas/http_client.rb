@@ -179,7 +179,7 @@ module Nylas
     def default_headers
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
-        "X-Nylas-Client-Id" => @app_id,
+        "X-Nylas-Client-Id" => @client_id,
         "Nylas-API-Version" => SUPPORTED_API_VERSION,
         "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
         "Content-type" => "application/json"

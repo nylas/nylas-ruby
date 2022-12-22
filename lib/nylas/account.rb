@@ -50,7 +50,7 @@ module Nylas
     end
 
     def self.resources_path(api:)
-      "/a/#{api.app_id}/accounts"
+      "/a/#{api.client_id}/accounts"
     end
   end
 end

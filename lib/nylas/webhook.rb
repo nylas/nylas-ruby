@@ -86,7 +86,7 @@ module Nylas
     end
 
     def self.resources_path(api:)
-      "/a/#{api.app_id}/webhooks"
+      "/a/#{api.client_id}/webhooks"
     end
 
     private

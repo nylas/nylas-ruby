@@ -23,7 +23,7 @@ module Nylas
     private
 
     def retrieve_code(name:, email_address:, provider:, settings:, reauth_account_id:, scopes:)
-      payload = { client_id: api.client.app_id, name: name, email_address: email_address,
+      payload = { client_id: api.client.client_id, name: name, email_address: email_address,
                   provider: provider, settings: settings, scopes: scopes }
       payload[:reauth_account_id] = reauth_account_id
       response = api.execute(method: :post, path: "/connect/authorize", payload: JSON.dump(payload))
@@ -31,7 +31,7 @@ module Nylas
     end
 
     def exchange_code_for_access_token(code)
-      payload = { client_id: api.client.app_id, client_secret: api.client.app_secret, code: code }
+      payload = { client_id: api.client.client_id, client_secret: api.client.client_secret, code: code }
       response = api.execute(method: :post, path: "/connect/token", payload: JSON.dump(payload))
       response[:access_token]
     end

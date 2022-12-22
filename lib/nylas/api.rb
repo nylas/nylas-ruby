@@ -6,7 +6,7 @@ module Nylas
     attr_accessor :client
 
     extend Forwardable
-    def_delegators :client, :execute, :get, :post, :put, :delete, :app_id, :api_server
+    def_delegators :client, :execute, :get, :post, :put, :delete, :client_id, :api_server
 
     include Logging
 
@@ -37,7 +37,7 @@ module Nylas
 
     def authentication_url(redirect_uri:, scopes:, response_type: "code", login_hint: nil, state: nil,
                            provider: nil, redirect_on_error: nil, disable_provider_selection: nil)
-      params = { client_id: app_id, redirect_uri: redirect_uri, response_type: response_type,
+      params = { client_id: client_id, redirect_uri: redirect_uri, response_type: response_type,
                  login_hint: login_hint }
 
       params[:state] = state if state

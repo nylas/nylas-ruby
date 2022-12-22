@@ -29,7 +29,7 @@ module Nylas
     has_n_of_attribute :allowed_domains, :string
 
     def resources_path(*)
-      "/component/#{api.client.app_id}"
+      "/component/#{api.client.client_id}"
     end
   end
 end
