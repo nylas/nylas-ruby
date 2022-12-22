@@ -46,30 +46,30 @@ module Nylas
     attr_accessor :api_server
     attr_writer :default_headers
     attr_reader :access_token
-    attr_reader :app_id
-    attr_reader :app_secret
+    attr_reader :client_id
+    attr_reader :client_secret
 
-    # @param app_id [String] Your application id from the Nylas Dashboard
-    # @param app_secret [String] Your application secret from the Nylas Dashboard
+    # @param client_id [String] Your application's client ID from the Nylas Dashboard
+    # @param client_secret [String] Your application's client secret from the Nylas Dashboard
     # @param access_token [String] (Optional) Your users access token.
     # @param api_server [String] (Optional) Which Nylas API Server to connect to. Only change this if
     #                            you're using a self-hosted Nylas instance.
     # @return [Nylas::HttpClient]
-    def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com")
+    def initialize(client_id:, client_secret:, access_token: nil, api_server: "https://api.nylas.com")
       unless api_server.include?("://")
         raise "When overriding the Nylas API server address, you must include https://"
       end
 
       @api_server = api_server
       @access_token = access_token
-      @app_secret = app_secret
-      @app_id = app_id
+      @client_id = client_id
+      @client_secret = client_secret
     end
 
     # @return [Nylas::HttpClient[]
     def as(access_token)
-      HttpClient.new(app_id: app_id, access_token: access_token,
-                     app_secret: app_secret, api_server: api_server)
+      HttpClient.new(client_id: client_id, access_token: access_token,
+                     client_secret: client_secret, api_server: api_server)
     end
 
     # Sends a request to the Nylas API and rai
