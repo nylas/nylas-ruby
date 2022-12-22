@@ -10,20 +10,20 @@ describe Nylas::HttpClient do
 
   describe "#parse_response" do
     it "deserializes JSON with unicode characters" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       response = nylas.parse_response(full_json)
       expect(response).not_to be_a_kind_of(String)
     end
 
     it "raises if the JSON is unable to be deserialized" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       expect { nylas.parse_response("{{") }.to raise_error(Nylas::JsonParseError)
     end
   end
 
   describe "#execute handles content types" do
     it "parses JSON when given content-type == application/json" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/contacts/1234")
         .to_return(status: 200, body: full_json, headers: { "Content-Type" => "Application/Json" })
@@ -33,7 +33,7 @@ describe Nylas::HttpClient do
     end
 
     it "throws an error if content-type == application/json but response is not a json" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/contacts/1234")
         .to_return(status: 200, body: "abc", headers: { "Content-Type" => "Application/Json" })
@@ -42,7 +42,7 @@ describe Nylas::HttpClient do
     end
 
     it "still throws an API error if content-type == application/json but response is not a json" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/contacts/1234")
         .to_return(status: 400, body: "abc", headers: { "Content-Type" => "Application/Json" })
@@ -51,7 +51,7 @@ describe Nylas::HttpClient do
     end
 
     it "skips parsing when content-type is not JSON" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/contacts/1234/picture")
         .to_return(status: 200, body: "some values", headers: { "Content-Type" => "image/jpeg" })
@@ -64,7 +64,7 @@ describe Nylas::HttpClient do
   describe "#execute" do
     it "includes Nylas API Version in headers" do
       supported_api_version = "2.5"
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       allow(RestClient::Request).to receive(:execute)
 
       nylas.execute(method: :get, path: "/contacts/1234/picture")
@@ -79,7 +79,7 @@ describe Nylas::HttpClient do
     end
 
     it "handles redirect correctly" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
 
       stub_request(:get, "https://api.nylas.com/oauth/authorize")
         .to_return(status: 302, body: "")
@@ -115,7 +115,7 @@ describe Nylas::HttpClient do
           "type": "invalid_request_error"
         }.to_json
 
-        nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+        nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
           .to_return(status: code, body: error_json)
 
@@ -128,7 +128,7 @@ describe Nylas::HttpClient do
           "type": "invalid_request_error"
         }.to_json
 
-        nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+        nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
         stub_request(:get, "https://api.nylas.com/contacts")
           .to_return(status: code, body: error_json, headers: { "Content-Type" => "Application/Json" })
 
@@ -146,7 +146,7 @@ describe Nylas::HttpClient do
         "X-RateLimit-Reset": "10"
       }
 
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       stub_request(:get, "https://api.nylas.com/contacts")
         .to_return(status: 429, body: error_json, headers: error_headers)
 
@@ -164,14 +164,14 @@ describe Nylas::HttpClient do
     path = "/contacts/1234/picture"
 
     it "no query parameters" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: {})
 
       expect(CGI.unescape(request[:url])).to eql(url + path)
     end
 
     it "one query parameter" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { param: "value" })
 
       expected_params = "?param=value"
@@ -179,7 +179,7 @@ describe Nylas::HttpClient do
     end
 
     it "multiple query parameters" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       params = { id: "1234", limit: 100, offset: 0, view: "count" }
       request = nylas.build_request(method: :get, path: path, query: params)
 
@@ -188,7 +188,7 @@ describe Nylas::HttpClient do
     end
 
     it "array of query parameter values" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { metadata_key: %w[key1 key2 key3] })
 
       expected_params = "?metadata_key=key1&metadata_key=key2&metadata_key=key3"
@@ -196,7 +196,7 @@ describe Nylas::HttpClient do
     end
 
     it "setting metadata_pair query param (set hash of key-value pairs)" do
-      nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
+      nylas = described_class.new(client_id: "id", client_secret: "secret", access_token: "token")
       metadata_pair = { key1: "value1", key2: "value2", key3: "value3" }
       request = nylas.build_request(method: :get, path: path, query: { metadata_pair: metadata_pair })
 

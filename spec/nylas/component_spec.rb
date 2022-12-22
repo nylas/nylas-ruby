@@ -4,8 +4,8 @@ describe Nylas::Component do
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real",
+        client_id: "not-real",
+        client_secret: "also-not-real",
         access_token: "seriously-unreal"
       )
       api = Nylas::API.new(client: client)
@@ -46,8 +46,8 @@ describe Nylas::Component do
   describe "saving" do
     it "POST with no ID set" do
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real",
+        client_id: "not-real",
+        client_secret: "also-not-real",
         access_token: "seriously-unreal"
       )
       api = Nylas::API.new(client: client)
@@ -91,8 +91,8 @@ describe Nylas::Component do
 
     it "PUT with ID set" do
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real",
+        client_id: "not-real",
+        client_secret: "also-not-real",
         access_token: "seriously-unreal"
       )
       api = Nylas::API.new(client: client)

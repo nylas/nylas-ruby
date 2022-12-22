@@ -40,7 +40,7 @@ describe Nylas::Account do
   end
 
   it "can update metadata" do
-    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    api = instance_double("Nylas::API", execute: { success: true }, client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
     account.metadata = {
@@ -62,7 +62,7 @@ describe Nylas::Account do
   end
 
   it "can be downgraded" do
-    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    api = instance_double("Nylas::API", execute: { success: true }, client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
     expect(account.downgrade).to be_truthy
@@ -77,7 +77,7 @@ describe Nylas::Account do
   end
 
   it "can be upgraded" do
-    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    api = instance_double("Nylas::API", execute: { success: true }, client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
     expect(account.upgrade).to be_truthy
@@ -92,7 +92,7 @@ describe Nylas::Account do
   end
 
   it "can revoke all tokens" do
-    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    api = instance_double("Nylas::API", execute: { success: true }, client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
     access_token = "some_access_token"
 
@@ -108,7 +108,7 @@ describe Nylas::Account do
   end
 
   it "can be destroyed" do
-    api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
+    api = instance_double("Nylas::API", execute: { success: true }, client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
 
     expect(account.destroy).to be_truthy
@@ -123,7 +123,7 @@ describe Nylas::Account do
   end
 
   it "can return token information" do
-    api = instance_double("Nylas::API", app_id: "app-987")
+    api = instance_double("Nylas::API", client_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
     token_info_response = {
       scopes: "email.send,email.modify,calendar",

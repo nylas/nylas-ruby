@@ -7,7 +7,7 @@ require "spec_helper"
 describe Nylas::API do
   describe "#exchange_code_for_token" do
     it "retrieves oauth token with code" do
-      client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
+      client = Nylas::HttpClient.new(client_id: "fake-app", client_secret: "fake-secret")
       data = {
         "client_id" => "fake-app",
         "client_secret" => "fake-secret",
@@ -28,7 +28,7 @@ describe Nylas::API do
     end
 
     it "retrieves full response from the server" do
-      client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
+      client = Nylas::HttpClient.new(client_id: "fake-app", client_secret: "fake-secret")
       data = {
         "client_id" => "fake-app",
         "client_secret" => "fake-secret",
@@ -52,7 +52,7 @@ describe Nylas::API do
   describe "#authentication_url" do
     context "with required parameters" do
       it "returns url for hosted_authentication" do
-        api = described_class.new(app_id: "2454354")
+        api = described_class.new(client_id: "2454354")
 
         hosted_auth_url = api.authentication_url(
           redirect_uri: "http://example.com",
@@ -74,7 +74,7 @@ describe Nylas::API do
 
     context "with required and optional parameters" do
       it "returns url for hosted_authentication with optional parameters" do
-        api = described_class.new(app_id: "2454354")
+        api = described_class.new(client_id: "2454354")
 
         hosted_auth_url = api.authentication_url(
           redirect_uri: "http://example.com",
@@ -102,7 +102,7 @@ describe Nylas::API do
 
     context "when required parameter are missing" do
       it "throws argument error if redirect uri is mising" do
-        api = described_class.new(app_id: "2454354")
+        api = described_class.new(client_id: "2454354")
 
         expect do
           api.authentication_url(scopes: ["email"])
@@ -110,7 +110,7 @@ describe Nylas::API do
       end
 
       it "throws argument error if scopes is mising" do
-        api = described_class.new(app_id: "2454354")
+        api = described_class.new(client_id: "2454354")
 
         expect do
           api.authentication_url(redirect_uri: "http://example.com")
@@ -118,7 +118,7 @@ describe Nylas::API do
       end
 
       it "generates wrong url if scopes and redirect_uri is nil" do
-        api = described_class.new(app_id: "2454354")
+        api = described_class.new(client_id: "2454354")
 
         hosted_auth_url = api.authentication_url(
           redirect_uri: nil,
@@ -148,7 +148,7 @@ describe Nylas::API do
 
   describe "#current_account" do
     it "retrieves the account for the current OAuth Access Token" do
-      client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",
+      client = Nylas::HttpClient.new(client_id: "not-real", client_secret: "also-not-real",
                                      access_token: "seriously-unreal")
       allow(client).to receive(:execute).with(method: :get, path: "/account").and_return(id: 1234)
       api = described_class.new(client: client)
@@ -156,7 +156,7 @@ describe Nylas::API do
     end
 
     it "raises an exception if there is not an access token set" do
-      client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
+      client = Nylas::HttpClient.new(client_id: "not-real", client_secret: "also-not-real")
       allow(client).to receive(:execute).with(method: :get, path: "/account").and_return(id: 1234)
       api = described_class.new(client: client)
       expect { api.current_account.id }.to raise_error Nylas::NoAuthToken,
@@ -165,7 +165,7 @@ describe Nylas::API do
     end
 
     it "sets X-Nylas-Client-Id header" do
-      client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
+      client = Nylas::HttpClient.new(client_id: "not-real", client_secret: "also-not-real")
       expect(client.default_headers).to include("X-Nylas-Client-Id" => "not-real")
     end
   end
@@ -176,8 +176,8 @@ describe Nylas::API do
       start_time = 1_609_439_400
       end_time = 1_640_975_400
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real",
+        client_id: "not-real",
+        client_secret: "also-not-real",
         access_token: "seriously-unreal"
       )
       api = described_class.new(client: client)
@@ -226,8 +226,8 @@ describe Nylas::API do
   describe "application details" do
     it "gets the application details" do
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real"
+        client_id: "not-real",
+        client_secret: "also-not-real"
       )
       api = described_class.new(client: client)
       application_details_response = {
@@ -261,8 +261,8 @@ describe Nylas::API do
       app_details.icon_url = "http://localhost/updated_icon.png"
       app_details.redirect_uris = %w[http://localhost/callback http://localhost/updated]
       client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real"
+        client_id: "not-real",
+        client_secret: "also-not-real"
       )
       api = described_class.new(client: client)
       stub_request(:put, "https://api.nylas.com/a/not-real")

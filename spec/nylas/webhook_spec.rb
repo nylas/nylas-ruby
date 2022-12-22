@@ -48,7 +48,7 @@ describe Nylas::Webhook do
 
   describe "#create" do
     it "Serializes all non-read-only attributes" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         application_id: "app-123",
         callback_url: "https://url.com/callback",
@@ -77,7 +77,7 @@ describe Nylas::Webhook do
 
   describe "update" do
     it "Serializes only state" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         id: "webhook-123",
         application_id: "app-123",
@@ -103,7 +103,7 @@ describe Nylas::Webhook do
     end
 
     it "Throws an error if update was called with something other than just state" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         id: "webhook-123",
         application_id: "app-123",
@@ -123,7 +123,7 @@ describe Nylas::Webhook do
 
   describe "save" do
     it "Creates if no id exists" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         application_id: "app-123",
         callback_url: "https://url.com/callback",
@@ -150,7 +150,7 @@ describe Nylas::Webhook do
     end
 
     it "Updates if id exists" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         id: "webhook-123",
         application_id: "app-123",
@@ -178,7 +178,7 @@ describe Nylas::Webhook do
 
   describe "#destroy" do
     it "Deletes the webhook on the API" do
-      api = instance_double(Nylas::API, execute: JSON.parse("{}"), app_id: "app-987")
+      api = instance_double(Nylas::API, execute: JSON.parse("{}"), client_id: "app-987")
       data = {
         id: "webhook-123",
         application_id: "app-123",
