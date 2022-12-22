@@ -1,5 +1,8 @@
 # Changelog
 
+### 6.0.0 / TBD
+* **BREAKING CHANGE:** Rename credential variable names to current naming notation
+
 ### 5.14.0 / 2022-12-16
 * Added support for rate limit errors
 * Added `disable_provider_selection` option for building auth URL
