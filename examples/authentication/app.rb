@@ -24,7 +24,7 @@ end
   send(method, "/auth/:provider/callback") do
     auth_hash = env['omniauth.auth'] # => OmniAuth::AuthHash
 
-    api = Nylas::API.new(app_id: ENV['NYLAS_APP_ID'], app_secret: ENV['NYLAS_APP_SECRET'])
+    api = Nylas::API.new(client_id: ENV['NYLAS_APP_ID'], client_secret: ENV['NYLAS_APP_SECRET'])
     nylas_token = api.authenticate(name: auth_hash[:info][:name], email_address: auth_hash[:info][:email],
                                    provider: :gmail,
                                    settings: { google_client_id: ENV['GOOGLE_CLIENT_ID'],
