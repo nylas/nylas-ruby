@@ -100,8 +100,8 @@ All of the functionality of the Nylas Communications Platform is available throu
 require 'nylas'
 
 nylas = Nylas::API.new(
-    app_id: CLIENT_ID,
-    app_secret: CLIENT_SECRET,
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
     access_token: ACCESS_TOKEN
 )
 ```
