@@ -47,9 +47,9 @@ module GemConfig
   end
 
   def self.testing_and_debugging_dependencies
-    [["pry", "~>  0.14.1"],
-     ["pry-nav", "~> 0.2.4"],
-     ["pry-stack_explorer", "~> 0.4.9"],
+    [["pry", "~>  0.13.0"],
+     ["pry-nav", "~> 1.0.0"],
+     ["pry-stack_explorer", "~> 0.6.1"],
      ["rspec", "~> 3.7"],
      ["rspec-json_matcher", "~> 0.1"],
      ["webmock", "~> 3.0"],
