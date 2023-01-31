@@ -98,6 +98,6 @@ module Nylas
       !obj.nil? && obj.respond_to?(:call)
     end
 
-    private_class_method :build_webhook_tunnel, :setup_websocket_client, :callable
+    private_class_method :setup_websocket_client, :callable
   end
 end
