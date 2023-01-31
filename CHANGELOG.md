@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add local webhook testing support
+
 ### 5.14.0 / 2022-12-16
 * Added support for rate limit errors
 * Added `disable_provider_selection` option for building auth URL
