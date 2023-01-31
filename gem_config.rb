@@ -41,8 +41,8 @@ module GemConfig
      ["rubocop", "~> 1.24.1"],
      ["rubocop-rspec", "~> 2.7.0"],
      ["tzinfo", "~> 2.0.5"],
-     # ["eventmachine", "~> 1.2.7"],
-     # ["faye-websocket", "~> 0.11.1"],
+     ["eventmachine", "~> 1.2.7"],
+     ["faye-websocket", "~> 0.11.1"],
      ["overcommit", "~> 0.41"]] + testing_and_debugging_dependencies
   end
 
