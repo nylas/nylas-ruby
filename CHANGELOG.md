@@ -2,7 +2,7 @@
 
 ### Unreleased
 * Add local webhook testing support
-* Add `tzinfo` as a runtime dependency
+* Add `tzinfo`, `faye-websocket`, `eventmachine` as runtime dependencies
 
 ### 5.14.0 / 2022-12-16
 * Added support for rate limit errors
