@@ -19,7 +19,7 @@ module Nylas
     def self.open_webhook_tunnel(api, config = nil)
       tunnel_id = SecureRandom.uuid
       triggers = config[:triggers]
-      region = config[:region]
+      region = config[:region] || "us"
       websocket_domain = "tunnel.nylas.com"
       callback_domain = "cb.nylas.com"
 
