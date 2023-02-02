@@ -16,9 +16,9 @@ module Nylas
     # @param api [Nylas::API] The configured Nylas API client
     # @param config [Hash] Configuration for the webhook tunnel, including callback functions, region, and
     #   events to subscribe to
-    def self.open_webhook_tunnel(api, config = nil)
+    def self.open_webhook_tunnel(api, config = {})
       tunnel_id = SecureRandom.uuid
-      triggers = config[:triggers]
+      triggers = config[:triggers] || WebhookTrigger.constants(false).map { |c| WebhookTrigger.const_get c }
       region = config[:region] || "us"
       websocket_domain = "tunnel.nylas.com"
       callback_domain = "cb.nylas.com"
