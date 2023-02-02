@@ -65,11 +65,7 @@ describe Nylas::Tunnel do
     end
 
     it "calls the functions with the default values" do
-      default_webhooks = %w[contact.created contact.updated contact.deleted calendar.created calendar.updated
-                            calendar.deleted event.created event.updated event.deleted job.successful
-                            job.failed account.connected account.running account.stopped account.invalid
-                            account.sync_error message.created message.opened message.link_created
-                            message.updated message.bounced thread.replied]
+      default_webhooks = WebhookTrigger.constants(false).map { |c| WebhookTrigger.const_get c }
 
       described_class.open_webhook_tunnel(api)
 
