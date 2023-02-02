@@ -21,6 +21,10 @@ class MockWebsocketClient
   end
 end
 
+class MockMessage
+  attr_accessor :data
+end
+
 def on_open(_)
   "on_open"
 end
@@ -31,6 +35,10 @@ end
 
 def on_error(_)
   "on_error"
+end
+
+def on_message(delta)
+  delta
 end
 
 describe Nylas::Tunnel do
@@ -84,7 +92,8 @@ describe Nylas::Tunnel do
           triggers: ["event.updated"],
           on_open: method(:on_open),
           on_close: method(:on_close),
-          on_error: method(:on_error)
+          on_error: method(:on_error),
+          on_message: method(:on_message)
         }
       )
     end
@@ -116,6 +125,19 @@ describe Nylas::Tunnel do
       expect(EM).to have_received(:stop)
       expect(ws.listeners["error"].call).to eql("on_error")
     end
+
+    it "handles delta parsing on message properly" do
+      message = MockMessage.new
+      delta_callback = ws.listeners["message"].call(message)
+      expect(delta_callback).to be(nil)
+
+      # rubocop:disable Layout/LineLength
+      message.data = '{"body": "{\\"deltas\\": [{\\"date\\": 1675098465, \\"object\\": \\"message\\", \\"type\\": \\"message.created\\", \\"object_data\\": {\\"namespace_id\\": \\"namespace_123\\", \\"account_id\\": \\"account_123\\", \\"object\\": \\"message\\", \\"attributes\\": {\\"thread_id\\": \\"thread_123\\", \\"received_date\\": 1675098459}, \\"id\\": \\"123\\", \\"metadata\\": null}}]}"}'
+      # rubocop:enable Layout/LineLength
+
+      delta_callback = ws.listeners["message"].call(message)
+      expect(delta_callback).not_to be(nil)
+    end
   end
 
   describe "callable" do
@@ -127,6 +149,79 @@ describe Nylas::Tunnel do
 
       expect(callable).to be(true)
       expect(uncallable).to be(false)
+    end
+  end
+
+  describe "parse_deltas_from_message" do
+    let(:message) { MockMessage.new }
+
+    it "parses the delta when the message is set" do
+      # rubocop:disable Layout/LineLength
+      message.data = '{"body": "{\\"deltas\\": [{\\"date\\": 1675098465, \\"object\\": \\"message\\", \\"type\\": \\"message.created\\", \\"object_data\\": {\\"namespace_id\\": \\"namespace_123\\", \\"account_id\\": \\"account_123\\", \\"object\\": \\"message\\", \\"attributes\\": {\\"thread_id\\": \\"thread_123\\", \\"received_date\\": 1675098459}, \\"id\\": \\"123\\", \\"metadata\\": null}}]}"}'
+      # rubocop:enable Layout/LineLength
+      json = {
+        "date" => 1675098465,
+        "object" => "message",
+        "type" => "message.created",
+        "object_data" => {
+          "namespace_id" => "namespace_123",
+          "account_id" => "account_123",
+          "object" => "message",
+          "id" => "123",
+          "metadata" => nil,
+          "attributes" => {
+            "thread_id" => "thread_123",
+            "received_date" => 1675098459
+          }
+        }
+      }
+
+      result = described_class.send(:parse_deltas_from_message, message)
+
+      expect(result).to be_a(Array)
+      expect(result.length).to be(1)
+      expect(result[0]).to eql(json)
+    end
+
+    it "returns if message data is empty" do
+      result = described_class.send(:parse_deltas_from_message, message)
+
+      expect(result).to be(nil)
+    end
+  end
+
+  describe "merge_and_create_delta" do
+    it "serializes it into the Delta object" do
+      delta = {
+        "date" => 1675098465,
+        "object" => "message",
+        "type" => "message.created",
+        "object_data" => {
+          "namespace_id" => "namespace_123",
+          "account_id" => "account_123",
+          "object" => "message",
+          "id" => "123",
+          "metadata" => nil,
+          "attributes" => {
+            "thread_id" => "thread_123",
+            "received_date" => 1675098459
+          }
+        }
+      }
+
+      serialized = described_class.send(:merge_and_create_delta, delta)
+
+      expect(serialized).to be_a(Nylas::Delta)
+      expect(serialized.date).to eql(Time.at(1675098465))
+      expect(serialized.object).to eql("message")
+      expect(serialized.type).to eql("message.created")
+      expect(serialized.namespace_id).to eql("namespace_123")
+      expect(serialized.account_id).to eql("account_123")
+      expect(serialized.object).to eql("message")
+      expect(serialized.id).to eql("123")
+      attributes = serialized.object_attributes
+      expect(attributes["thread_id"]).to eql("thread_123")
+      expect(attributes["received_date"]).to be(1675098459)
     end
   end
 end
