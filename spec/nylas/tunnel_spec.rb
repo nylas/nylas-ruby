@@ -2,6 +2,37 @@
 
 require "rspec"
 
+##
+# Mock class and functions
+##
+
+class MockWebsocketClient
+  attr_accessor :url, :protocols, :options, :listeners
+
+  def initialize(url, protocols, options)
+    self.url = url
+    self.protocols = protocols
+    self.options = options
+    self.listeners = {}
+  end
+
+  def on(event, &block)
+    listeners[event.to_s] = block
+  end
+end
+
+def on_open(_)
+  "on_open"
+end
+
+def on_close(_)
+  "on_close"
+end
+
+def on_error(_)
+  "on_error"
+end
+
 describe Nylas::Tunnel do
   describe "register_webhook_callback" do
     it "creates a webhook with the correct parameters" do
