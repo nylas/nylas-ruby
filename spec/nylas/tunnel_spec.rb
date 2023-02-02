@@ -56,6 +56,44 @@ describe Nylas::Tunnel do
     )
   end
 
+  describe "open_webhook_tunnel" do
+    before do
+      allow(EM).to receive(:run).and_yield
+      allow(SecureRandom).to receive(:uuid).and_return("tunnel-123")
+      allow(described_class).to receive(:setup_websocket_client)
+      allow(described_class).to receive(:register_webhook_callback)
+    end
+
+    it "calls the functions with the default values" do
+      default_webhooks = %w[contact.created contact.updated contact.deleted calendar.created calendar.updated
+                            calendar.deleted event.created event.updated event.deleted job.successful
+                            job.failed account.connected account.running account.stopped account.invalid
+                            account.sync_error message.created message.opened message.link_created
+                            message.updated message.bounced thread.replied]
+
+      described_class.open_webhook_tunnel(api)
+
+      expect(described_class).to have_received(:setup_websocket_client)
+        .with("tunnel.nylas.com", api, "tunnel-123", "us", {})
+      expect(described_class).to have_received(:register_webhook_callback)
+        .with(api, "cb.nylas.com", "tunnel-123", default_webhooks)
+    end
+
+    it "calls the functions with the correct values" do
+      config = {
+        region: "ireland",
+        triggers: [WebhookTrigger::ACCOUNT_CONNECTED]
+      }
+
+      described_class.open_webhook_tunnel(api, config)
+
+      expect(described_class).to have_received(:setup_websocket_client)
+        .with("tunnel.nylas.com", api, "tunnel-123", "ireland", config)
+      expect(described_class).to have_received(:register_webhook_callback)
+        .with(api, "cb.nylas.com", "tunnel-123", ["account.connected"])
+    end
+  end
+
   describe "register_webhook_callback" do
     it "creates a webhook with the correct parameters" do
       allow(client).to receive(:execute).and_return({})
