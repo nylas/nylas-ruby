@@ -51,6 +51,7 @@ module Nylas
     # @param tunnel_id [String] The ID of the tunnel
     # @param region [String] The Nylas region to configure for
     # @param config [Hash] The object containing all the callback methods
+    # @return [WebSocket::Client] The configured websocket client
     def self.setup_websocket_client(websocket_domain, api, tunnel_id, region, config)
       ws = Faye::WebSocket::Client.new(
         "wss://#{websocket_domain}",
@@ -89,6 +90,8 @@ module Nylas
           config[:on_message].call(Delta.new(**delta)) if callable(config[:on_message])
         end
       end
+
+      ws
     end
 
     # Check if the object is a method
