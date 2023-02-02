@@ -80,6 +80,8 @@ module Nylas
       end
 
       ws.on :message do |message|
+        next unless message.data
+
         json = JSON.parse(message.data)
         deltas = JSON.parse(json["body"])["deltas"]
         next if deltas.nil?
