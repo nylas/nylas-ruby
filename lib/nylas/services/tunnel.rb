@@ -80,16 +80,12 @@ module Nylas
       end
 
       ws.on :message do |message|
-        next unless message.data
-
-        json = JSON.parse(message.data)
-        deltas = JSON.parse(json["body"])["deltas"]
+        deltas = parse_deltas_from_message(message)
         next if deltas.nil?
 
         deltas.each do |delta|
-          object_data = delta.delete("object_data")
-          delta = delta.merge(object_data).transform_keys(&:to_sym)
-          config[:on_message].call(Delta.new(**delta)) if callable(config[:on_message])
+          delta = merge_and_create_delta(delta)
+          config[:on_message].call(delta) if callable(config[:on_message])
         end
       end
 
@@ -103,6 +99,30 @@ module Nylas
       !obj.nil? && obj.respond_to?(:call)
     end
 
-    private_class_method :setup_websocket_client, :callable
+    # Parse deltas from the message object
+    # @param message [Any] The message object containing the deltas
+    # @return [Hash] The parsed list of deltas
+    def self.parse_deltas_from_message(message)
+      return unless message.data
+
+      json = JSON.parse(message.data)
+      JSON.parse(json["body"])["deltas"]
+    end
+
+    # Clean up and create the delta object
+    # @param delta [Hash] The hash containing the delta attributes from the API
+    # @return [Nylas::Delta] The delta object
+    def self.merge_and_create_delta(delta)
+      object_data = delta.delete("object_data")
+      attributes = object_data.delete("attributes")
+      object_data["object_attributes"] = attributes
+      delta = delta.merge(object_data).transform_keys(&:to_sym)
+      Delta.new(**delta)
+    end
+
+    private_class_method :setup_websocket_client,
+                         :callable,
+                         :parse_deltas_from_message,
+                         :merge_and_create_delta
   end
 end
