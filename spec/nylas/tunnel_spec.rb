@@ -34,17 +34,22 @@ def on_error(_)
 end
 
 describe Nylas::Tunnel do
+  let(:client) do
+    Nylas::HttpClient.new(
+      app_id: "not-real",
+      app_secret: "also-not-real"
+    )
+  end
+  let(:api) do
+    instance_double(
+      Nylas::API,
+      client: client,
+      webhooks: Nylas::Collection.new(model: Nylas::Webhook, api: client)
+    )
+  end
+
   describe "register_webhook_callback" do
     it "creates a webhook with the correct parameters" do
-      client = Nylas::HttpClient.new(
-        app_id: "not-real",
-        app_secret: "also-not-real"
-      )
-      api = instance_double(
-        Nylas::API,
-        client: client,
-        webhooks: Nylas::Collection.new(model: Nylas::Webhook, api: client)
-      )
       allow(client).to receive(:execute).and_return({})
       callback_domain = "domain.com"
       tunnel_path = "tunnel"
@@ -63,6 +68,65 @@ describe Nylas::Tunnel do
         ),
         query: {}
       )
+    end
+  end
+
+  describe "setup_websocket_client" do
+    let(:ws) do
+      described_class.send(
+        :setup_websocket_client,
+        "tunnel.nylas.com",
+        api,
+        "tunnel-123",
+        "us",
+        {
+          region: "us",
+          triggers: ["event.updated"],
+          on_open: method(:on_open),
+          on_close: method(:on_close),
+          on_error: method(:on_error)
+        }
+      )
+    end
+
+    before do
+      stub_const("Faye::WebSocket::Client", MockWebsocketClient)
+    end
+
+    it "passes the correct values to the websockets init" do
+      options = {
+        headers: {
+          "Client-Id" => "not-real",
+          "Client-Secret" => "also-not-real",
+          "Tunnel-Id" => "tunnel-123",
+          "Region" => "us"
+        }
+      }
+
+      expect(ws.url).to eql("wss://tunnel.nylas.com")
+      expect(ws.protocols).to eql([])
+      expect(ws.options).to eql(options)
+    end
+
+    it "set the correct callbacks and is callable" do
+      allow(EM).to receive(:stop)
+
+      expect(ws.listeners["open"].call).to eql("on_open")
+      expect(ws.listeners["close"].call).to be(nil)
+      expect(EM).to have_received(:stop)
+      expect(ws.listeners["error"].call).to eql("on_error")
+    end
+  end
+
+  describe "callable" do
+    it "correctly identifies a callable objects vs. un-callable ones" do
+      string = "random string"
+
+      callable = described_class.send(:callable, method(:on_open))
+      uncallable = described_class.send(:callable, string)
+
+      expect(callable).to be(true)
+      expect(uncallable).to be(false)
     end
   end
 end
