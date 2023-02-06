@@ -1,5 +1,9 @@
 # Changelog
 
+### Unreleased
+* Fix `MESSAGE_LINK_CLICKED` trigger
+* Add missing job status webhook triggers
+
 ### 5.15.0 / 2022-02-02
 * Add local webhook testing support
 * Add `tzinfo`, `faye-websocket`, `eventmachine` as runtime dependencies

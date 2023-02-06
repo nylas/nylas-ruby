@@ -19,7 +19,7 @@ module WebhookTrigger
   ACCOUNT_SYNC_ERROR = "account.sync_error"
   MESSAGE_CREATED = "message.created"
   MESSAGE_OPENED = "message.opened"
-  MESSAGE_LINK_CLICKED = "message.link_created"
+  MESSAGE_LINK_CLICKED = "message.link_clicked"
   MESSAGE_UPDATED = "message.updated"
   MESSAGE_BOUNCED = "message.bounced"
   THREAD_REPLIED = "thread.replied"
@@ -34,6 +34,8 @@ module WebhookTrigger
   EVENT_DELETED = "event.deleted"
   JOB_SUCCESSFUL = "job.successful"
   JOB_FAILED = "job.failed"
+  JOB_DELAYED = "job.delayed"
+  JOB_CANCELLED = "job.cancelled"
 end
 
 module Nylas
