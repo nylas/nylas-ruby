@@ -34,6 +34,8 @@ module WebhookTrigger
   EVENT_DELETED = "event.deleted"
   JOB_SUCCESSFUL = "job.successful"
   JOB_FAILED = "job.failed"
+  JOB_DELAYED = "job.delayed"
+  JOB_CANCELLED = "job.cancelled"
 end
 
 module Nylas
