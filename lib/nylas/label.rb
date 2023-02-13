@@ -17,11 +17,11 @@ module Nylas
 
     attribute :id, :string
     attribute :account_id, :string
-
     attribute :object, :string
 
     attribute :name, :string
     attribute :display_name, :string
+    attribute :provider_id, :string
     attribute :job_status_id, :string, read_only: true
   end
 end

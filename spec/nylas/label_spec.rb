@@ -17,14 +17,22 @@ describe Nylas::Label do
     expect(described_class).to be_updatable
   end
 
-  describe "#from_json" do
+  describe ".from_json" do
     it "deserializes all the attributes successfully" do
-      json = JSON.dump(display_name: "All Mail", id: "label-all-mail", name: "all", account_id: "acc-234")
-      label = described_class.from_json(json, api: nil)
+      data = {
+        id: "label-all-mail",
+        account_id: "acc-234",
+        display_name: "All Mail",
+        name: "all",
+        provider_id: "provider-id"
+      }
+
+      label = described_class.from_json(JSON.dump(data), api: nil)
       expect(label.display_name).to eql "All Mail"
       expect(label.id).to eql "label-all-mail"
       expect(label.name).to eql "all"
       expect(label.account_id).to eql "acc-234"
+      expect(label.provider_id).to eql "provider-id"
     end
   end
 end
