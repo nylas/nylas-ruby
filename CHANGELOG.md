@@ -1,8 +1,9 @@
 # Changelog
 
-### Unreleased
-* Fix `MESSAGE_LINK_CLICKED` trigger
+### 5.16.0 / 2022-03-14
+* Add missing `provider_id` attribute to `Label`
 * Add missing job status webhook triggers
+* Fix `MESSAGE_LINK_CLICKED` trigger
 
 ### 5.15.0 / 2022-02-02
 * Add local webhook testing support
