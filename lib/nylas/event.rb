@@ -40,6 +40,8 @@ module Nylas
     has_n_of_attribute :notifications, :event_notification
     has_n_of_attribute :round_robin_order, :string
     attribute :original_start_time, :unix_timestamp
+    attribute :organizer_email, :string
+    attribute :organizer_name, :string
     attribute :reminder_minutes, :string
     attribute :reminder_method, :string
     attribute :job_status_id, :string, read_only: true

@@ -13,6 +13,8 @@ describe Nylas::Event do
         description: "an event",
         message_id: "mess-8766",
         owner: '"owner" <owner@example.com>',
+        organizer_email: "owner@example.com",
+        organizer_name: "owner",
         participants: [
           {
             comment: "Let me think on it",
@@ -99,6 +101,8 @@ describe Nylas::Event do
       expect(event.notifications[0].subject).to eql "Test Event Notification"
       expect(event.notifications[0].body).to eql "Reminding you about our meeting."
       expect(event.visibility).to eql "private"
+      expect(event.organizer_email).to eql "owner@example.com"
+      expect(event.organizer_name).to eql "owner"
     end
   end
 
