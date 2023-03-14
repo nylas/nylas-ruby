@@ -2,6 +2,7 @@
 
 ### 5.16.0 / 2022-03-14
 * Add missing `provider_id` attribute to `Label`
+* Add `organizer_email` and `organizer_name` to `Event`
 * Add missing job status webhook triggers
 * Fix `MESSAGE_LINK_CLICKED` trigger
 
