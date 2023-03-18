@@ -58,7 +58,8 @@ describe Nylas::Event do
           subject: "Test Event Notification",
           body: "Reminding you about our meeting."
         }],
-        visibility: "private"
+        visibility: "private",
+        updated_at: 1649179701
       }
 
       event = described_class.from_json(JSON.dump(data), api: api)
@@ -103,6 +104,7 @@ describe Nylas::Event do
       expect(event.visibility).to eql "private"
       expect(event.organizer_email).to eql "owner@example.com"
       expect(event.organizer_name).to eql "owner"
+      expect(event.updated_at).to eql Time.at(1649179701)
     end
   end
 
