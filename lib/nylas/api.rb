@@ -24,14 +24,15 @@ module Nylas
     end
 
     # @return [String] A Nylas access token for that particular user.
-    def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil, scopes: nil)
+    def authenticate(name:, email_address:, provider:, settings:, reauth_account_id: nil, scopes: nil, return_full_response: false)
       NativeAuthentication.new(api: self).authenticate(
         name: name,
         email_address: email_address,
         provider: provider,
         settings: settings,
         reauth_account_id: reauth_account_id,
-        scopes: scopes
+        scopes: scopes,
+        return_full_response: return_full_response
       )
     end
 
