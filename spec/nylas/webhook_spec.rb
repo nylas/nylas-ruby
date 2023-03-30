@@ -201,4 +201,26 @@ describe Nylas::Webhook do
       )
     end
   end
+
+  describe "verify_webhook_signature" do
+    it "returns true if the webhook signature is valid" do
+      is_verified = described_class.verify_webhook_signature(
+        "ddc02f921a4835e310f249dc09770c3fea2cb6fe949adc1887d7adc04a581e1c",
+        "test123",
+        "myClientSecret"
+      )
+
+      expect(is_verified).to be(true)
+    end
+
+    it "returns false if the webhook signature is invalid" do
+      is_verified = described_class.verify_webhook_signature(
+        "ddc02f921a4835e310f249dc09770c3fea2cb6fe949adc1887d7adc04a581e1c",
+        "test1234",
+        "myClientSecret"
+      )
+
+      expect(is_verified).to be(false)
+    end
+  end
 end
