@@ -42,6 +42,7 @@ module Nylas
   # Represents a webhook attached to your application.
   # @see https://docs.nylas.com/reference#webhooks
   class Webhook
+    require "openssl"
     include Model
     self.creatable = true
     self.listable = true
@@ -89,6 +90,16 @@ module Nylas
 
     def self.resources_path(api:)
       "/a/#{api.app_id}/webhooks"
+    end
+
+    # Verify incoming webhook signature came from Nylas
+    # @param nylas_signature [str] The signature to verify
+    # @param raw_body [str] The raw body from the payload
+    # @param client_secret [str] Client secret of the app receiving the webhook
+    # @return [Boolean] True if the webhook signature was verified from Nylas
+    def self.verify_webhook_signature(nylas_signature, raw_body, client_secret)
+      digest = OpenSSL::HMAC.hexdigest("SHA256", client_secret, raw_body)
+      digest == nylas_signature
     end
 
     private

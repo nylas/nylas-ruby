@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add support for verifying webhook signatures
+
 ### 5.16.0 / 2022-03-14
 * Add missing `provider_id` attribute to `Label`
 * Add `organizer_email` and `organizer_name` to `Event`
