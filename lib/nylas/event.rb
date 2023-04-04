@@ -46,6 +46,7 @@ module Nylas
     attribute :reminder_method, :string
     attribute :job_status_id, :string, read_only: true
     attribute :visibility, :string
+    attribute :updated_at, :unix_timestamp, read_only: true
 
     attr_accessor :notify_participants
 
