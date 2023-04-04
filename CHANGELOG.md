@@ -2,7 +2,6 @@
 
 ### 5.17.0 / 2022-04-04
 * Add support for verifying webhook signatures
-* Add the `organizer_email` and `organizer_name` attributes to the Event Object
 * Add `event.updated_at`
 * Allow native authentication to return the full response like the `exchange_code_for_token`
 
