@@ -1,7 +1,10 @@
 # Changelog
 
-### Unreleased
+### 5.17.0 / 2022-04-04
 * Add support for verifying webhook signatures
+* Add the `organizer_email` and `organizer_name` attributes to the Event Object
+* Add `event.updated_at`
+* Allow native authentication to return the full response like the `exchange_code_for_token`
 
 ### 5.16.0 / 2022-03-14
 * Add missing `provider_id` attribute to `Label`
