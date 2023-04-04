@@ -3,11 +3,16 @@
 require "spec_helper"
 
 # rubocop:disable RSpec/MessageSpies
+# rubocop:disable Rspec/NestedGroups
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 
 describe Nylas::NativeAuthentication do
   describe "#authenticate" do
-    context "return_full_response parameter" do
-      let(:client) { Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real", access_token: "seriously-unreal") }
+    context "when called return_full_response parameter" do
+      let(:client) do
+        Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",
+                              access_token: "seriously-unreal")
+      end
       let(:api) { Nylas::API.new(client: client) }
       let(:scopes) { "email,calendar,contacts" }
       let(:scopes_array) { %w[email calendar contacts] }
@@ -38,16 +43,19 @@ describe Nylas::NativeAuthentication do
 
       context "when return_full_response is not set" do
         let(:expected_result) { "fake-token" }
+
         it_behaves_like "a successful authentication"
       end
 
       context "when return_full_response is false" do
         let(:expected_result) { "fake-token" }
+
         it_behaves_like "a successful authentication", false
       end
 
       context "when return_full_response is true" do
         let(:expected_result) { token_response }
+
         it_behaves_like "a successful authentication", true
       end
     end
@@ -162,3 +170,5 @@ describe Nylas::NativeAuthentication do
 end
 
 # rubocop:enable RSpec/MessageSpies
+# rubocop:enable Rspec/NestedGroups
+# rubocop:enable RSpec/MultipleMemoizedHelpers
