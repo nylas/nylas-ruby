@@ -128,7 +128,7 @@ module Nylas
         headers: headers,
         query: query,
         payload: payload,
-        auth_method: auth_method
+        api_key: api_key
       )
     end
 
