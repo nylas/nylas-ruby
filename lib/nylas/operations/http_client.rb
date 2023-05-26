@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require "rest-client"
+
+require_relative "../errors"
+
 module Nylas
   require "yajl"
   require "base64"
@@ -68,9 +72,6 @@ module Nylas
         response
       end
     end
-    # rubocop:enable Metrics/MethodLength
-    inform_on :execute, level: :debug,
-                        also_log: { result: true, values: %i[method url path headers query payload] }
 
     def build_request(
       method:,
@@ -81,7 +82,7 @@ module Nylas
       timeout: nil,
       api_key: nil
     )
-      url ||= url_for_path(path)
+      url = path
       url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
@@ -136,8 +137,7 @@ module Nylas
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
         "X-Nylas-Client-Id" => @app_id,
-        "Nylas-API-Version" => SUPPORTED_API_VERSION,
-        "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
+        "User-Agent" => "Nylas Ruby SDK v3",
         "Content-type" => "application/json"
       }
     end
@@ -149,12 +149,6 @@ module Nylas
     rescue Yajl::ParseError
       raise Nylas::JsonParseError
     end
-    inform_on :parse_response, level: :debug, also_log: { result: true }
-
-    def url_for_path(path)
-      protocol, domain = api_server.split("//")
-      "#{protocol}//#{access_token}:@#{domain}#{path}"
-    end
 
     private
 
@@ -162,9 +156,6 @@ module Nylas
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
                                     headers: headers, timeout: timeout, &block)
     end
-
-    inform_on :rest_client_execute, level: :debug,
-                                    also_log: { result: true, values: %i[method url headers payload] }
 
     def handle_failed_response(result:, response:)
       http_code = result.code.to_i

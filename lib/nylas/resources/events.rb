@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "base_resource"
-require_relative "operations/create"
-require_relative "operations/find"
-require_relative "operations/list"
-require_relative "operations/update"
-require_relative "operations/destroy"
+require_relative "../operations/api_operations"
 # require other mixins as needed
 
 module Nylas
