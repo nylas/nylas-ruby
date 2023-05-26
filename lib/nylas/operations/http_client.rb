@@ -5,12 +5,7 @@ module Nylas
   require "base64"
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
-  class HttpClient
-    module AuthMethod
-      BEARER = 1
-      BASIC = 2
-    end
-
+  module HttpClient
     HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
 
     HTTP_CODE_TO_EXCEPTIONS = {
@@ -31,46 +26,9 @@ module Nylas
       504 => RequestTimedOut
     }.freeze
 
-    ENDPOINT_TIMEOUTS = {
-      "/oauth/authorize" => 345,
-      "/messages/search" => 350,
-      "/threads/search" => 350,
-      "/delta" => 3650,
-      "/delta/longpoll" => 3650,
-      "/delta/streaming" => 3650
-    }.freeze
-
-    SUPPORTED_API_VERSION = "2.5"
-
-    include Logging
     attr_accessor :api_server
     attr_writer :default_headers
-    attr_reader :access_token
-    attr_reader :app_id
-    attr_reader :app_secret
-
-    # @param app_id [String] Your application id from the Nylas Dashboard
-    # @param app_secret [String] Your application secret from the Nylas Dashboard
-    # @param access_token [String] (Optional) Your users access token.
-    # @param api_server [String] (Optional) Which Nylas API Server to connect to. Only change this if
-    #                            you're using a self-hosted Nylas instance.
-    # @return [Nylas::HttpClient]
-    def initialize(app_id:, app_secret:, access_token: nil, api_server: "https://api.nylas.com")
-      unless api_server.include?("://")
-        raise "When overriding the Nylas API server address, you must include https://"
-      end
-
-      @api_server = api_server
-      @access_token = access_token
-      @app_secret = app_secret
-      @app_id = app_id
-    end
-
-    # @return [Nylas::HttpClient[]
-    def as(access_token)
-      HttpClient.new(app_id: app_id, access_token: access_token,
-                     app_secret: app_secret, api_server: api_server)
-    end
+    attr_reader :access_token, :app_id, :app_secret
 
     # Sends a request to the Nylas API and rai
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
@@ -83,16 +41,14 @@ module Nylas
     # @param auth_method [AuthMethod] (Optional, defaults to BEARER) - The authentication method.
     # @return [Array Hash Stringn]
     # rubocop:disable Metrics/MethodLength
-    def execute(method:, path: nil, headers: {}, query: {}, payload: nil, auth_method: nil)
-      timeout = ENDPOINT_TIMEOUTS.fetch(path, 230)
+    def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil)
       request = build_request(
         method: method,
         path: path,
         headers: headers,
         query: query,
         payload: payload,
-        timeout: timeout,
-        auth_method: auth_method || AuthMethod::BEARER
+        api_key: api_key
       )
       rest_client_execute(**request) do |response, _request, result|
         content_type = nil
@@ -123,49 +79,49 @@ module Nylas
       query: {},
       payload: nil,
       timeout: nil,
-      auth_method: nil
+      api_key: nil
     )
       url ||= url_for_path(path)
       url = add_query_params_to_url(url, query)
-      resulting_headers = default_headers.merge(headers).merge(auth_header(auth_method))
+      resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
 
     # Syntactical sugar for making GET requests via the API.
     # @see #execute
-    def get(path: nil, headers: {}, query: {}, auth_method: nil)
-      execute(method: :get, path: path, query: query, headers: headers, auth_method: auth_method)
+    def get(path: nil, headers: {}, query: {}, api_key: nil)
+      execute(method: :get, path: path, query: query, headers: headers, api_key: api_key)
     end
 
     # Syntactical sugar for making POST requests via the API.
     # @see #execute
-    def post(path: nil, payload: nil, headers: {}, query: {}, auth_method: nil)
+    def post(path: nil, payload: nil, headers: {}, query: {}, api_key: nil)
       execute(
         method: :post,
         path: path,
         headers: headers,
         query: query,
         payload: payload,
-        auth_method: auth_method
+        api_key: api_key
       )
     end
 
     # Syntactical sugar for making PUT requests via the API.
     # @see #execute
-    def put(path: nil, payload:, headers: {}, query: {}, auth_method: nil)
+    def put(payload:, path: nil, headers: {}, query: {}, api_key: nil)
       execute(
         method: :put,
         path: path,
         headers: headers,
         query: query,
         payload: payload,
-        auth_method: auth_method
+        api_key: api_key
       )
     end
 
     # Syntactical sugar for making DELETE requests via the API.
     # @see #execute
-    def delete(path: nil, payload: nil, headers: {}, query: {}, auth_method: nil)
+    def delete(path: nil, payload: nil, headers: {}, query: {}, api_key: nil)
       execute(
         method: :delete,
         path: path,
@@ -263,16 +219,8 @@ module Nylas
       query
     end
 
-    def auth_header(auth_method)
-      authorization_string = case auth_method
-                             when AuthMethod::BEARER
-                               "Bearer #{access_token}"
-                             when AuthMethod::BASIC
-                               "Basic #{Base64.encode64("#{access_token}:")}"
-                             else
-                               "Bearer #{access_token}"
-                             end
-
+    def auth_header(api_key)
+      authorization_string = "Bearer #{api_key}"
       { "Authorization" => authorization_string }
     end
   end

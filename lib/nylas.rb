@@ -24,14 +24,9 @@ require "forwardable"
 require_relative "nylas/version"
 require_relative "nylas/errors"
 
-require_relative "nylas/logging"
-require_relative "nylas/types"
+require_relative "nylas/operations/http_client"
+require_relative "nylas/operations/api_operations"
 
-require_relative "nylas/http_client"
-require_relative "nylas/api"
-require_relative "nylas/model"
-
-# an SDK for interacting with the Nylas API
-# @see https://docs.nylas.com/reference
-module Nylas
-end
+require_relative "nylas/resources/base_resource"
+require_relative "nylas/resources/calendars"
+require_relative "nylas/resources/events"
