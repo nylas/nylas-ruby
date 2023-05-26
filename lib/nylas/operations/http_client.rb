@@ -32,7 +32,6 @@ module Nylas
 
     attr_accessor :api_server
     attr_writer :default_headers
-    attr_reader :access_token, :app_id, :app_secret
 
     # Sends a request to the Nylas API and rai
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
@@ -136,7 +135,6 @@ module Nylas
     def default_headers
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
-        "X-Nylas-Client-Id" => @app_id,
         "User-Agent" => "Nylas Ruby SDK v3",
         "Content-type" => "application/json"
       }

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "resources/calendars"
+require_relative "resources/events"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
