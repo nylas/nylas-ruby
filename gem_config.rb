@@ -10,7 +10,7 @@ module GemConfig
     gem.license = "MIT"
     gem.version = Nylas::VERSION
     gem.platform = "ruby"
-    gem.required_ruby_version = ">= 2.3"
+    gem.required_ruby_version = ">= 3.0"
     append_nylas_data(gem)
     dev_dependencies.each do |dependency|
       gem.add_development_dependency(*dependency)

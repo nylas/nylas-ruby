@@ -7,6 +7,7 @@ module Nylas
   # Providers
   class Providers < BaseResource
     include Operations::List
+    include Operations::Create
 
     def initialize(parent)
       super("providers", parent)
@@ -19,15 +20,21 @@ module Nylas
     def list
       check_credentials
 
-      req = i_list("#{host}/connect/providers/find")
-      req.call(query_params: { client_id: client_id }, api_key: api_key)
+      i_list(
+        "#{host}/connect/providers/find",
+        query_params: { client_id: client_id },
+        api_key: api_key
+      )
     end
 
     def detect(query_params)
       check_credentials
 
-      req = i_create("#{host}/connect/providers/detect")
-      req.call(query_params: { client_id: client_id, **query_params }, api_key: api_key)
+      i_create(
+        "#{host}/connect/providers/detect",
+        query_params: { client_id: client_id, **query_params },
+        api_key: api_key
+      )
     end
   end
 end

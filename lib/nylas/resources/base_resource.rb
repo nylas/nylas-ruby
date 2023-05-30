@@ -4,6 +4,7 @@ require "net/http"
 require "json"
 
 module Nylas
+  # BaseResource is the base class for all Nylas API resources.
   class BaseResource
     attr_reader :resource_name, :sdk_instance
 

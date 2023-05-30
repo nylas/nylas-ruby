@@ -15,6 +15,13 @@ module Nylas
       super("calendars", sdk_instance)
     end
 
+    def get_availability(path_params: {}, request_body: nil)
+      i_create(
+        "#{host}/grants/#{path_params[:grant_id]}/calendars/availability",
+        request_body: request_body
+      )
+    end
+
     def create(query_params: {}, request_body: nil)
       i_create(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",

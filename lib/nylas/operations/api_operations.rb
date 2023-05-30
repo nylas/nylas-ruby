@@ -10,12 +10,13 @@ module Nylas
     module Create
       include HttpClient
 
-      def i_create(path, query_params: {}, request_body: nil)
+      def i_create(path, query_params: {}, headers: {}, request_body: nil)
         execute(
           method: :post,
           path: path,
           query: query_params,
           payload: request_body,
+          headers: headers,
           api_key: api_key
         )
       end
