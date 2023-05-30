@@ -2,6 +2,8 @@
 
 require_relative "resources/calendars"
 require_relative "resources/events"
+require_relative "resources/auth"
+require_relative "resources/webhooks"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
@@ -21,6 +23,14 @@ module Nylas
 
     def events
       Events.new(self)
+    end
+
+    def auth
+      Auth.new(self)
+    end
+
+    def webhooks
+      Webhooks.new(self)
     end
   end
 end

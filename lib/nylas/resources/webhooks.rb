@@ -2,19 +2,18 @@
 
 require_relative "base_resource"
 require_relative "../operations/api_operations"
-# require other mixins as needed
 
 module Nylas
-  # Events
-  class Events < BaseResource
+  # Webhooks
+  class Webhooks < BaseResource
     include Operations::Create
     include Operations::Find
     include Operations::List
     include Operations::Update
     include Operations::Destroy
 
-    def initialize(sdk_instance)
-      super("events", sdk_instance)
+    def initialize(parent)
+      super("webhooks", parent)
     end
 
     def create(query_params: {}, request_body: nil)

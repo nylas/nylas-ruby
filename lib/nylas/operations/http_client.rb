@@ -45,14 +45,8 @@ module Nylas
     # @return [Array Hash Stringn]
     # rubocop:disable Metrics/MethodLength
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil)
-      request = build_request(
-        method: method,
-        path: path,
-        headers: headers,
-        query: query,
-        payload: payload,
-        api_key: api_key
-      )
+      request = build_request(method: method, path: path, headers: headers,
+                              query: query, payload: payload, api_key: api_key)
       rest_client_execute(**request) do |response, _request, result|
         content_type = nil
 
@@ -73,63 +67,12 @@ module Nylas
     end
 
     def build_request(
-      method:,
-      path: nil,
-      headers: {},
-      query: {},
-      payload: nil,
-      timeout: nil,
-      api_key: nil
+      method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil
     )
       url = path
       url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
-    end
-
-    # Syntactical sugar for making GET requests via the API.
-    # @see #execute
-    def get(path: nil, headers: {}, query: {}, api_key: nil)
-      execute(method: :get, path: path, query: query, headers: headers, api_key: api_key)
-    end
-
-    # Syntactical sugar for making POST requests via the API.
-    # @see #execute
-    def post(path: nil, payload: nil, headers: {}, query: {}, api_key: nil)
-      execute(
-        method: :post,
-        path: path,
-        headers: headers,
-        query: query,
-        payload: payload,
-        api_key: api_key
-      )
-    end
-
-    # Syntactical sugar for making PUT requests via the API.
-    # @see #execute
-    def put(payload:, path: nil, headers: {}, query: {}, api_key: nil)
-      execute(
-        method: :put,
-        path: path,
-        headers: headers,
-        query: query,
-        payload: payload,
-        api_key: api_key
-      )
-    end
-
-    # Syntactical sugar for making DELETE requests via the API.
-    # @see #execute
-    def delete(path: nil, payload: nil, headers: {}, query: {}, api_key: nil)
-      execute(
-        method: :delete,
-        path: path,
-        headers: headers,
-        query: query,
-        payload: payload,
-        api_key: api_key
-      )
     end
 
     def default_headers
@@ -178,9 +121,7 @@ module Nylas
 
     def error_hash_to_exception(exception, response)
       exception.new(
-        response[:type],
-        response[:message],
-        response.fetch(:server_error, nil)
+        response[:type], response[:message], response.fetch(:server_error, nil)
       )
     end
 
@@ -209,8 +150,7 @@ module Nylas
     end
 
     def auth_header(api_key)
-      authorization_string = "Bearer #{api_key}"
-      { "Authorization" => authorization_string }
+      { "Authorization" => "Bearer #{api_key}" }
     end
   end
 end
