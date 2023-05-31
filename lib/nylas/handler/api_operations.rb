@@ -8,6 +8,8 @@ module Nylas
   module Operations
     # Create
     module Post
+      protected
+
       include HttpClient
 
       def post(path, query_params: {}, headers: {}, request_body: nil)
@@ -24,6 +26,8 @@ module Nylas
 
     # Find
     module Get
+      protected
+
       include HttpClient
 
       def get(path, query_params: {})
@@ -38,6 +42,8 @@ module Nylas
 
     # Update
     module Put
+      protected
+
       include HttpClient
 
       def put(path, query_params: {}, request_body: nil)
@@ -53,6 +59,8 @@ module Nylas
 
     # Destroy
     module Delete
+      protected
+
       include HttpClient
 
       def delete(path, query_params: {})
