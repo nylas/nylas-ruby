@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/nylas/client"
+require_relative "lib/nylas"
 
 nylas = Nylas::Client.new(api_key: "key")
 
