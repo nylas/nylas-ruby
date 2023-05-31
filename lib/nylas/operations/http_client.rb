@@ -3,6 +3,7 @@
 require "rest-client"
 
 require_relative "../errors"
+require_relative "../version"
 
 module Nylas
   require "yajl"

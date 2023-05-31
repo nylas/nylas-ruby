@@ -6,8 +6,8 @@ require_relative "../operations/api_operations"
 module Nylas
   # Providers
   class Providers < BaseResource
-    include Operations::List
-    include Operations::Create
+    include Operations::Get
+    include Operations::Post
 
     def initialize(parent)
       super("providers", parent)
@@ -20,7 +20,7 @@ module Nylas
     def list
       check_credentials
 
-      i_list(
+      get(
         "#{host}/connect/providers/find",
         query_params: { client_id: client_id },
         api_key: api_key
@@ -30,7 +30,7 @@ module Nylas
     def detect(query_params)
       check_credentials
 
-      i_create(
+      post(
         "#{host}/connect/providers/detect",
         query_params: { client_id: client_id, **query_params },
         api_key: api_key

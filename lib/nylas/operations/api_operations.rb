@@ -7,10 +7,10 @@ module Nylas
   # without exposing the HTTP client to the end user.
   module Operations
     # Create
-    module Create
+    module Post
       include HttpClient
 
-      def i_create(path, query_params: {}, headers: {}, request_body: nil)
+      def post(path, query_params: {}, headers: {}, request_body: nil)
         execute(
           method: :post,
           path: path,
@@ -23,24 +23,10 @@ module Nylas
     end
 
     # Find
-    module Find
+    module Get
       include HttpClient
 
-      def i_find(path, query_params: {})
-        execute(
-          method: :get,
-          path: path,
-          query: query_params,
-          api_key: api_key
-        )
-      end
-    end
-
-    # List
-    module List
-      include HttpClient
-
-      def i_list(path, query_params: {})
+      def get(path, query_params: {})
         execute(
           method: :get,
           path: path,
@@ -51,10 +37,10 @@ module Nylas
     end
 
     # Update
-    module Update
+    module Put
       include HttpClient
 
-      def i_update(path, query_params: {}, request_body: nil)
+      def put(path, query_params: {}, request_body: nil)
         execute(
           method: :put,
           path: path,
@@ -66,10 +52,10 @@ module Nylas
     end
 
     # Destroy
-    module Destroy
+    module Delete
       include HttpClient
 
-      def i_destroy(path, query_params: {})
+      def delete(path, query_params: {})
         execute(
           method: :delete,
           path: path,

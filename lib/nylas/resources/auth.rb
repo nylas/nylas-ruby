@@ -14,20 +14,16 @@ require_relative "../operations/api_operations"
 module Nylas
   # Auth
   class Auth < BaseResource
-    include Operations::Create
-    include Operations::List
+    include Operations::Post
+    include Operations::Get
 
     def initialize(sdk_instance)
       super("auth", sdk_instance)
+      @providers = Providers.new(@sdk_instance)
+      @grants = Grants.new(@sdk_instance)
     end
 
-    def providers
-      Providers.new(self)
-    end
-
-    def grants
-      Grants.new(self)
-    end
+    attr_reader :providers, :grants
 
     # Exchange an authorization code for an access token
     # @param payload The request parameters for the code exchange
@@ -38,7 +34,7 @@ module Nylas
 
       payload[:code_verifier] = code_verifier if code_verifier
 
-      i_create(
+      post(
         "#{host}/connect/token",
         request_body: payload
       )
@@ -50,7 +46,7 @@ module Nylas
       payload = { client_id: client_id, client_secret: client_secret, refresh_token: refresh_token,
                   redirect_uri: redirect_uri, grant_type: "refresh_token" }
 
-      i_create(
+      post(
         "#{host}/connect/token",
         request_body: payload
       )
@@ -97,7 +93,7 @@ module Nylas
       credentials = "#{@api_client.client_id}:#{@api_client.client_secret}"
       encoded_credentials = Base64.strict_encode64(credentials)
 
-      i_create(
+      post(
         "#{host}/connect/auth",
         request_body: payload,
         headers: { "Authorization" => "Basic #{encoded_credentials}" }
@@ -105,7 +101,7 @@ module Nylas
     end
 
     def revoke(token)
-      i_create(
+      post(
         "#{host}/connect/revoke",
         query_params: {
           token: token
@@ -147,7 +143,7 @@ module Nylas
 
     def validate_token(query_params)
       check_auth_credentials
-      i_list(
+      get(
         "#{host}/connect/tokeninfo",
         query_params: query_params
       )

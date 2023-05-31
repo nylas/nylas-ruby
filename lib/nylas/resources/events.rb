@@ -7,18 +7,17 @@ require_relative "../operations/api_operations"
 module Nylas
   # Events
   class Events < BaseResource
-    include Operations::Create
-    include Operations::Find
-    include Operations::List
-    include Operations::Update
-    include Operations::Destroy
+    include Operations::Get
+    include Operations::Post
+    include Operations::Put
+    include Operations::Delete
 
     def initialize(sdk_instance)
       super("events", sdk_instance)
     end
 
     def create(query_params: {}, request_body: nil)
-      i_create(
+      post(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",
         query_params: query_params,
         request_body: request_body
@@ -26,21 +25,21 @@ module Nylas
     end
 
     def find(path_params: {}, query_params: {})
-      i_find(
+      get(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
         query_params: query_params
       )
     end
 
-    def list(query_params: {})
-      i_list(
+    def list(path_params: {}, query_params: {})
+      get(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",
         query_params: query_params
       )
     end
 
     def update(path_params: {}, query_params: {}, request_body: nil)
-      i_update(
+      put(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
         query_params: query_params,
         request_body: request_body
@@ -48,7 +47,7 @@ module Nylas
     end
 
     def destroy(path_params: {}, query_params: {})
-      i_destroy(
+      delete(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
         query_params: query_params
       )
