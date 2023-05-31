@@ -2,7 +2,7 @@ inherit_from: .rubocop_todo.yml
 
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.0
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
@@ -27,6 +27,7 @@ Metrics/ParameterLists:
     - "lib/nylas/calendar_collection.rb"
 
 Metrics/MethodLength:
+  Max: 20
   Exclude:
     - "lib/nylas/calendar_collection.rb"
     - "lib/nylas/services/tunnel.rb"
@@ -36,6 +37,7 @@ Metrics/AbcSize:
     - "lib/nylas/services/tunnel.rb"
 
 Metrics/ModuleLength:
+  Max: 200
   Exclude:
     - "lib/nylas/model.rb"
 
