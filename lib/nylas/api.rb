@@ -4,6 +4,7 @@ require_relative "resources/calendars"
 require_relative "resources/events"
 require_relative "resources/auth"
 require_relative "resources/webhooks"
+require_relative "resources/application"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
@@ -15,6 +16,10 @@ module Nylas
       @client_id = client_id
       @client_secret = client_secret
       @host = "https://api-staging.us.nylas.com/v3"
+    end
+    
+    def application
+      Application.new(self)
     end
 
     def calendars
