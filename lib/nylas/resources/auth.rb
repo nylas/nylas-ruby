@@ -90,7 +90,7 @@ module Nylas
     def hosted_auth(payload)
       check_auth_credentials
 
-      credentials = "#{@api_client.client_id}:#{@api_client.client_secret}"
+      credentials = "#{client_id}:#{client_secret}"
       encoded_credentials = Base64.strict_encode64(credentials)
 
       post(
@@ -161,7 +161,7 @@ module Nylas
 
     def build_query(config)
       params = {
-        "client_id" => @api_client.client_id,
+        "client_id" => client_id,
         "redirect_uri" => config["redirectUri"],
         "access_type" => config["accessType"] || "offline",
         "response_type" => "code"
