@@ -21,7 +21,7 @@ module Nylas
       )
     end
 
-    def create(query_params: {}, request_body: nil)
+    def create(path_params: {}, query_params: {}, request_body: nil)
       post(
         "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",
         query_params: query_params,

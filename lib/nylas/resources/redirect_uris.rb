@@ -30,9 +30,7 @@ module Nylas
     end
 
     def list
-      get(
-        "#{host}/applications/#{resource_name}"
-      )
+      get("#{host}/applications/#{resource_name}")
     end
 
     def update(path_params: {}, request_body: nil)
