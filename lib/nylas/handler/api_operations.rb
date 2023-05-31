@@ -19,7 +19,8 @@ module Nylas
           query: query_params,
           payload: request_body,
           headers: headers,
-          api_key: api_key
+          api_key: api_key,
+          timeout: timeout
         )
       end
     end
@@ -35,7 +36,8 @@ module Nylas
           method: :get,
           path: path,
           query: query_params,
-          api_key: api_key
+          api_key: api_key,
+          timeout: timeout
         )
       end
     end
@@ -52,7 +54,8 @@ module Nylas
           path: path,
           query: query_params,
           payload: request_body,
-          api_key: api_key
+          api_key: api_key,
+          timeout: timeout
         )
       end
     end
@@ -68,7 +71,8 @@ module Nylas
           method: :delete,
           path: path,
           query: query_params,
-          api_key: api_key
+          api_key: api_key,
+          timeout: timeout
         )
       end
     end
