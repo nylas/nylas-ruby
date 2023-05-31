@@ -3,12 +3,14 @@
 module Nylas
   # BaseResource is the base class for all Nylas API resources.
   class BaseResource
-    attr_reader :resource_name, :sdk_instance
-
     def initialize(resource_name, sdk_instance)
       @resource_name = resource_name
       @sdk_instance = sdk_instance
     end
+
+    protected
+
+    attr_reader :resource_name, :sdk_instance
 
     private
 
