@@ -153,8 +153,8 @@ module Nylas
       check_auth_credentials
 
       URI::HTTP.build(
-        host: @api_client.server_url,
-        path: "/v3/connect/auth",
+        host: host,
+        path: "/connect/auth",
         query: build_query(config)
       )
     end

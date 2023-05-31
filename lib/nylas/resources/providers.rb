@@ -22,8 +22,7 @@ module Nylas
 
       get(
         "#{host}/connect/providers/find",
-        query_params: { client_id: client_id },
-        api_key: api_key
+        query_params: { client_id: client_id }
       )
     end
 
@@ -32,8 +31,7 @@ module Nylas
 
       post(
         "#{host}/connect/providers/detect",
-        query_params: { client_id: client_id, **query_params },
-        api_key: api_key
+        query_params: { client_id: client_id, **query_params }
       )
     end
   end
