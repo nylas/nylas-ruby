@@ -24,10 +24,8 @@ If you have a question that needs an answer, please reach out to support@nylas.c
 
 ## ⚙️ Install
 ### Prerequisites
-- Ruby 2.3 or above.
-- Ruby Frameworks: `rest-client`, `json`, `yajl-ruby`.
-
-We support Rails 4.2 and above. A more detailed compatibility list can be found in our [list of Gemfiles](https://github.com/nylas/nylas-ruby/tree/master/gemfiles).
+- Ruby 3.0 or above.
+- Ruby Frameworks: `rest-client` and `yajl-ruby`.
 
 ### Install
 
