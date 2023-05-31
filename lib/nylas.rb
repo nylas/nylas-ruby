@@ -23,10 +23,14 @@ require "forwardable"
 
 require_relative "nylas/version"
 require_relative "nylas/errors"
+require_relative "nylas/api"
 
-require_relative "nylas/operations/http_client"
-require_relative "nylas/operations/api_operations"
-
-require_relative "nylas/resources/base_resource"
+require_relative "nylas/resources/application"
+require_relative "nylas/resources/auth"
 require_relative "nylas/resources/calendars"
 require_relative "nylas/resources/events"
+require_relative "nylas/resources/grants"
+require_relative "nylas/resources/providers"
+require_relative "nylas/resources/redirect_uris"
+require_relative "nylas/resources/scopes"
+require_relative "nylas/resources/webhooks"

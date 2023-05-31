@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "net/http"
-require "json"
-
 module Nylas
   # BaseResource is the base class for all Nylas API resources.
   class BaseResource
