@@ -16,6 +16,9 @@ module Nylas
       super("redirect-uris", sdk_instance)
     end
 
+    # Add new redirect URI to existing application
+    # @param [Hash] request_body
+    # @return [Hash] Redirect URI object
     def create(request_body: nil)
       post(
         "#{host}/applications/#{resource_name}",
@@ -29,6 +32,8 @@ module Nylas
       )
     end
 
+    # Get all Application's Redirect URIs
+    # @return [Array] Array of Redirect URI objects
     def list
       get("#{host}/applications/#{resource_name}")
     end
