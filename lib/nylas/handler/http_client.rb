@@ -11,6 +11,8 @@ module Nylas
 
   # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
   module HttpClient
+    protected
+
     HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
 
     HTTP_CODE_TO_EXCEPTIONS = {

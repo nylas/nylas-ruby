@@ -4,6 +4,7 @@ require_relative "base_resource"
 require_relative "../handler/api_operations"
 
 module Nylas
+  # Calendars
   class Calendars < BaseResource
     include Operations::Get
     include Operations::Post
