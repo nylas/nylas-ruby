@@ -20,6 +20,8 @@ module Nylas
       @redirect_uris = RedirectURIs.new(sdk_instance)
     end
 
+    # Gets the application object
+    # @return [hash] Application object
     def info
       get("#{host}/applications")
     end

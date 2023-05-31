@@ -65,7 +65,7 @@ module Nylas
         end
 
         handle_failed_response(result: result, response: response)
-        response
+        return response[:data], response[:request_id]
       end
     end
 
