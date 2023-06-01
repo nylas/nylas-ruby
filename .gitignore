@@ -28,3 +28,4 @@ TAGS
 *.swp
 vendor/
 out
+test.rb
