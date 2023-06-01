@@ -11,12 +11,12 @@ module Nylas
   class Client
     attr_reader :api_key, :host, :client_id, :client_secret, :timeout
 
-    def initialize(api_key: nil, config: {})
+    def initialize(api_key: nil, client_id: nil, client_secret: nil, host: DEFAULT_REGION_URL, timeout: nil)
       @api_key = api_key
-      @client_id = config[:client_id]
-      @client_secret = config[:client_secret]
-      @host = "#{config[:host] || 'https://api-staging.us.nylas.com'}/v3"
-      @timeout = config[:timeout]
+      @client_id = client_id
+      @client_secret = client_secret
+      @host = "#{host}/v3"
+      @timeout = timeout
     end
 
     def application
