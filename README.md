@@ -91,26 +91,22 @@ To use this SDK, you first need to [sign up for a free Nylas developer account](
 
 Then, follow our guide to [setup your first app and get your API access keys](https://docs.nylas.com/docs/get-your-developer-api-keys).
 
-All of the functionality of the Nylas Communications Platform is available through the `API` object. To access data for an account that’s connected to Nylas, create a new API client object and pass the variables you gathered when you got your developer API keys. In the following example, replace `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN` with your values.
+All of the functionality of the Nylas Communications Platform is available through the `API` object. To access data for an account that’s connected to Nylas, create a new API client object and pass the variables you gathered when you got your developer API keys. In the following example, replace `API_KEY` with your Nylas API Key, and optionally fill in the rest of the configuration.
 
 
 ```ruby
 require 'nylas'
 
 nylas = Nylas::API.new(
-    app_id: CLIENT_ID,
-    app_secret: CLIENT_SECRET,
-    access_token: ACCESS_TOKEN
+  api_key: API_KEY,
+  client_id: CLIENT_ID, # Optional
+  client_secret: CLIENT_SECRET, # Optional
+  host: DEFAULT_REGION_URL, # Optional
+  timeout: TIMEOUT # Optional
 )
 ```
 
-Now, you can use `nylas` to access full email, calendar, and contacts functionality. For example, here is how you would print the subject line for the most recent email message to the console.
-
-
-```ruby
-message = nylas.messages.first
-puts(message.subject)
-```
+Now, you can use `nylas` to access full email, calendar, and contacts functionality.
 
 To learn more about how to use the Nylas Ruby SDK, please refer to our [Ruby](https://docs.nylas.com/docs/quickstart-ruby) [SDK QuickStart Guide](https://docs.nylas.com/docs/quickstart-ruby).
 
