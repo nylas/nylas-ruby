@@ -24,6 +24,7 @@ require "forwardable"
 require_relative "nylas/version"
 require_relative "nylas/errors"
 require_relative "nylas/client"
+require_relative "nylas/config"
 
 require_relative "nylas/handler/http_client"
 require_relative "nylas/handler/api_operations"
