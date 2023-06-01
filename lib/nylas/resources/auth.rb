@@ -19,8 +19,8 @@ module Nylas
 
     def initialize(sdk_instance)
       super("auth", sdk_instance)
-      @providers = Providers.new(@sdk_instance)
-      @grants = Grants.new(@sdk_instance)
+      @providers = Providers.new(sdk_instance)
+      @grants = Grants.new(sdk_instance)
     end
 
     attr_reader :providers, :grants
