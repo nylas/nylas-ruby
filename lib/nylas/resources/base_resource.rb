@@ -5,21 +5,13 @@ module Nylas
   class BaseResource
     def initialize(resource_name, sdk_instance)
       @resource_name = resource_name
-      @sdk_instance = sdk_instance
+      @api_key = sdk_instance.api_key
+      @host = sdk_instance.host
+      @timeout = sdk_instance.timeout
     end
-
-    protected
-
-    attr_reader :resource_name, :sdk_instance
 
     private
 
-    def api_key
-      sdk_instance.api_key
-    end
-
-    def host
-      sdk_instance.host
-    end
+    attr_reader :resource_name, :api_key, :host, :timeout
   end
 end
