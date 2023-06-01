@@ -27,7 +27,6 @@ require_relative "nylas/client"
 require_relative "nylas/config"
 
 require_relative "nylas/handler/http_client"
-require_relative "nylas/handler/api_operations"
 
 require_relative "nylas/resources/application"
 require_relative "nylas/resources/auth"
