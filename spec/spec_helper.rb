@@ -7,7 +7,6 @@ require "simplecov-cobertura"
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
 require "nylas"
-require "pry"
 require "webmock/rspec"
 require "rspec-json_matcher"
 
