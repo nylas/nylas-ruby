@@ -15,6 +15,10 @@ module Nylas
       super("grants", sdk_instance)
     end
 
+    # Create a grant
+    # @param query_params [Hash] The query params to pass to the request
+    # @param request_body [Hash] The request body to pass to the request
+    # @return [Array(Hash, String)] The created grant object and API Request ID
     def create(query_params: {}, request_body: nil)
       post(
         "#{host}/grants",
@@ -23,6 +27,10 @@ module Nylas
       )
     end
 
+    # Find a grant
+    # @param path_params [Hash] The path params to pass to the request
+    # @param query_params [Hash] The query params to pass to the request
+    # @return [Array(Hash, String)] The grant object and API Request ID
     def find(path_params: {}, query_params: {})
       get(
         "#{host}/grants/#{path_params[:grant_id]}",
@@ -30,6 +38,9 @@ module Nylas
       )
     end
 
+    # List all grants
+    # @param query_params [Hash] The query params to pass to the request
+    # @return [Array(Array, String)] The list of grants and API Request ID
     def list(query_params: {})
       get(
         "#{host}/grants",
@@ -37,6 +48,11 @@ module Nylas
       )
     end
 
+    # Update a grant
+    # @param path_params [Hash] The path params to pass to the request
+    # @param query_params [Hash] The query params to pass to the request
+    # @param request_body [Hash] The request body to pass to the request
+    # @return [Array(Hash, String)] The updated grant object and API Request ID
     def update(path_params: {}, query_params: {}, request_body: nil)
       put(
         "#{host}/grants/#{path_params[:grant_id]}",
@@ -45,11 +61,17 @@ module Nylas
       )
     end
 
+    # Delete a grant
+    # @param path_params [Hash] The path params to pass to the request
+    # @param query_params [Hash] The query params to pass to the request
+    # @return [String] The API Request ID for the delete operation
     def destroy(path_params: {}, query_params: {})
-      delete(
+      _, request_id = delete(
         "#{host}/grants/#{path_params[:grant_id]}",
         query_params: query_params
       )
+
+      request_id
     end
   end
 end

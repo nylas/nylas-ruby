@@ -13,10 +13,8 @@ module Nylas
       super("providers", parent)
     end
 
-    def check_credentials
-      raise "client_id is required" if client_id.nil?
-    end
-
+    # Lists created providers (integrations)
+    # @return [Array(Array, String)] List of created providers and API Request ID
     def list
       check_credentials
 
@@ -26,6 +24,9 @@ module Nylas
       )
     end
 
+    # Detects provider for passed email
+    # @param [Hash] query_params The query parameters to pass to the API
+    # @return [Array(Hash, String)] The detected provider object and API Request ID
     def detect(query_params)
       check_credentials
 
@@ -33,6 +34,12 @@ module Nylas
         "#{host}/connect/providers/detect",
         query_params: { client_id: client_id, **query_params }
       )
+    end
+
+    private
+
+    def check_credentials
+      raise "client_id is required" if client_id.nil?
     end
   end
 end

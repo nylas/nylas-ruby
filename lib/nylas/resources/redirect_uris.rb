@@ -17,8 +17,8 @@ module Nylas
     end
 
     # Add new redirect URI to existing application
-    # @param [Hash] request_body
-    # @return [Hash] Redirect URI object
+    # @param [Hash] request_body The request body to pass to the request
+    # @return [Array(Hash, String)] The redirect URI object and API Request ID
     def create(request_body: nil)
       post(
         "#{host}/applications/#{resource_name}",
@@ -26,6 +26,9 @@ module Nylas
       )
     end
 
+    # Get a specific redirect URI
+    # @param path_params [Hash] The path params to pass to the request
+    # @return [Array(Hash, String)] The redirect URI object and API Request ID
     def find(path_params: {})
       get(
         "#{host}/applications/#{resource_name}/#{path_params[:id]}"
@@ -33,11 +36,15 @@ module Nylas
     end
 
     # Get all Application's Redirect URIs
-    # @return [Array] Array of Redirect URI objects
+    # @return [Array(Hash, String)] The list of all redirect URIs and API Request ID
     def list
       get("#{host}/applications/#{resource_name}")
     end
 
+    # Update a redirect URI
+    # @param path_params [Hash] The path params to pass to the request
+    # @param [Hash] request_body The request body to pass to the request
+    # @return [Array(Hash, String)] The updated redirect URI object and API Request ID
     def update(path_params: {}, request_body: nil)
       put(
         "#{host}/applications/#{resource_name}/#{path_params[:id]}",
@@ -45,10 +52,15 @@ module Nylas
       )
     end
 
+    # Delete a redirect URI
+    # @param path_params [Hash] The path params to pass to the request
+    # @return [String] The API Request ID for the delete operation
     def destroy(path_params: {})
-      delete(
+      _, request_id = delete(
         "#{host}/applications/#{resource_name}/#{path_params[:id]}"
       )
+
+      request_id
     end
   end
 end

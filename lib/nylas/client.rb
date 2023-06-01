@@ -23,22 +23,32 @@ module Nylas
       @timeout = timeout
     end
 
+    # The application resources for your Nylas application
+    # @return [Nylas::Application] The application resources for your Nylas application
     def application
       Application.new(self)
     end
 
+    # The calendar resources for your Nylas application
+    # @return [Nylas::Calendars] The calendar resources for your Nylas application
     def calendars
       Calendars.new(self)
     end
 
+    # The event resources for your Nylas application
+    # @return [Nylas::Events] The event resources for your Nylas application
     def events
       Events.new(self)
     end
 
+    # The auth resources for your Nylas application
+    # @return [Nylas::Auth] The auth resources for your Nylas application
     def auth
       Auth.new(self)
     end
 
+    # The webhook resources for your Nylas application
+    # @return [Nylas::Webhooks] The webhook resources for your Nylas application
     def webhooks
       Webhooks.new(self)
     end
