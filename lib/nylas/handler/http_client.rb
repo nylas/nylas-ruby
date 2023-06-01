@@ -44,8 +44,7 @@ module Nylas
     # @param query [Hash] (Optional, defaults to {}) - Hash of names and values to include in the query
     #                      section of the URI fragment
     # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
-    # @param auth_method [AuthMethod] (Optional, defaults to BEARER) - The authentication method.
-    # @return [Array Hash Stringn]
+    # @return Array(Object, String) Hash of the parsed JSON response from the API.
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil, timeout: nil)
       request = build_request(method: method, path: path, headers: headers,
                               query: query, payload: payload, api_key: api_key, timeout: timeout)

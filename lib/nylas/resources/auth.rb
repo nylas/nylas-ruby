@@ -26,8 +26,10 @@ module Nylas
     attr_reader :providers, :grants
 
     # Exchange an authorization code for an access token
-    # @param payload The request parameters for the code exchange
-    # @return Information about the Nylas application
+    # @param code [String] The OAuth 2.0 code from the authorization request
+    # @param redirect_uri [String] The redirect URI of the integration
+    # @param code_verifier [String] The code verifier used to generate the code challenge
+    # @return [Array(Hash, String)] The token object and API Request ID
     def exchange_code_for_token(code, redirect_uri, code_verifier: nil)
       payload = { client_id: client_id, client_secret: client_secret, code: code, redirect_uri: redirect_uri,
                   grant_type: "authorization_code" }
@@ -40,6 +42,10 @@ module Nylas
       )
     end
 
+    # Refresh an access token
+    # @param refresh_token [String] The refresh token from the original access token
+    # @param redirect_uri [String] The redirect URI of the integration
+    # @return [Array(Hash, String]) The refreshed token object and API Request ID
     def refresh_access_token(refresh_token, redirect_uri)
       check_auth_credentials
 
@@ -52,18 +58,31 @@ module Nylas
       )
     end
 
+    # Validate and retrieve information about an ID token
+    # @param token [String] The ID token to validate
+    # @return [Array(Hash, String)] The information about the ID token and API Request ID
     def validate_id_token(token)
       validate_token({ id_token: token })
     end
 
+    # Validate and retrieve information about an access token
+    # @param token [String] The access token to validate
+    # @return [Array(Hash, String)] The information about the access token and API Request ID
     def validate_access_token(token)
       validate_token({ access_token: token })
     end
 
+    # Build the URL for authenticating users to your application via Hosted Authentication
+    # @param config [Hash] The configuration for the authentication request
+    # @return [String] The URL for hosted authentication
     def url_for_authentication(config)
       url_auth_builder(config).to_s
     end
 
+    # Build the URL for authenticating users to your application via Hosted Authentication with PKCE
+    # IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
+    # @param config [Hash] The configuration for the authentication request
+    # @return [OpenStruct] The URL for hosted authentication with secret & hashed secret
     def url_for_authentication_pkce(config)
       url = url_auth_builder(config)
 
@@ -77,6 +96,9 @@ module Nylas
       OpenStruct.new(secret: secret, secret_hash: secret_hash, url: url.to_s)
     end
 
+    # Build the URL for admin consent authentication for Microsoft
+    # @param config [Hash] The configuration for the authentication request
+    # @return [String] The URL for hosted authentication
     def url_for_admin_consent(config)
       config_with_provider = config.merge("provider" => "microsoft")
       url = url_auth_builder(config_with_provider)
@@ -87,6 +109,11 @@ module Nylas
       url.to_s
     end
 
+    # Create a new authorization request and get a new unique login url.
+    # Used only for hosted authentication.
+    # This is the initial step requested from the server side to issue a new login url.
+    # @param payload [Hash] The configuration for the authentication request
+    # @return [Array(Hash, String)] The authorization request object and API Request ID
     def hosted_auth(payload)
       check_auth_credentials
 
@@ -100,6 +127,9 @@ module Nylas
       )
     end
 
+    # Revoke a single access token
+    # @param token [String] The access token to revoke
+    # @return [Boolean] True if the token was revoked
     def revoke(token)
       post(
         "#{host}/connect/revoke",

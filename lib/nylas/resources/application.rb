@@ -21,7 +21,7 @@ module Nylas
     end
 
     # Gets the application object
-    # @return [hash] Application object
+    # @return [Array(Hash, String)] The Application object and API Request ID
     def info
       get("#{host}/applications")
     end
