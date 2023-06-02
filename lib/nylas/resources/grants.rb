@@ -64,14 +64,14 @@ module Nylas
     # Delete a grant
     # @param path_params [Hash] The path params to pass to the request
     # @param query_params [Hash] The query params to pass to the request
-    # @return [String] The API Request ID for the delete operation
+    # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation
     def destroy(path_params: {}, query_params: {})
       _, request_id = delete(
         "#{host}/grants/#{path_params[:grant_id]}",
         query_params: query_params
       )
 
-      request_id
+      [true, request_id]
     end
   end
 end

@@ -54,13 +54,13 @@ module Nylas
 
     # Delete a redirect URI
     # @param path_params [Hash] The path params to pass to the request
-    # @return [String] The API Request ID for the delete operation
+    # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation
     def destroy(path_params: {})
       _, request_id = delete(
         "#{host}/applications/#{resource_name}/#{path_params[:id]}"
       )
 
-      request_id
+      [true, request_id]
     end
   end
 end
