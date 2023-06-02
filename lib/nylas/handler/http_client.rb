@@ -102,7 +102,7 @@ module Nylas
 
     def error_hash_to_exception(exception, response)
       exception.new(
-        response[:type], response[:message], response.fetch(:server_error, nil)
+        response[:type], response[:message], response.fetch(:provider_error, nil)
       )
     end
 

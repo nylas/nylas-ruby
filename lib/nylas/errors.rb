@@ -8,21 +8,21 @@ module Nylas
   # Base class to inflate the standard errors returned from the Nylas API
   class APIError < Error
     attr_accessor :type
-    attr_accessor :message
-    attr_accessor :server_error
+    attr_accessor :request_id
+    attr_accessor :provider_error
 
-    def initialize(type, message, server_error = nil)
-      super(message)
+    def initialize(type, message, provider_error = nil)
+      super(type)
       self.type = type
-      self.message = message
-      self.server_error = server_error
+      self.request_id = message
+      self.provider_error = provider_error
     end
 
     def self.parse_error_response(response)
       new(
         response["type"],
         response["message"],
-        response["server_error"]
+        response["provider_error"]
       )
     end
   end
@@ -38,7 +38,7 @@ module Nylas
   TeapotError = Class.new(APIError)
   RequestTimedOut = Class.new(APIError)
   MessageRejected = Class.new(APIError)
-  SendingQuotaExceeded = Class.new(RateLimitError)
+  SendingQuotaExceeded = Class.new(APIError)
   ServiceUnavailable = Class.new(APIError)
   BadGateway = Class.new(APIError)
   InternalError = Class.new(APIError)
