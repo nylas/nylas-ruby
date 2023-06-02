@@ -1,1 +1,6 @@
---no-private --protected lib/**/*.rb --exclude lib/nylas/handler/api_operations.rb
+--no-private
+--protected
+--exclude lib/nylas/handler/api_operations.rb
+--exclude lib/nylas/handler/http_client.rb
+--exclude lib/nylas/resources/base_resource.rb
+lib/**/*.rb
