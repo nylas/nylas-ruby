@@ -13,26 +13,6 @@ module Nylas
   module HttpClient
     protected
 
-    HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
-
-    HTTP_CODE_TO_EXCEPTIONS = {
-      400 => InvalidRequest,
-      401 => UnauthorizedRequest,
-      402 => MessageRejected,
-      403 => AccessDenied,
-      404 => ResourceNotFound,
-      405 => MethodNotAllowed,
-      410 => ResourceRemoved,
-      418 => TeapotError,
-      422 => MailProviderError,
-      429 => SendingQuotaExceeded,
-      500 => InternalError,
-      501 => EndpointNotYetImplemented,
-      502 => BadGateway,
-      503 => ServiceUnavailable,
-      504 => RequestTimedOut
-    }.freeze
-
     attr_accessor :api_server
     attr_writer :default_headers
 

@@ -3,35 +3,7 @@
 module Nylas
   Error = Class.new(::StandardError)
 
-  class ModelActionError < Error; end
-  class ModelNotFilterableError < ModelActionError; end
-  class ModelNotCreatableError < ModelActionError; end
-  class ModelNotShowableError < ModelActionError; end
-  class ModelNotAvailableAsRawError < ModelActionError; end
-  class ModelNotListableError < ModelActionError; end
-  class ModelNotFilterableError < ModelActionError; end
-  class ModelNotSearchableError < ModelActionError; end
-  class ModelNotUpdatableError < ModelActionError; end
-  class ModelNotDestroyableError < ModelActionError; end
-
   class JsonParseError < Error; end
-
-  # Raised when attempting to set a field that is not on a model with mass assignment
-  class ModelMissingFieldError < ModelActionError
-    def initialize(field, model)
-      super("#{field} is not a valid attribute for #{model.class.name}")
-    end
-  end
-
-  # Indicates that a given method needs an access token to work.
-  class NoAuthToken < Error
-    def initialize(method_name)
-      super "No access token was provided and the #{method_name} method requires one"
-    end
-  end
-
-  UnexpectedAccountAction = Class.new(Error)
-  UnexpectedResponse = Class.new(Error)
 
   # Base class to inflate the standard errors returned from the Nylas API
   class APIError < Error
@@ -55,44 +27,8 @@ module Nylas
     end
   end
 
-  # Error class representing a 429 error response, with details on the rate limit
-  class RateLimitError < APIError
-    attr_accessor :rate_limit
-    attr_accessor :rate_limit_reset
-
-    RATE_LIMIT_LIMIT_HEADER = "x_ratelimit_limit"
-    RATE_LIMIT_RESET_HEADER = "x_ratelimit_reset"
-
-    def initialize(type, message, server_error = nil, rate_limit = nil, rate_limit_reset = nil)
-      super(type, message, server_error)
-      self.rate_limit = rate_limit
-      self.rate_limit_reset = rate_limit_reset
-    end
-
-    def self.parse_error_response(response)
-      rate_limit, rate_limit_rest = extract_rate_limit_details(response)
-
-      new(
-        response["type"],
-        response["message"],
-        response["server_error"],
-        rate_limit,
-        rate_limit_rest
-      )
-    end
-
-    def self.extract_rate_limit_details(response)
-      return nil, nil unless response.respond_to?(:headers)
-
-      rate_limit = response.headers[RATE_LIMIT_LIMIT_HEADER.to_sym].to_i
-      rate_limit_rest = response.headers[RATE_LIMIT_RESET_HEADER.to_sym].to_i
-
-      [rate_limit, rate_limit_rest]
-    end
-
-    private_class_method :extract_rate_limit_details
-  end
-
+  UnexpectedAccountAction = Class.new(Error)
+  UnexpectedResponse = Class.new(Error)
   AccessDenied = Class.new(APIError)
   ResourceNotFound = Class.new(APIError)
   MethodNotAllowed = Class.new(APIError)
@@ -108,4 +44,24 @@ module Nylas
   InternalError = Class.new(APIError)
   EndpointNotYetImplemented = Class.new(APIError)
   MailProviderError = Class.new(APIError)
+
+  HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
+
+  HTTP_CODE_TO_EXCEPTIONS = {
+    400 => InvalidRequest,
+    401 => UnauthorizedRequest,
+    402 => MessageRejected,
+    403 => AccessDenied,
+    404 => ResourceNotFound,
+    405 => MethodNotAllowed,
+    410 => ResourceRemoved,
+    418 => TeapotError,
+    422 => MailProviderError,
+    429 => SendingQuotaExceeded,
+    500 => InternalError,
+    501 => EndpointNotYetImplemented,
+    502 => BadGateway,
+    503 => ServiceUnavailable,
+    504 => RequestTimedOut
+  }.freeze
 end
