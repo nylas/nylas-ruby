@@ -9,15 +9,21 @@ module Nylas
     include Operations::Get
     include Operations::Post
 
-    def initialize(parent)
+    def initialize(parent, client_id, client_secret)
       super("providers", parent)
+      if client_id.nil? || client_secret.nil?
+        raise "You must provide a client_id and client_secret to use provider methods"
+      end
+
+      @client_id = client_id
+      @client_secret = client_secret
     end
+
+    attr_reader :client_id, :client_secret
 
     # Lists created providers (integrations)
     # @return [Array(Array, String)] List of created providers and API Request ID
     def list
-      check_credentials
-
       get(
         "#{host}/connect/providers/find",
         query_params: { client_id: client_id }
@@ -28,18 +34,10 @@ module Nylas
     # @param [Hash] query_params The query parameters to pass to the API
     # @return [Array(Hash, String)] The detected provider object and API Request ID
     def detect(query_params)
-      check_credentials
-
       post(
         "#{host}/connect/providers/detect",
         query_params: { client_id: client_id, **query_params }
       )
-    end
-
-    private
-
-    def check_credentials
-      raise "client_id is required" if client_id.nil?
     end
   end
 end

@@ -17,13 +17,19 @@ module Nylas
     include Operations::Post
     include Operations::Get
 
-    def initialize(sdk_instance)
+    def initialize(sdk_instance, client_id, client_secret)
       super("auth", sdk_instance)
-      @providers = Providers.new(sdk_instance)
+      if client_id.nil? || client_secret.nil?
+        raise "You must provide a client_id and client_secret to use auth methods"
+      end
+
+      @providers = Providers.new(sdk_instance, client_id, client_secret)
       @grants = Grants.new(sdk_instance)
+      @client_id = client_id
+      @client_secret = client_secret
     end
 
-    attr_reader :providers, :grants
+    attr_reader :providers, :grants, :client_id, :client_secret
 
     # Exchange an authorization code for an access token
     # @param code [String] The OAuth 2.0 code from the authorization request
@@ -47,8 +53,6 @@ module Nylas
     # @param redirect_uri [String] The redirect URI of the integration
     # @return [Array(Hash, String]) The refreshed token object and API Request ID
     def refresh_access_token(refresh_token, redirect_uri)
-      check_auth_credentials
-
       payload = { client_id: client_id, client_secret: client_secret, refresh_token: refresh_token,
                   redirect_uri: redirect_uri, grant_type: "refresh_token" }
 
@@ -115,8 +119,6 @@ module Nylas
     # @param payload [Hash] The configuration for the authentication request
     # @return [Array(Hash, String)] The authorization request object and API Request ID
     def hosted_auth(payload)
-      check_auth_credentials
-
       credentials = "#{client_id}:#{client_secret}"
       encoded_credentials = Base64.strict_encode64(credentials)
 
@@ -152,12 +154,6 @@ module Nylas
       params
     end
 
-    def check_auth_credentials
-      return unless client_id.nil? || client_secret.nil?
-
-      raise "You must provide a client_id and client_secret to use auth methods"
-    end
-
     def build_query_with_pkce(config)
       params = build_query(config)
 
@@ -172,7 +168,6 @@ module Nylas
     end
 
     def validate_token(query_params)
-      check_auth_credentials
       get(
         "#{host}/connect/tokeninfo",
         query_params: query_params
@@ -180,8 +175,6 @@ module Nylas
     end
 
     def url_auth_builder(config)
-      check_auth_credentials
-
       URI::HTTP.build(
         host: host,
         path: "/connect/auth",

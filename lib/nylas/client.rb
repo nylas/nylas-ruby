@@ -9,16 +9,12 @@ require_relative "resources/application"
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
   class Client
-    attr_reader :api_key, :host, :client_id, :client_secret, :timeout
+    attr_reader :api_key, :host, :timeout
 
     def initialize(api_key: nil,
-                   client_id: nil,
-                   client_secret: nil,
                    host: DEFAULT_REGION_URL,
                    timeout: nil)
       @api_key = api_key
-      @client_id = client_id
-      @client_secret = client_secret
       @host = "#{host}/v3"
       @timeout = timeout
     end
@@ -42,9 +38,11 @@ module Nylas
     end
 
     # The auth resources for your Nylas application
+    # @param client_id [String] The client ID of your Nylas application
+    # @param client_secret [String] The client secret of your Nylas application
     # @return [Nylas::Auth] The auth resources for your Nylas application
-    def auth
-      Auth.new(self)
+    def auth(client_id, client_secret)
+      Auth.new(self, client_id, client_secret)
     end
 
     # The webhook resources for your Nylas application
