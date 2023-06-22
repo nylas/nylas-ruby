@@ -15,7 +15,7 @@ module Nylas
                    host: Config::DEFAULT_REGION_URL,
                    timeout: nil)
       @api_key = api_key
-      @host = "#{host}/v3"
+      @host = host
       @timeout = timeout
     end
 

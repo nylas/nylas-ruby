@@ -17,7 +17,7 @@ module Nylas
       def create(identifier:, query_params: {}, request_body: nil)
         execute(
           method: :post,
-          path: "#{host}/grants/#{identifier}/#{resource_name}",
+          path: "#{host}/v3/grants/#{identifier}/#{resource_name}",
           query: query_params,
           payload: request_body,
           api_key: api_key,
@@ -35,7 +35,7 @@ module Nylas
       def list(identifier:, query_params: {})
         execute(
           method: :get,
-          path: "#{host}/grants/#{identifier}/#{resource_name}",
+          path: "#{host}/v3/grants/#{identifier}/#{resource_name}",
           query: query_params,
           api_key: api_key,
           timeout: timeout
@@ -53,7 +53,7 @@ module Nylas
       def find(identifier:, object_id:, query_params: {})
         execute(
           method: :get,
-          path: "#{host}/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query: query_params,
           api_key: api_key,
           timeout: timeout
@@ -72,7 +72,7 @@ module Nylas
       def update(identifier:, object_id:, query_params: {}, request_body: nil)
         execute(
           method: :put,
-          path: "#{host}/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query: query_params,
           payload: request_body,
           api_key: api_key,
@@ -91,7 +91,7 @@ module Nylas
       def destroy(identifier:, object_id:, query_params: {})
         _, request_id = execute(
           method: :delete,
-          path: "#{host}/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query: query_params,
           api_key: api_key,
           timeout: timeout
