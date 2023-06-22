@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "base_resource"
+require_relative "resource"
 require_relative "../handler/api_operations"
 # require other mixins as needed
 
 module Nylas
   # Events
-  class Events < BaseResource
+  class Events < Resource
     include Operations::Create
     include Operations::Update
     include Operations::List

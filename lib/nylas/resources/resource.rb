@@ -2,7 +2,7 @@
 
 module Nylas
   # BaseResource is the base class for all Nylas API resources.
-  class BaseResource
+  class Resource
     def initialize(resource_name, sdk_instance)
       @resource_name = resource_name
       @api_key = sdk_instance.api_key

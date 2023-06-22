@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "base_resource"
+require_relative "resource"
 require_relative "../handler/api_operations"
 
 module Nylas
   # Calendars
-  class Calendars < BaseResource
+  class Calendars < Resource
     include Operations::Create
     include Operations::Update
     include Operations::List

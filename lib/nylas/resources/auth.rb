@@ -6,14 +6,14 @@ require "securerandom"
 require "ostruct"
 require "uri"
 
-require_relative "base_resource"
+require_relative "resource"
 require_relative "grants"
 require_relative "providers"
 require_relative "../handler/api_operations"
 
 module Nylas
   # Auth
-  class Auth < BaseResource
+  class Auth < Resource
     def initialize(sdk_instance, client_id, client_secret)
       super("auth", sdk_instance)
       if client_id.nil? || client_secret.nil?

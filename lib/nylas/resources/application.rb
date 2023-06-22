@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative "base_resource"
+require_relative "resource"
 require_relative "../handler/api_operations"
 require_relative "redirect_uris"
 # require other mixins as needed
 
 module Nylas
   # Application
-  class Application < BaseResource
+  class Application < Resource
     attr_reader :redirect_uris
 
     def initialize(sdk_instance)
