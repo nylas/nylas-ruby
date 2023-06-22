@@ -12,7 +12,7 @@ module Nylas
     attr_reader :api_key, :host, :timeout
 
     def initialize(api_key: nil,
-                   host: DEFAULT_REGION_URL,
+                   host: Config::DEFAULT_REGION_URL,
                    timeout: nil)
       @api_key = api_key
       @host = "#{host}/v3"
