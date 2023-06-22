@@ -3,13 +3,12 @@
 require_relative "http_client"
 
 module Nylas
-  # Allows resources to perform CRUD operations on the API endpoints
-  # without exposing the HTTP client to the end user.
+  # Allows resources to perform CRUD operations on the Grants API
+  # endpoints without exposing the HTTP client to the end user.
   module GrantsApiOperations
-    # Create
+    include HttpClient
+    # Create a Nylas object
     module Create
-      include HttpClient
-
       # Create a Nylas object
       # @param identifier [String] The grant ID or email to create in
       # @param query_params [Hash] The query params to pass to the request
@@ -21,17 +20,14 @@ module Nylas
           path: "#{host}/grants/#{identifier}/#{resource_name}",
           query: query_params,
           payload: request_body,
-          headers: headers,
           api_key: api_key,
           timeout: timeout
         )
       end
     end
 
-    # List
+    # List Nylas objects
     module List
-      include HttpClient
-
       # List Nylas objects
       # @param identifier [String] The grant ID or email account to query
       # @param query_params [Hash] The query params to pass to the request
@@ -47,10 +43,8 @@ module Nylas
       end
     end
 
-    # Find
+    # Find a Nylas object
     module Find
-      include HttpClient
-
       # Find a Nylas object
       # @param identifier [String] The grant ID or email account to query
       # @param object_id [String] The ID of the object
@@ -67,10 +61,8 @@ module Nylas
       end
     end
 
-    # Update
+    # Update a Nylas object
     module Update
-      include HttpClient
-
       # Update a Nylas object
       # @param identifier [String] The grant ID or email account to update in
       # @param object_id [String] The ID of the object
@@ -89,10 +81,8 @@ module Nylas
       end
     end
 
-    # Destroy
+    # Delete a Nylas object
     module Destroy
-      include HttpClient
-
       # Delete a Nylas object
       # @param identifier [String] The grant ID or email account to delete from
       # @param object_id [String] The ID of the object
