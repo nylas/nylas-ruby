@@ -8,11 +8,6 @@ require_relative "redirect_uris"
 module Nylas
   # Application
   class Application < BaseResource
-    include Operations::Get
-    include Operations::Post
-    include Operations::Put
-    include Operations::Delete
-
     attr_reader :redirect_uris
 
     def initialize(sdk_instance)

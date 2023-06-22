@@ -14,9 +14,6 @@ require_relative "../handler/api_operations"
 module Nylas
   # Auth
   class Auth < BaseResource
-    include Operations::Post
-    include Operations::Get
-
     def initialize(sdk_instance, client_id, client_secret)
       super("auth", sdk_instance)
       if client_id.nil? || client_secret.nil?

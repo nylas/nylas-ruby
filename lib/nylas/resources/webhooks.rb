@@ -24,74 +24,14 @@ module Nylas
 
   # Webhooks
   class Webhooks < BaseResource
-    include Operations::Get
-    include Operations::Post
-    include Operations::Put
-    include Operations::Delete
+    include Operations::Create
+    include Operations::Update
+    include Operations::List
+    include Operations::Destroy
+    include Operations::Find
 
     def initialize(parent)
       super("webhooks", parent)
-    end
-
-    # Create a webhook
-    # @param path_params [Hash] The path params to pass to the request
-    # @param query_params [Hash] The query params to pass to the request
-    # @param request_body [Hash] The request body to pass to the request
-    # @return [Array(Hash, String)] The created webhook object and API Request ID
-    def create(path_params: {}, query_params: {}, request_body: nil)
-      post(
-        "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",
-        query_params: query_params,
-        request_body: request_body
-      )
-    end
-
-    # Find a webhook
-    # @param path_params [Hash] The path params to pass to the request
-    # @param query_params [Hash] The query params to pass to the request
-    # @return [Array(Hash, String)] The webhook object and API Request ID
-    def find(path_params: {}, query_params: {})
-      get(
-        "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
-        query_params: query_params
-      )
-    end
-
-    # List all webhooks
-    # @param path_params [Hash] The path params to pass to the request
-    # @param query_params [Hash] The query params to pass to the request
-    # @return [Array(Array, String)] The list of webhooks and API Request ID
-    def list(path_params: {}, query_params: {})
-      get(
-        "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}",
-        query_params: query_params
-      )
-    end
-
-    # Update a webhook
-    # @param path_params [Hash] The path params to pass to the request
-    # @param query_params [Hash] The query params to pass to the request
-    # @param request_body [Hash] The request body to pass to the request
-    # @return [Array(Hash, String)] The updated webhook object and API Request ID
-    def update(path_params: {}, query_params: {}, request_body: nil)
-      put(
-        "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
-        query_params: query_params,
-        request_body: request_body
-      )
-    end
-
-    # Delete a webhook
-    # @param path_params [Hash] The path params to pass to the request
-    # @param query_params [Hash] The query params to pass to the request
-    # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation
-    def destroy(path_params: {}, query_params: {})
-      _, request_id = delete(
-        "#{host}/grants/#{path_params[:grant_id]}/#{resource_name}/#{path_params[:id]}",
-        query_params: query_params
-      )
-
-      [true, request_id]
     end
   end
 end
