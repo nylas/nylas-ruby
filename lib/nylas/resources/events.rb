@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
 require_relative "resource"
-require_relative "../handler/api_operations"
-# require other mixins as needed
+require_relative "../handler/grants_api_operations"
 
 module Nylas
   # Events
   class Events < Resource
-    include Operations::Create
-    include Operations::Update
-    include Operations::List
-    include Operations::Destroy
-    include Operations::Find
+    include GrantsApiOperations::Create
+    include GrantsApiOperations::Update
+    include GrantsApiOperations::List
+    include GrantsApiOperations::Destroy
+    include GrantsApiOperations::Find
 
     def initialize(sdk_instance)
       super("events", sdk_instance)

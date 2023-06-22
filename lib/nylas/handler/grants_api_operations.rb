@@ -5,7 +5,7 @@ require_relative "http_client"
 module Nylas
   # Allows resources to perform CRUD operations on the API endpoints
   # without exposing the HTTP client to the end user.
-  module Operations
+  module GrantsApiOperations
     # Create
     module Create
       include HttpClient

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "resource"
-require_relative "../handler/api_operations"
 
 module Nylas
   # Providers

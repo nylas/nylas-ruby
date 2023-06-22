@@ -9,7 +9,6 @@ require "uri"
 require_relative "resource"
 require_relative "grants"
 require_relative "providers"
-require_relative "../handler/api_operations"
 
 module Nylas
   # Auth

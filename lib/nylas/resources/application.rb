@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "resource"
-require_relative "../handler/api_operations"
 require_relative "redirect_uris"
-# require other mixins as needed
 
 module Nylas
   # Application
@@ -12,7 +10,7 @@ module Nylas
 
     def initialize(sdk_instance)
       super("application", sdk_instance)
-      @redirect_uris = RedirectURIs.new(sdk_instance)
+      @redirect_uris = RedirectUris.new(sdk_instance)
     end
 
     # Gets the application object
