@@ -22,7 +22,7 @@ module Nylas
     # @return [Array(Hash, String)] The availability object and API Request ID
     def get_availability(path_params: {}, request_body: nil)
       post(
-        "#{host}/grants/#{path_params[:grant_id]}/calendars/availability",
+        path: "#{host}/grants/#{path_params[:grant_id]}/calendars/availability",
         request_body: request_body
       )
     end

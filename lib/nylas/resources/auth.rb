@@ -9,10 +9,14 @@ require "uri"
 require_relative "resource"
 require_relative "grants"
 require_relative "providers"
+require_relative "../handler/api_operations"
 
 module Nylas
   # Auth
   class Auth < Resource
+    include ApiOperations::Post
+    include ApiOperations::Get
+
     def initialize(sdk_instance, client_id, client_secret)
       super("auth", sdk_instance)
       if client_id.nil? || client_secret.nil?
@@ -39,7 +43,7 @@ module Nylas
       payload[:code_verifier] = code_verifier if code_verifier
 
       post(
-        "#{host}/connect/token",
+        path: "#{host}/connect/token",
         request_body: payload
       )
     end
@@ -53,7 +57,7 @@ module Nylas
                   redirect_uri: redirect_uri, grant_type: "refresh_token" }
 
       post(
-        "#{host}/connect/token",
+        path: "#{host}/connect/token",
         request_body: payload
       )
     end
@@ -119,7 +123,7 @@ module Nylas
       encoded_credentials = Base64.strict_encode64(credentials)
 
       post(
-        "#{host}/connect/auth",
+        path: "#{host}/connect/auth",
         request_body: payload,
         headers: { "Authorization" => "Basic #{encoded_credentials}" }
       )
@@ -130,7 +134,7 @@ module Nylas
     # @return [Boolean] True if the token was revoked
     def revoke(token)
       post(
-        "#{host}/connect/revoke",
+        path: "#{host}/connect/revoke",
         query_params: {
           token: token
         }
@@ -165,7 +169,7 @@ module Nylas
 
     def validate_token(query_params)
       get(
-        "#{host}/connect/tokeninfo",
+        path: "#{host}/connect/tokeninfo",
         query_params: query_params
       )
     end

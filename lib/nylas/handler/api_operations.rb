@@ -26,12 +26,13 @@ module Nylas
       protected
 
       include HttpClient
-      def post(path:, query_params: {}, request_body: nil)
+      def post(path:, query_params: {}, request_body: nil, headers: {})
         execute(
           method: :post,
           path: path,
           query: query_params,
           payload: request_body,
+          headers: headers,
           api_key: api_key,
           timeout: timeout
         )
@@ -43,12 +44,13 @@ module Nylas
       protected
 
       include HttpClient
-      def put(path:, query_params: {}, request_body: nil)
+      def put(path:, query_params: {}, request_body: nil, headers: {})
         execute(
           method: :put,
           path: path,
           query: query_params,
           payload: request_body,
+          headers: headers,
           api_key: api_key,
           timeout: timeout
         )
@@ -60,12 +62,13 @@ module Nylas
       protected
 
       include HttpClient
-      def patch(path:, query_params: {}, request_body: nil)
+      def patch(path:, query_params: {}, request_body: nil, headers: {})
         execute(
           method: :patch,
           path: path,
           query: query_params,
           payload: request_body,
+          headers: headers,
           api_key: api_key,
           timeout: timeout
         )
@@ -77,11 +80,12 @@ module Nylas
       protected
 
       include HttpClient
-      def delete(path:, query_params: {})
+      def delete(path:, query_params: {}, headers: {})
         execute(
           method: :post,
           path: path,
           query: query_params,
+          headers: headers,
           payload: nil,
           api_key: api_key,
           timeout: timeout

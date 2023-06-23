@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 require_relative "resource"
+require_relative "../handler/api_operations"
 
 module Nylas
   # Providers
   class Providers < Resource
+    include ApiOperations::Get
+    include ApiOperations::Post
+
     def initialize(parent, client_id, client_secret)
       super("providers", parent)
       if client_id.nil? || client_secret.nil?
