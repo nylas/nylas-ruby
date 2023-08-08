@@ -39,7 +39,7 @@ module Nylas
 
       post(
         path: "#{host}/v3/connect/token",
-        request_body: request.to_json
+        request_body: request
       )
     end
 
@@ -51,7 +51,7 @@ module Nylas
 
       post(
         path: "#{host}/v3/connect/token",
-        request_body: request.to_json
+        request_body: request
       )
     end
 
