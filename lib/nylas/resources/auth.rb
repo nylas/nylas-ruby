@@ -160,20 +160,20 @@ module Nylas
     def build_query(config)
       params = {
         "client_id" => client_id,
-        "redirect_uri" => config["redirect_uri"],
-        "access_type" => config["access_type"] || "offline",
+        "redirect_uri" => config[:redirect_uri],
+        "access_type" => config[:access_type] || "online",
         "response_type" => "code"
       }
 
-      params["provider"] = config["provider"] if config["provider"]
-      if config["login_hint"]
-        params["login_hint"] = config["login_hint"]
-        params["include_grant_scopes"] = config["include_grant_scopes"].to_s if config["include_grant_scopes"]
+      params["provider"] = config[:provider] if config[:provider]
+      if config[:login_hint]
+        params["login_hint"] = config[:login_hint]
+        params["include_grant_scopes"] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
       end
-      params["scope"] = config["scope"].join(" ") if config["scope"]
-      params["prompt"] = config["prompt"] if config["prompt"]
-      params["metadata"] = config["metadata"] if config["metadata"]
-      params["state"] = config["state"] if config["state"]
+      params["scope"] = config[:scope].join(" ") if config[:scope]
+      params["prompt"] = config[:prompt] if config[:prompt]
+      params["metadata"] = config[:metadata] if config[:metadata]
+      params["state"] = config[:state] if config[:state]
 
       URI.encode_www_form(params)
     end
