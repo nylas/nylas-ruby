@@ -33,26 +33,20 @@ module Nylas
 
     # Exchange an authorization code for an access token
     # @param request [Hash] The code exchange request
-    # @return [Array(Hash, String)] The token object and API Request ID
+    # @return [Hash] The token object
     def exchange_code_for_token(request)
       request[:grant_type] = "authorization_code"
 
-      post(
-        path: "#{host}/v3/connect/token",
-        request_body: request
-      )
+      execute_token_request(request)
     end
 
     # Refresh an access token
     # @param request [Hash] The code exchange request
-    # @return [Array(Hash, String]) The refreshed token object and API Request ID
+    # @return [Hash] The refreshed token object
     def refresh_access_token(request)
       request[:grant_type] = "refresh_token"
 
-      post(
-        path: "#{host}/v3/connect/token",
-        request_body: request
-      )
+      execute_token_request(request)
     end
 
     # Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
@@ -153,6 +147,18 @@ module Nylas
     def hash_pkce_secret(secret)
       Digest::SHA256.digest(secret).unpack1("H*")
       Base64.strict_encode64(Digest::SHA256.digest(secret))
+    end
+
+    def execute_token_request(request)
+      execute(
+        method: :post,
+        path: "#{host}/v3/connect/token",
+        query: {},
+        payload: request,
+        headers: {},
+        api_key: api_key,
+        timeout: timeout
+      )
     end
   end
 end
