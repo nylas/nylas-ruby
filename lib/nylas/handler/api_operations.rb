@@ -82,7 +82,7 @@ module Nylas
       include HttpClient
       def delete(path:, query_params: {}, headers: {})
         execute(
-          method: :post,
+          method: :delete,
           path: path,
           query: query_params,
           headers: headers,
