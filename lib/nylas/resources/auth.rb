@@ -16,18 +16,13 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Get
 
-    def initialize(sdk_instance, client_id, client_secret)
+    def initialize(sdk_instance)
       super("auth", sdk_instance)
-      if client_id.nil? || client_secret.nil?
-        raise "You must provide a client_id and client_secret to use auth methods"
-      end
 
       @grants = Grants.new(sdk_instance)
-      @client_id = client_id
-      @client_secret = client_secret
     end
 
-    attr_reader :grants, :client_id, :client_secret
+    attr_reader :grants
 
     # Build the URL for authenticating users to your application with OAuth 2.0
     # @param config [Hash] The configuration for building the URL
@@ -37,33 +32,26 @@ module Nylas
     end
 
     # Exchange an authorization code for an access token
-    # @param code [String] The OAuth 2.0 code from the authorization request
-    # @param redirect_uri [String] The redirect URI of the integration
-    # @param code_verifier [String] The code verifier used to generate the code challenge
+    # @param request [Hash] The code exchange request
     # @return [Array(Hash, String)] The token object and API Request ID
-    def exchange_code_for_token(code, redirect_uri, code_verifier: nil)
-      payload = { client_id: client_id, client_secret: client_secret, code: code, redirect_uri: redirect_uri,
-                  grant_type: "authorization_code" }
-
-      payload[:code_verifier] = code_verifier if code_verifier
+    def exchange_code_for_token(request)
+      request[:grant_type] = "authorization_code"
 
       post(
         path: "#{host}/v3/connect/token",
-        request_body: payload
+        request_body: request.to_json
       )
     end
 
     # Refresh an access token
-    # @param refresh_token [String] The refresh token from the original access token
-    # @param redirect_uri [String] The redirect URI of the integration
+    # @param request [Hash] The code exchange request
     # @return [Array(Hash, String]) The refreshed token object and API Request ID
-    def refresh_access_token(refresh_token, redirect_uri)
-      payload = { client_id: client_id, client_secret: client_secret, refresh_token: refresh_token,
-                  redirect_uri: redirect_uri, grant_type: "refresh_token" }
+    def refresh_access_token(request)
+      request[:grant_type] = "refresh_token"
 
       post(
         path: "#{host}/v3/connect/token",
-        request_body: payload
+        request_body: request.to_json
       )
     end
 
@@ -96,22 +84,6 @@ module Nylas
       url.query = URI.encode_www_form(query_params)
 
       url.to_s
-    end
-
-    # Create a new authorization request and get a new unique login url.
-    # Used only for hosted authentication.
-    # This is the initial step requested from the server side to issue a new login url.
-    # @param payload [Hash] The configuration for the authentication request
-    # @return [Array(Hash, String)] The authorization request object and API Request ID
-    def server_side_hosted_auth(payload)
-      credentials = "#{client_id}:#{client_secret}"
-      encoded_credentials = Base64.strict_encode64(credentials)
-
-      post(
-        path: "#{host}/v3/connect/auth",
-        request_body: payload,
-        headers: { "Authorization" => "Basic #{encoded_credentials}" }
-      )
     end
 
     # Revoke a single access token
@@ -159,7 +131,7 @@ module Nylas
 
     def build_query(config)
       params = {
-        "client_id" => client_id,
+        "client_id" => config[:client_id],
         "redirect_uri" => config[:redirect_uri],
         "access_type" => config[:access_type] || "online",
         "response_type" => "code"

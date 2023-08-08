@@ -38,11 +38,9 @@ module Nylas
     end
 
     # The auth resources for your Nylas application
-    # @param client_id [String] The client ID of your Nylas application
-    # @param client_secret [String] The client secret of your Nylas application
     # @return [Nylas::Auth] The auth resources for your Nylas application
-    def auth(client_id, client_secret)
-      Auth.new(self, client_id, client_secret)
+    def auth
+      Auth.new(self)
     end
 
     # The webhook resources for your Nylas application
