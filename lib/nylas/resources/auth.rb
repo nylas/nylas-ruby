@@ -151,7 +151,7 @@ module Nylas
 
     def url_auth_builder(config)
       builder = URI.parse(host)
-      builder.path = "/connect/auth"
+      builder.path = "/v3/connect/auth"
       builder.query = build_query(config)
 
       builder
@@ -160,15 +160,15 @@ module Nylas
     def build_query(config)
       params = {
         "client_id" => client_id,
-        "redirect_uri" => config["redirectUri"],
-        "access_type" => config["accessType"] || "offline",
+        "redirect_uri" => config["redirect_uri"],
+        "access_type" => config["access_type"] || "offline",
         "response_type" => "code"
       }
 
       params["provider"] = config["provider"] if config["provider"]
-      if config["loginHint"]
-        params["login_hint"] = config["loginHint"]
-        params["include_grant_scopes"] = config["includeGrantScopes"].to_s if config["includeGrantScopes"]
+      if config["login_hint"]
+        params["login_hint"] = config["login_hint"]
+        params["include_grant_scopes"] = config["include_grant_scopes"].to_s if config["include_grant_scopes"]
       end
       params["scope"] = config["scope"].join(" ") if config["scope"]
       params["prompt"] = config["prompt"] if config["prompt"]
