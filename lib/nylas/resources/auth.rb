@@ -8,7 +8,6 @@ require "uri"
 
 require_relative "resource"
 require_relative "grants"
-require_relative "providers"
 require_relative "../handler/api_operations"
 
 module Nylas
@@ -23,13 +22,19 @@ module Nylas
         raise "You must provide a client_id and client_secret to use auth methods"
       end
 
-      @providers = Providers.new(sdk_instance, client_id, client_secret)
       @grants = Grants.new(sdk_instance)
       @client_id = client_id
       @client_secret = client_secret
     end
 
-    attr_reader :providers, :grants, :client_id, :client_secret
+    attr_reader :grants, :client_id, :client_secret
+
+    # Build the URL for authenticating users to your application with OAuth 2.0
+    # @param config [Hash] The configuration for building the URL
+    # @return [String] The URL for hosted authentication
+    def url_for_oauth2(config)
+      url_auth_builder(config).to_s
+    end
 
     # Exchange an authorization code for an access token
     # @param code [String] The OAuth 2.0 code from the authorization request
@@ -62,39 +67,19 @@ module Nylas
       )
     end
 
-    # Validate and retrieve information about an ID token
-    # @param token [String] The ID token to validate
-    # @return [Array(Hash, String)] The information about the ID token and API Request ID
-    def validate_id_token(token)
-      validate_token({ id_token: token })
-    end
-
-    # Validate and retrieve information about an access token
-    # @param token [String] The access token to validate
-    # @return [Array(Hash, String)] The information about the access token and API Request ID
-    def validate_access_token(token)
-      validate_token({ access_token: token })
-    end
-
-    # Build the URL for authenticating users to your application via Hosted Authentication
-    # @param config [Hash] The configuration for the authentication request
-    # @return [String] The URL for hosted authentication
-    def url_for_authentication(config)
-      url_auth_builder(config).to_s
-    end
-
-    # Build the URL for authenticating users to your application via Hosted Authentication with PKCE
+    # Build the URL for authenticating users to your application with OAuth 2.0 and PKCE
     # IMPORTANT: YOU WILL NEED TO STORE THE 'secret' returned to use it inside the CodeExchange flow
-    # @param config [Hash] The configuration for the authentication request
+    # @param config [Hash] The configuration for building the URL
     # @return [OpenStruct] The URL for hosted authentication with secret & hashed secret
-    def url_for_authentication_pkce(config)
+    def url_for_oauth2_pkce(config)
       url = url_auth_builder(config)
 
-      # Add code challenge to URL generation
-      url.query = build_query_with_pkce(config)
-
+      # Generate a secret and hash it
       secret = SecureRandom.uuid
       secret_hash = hash_pkce_secret(secret)
+
+      # Add code challenge to URL generation
+      url.query = build_query_with_pkce(config, secret_hash)
 
       # Return the url with secret & hashed secret
       OpenStruct.new(secret: secret, secret_hash: secret_hash, url: url.to_s)
@@ -118,7 +103,7 @@ module Nylas
     # This is the initial step requested from the server side to issue a new login url.
     # @param payload [Hash] The configuration for the authentication request
     # @return [Array(Hash, String)] The authorization request object and API Request ID
-    def hosted_auth(payload)
+    def server_side_hosted_auth(payload)
       credentials = "#{client_id}:#{client_secret}"
       encoded_credentials = Base64.strict_encode64(credentials)
 
@@ -131,7 +116,7 @@ module Nylas
 
     # Revoke a single access token
     # @param token [String] The access token to revoke
-    # @return [Boolean] True if the token was revoked
+    # @return [Boolean] True if the access token was revoked successfully
     def revoke(token)
       post(
         path: "#{host}/connect/revoke",
@@ -148,30 +133,20 @@ module Nylas
       params = build_query(config)
 
       # Append new params specific for admin consent
-      params << %w[response_type adminconsent]
-      params << ["credential_id", config["credentialId"]]
+      params["response_type"] = "adminconsent"
+      params["credential_id"] = config["credentialId"]
 
       params
     end
 
-    def build_query_with_pkce(config)
+    def build_query_with_pkce(config, secret_hash)
       params = build_query(config)
 
       # Append new PKCE specific params
-      params << %w[code_challenge_method s256]
-
-      secret = SecureRandom.uuid
-      secret_hash = hash_pkce_secret(secret)
-      params << ["code_challenge", secret_hash]
+      params["code_challenge_method"] = "s256"
+      params["code_challenge"] = secret_hash
 
       URI.encode_www_form(params)
-    end
-
-    def validate_token(query_params)
-      get(
-        path: "#{host}/connect/tokeninfo",
-        query_params: query_params
-      )
     end
 
     def url_auth_builder(config)
