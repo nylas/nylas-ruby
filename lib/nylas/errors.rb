@@ -11,11 +11,11 @@ module Nylas
     attr_accessor :request_id
     attr_accessor :provider_error
 
-    def initialize(type, message, provider_error = nil)
-      super(type)
+    def initialize(type, message, provider_error = nil, request_id = nil)
+      super(message)
       self.type = type
-      self.request_id = message
       self.provider_error = provider_error
+      self.request_id = request_id
     end
 
     def self.parse_error_response(response)

@@ -103,8 +103,11 @@ module Nylas
     end
 
     def error_hash_to_exception(exception, response)
+      return if !response || !response.key?(:error)
+
+      error_obj = response[:error]
       exception.new(
-        response[:type], response[:message], response.fetch(:provider_error, nil)
+        error_obj[:type], error_obj[:message], error_obj.fetch(:provider_error, nil)
       )
     end
 
