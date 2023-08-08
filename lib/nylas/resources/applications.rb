@@ -6,13 +6,13 @@ require_relative "../handler/api_operations"
 
 module Nylas
   # Application
-  class Application < Resource
+  class Applications < Resource
     include ApiOperations::Get
 
     attr_reader :redirect_uris
 
     def initialize(sdk_instance)
-      super("application", sdk_instance)
+      super("applications", sdk_instance)
       @redirect_uris = RedirectUris.new(sdk_instance)
     end
 

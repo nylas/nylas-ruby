@@ -28,7 +28,7 @@ require_relative "nylas/config"
 
 require_relative "nylas/handler/http_client"
 
-require_relative "nylas/resources/application"
+require_relative "nylas/resources/applications"
 require_relative "nylas/resources/auth"
 require_relative "nylas/resources/calendars"
 require_relative "nylas/resources/events"

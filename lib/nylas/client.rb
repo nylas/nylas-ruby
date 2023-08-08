@@ -4,7 +4,7 @@ require_relative "resources/calendars"
 require_relative "resources/events"
 require_relative "resources/auth"
 require_relative "resources/webhooks"
-require_relative "resources/application"
+require_relative "resources/applications"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects
@@ -20,9 +20,9 @@ module Nylas
     end
 
     # The application resources for your Nylas application
-    # @return [Nylas::Application] The application resources for your Nylas application
+    # @return [Nylas::Applications] The application resources for your Nylas application
     def application
-      Application.new(self)
+      Applications.new(self)
     end
 
     # The calendar resources for your Nylas application
