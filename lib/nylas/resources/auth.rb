@@ -48,7 +48,7 @@ module Nylas
       payload[:code_verifier] = code_verifier if code_verifier
 
       post(
-        path: "#{host}/connect/token",
+        path: "#{host}/v3/connect/token",
         request_body: payload
       )
     end
@@ -62,7 +62,7 @@ module Nylas
                   redirect_uri: redirect_uri, grant_type: "refresh_token" }
 
       post(
-        path: "#{host}/connect/token",
+        path: "#{host}/v3/connect/token",
         request_body: payload
       )
     end
@@ -108,7 +108,7 @@ module Nylas
       encoded_credentials = Base64.strict_encode64(credentials)
 
       post(
-        path: "#{host}/connect/auth",
+        path: "#{host}/v3/connect/auth",
         request_body: payload,
         headers: { "Authorization" => "Basic #{encoded_credentials}" }
       )
@@ -119,7 +119,7 @@ module Nylas
     # @return [Boolean] True if the access token was revoked successfully
     def revoke(token)
       post(
-        path: "#{host}/connect/revoke",
+        path: "#{host}/v3/connect/revoke",
         query_params: {
           token: token
         }

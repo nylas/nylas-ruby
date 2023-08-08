@@ -19,7 +19,7 @@ module Nylas
     # Gets the application object
     # @return [Array(Hash, String)] The Application object and API Request ID
     def info
-      get(path: "#{host}/applications")
+      get(path: "#{host}/v3/applications")
     end
   end
 end
