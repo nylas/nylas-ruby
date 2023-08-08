@@ -53,7 +53,9 @@ module Nylas
       url = path
       url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
-      { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
+      serialized_payload = payload&.to_json
+
+      { method: method, url: url, payload: serialized_payload, headers: resulting_headers, timeout: timeout }
     end
 
     def default_headers
