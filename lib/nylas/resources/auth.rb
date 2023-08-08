@@ -150,11 +150,11 @@ module Nylas
     end
 
     def url_auth_builder(config)
-      URI::HTTP.build(
-        host: host,
-        path: "/connect/auth",
-        query: build_query(config)
-      )
+      builder = URI.parse(host)
+      builder.path = "/connect/auth"
+      builder.query = build_query(config)
+
+      builder
     end
 
     def build_query(config)
