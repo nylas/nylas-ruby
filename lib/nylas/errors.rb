@@ -6,62 +6,39 @@ module Nylas
   class JsonParseError < Error; end
 
   # Base class to inflate the standard errors returned from the Nylas API
-  class APIError < Error
-    attr_accessor :type
-    attr_accessor :request_id
-    attr_accessor :provider_error
+  class NylasApiError < Error
+    attr_accessor :type, :request_id, :provider_error, :status_code
 
-    def initialize(type, message, provider_error = nil, request_id = nil)
+    def initialize(type, message, status_code, provider_error = nil, request_id = nil)
       super(message)
       self.type = type
+      self.status_code = status_code
       self.provider_error = provider_error
       self.request_id = request_id
     end
 
-    def self.parse_error_response(response)
+    def self.parse_error_response(response, status_code)
       new(
         response["type"],
         response["message"],
+        status_code,
         response["provider_error"]
       )
     end
   end
 
-  UnexpectedAccountAction = Class.new(Error)
-  UnexpectedResponse = Class.new(Error)
-  AccessDenied = Class.new(APIError)
-  ResourceNotFound = Class.new(APIError)
-  MethodNotAllowed = Class.new(APIError)
-  InvalidRequest = Class.new(APIError)
-  UnauthorizedRequest = Class.new(APIError)
-  ResourceRemoved = Class.new(APIError)
-  TeapotError = Class.new(APIError)
-  RequestTimedOut = Class.new(APIError)
-  MessageRejected = Class.new(APIError)
-  SendingQuotaExceeded = Class.new(APIError)
-  ServiceUnavailable = Class.new(APIError)
-  BadGateway = Class.new(APIError)
-  InternalError = Class.new(APIError)
-  EndpointNotYetImplemented = Class.new(APIError)
-  MailProviderError = Class.new(APIError)
+  class NylasOAuthError < Error
+    attr_accessor :error, :error_description, :error_uri, :error_code, :status_code
+
+    def initialize(error, error_description, error_uri, error_code, status_code)
+      super(error_description)
+      self.error = error
+      self.error_description = error_description
+      self.error_uri = error_uri
+      self.error_code = error_code
+      self.status_code = status_code
+    end
+  end
 
   HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
-
-  HTTP_CODE_TO_EXCEPTIONS = {
-    400 => InvalidRequest,
-    401 => UnauthorizedRequest,
-    402 => MessageRejected,
-    403 => AccessDenied,
-    404 => ResourceNotFound,
-    405 => MethodNotAllowed,
-    410 => ResourceRemoved,
-    418 => TeapotError,
-    422 => MailProviderError,
-    429 => SendingQuotaExceeded,
-    500 => InternalError,
-    501 => EndpointNotYetImplemented,
-    502 => BadGateway,
-    503 => ServiceUnavailable,
-    504 => RequestTimedOut
-  }.freeze
 end

@@ -38,11 +38,11 @@ module Nylas
         begin
           response = parse_response(response) if content_type == "application/json"
         rescue Nylas::JsonParseError
-          handle_failed_response(result: result, response: response)
+          handle_failed_response(result, response, path)
           raise
         end
 
-        handle_failed_response(result: result, response: response)
+        handle_failed_response(result, response, path)
         return response[:data], response[:request_id]
       end
     end
@@ -81,34 +81,36 @@ module Nylas
                                     headers: headers, timeout: timeout, &block)
     end
 
-    def handle_failed_response(result:, response:)
+    def handle_failed_response(result, response, path)
       http_code = result.code.to_i
 
-      handle_anticipated_failure_mode(http_code: http_code, response: response)
-      raise UnexpectedResponse, result.msg if result.is_a?(Net::HTTPClientError)
+      handle_anticipated_failure_mode(http_code, response, path)
     end
 
-    def handle_anticipated_failure_mode(http_code:, response:)
+    def handle_anticipated_failure_mode(http_code, response, path)
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
-      exception = HTTP_CODE_TO_EXCEPTIONS.fetch(http_code, APIError)
       case response
       when Hash
-        raise error_hash_to_exception(exception, response)
-      when RestClient::Response
-        raise exception.parse_error_response(response)
+        raise error_hash_to_exception(response, http_code, path)
       else
-        raise exception.new(http_code, response)
+        raise NylasApiError.parse_error_response(response, http_code)
       end
     end
 
-    def error_hash_to_exception(exception, response)
+    def error_hash_to_exception(response, status_code, path)
       return if !response || !response.key?(:error)
 
-      error_obj = response[:error]
-      exception.new(
-        error_obj[:type], error_obj[:message], error_obj.fetch(:provider_error, nil)
-      )
+      if %W[#{host}/v3/connect/token #{host}/v3/connect/revoke].include?(path)
+        NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
+                            response[:error_code], status_code)
+      else
+        error_obj = response[:error]
+        provider_error = error_obj.fetch(:provider_error, nil)
+
+        NylasApiError.new(error_obj[:type], error_obj[:message], status_code, provider_error,
+                          response[:request_id])
+      end
     end
 
     def add_query_params_to_url(url, query)
