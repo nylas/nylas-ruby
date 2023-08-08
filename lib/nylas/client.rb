@@ -21,7 +21,7 @@ module Nylas
 
     # The application resources for your Nylas application
     # @return [Nylas::Applications] The application resources for your Nylas application
-    def application
+    def applications
       Applications.new(self)
     end
 
