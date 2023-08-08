@@ -10,7 +10,7 @@ module Nylas
 
       include HttpClient
       def get(path:, query_params: {})
-        execute(
+        response = execute(
           method: :get,
           path: path,
           query: query_params,
@@ -18,6 +18,8 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
+
+        [response[:data], response[:request_id]]
       end
     end
 
@@ -27,7 +29,7 @@ module Nylas
 
       include HttpClient
       def post(path:, query_params: {}, request_body: nil, headers: {})
-        execute(
+        response = execute(
           method: :post,
           path: path,
           query: query_params,
@@ -36,6 +38,8 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
+
+        [response[:data], response[:request_id]]
       end
     end
 
@@ -45,7 +49,7 @@ module Nylas
 
       include HttpClient
       def put(path:, query_params: {}, request_body: nil, headers: {})
-        execute(
+        response = execute(
           method: :put,
           path: path,
           query: query_params,
@@ -54,6 +58,8 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
+
+        [response[:data], response[:request_id]]
       end
     end
 
@@ -63,7 +69,7 @@ module Nylas
 
       include HttpClient
       def patch(path:, query_params: {}, request_body: nil, headers: {})
-        execute(
+        response = execute(
           method: :patch,
           path: path,
           query: query_params,
@@ -72,6 +78,8 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
+
+        [response[:data], response[:request_id]]
       end
     end
 
@@ -81,7 +89,7 @@ module Nylas
 
       include HttpClient
       def delete(path:, query_params: {}, headers: {})
-        execute(
+        response = execute(
           method: :delete,
           path: path,
           query: query_params,
@@ -90,6 +98,8 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
+
+        [response[:data], response[:request_id]]
       end
     end
   end
