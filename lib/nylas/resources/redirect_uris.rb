@@ -13,7 +13,7 @@ module Nylas
     include AdminApiOperations::Find
 
     def initialize(sdk_instance)
-      super("redirect-uris", sdk_instance)
+      super("applications/redirect-uris", sdk_instance)
     end
   end
 end
