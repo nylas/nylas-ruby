@@ -4,7 +4,7 @@ require_relative "resource"
 require_relative "../handler/admin_api_operations"
 
 module Nylas
-  # redirect uris
+  # Redirect URIs
   class RedirectUris < Resource
     include AdminApiOperations::Create
     include AdminApiOperations::Update
@@ -12,6 +12,7 @@ module Nylas
     include AdminApiOperations::Destroy
     include AdminApiOperations::Find
 
+    # Initializes redirect URIs.
     def initialize(sdk_instance)
       super("applications/redirect-uris", sdk_instance)
     end

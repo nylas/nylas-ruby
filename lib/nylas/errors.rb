@@ -5,7 +5,7 @@ module Nylas
 
   class JsonParseError < Error; end
 
-  # Base class to inflate the standard errors returned from the Nylas API
+  # Base class to inflate the standard errors returned from the Nylas API.
   class NylasApiError < Error
     attr_accessor :type, :request_id, :provider_error, :status_code
 

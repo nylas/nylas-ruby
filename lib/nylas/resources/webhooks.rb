@@ -5,7 +5,7 @@ require_relative "../handler/grants_api_operations"
 
 module Nylas
   module WebhookTrigger
-    # Module representing the possible 'trigger' values in a Webhook
+    # Module representing the possible 'trigger' values in a Webhook.
     # @see https://developer.nylas.com/docs/api#post/a/client_id/webhooks
 
     CALENDAR_CREATED = "calendar.created"
@@ -30,6 +30,7 @@ module Nylas
     include GrantsApiOperations::Destroy
     include GrantsApiOperations::Find
 
+    # Initializes webhooks.
     def initialize(parent)
       super("webhooks", parent)
     end

@@ -12,6 +12,7 @@ module Nylas
     include AdminApiOperations::Destroy
     include AdminApiOperations::Find
 
+    # Initializes Grants.
     def initialize(sdk_instance)
       super("grants", sdk_instance)
     end
