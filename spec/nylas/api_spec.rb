@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-# This spec is the only one that should have any webmock stuff going on, everything else should use the
-# FakeAPI to see what requests were made and what they included.
+# This spec is the only one that should have any webmock stuff going on, everything else should use
+#   the FakeAPI to see what requests were made and what they included.
 describe Nylas::API do
   describe "#exchange_code_for_token" do
     it "retrieves oauth token with code" do
