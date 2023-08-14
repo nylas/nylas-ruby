@@ -8,10 +8,10 @@ module Nylas
   #   HTTP client to the end user.
   module AdminApiOperations
     include HttpClient
-    # Create a Nylas object.
+    # Creates a Nylas object.
     module Create
       include ApiOperations::Post
-      # Create a Nylas object.
+      # Creates a Nylas object.
       #
       # @param query_params [Hash, {}] The query params to pass to the request.
       # @param request_body [Hash, nil] The request body to pass to the request. Defaults to `nil`.
@@ -25,10 +25,10 @@ module Nylas
       end
     end
 
-    # List Nylas objects.
+    # Lists Nylas objects.
     module List
       include ApiOperations::Get
-      # List Nylas objects.
+      # Lists Nylas objects.
       #
       # @param query_params [Hash, {}] The query params to pass to the request.
       # @return [Array(Hash, String)] The list of Nylas objects and API Request ID.
@@ -40,10 +40,10 @@ module Nylas
       end
     end
 
-    # Find a Nylas object.
+    # Finds a Nylas object.
     module Find
       include ApiOperations::Get
-      # Find a Nylas object.
+      # Finds a Nylas object.
       #
       # @param object_id [String] The ID of the object.
       # @param query_params [Hash, {}] The query params to pass to the request.
@@ -56,10 +56,10 @@ module Nylas
       end
     end
 
-    # Update a Nylas object.
+    # Updates a Nylas object.
     module Update
       include ApiOperations::Put
-      # Update a Nylas object.
+      # Updates a Nylas object.
       #
       # @param object_id [String] The ID of the object.
       # @param query_params [Hash, {}] The query params to pass to the request.
@@ -74,10 +74,10 @@ module Nylas
       end
     end
 
-    # Delete a Nylas object.
+    # Deletes a Nylas object.
     module Destroy
       include ApiOperations::Delete
-      # Delete a Nylas object.
+      # Deletes a Nylas object.
       #
       # @param object_id [String] The ID of the object.
       # @param query_params [Hash, {}] The query params to pass to the request.

@@ -3,26 +3,32 @@
 require "spec_helper"
 
 describe Nylas::CurrentAccount do
+  # Restricts the ability to filter the current account.
   it "is not filterable" do
     expect(described_class).not_to be_filterable
   end
 
+  # Restricts the ability to list the current account.
   it "is not listable" do
     expect(described_class).not_to be_listable
   end
 
+  # Restricts the ability to create the current account.
   it "is not creatable" do
     expect(described_class).not_to be_creatable
   end
 
+  # Restricts the ability to update the current account.
   it "is not updatable" do
     expect(described_class).not_to be_updatable
   end
 
+  # Allows the current account to be displayed.
   it "is showable" do
     expect(described_class).to be_showable
   end
 
+  # Allows the current account's parameters to be deserialized from JSON.
   it "can be deserialized from JSON" do
     api = FakeAPI.new
     json = '{ "id": "awa6ltos76vz5hvphkp8k17nt", "account_id": "awa6ltos76vz5hvphkp8k17nt", ' \
@@ -39,6 +45,7 @@ describe Nylas::CurrentAccount do
     expect(account.sync_state).to eql "running"
   end
 
+  # Allows the current account's parameters to be serialized to JSON.
   it "can be serialized back into JSON" do
     api = FakeAPI.new
     json = '{ "id": "awa6ltos76vz5hvphkp8k17nt", "account_id": "awa6ltos76vz5hvphkp8k17nt", ' \

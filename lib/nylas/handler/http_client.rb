@@ -16,8 +16,8 @@ module Nylas
     attr_accessor :api_server
     attr_writer :default_headers
 
-    # Sends a request to the Nylas API and returns a successful response if the request succeeded,
-    #   or a failed response if the request encountered a JSON parse error.
+    # Sends a request to the Nylas API. Returns a successful response if the request succeeds, or a
+    #   failed response if the request encounters a JSON parse error.
     #
     # @param method [Symbol] HTTP method for the API call. Either `:get`, `:post`, `:delete`, or `:patch`.
     # @param path [String, nil] Relative path from the API Base. Defaults to `nil`. This is the
@@ -171,6 +171,7 @@ module Nylas
       query
     end
 
+    # Set the authorization header for an API query.
     def auth_header(api_key)
       { "Authorization" => "Bearer #{api_key}" }
     end

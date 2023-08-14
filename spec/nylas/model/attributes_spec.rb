@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe Nylas::Model::Attributes do
+  # Serializes an attribute. If the given API key is Read-only, the request is rejected.
   describe "#serialize_for_api" do
     it "rejects keys which are read_only" do
       test_json = {

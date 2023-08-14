@@ -3,7 +3,9 @@
 require "spec_helper"
 
 describe Nylas::CalendarCollection do
+  # Gets availability information from account calendars.
   describe "availability" do
+    # Makes and sends a request to get availability information from a single account's calendar.
     it "makes a request to get single availability" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
 
@@ -79,6 +81,7 @@ describe Nylas::CalendarCollection do
       )
     end
 
+    # Omits optional parameters when requesting availability information for a single account.
     it "optional params are omitted when getting single availability" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
       calendar_collection = described_class.new(model: Nylas::Calendar, api: api)
@@ -107,6 +110,7 @@ describe Nylas::CalendarCollection do
       )
     end
 
+    # Makes and sends a request to get availability information from multiple accounts' calendars.
     it "makes a request to get multiple availability" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
 
@@ -178,6 +182,7 @@ describe Nylas::CalendarCollection do
       )
     end
 
+    # Omits optional parameters when requesting availability information for multiple accounts.
     it "optional params are omitted when getting multiple availability" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
       calendar_collection = described_class.new(model: Nylas::Calendar, api: api)
@@ -207,7 +212,10 @@ describe Nylas::CalendarCollection do
     end
   end
 
+  # Verifies open hours against a calendar collection, and generates and throws errors as necessary.
   describe "verification" do
+    # Generates and throws an error if the account associated with a given email address does not
+    #   exist in the set open hours.
     it "throws an error if an email does not exist in open hours" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
 
@@ -247,6 +255,7 @@ describe Nylas::CalendarCollection do
     end
   end
 
+  # Generates and throws an error if at least one email address or calendar is not provided.
   it "throws an error if at least one of 'emails' or 'calendars' is not provided" do
     api = instance_double(Nylas::API, execute: JSON.parse("{}"))
     calendar_collection = described_class.new(model: Nylas::Calendar, api: api)

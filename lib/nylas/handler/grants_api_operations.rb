@@ -7,10 +7,10 @@ module Nylas
   # Allows resources to perform CRUD operations on the Grants API endpoints without exposing the
   #   HTTP client to the end user.
   module GrantsApiOperations
-    # Create a Nylas object.
+    # Creates a Nylas object.
     module Create
       include ApiOperations::Post
-      # Create a Nylas object.
+      # Creates a Nylas object.
       #
       # @param identifier [String] The Grant ID or email account in which to create the object.
       # @param query_params [Hash, {}] The query params to pass to the request.
@@ -25,10 +25,10 @@ module Nylas
       end
     end
 
-    # List Nylas objects.
+    # Lists Nylas objects.
     module List
       include ApiOperations::Get
-      # List Nylas objects.
+      # Lists Nylas objects.
       #
       # @param identifier [String] The Grant ID or email account to query.
       # @param query_params [Hash, {}] The query params to pass to the request.
@@ -41,10 +41,10 @@ module Nylas
       end
     end
 
-    # Find a Nylas object.
+    # Finds a Nylas object.
     module Find
       include ApiOperations::Get
-      # Find a Nylas object.
+      # Finds a Nylas object.
       #
       # @param identifier [String] The Grant ID or email account to query.
       # @param object_id [String] The ID of the object.
@@ -58,10 +58,10 @@ module Nylas
       end
     end
 
-    # Update a Nylas object.
+    # Updates a Nylas object.
     module Update
       include ApiOperations::Put
-      # Update a Nylas object.
+      # Updates a Nylas object.
       #
       # @param identifier [String] The Grant ID or email account in which to update an object.
       # @param object_id [String] The ID of the object.
@@ -77,10 +77,10 @@ module Nylas
       end
     end
 
-    # Delete a Nylas object.
+    # Deletes a Nylas object.
     module Destroy
       include ApiOperations::Delete
-      # Delete a Nylas object.
+      # Deletes a Nylas object.
       #
       # @param identifier [String] The Grant ID or email account from which to delete an object.
       # @param object_id [String] The ID of the object.

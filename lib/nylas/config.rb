@@ -3,7 +3,7 @@
 module Nylas
   # Configuration options for the Nylas Ruby SDK.
   module Config
-    # The configuration options for the different supported regions.
+    # The configuration options for supported regions.
     REGION_CONFIG = {
       us: {
         nylas_api_url: "https://api.us.nylas.com"

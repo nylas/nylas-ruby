@@ -11,7 +11,7 @@ module Nylas
 
     # Initializes an error and assigns the given attributes to it.
     #
-    # @param type []
+    # @param type [Hash] The error type.
     # @param message [String] The error message.
     # @param status_code [Hash] The associated status code.
     # @param provider_error [String, nil] The provider error, if applicable. Defaults to `nil`.
@@ -44,7 +44,7 @@ module Nylas
 
     # Initializes an error and assigns the given attributes to it.
     #
-    # @param error []
+    # @param error [Hash] The error type.
     # @param error_description [String] The description of the error.
     # @param error_uri [Hash] The URI of the error.
     # @param error_code [Hash] The error code.
