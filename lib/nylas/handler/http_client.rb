@@ -17,18 +17,18 @@ module Nylas
     attr_writer :default_headers
 
     # Sends a request to the Nylas API. Returns a successful response if the request succeeds, or a
-    #   failed response if the request encounters a JSON parse error.
+    # failed response if the request encounters a JSON parse error.
     #
-    # @param method [Symbol] HTTP method for the API call. Either `:get`, `:post`, `:delete`, or `:patch`.
-    # @param path [String, nil] Relative path from the API Base. Defaults to `nil`. This is the
-    #   preferred way to execute arbitrary or-not-yet-SDK-ified API commands.
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param path [String, nil] Relative path from the API Base. This is the preferred way to execute
+    # arbitrary or-not-yet-SDK-ified API commands.
     # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
-    #   fragment.
-    # @param payload [String, Hash, nil] Body to send with the request. Defaults to `nil`.
-    # @param api_key [Hash, nil] API key to send with the request. Defaults to `nil`.
-    # @param timeout [Hash, nil] Timeout value to send with the request. Defaults to `nil`.
-    # @return [Object] The parsed JSON response from the API.
+    # fragment.
+    # @param payload [String, Hash, nil] Body to send with the request.
+    # @param api_key [Hash, nil] API key to send with the request.
+    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @return [Object] Parsed JSON response from the API.
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil, timeout: nil)
       request = build_request(method: method, path: path, headers: headers,
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
@@ -53,16 +53,16 @@ module Nylas
 
     # Builds a request sent to the Nylas API.
     #
-    # @param method [Symbol] HTTP method for the API call. Either `:get`, `:post`, `:delete`, or `:patch`.
-    # @param path [String, nil] Relative path from the API Base. Defaults to `nil`.
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param path [String, nil] Relative path from the API Base.
     # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
-    #   fragment.
-    # @param payload [String, Hash, nil] Body to send with the request. Defaults to `nil`.
-    # @param timeout [Hash, nil] Timeout value to send with the request. Defaults to `nil`.
-    # @param api_key [Hash, nil] API key to send with the request. Defaults to `nil`.
+    # fragment.
+    # @param payload [String, Hash, nil] Body to send with the request.
+    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @param api_key [Hash, nil] API key to send with the request.
     # @return [Object] The request information after processing. This includes an updated payload
-    #   and headers.
+    # and headers.
     def build_request(
       method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil
     )
@@ -96,8 +96,8 @@ module Nylas
 
     # Sends a request to the Nylas REST API.
     #
-    # @param method [Symbol] HTTP method for the API call. Either `:get`, `:post`, `:delete`, or `:patch`.
-    # @param url [String] The URL for the API call.
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param url [String] URL for the API call.
     # @param headers [Hash] HTTP headers to include in the payload.
     # @param payload [String, Hash] Body to send with the request.
     # @param timeout [Hash] Timeout value to send with the request.
@@ -143,7 +143,7 @@ module Nylas
 
     # Adds query parameters to a URL.
     #
-    # @return [String] The processed URL, including the appropriate query parameters.
+    # @return [String] Processed URL, including query params.
     def add_query_params_to_url(url, query)
       unless query.empty?
         uri = URI.parse(url)
@@ -156,11 +156,11 @@ module Nylas
       url
     end
 
-    # Defines custom parameters for a `metadata_pair` query.
+    # Defines custom parameters for a metadata_pair query.
     #
-    # @return [String] The custom parameter in "<key>:<value>" format.
+    # @return [String] Custom parameter in "<key>:<value>" format.
     def custom_params(query)
-      # Convert hash to "<key>:<value>" form for `metadata_pair` query.
+      # Convert hash to "<key>:<value>" form for metadata_pair query.
       if query.key?(:metadata_pair)
         pairs = query[:metadata_pair].map do |key, value|
           "#{key}:#{value}"

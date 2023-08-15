@@ -13,9 +13,9 @@ module Nylas
 
     # Initializes a client session.
     #
-    # @param api_key [Hash, nil] API key to use for the client session. Defaults to `nil`.
-    # @param host [Hash] The client session's host.
-    # @param timeout [Hash, nil] The timeout value to use for the client session. Defaults to `nil`.
+    # @param api_key [Hash, nil] API key to use for the client session.
+    # @param host [Hash] Client session's host.
+    # @param timeout [Hash, nil] Timeout value to use for the client session.
     def initialize(api_key: nil,
                    host: Config::DEFAULT_REGION_URL,
                    timeout: nil)
@@ -26,35 +26,35 @@ module Nylas
 
     # The application resources for your Nylas application.
     #
-    # @return [Nylas::Applications] The application resources for your Nylas application.
+    # @return [Nylas::Applications] Application resources for your Nylas application.
     def applications
       Applications.new(self)
     end
 
     # The calendar resources for your Nylas application.
     #
-    # @return [Nylas::Calendars] The calendar resources for your Nylas application.
+    # @return [Nylas::Calendars] Calendar resources for your Nylas application.
     def calendars
       Calendars.new(self)
     end
 
     # The event resources for your Nylas application.
     #
-    # @return [Nylas::Events] The event resources for your Nylas application
+    # @return [Nylas::Events] Event resources for your Nylas application
     def events
       Events.new(self)
     end
 
     # The auth resources for your Nylas application.
     #
-    # @return [Nylas::Auth] The auth resources for your Nylas application.
+    # @return [Nylas::Auth] Auth resources for your Nylas application.
     def auth
       Auth.new(self)
     end
 
     # The webhook resources for your Nylas application.
     #
-    # @return [Nylas::Webhooks] The webhook resources for your Nylas application.
+    # @return [Nylas::Webhooks] Webhook resources for your Nylas application.
     def webhooks
       Webhooks.new(self)
     end

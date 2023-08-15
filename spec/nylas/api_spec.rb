@@ -3,11 +3,11 @@
 require "spec_helper"
 
 # This spec is the only one that should have any webmock stuff going on, everything else should use
-#   the FakeAPI to see what requests were made and what they included.
+# the FakeAPI to see what requests were made and what they included.
 describe Nylas::API do
-  # Exchanges an authorization code for a token.
+  # Exchange an authorization code for a token.
   describe "#exchange_code_for_token" do
-    # Retrieves an OAuth token using the existing authorization code.
+    # Retrieve an OAuth token using the existing authorization code.
     it "retrieves oauth token with code" do
       client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
       data = {
@@ -29,7 +29,7 @@ describe Nylas::API do
       expect(api.exchange_code_for_token("fake-code")).to eql("fake-token")
     end
 
-    # Retrieves an authorization response from the server.
+    # Retrieve an authorization response from the server.
     it "retrieves full response from the server" do
       client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
       data = {
@@ -52,9 +52,9 @@ describe Nylas::API do
     end
   end
 
-  # Creates an authentication URL with either required parameters or required and optional parameters.
+  # Create an authentication URL with either required parameters or required and optional parameters.
   describe "#authentication_url" do
-    # Creates and returns an authentication URL with required parameters for hosted authentication.
+    # Create an authentication URL with required parameters for hosted auth.
     context "with required parameters" do
       it "returns url for hosted_authentication" do
         api = described_class.new(app_id: "2454354")
@@ -77,8 +77,7 @@ describe Nylas::API do
       end
     end
 
-    # Creates and returns an authentication URL with required and optional parameters for hosted
-    #   authentication.
+    # Create an authentication URL with required and optional parameters for hosted auth.
     context "with required and optional parameters" do
       it "returns url for hosted_authentication with optional parameters" do
         api = described_class.new(app_id: "2454354")
@@ -107,10 +106,10 @@ describe Nylas::API do
       end
     end
 
-    # Generates errors if any required parameters are missing when the authentication URL is
-    #   created.
+    # Generate errors if any required parameters are missing when the authentication URL is
+    # created.
     context "when required parameter are missing" do
-      # Generates and throws an argument error if the redirect URI is missing.
+      # Generate and throw an argument error if the redirect URI is missing.
       it "throws argument error if redirect uri is mising" do
         api = described_class.new(app_id: "2454354")
 
@@ -119,7 +118,7 @@ describe Nylas::API do
         end.to raise_error(ArgumentError, /redirect_uri/)
       end
 
-      # Generates and throws an argument error if scopes are missing.
+      # Generate and throw an argument error if scopes are missing.
       it "throws argument error if scopes is mising" do
         api = described_class.new(app_id: "2454354")
 
@@ -128,7 +127,7 @@ describe Nylas::API do
         end.to raise_error(ArgumentError, /scopes/)
       end
 
-      # Generates and throws a wrong URL error if scopes are `nil` and the redirect URI is `nil`.
+      # Generate and throw a wrong URL error if scopes are nil and the redirect URI is nil.
       it "generates wrong url if scopes and redirect_uri is nil" do
         api = described_class.new(app_id: "2454354")
 
@@ -147,7 +146,7 @@ describe Nylas::API do
     end
   end
 
-  # Returns a `Nylas::Collection` object for contact group requests.
+  # Return a Nylas::Collection object for contact group requests.
   describe "#contact_groups" do
     it "returns Nylas::Collection for contact groups" do
       client = instance_double("Nylas::HttpClient")
@@ -159,9 +158,9 @@ describe Nylas::API do
     end
   end
 
-  # Retrieves the current acccount based on the provided OAuth token, and sets the header.
+  # Retrieve the current acccount based on the provided OAuth token, and set the header.
   describe "#current_account" do
-    # Retrieves the account related to the provided OAuth token.
+    # Retrieve the account related to the provided OAuth token.
     it "retrieves the account for the current OAuth Access Token" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real",
                                      access_token: "seriously-unreal")
@@ -170,7 +169,7 @@ describe Nylas::API do
       expect(api.current_account.id).to eql("1234")
     end
 
-    # Generates and throws an exception if no OAuth token is set.
+    # Generate and throw an exception if no OAuth token is set.
     it "raises an exception if there is not an access token set" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
       allow(client).to receive(:execute).with(method: :get, path: "/account").and_return(id: 1234)
@@ -180,14 +179,14 @@ describe Nylas::API do
                                                        "current_account method requires one"
     end
 
-    # Sets the `X-Nylas-Client-Id` header.
+    # Set the X-Nylas-Client-Id header.
     it "sets X-Nylas-Client-Id header" do
       client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
       expect(client.default_headers).to include("X-Nylas-Client-Id" => "not-real")
     end
   end
 
-  # Gets and sets an account's status (either `free` or `busy`) based on its calendar availability.
+  # Get an account's status (either free or busy) based on its calendar availability.
   describe "#free_busy" do
     it "returns `Nylas::FreeBusyCollection` for free busy details" do
       emails = ["test@example.com", "anothertest@example.com"]
@@ -241,9 +240,9 @@ describe Nylas::API do
     end
   end
 
-  # Gets and updates an application's details.
+  # Get and update an application's details.
   describe "application details" do
-    # Gets the application's details (name, icon, redirect URIs, and so on).
+    # Get an application's details (name, icon, redirect URIs, and so on).
     it "gets the application details" do
       client = Nylas::HttpClient.new(
         app_id: "not-real",
@@ -270,7 +269,7 @@ describe Nylas::API do
       expect(app_details.redirect_uris).to eq(%w[http://localhost/callback])
     end
 
-    # Updates an application's details (name, icon, redirect URIs, and so on).
+    # Update an application's details (name, icon, redirect URIs, and so on).
     it "updates the application details" do
       application_details_response = {
         application_name: "Updated App Name",
@@ -299,8 +298,8 @@ describe Nylas::API do
     end
   end
 
-  # Executes a set of actions to build an authentication URL, add headers to the request, and send
-  #   the request. If any exceptions or errors are generated, they are thrown.
+  # Execute a set of actions to build an authentication URL, add headers to the request, and send
+  # the request. If any exceptions or errors are generated, they are thrown.
   describe "#execute" do
     it "builds the URL based upon the api_server it was initialized with"
     it "adds the nylas headers to the request"

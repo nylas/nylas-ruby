@@ -27,16 +27,16 @@ module Nylas
 
     # Builds the URL for authenticating users to your application with OAuth 2.0.
     #
-    # @param config [Hash] The configuration for building the URL.
-    # @return [String] The URL for hosted authentication.
+    # @param config [Hash] Configuration for building the URL.
+    # @return [String] URL for hosted authentication.
     def url_for_oauth2(config)
       url_auth_builder(config).to_s
     end
 
     # Exchanges an authorization code for an access token.
     #
-    # @param request [Hash] The code exchange request.
-    # @return [Hash] The token object.
+    # @param request [Hash] Code exchange request.
+    # @return [Hash] Token object.
     def exchange_code_for_token(request)
       request[:grant_type] = "authorization_code"
 
@@ -45,8 +45,8 @@ module Nylas
 
     # Refreshes an access token.
     #
-    # @param request [Hash] The code exchange request.
-    # @return [Hash] The refreshed token object.
+    # @param request [Hash] Code exchange request.
+    # @return [Hash] Refreshed token object.
     def refresh_access_token(request)
       request[:grant_type] = "refresh_token"
 
@@ -56,8 +56,8 @@ module Nylas
     # Builds the URL for authenticating users to your application with OAuth 2.0 and PKCE.
     #   IMPORTANT: You must store the 'secret' returned to use it inside the CodeExchange flow.
     #
-    # @param config [Hash] The configuration for building the URL.
-    # @return [OpenStruct] The URL for hosted authentication with the secret and the hashed secret.
+    # @param config [Hash] Configuration for building the URL.
+    # @return [OpenStruct] URL for hosted authentication with the secret and the hashed secret.
     def url_for_oauth2_pkce(config)
       url = url_auth_builder(config)
 
@@ -74,8 +74,8 @@ module Nylas
 
     # Builds the URL for admin consent authentication for Microsoft.
     #
-    # @param config [Hash] The configuration for the authentication request.
-    # @return [String] The URL for hosted authentication.
+    # @param config [Hash] Configuration for the authentication request.
+    # @return [String] URL for hosted authentication.
     def url_for_admin_consent(config)
       config_with_provider = config.merge("provider" => "microsoft")
       url = url_auth_builder(config_with_provider)
@@ -88,8 +88,8 @@ module Nylas
 
     # Revokes a single access token.
     #
-    # @param token [String] The access token to revoke.
-    # @return [Boolean] `true` if the access token was revoked successfully.
+    # @param token [String] Access token to revoke.
+    # @return [Boolean] True if the access token was revoked successfully.
     def revoke(token)
       post(
         path: "#{host}/v3/connect/revoke",
@@ -104,9 +104,9 @@ module Nylas
 
     # Builds the query with admin consent authentication for Microsoft.
     #
-    # @param config [Hash] The configuration for the query.
-    # @return [Array(Hash, String)] An updated list of parameters, including those specific to admin
-    #   consent.
+    # @param config [Hash] Configuration for the query.
+    # @return [Array(Hash, String)] Updated list of parameters, including those specific to admin
+    # consent.
     def build_query_with_admin_consent(config)
       params = build_query(config)
 
@@ -119,10 +119,10 @@ module Nylas
 
     # Builds the query with PKCE.
     #
-    # @param config [Hash] The configuration for the query.
-    # @param secret_hash [Hash] The hashed secret.
-    # @return [Array(Hash, String)] An updated list of encoded parameters, including those specific
-    #   to PKCE.
+    # @param config [Hash] Configuration for the query.
+    # @param secret_hash [Hash] Hashed secret.
+    # @return [Array(Hash, String)] Updated list of encoded parameters, including those specific
+    # to PKCE.
     def build_query_with_pkce(config, secret_hash)
       params = build_query(config)
 
@@ -135,8 +135,8 @@ module Nylas
 
     # Builds the authentication URL.
     #
-    # @param config [Hash] The configuration for the query.
-    # @return [Array(Hash, String)] A list of components for the authentication URL.
+    # @param config [Hash] Configuration for the query.
+    # @return [Array(Hash, String)] List of components for the authentication URL.
     def url_auth_builder(config)
       builder = URI.parse(host)
       builder.path = "/v3/connect/auth"
@@ -147,8 +147,8 @@ module Nylas
 
     # Builds the query.
     #
-    # @param config [Hash] The configuration for the query.
-    # @return [Array(Hash, String)] A list of encoded parameters for the query.
+    # @param config [Hash] Configuration for the query.
+    # @return [Array(Hash, String)] List of encoded parameters for the query.
     def build_query(config)
       params = {
         "client_id" => config[:client_id],
@@ -172,8 +172,8 @@ module Nylas
 
     # Hashes the secret for PKCE authentication.
     #
-    # @param secret [String] The randomly-generated authentication secret.
-    # @return [Hash] The hashed authentication secret.
+    # @param secret [String] Randomly-generated authentication secret.
+    # @return [Hash] Hashed authentication secret.
     def hash_pkce_secret(secret)
       Digest::SHA256.digest(secret).unpack1("H*")
       Base64.strict_encode64(Digest::SHA256.digest(secret))
@@ -181,7 +181,7 @@ module Nylas
 
     # Sends the token request to the Nylas API.
     #
-    # @param request [Hash] The code exchange request.
+    # @param request [Hash] Code exchange request.
     def execute_token_request(request)
       execute(
         method: :post,

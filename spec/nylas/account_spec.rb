@@ -6,17 +6,17 @@ describe Nylas::Account do
     expect(described_class).to be_filterable
   end
 
-  # Restricts the ability to create an account.
+  # Restrict the ability to create an account.
   it "is not creatable" do
     expect(described_class).not_to be_creatable
   end
 
-  # Allows an account to be listed.
+  # Allow an account to be listed.
   it "is listable" do
     expect(described_class).to be_listable
   end
 
-  # Allows an account to be deserialized from JSON.
+  # Allow an account to be deserialized from JSON.
   it "can be deserialized from JSON" do
     json = JSON.dump(
       account_id: "30zipv27dtrsnkleg59mprw5p",
@@ -43,7 +43,7 @@ describe Nylas::Account do
     expect(account.metadata).to include(key: "value")
   end
 
-  # Allows an account's metadata to be updated.
+  # Allow an account's metadata to be updated.
   it "can update metadata" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -66,7 +66,7 @@ describe Nylas::Account do
     )
   end
 
-  # Allows an account to be downgraded. (What does this entail?)
+  # Allow an account to be downgraded. (What does this entail?)
   it "can be downgraded" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -82,7 +82,7 @@ describe Nylas::Account do
     )
   end
 
-  # Allows an account to be upgraded. (What does this entail?)
+  # Allow an account to be upgraded. (What does this entail?)
   it "can be upgraded" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -98,7 +98,7 @@ describe Nylas::Account do
     )
   end
 
-  # Allows an account to revoke all tokens.
+  # Allow an account to revoke all tokens.
   it "can revoke all tokens" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -115,7 +115,7 @@ describe Nylas::Account do
     )
   end
 
-  # Allows an account to be destroyed.
+  # Allow an account to be destroyed.
   it "can be destroyed" do
     api = instance_double("Nylas::API", execute: { success: true }, app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)
@@ -131,7 +131,7 @@ describe Nylas::Account do
     )
   end
 
-  # Allows an account to return token information.
+  # Allow an account to return token information.
   it "can return token information" do
     api = instance_double("Nylas::API", app_id: "app-987")
     account = described_class.from_json('{ "id": "acc-1234" }', api: api)

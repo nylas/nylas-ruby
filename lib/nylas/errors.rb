@@ -11,11 +11,11 @@ module Nylas
 
     # Initializes an error and assigns the given attributes to it.
     #
-    # @param type [Hash] The error type.
-    # @param message [String] The error message.
-    # @param status_code [Hash] The associated status code.
-    # @param provider_error [String, nil] The provider error, if applicable. Defaults to `nil`.
-    # @param request_id [Hash, nil] The ID of the request. Defaults to `nil`.
+    # @param type [Hash] Error type.
+    # @param message [String] Error message.
+    # @param status_code [Hash] Error status code.
+    # @param provider_error [String, nil] Provider error.
+    # @param request_id [Hash, nil] The ID of the request.
     def initialize(type, message, status_code, provider_error = nil, request_id = nil)
       super(message)
       self.type = type
@@ -26,8 +26,8 @@ module Nylas
 
     # Parses the error response.
     #
-    # @param response [Hash] The response from the Nylas API.
-    # @param status_code [String] The error status code.
+    # @param response [Hash] Response from the Nylas API.
+    # @param status_code [String] Error status code.
     def self.parse_error_response(response, status_code)
       new(
         response["type"],
@@ -44,11 +44,11 @@ module Nylas
 
     # Initializes an error and assigns the given attributes to it.
     #
-    # @param error [Hash] The error type.
-    # @param error_description [String] The description of the error.
-    # @param error_uri [Hash] The URI of the error.
-    # @param error_code [Hash] The error code.
-    # @param status_code [Hash] The associated status code.
+    # @param error [Hash] Error type.
+    # @param error_description [String] Description of the error.
+    # @param error_uri [Hash] Error URI.
+    # @param error_code [Hash] Error code.
+    # @param status_code [Hash] Error status code.
     def initialize(error, error_description, error_uri, error_code, status_code)
       super(error_description)
       self.error = error
