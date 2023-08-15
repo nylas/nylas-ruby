@@ -11,13 +11,15 @@ module Nylas
 
     attr_reader :redirect_uris
 
+    # Initializes the application.
     def initialize(sdk_instance)
       super("applications", sdk_instance)
       @redirect_uris = RedirectUris.new(sdk_instance)
     end
 
-    # Gets the application object
-    # @return [Array(Hash, String)] The Application object and API Request ID
+    # Gets the application object.
+    #
+    # @return [Array(Hash, String)] Application object and API Request ID.
     def info
       get(path: "#{host}/v3/applications")
     end

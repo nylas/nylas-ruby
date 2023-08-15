@@ -12,6 +12,7 @@ module Nylas
     include GrantsApiOperations::Destroy
     include GrantsApiOperations::Find
 
+    # Initializes Events.
     def initialize(sdk_instance)
       super("events", sdk_instance)
     end

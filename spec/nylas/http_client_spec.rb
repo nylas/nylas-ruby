@@ -8,20 +8,25 @@ describe Nylas::HttpClient do
     '{"snippet":"\u26a1\ufe0f Some text \ud83d","starred":false,"subject":"Updates"}'
   end
 
+  # Set how the HTTP client parses JSON responses from the API.
   describe "#parse_response" do
+    # Set the HTTP client to deserialize JSON responses with unicode characters.
     it "deserializes JSON with unicode characters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       response = nylas.parse_response(full_json)
       expect(response).not_to be_a_kind_of(String)
     end
 
+    # Raise an error if the JSON response cannot be deserialized.
     it "raises if the JSON is unable to be deserialized" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       expect { nylas.parse_response("{{") }.to raise_error(Nylas::JsonParseError)
     end
   end
 
+  # Set how the HTTP client handles content types.
   describe "#execute handles content types" do
+    # Set the HTTP client to parse JSON when the content-type is "application/json".
     it "parses JSON when given content-type == application/json" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -32,6 +37,8 @@ describe Nylas::HttpClient do
       expect(response).to be_a_kind_of(Hash)
     end
 
+    # Set the HTTP client to generate and throw an error when the content-type is "application/json",
+    # but the response is not a JSON string.
     it "throws an error if content-type == application/json but response is not a json" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -41,6 +48,8 @@ describe Nylas::HttpClient do
       expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::JsonParseError)
     end
 
+    # Set the HTTP client to generate and throw an API error when the content-type is "application/json",
+    # but the response is not a JSON string.
     it "still throws an API error if content-type == application/json but response is not a json" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -50,6 +59,7 @@ describe Nylas::HttpClient do
       expect { nylas.execute(method: :get, path: "/contacts/1234") }.to raise_error(Nylas::InvalidRequest)
     end
 
+    # Set the HTTP client to skip parsing the response when the content-type is not "application/json".
     it "skips parsing when content-type is not JSON" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -62,6 +72,7 @@ describe Nylas::HttpClient do
   end
 
   describe "#execute" do
+    # Include the Nylas API version in the HTTP client's headers.
     it "includes Nylas API Version in headers" do
       supported_api_version = "2.5"
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
@@ -78,6 +89,7 @@ describe Nylas::HttpClient do
       )
     end
 
+    # Set the HTTP client's redirect method.
     it "handles redirect correctly" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
 
@@ -89,6 +101,7 @@ describe Nylas::HttpClient do
     end
   end
 
+  # Set and generate HTTP errors.
   describe "HTTP errors" do
     http_codes_errors = {
       400 => Nylas::InvalidRequest,
@@ -109,6 +122,8 @@ describe Nylas::HttpClient do
     }
 
     http_codes_errors.each do |code, error|
+      # Generate and throw an error based on the error type and error code when the content-type is
+      # not set.
       it "should return #{error} given #{code} status code when no content-type present" do
         error_json = {
           "message": "Invalid datetime value z for start_time",
@@ -122,6 +137,8 @@ describe Nylas::HttpClient do
         expect { nylas.execute(method: :get, path: "/contacts") }.to raise_error(error)
       end
 
+      # Generate and throw an error based on the error type and error code when the content-type is
+      # "application/json".
       it "should return #{error} given #{code} status code when content-type is json" do
         error_json = {
           "message": "Invalid datetime value z for start_time",
@@ -136,6 +153,7 @@ describe Nylas::HttpClient do
       end
     end
 
+    # Set the HTTP client's rate limit responses.
     it "extracts rate limit responses properly" do
       error_json = {
         "message": "Too many requests",
@@ -159,10 +177,12 @@ describe Nylas::HttpClient do
     end
   end
 
+  # Build the HTTP client's URL.
   describe "building URL with query params" do
     url = "https://token:@api.nylas.com"
     path = "/contacts/1234/picture"
 
+    # Build the HTTP client's URL with no query params.
     it "no query parameters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: {})
@@ -170,6 +190,7 @@ describe Nylas::HttpClient do
       expect(CGI.unescape(request[:url])).to eql(url + path)
     end
 
+    # Build the HTTP client's URL with one query param.
     it "one query parameter" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { param: "value" })
@@ -178,6 +199,7 @@ describe Nylas::HttpClient do
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
 
+    # Build the HTTP client's URL with multiple query params.
     it "multiple query parameters" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       params = { id: "1234", limit: 100, offset: 0, view: "count" }
@@ -187,6 +209,7 @@ describe Nylas::HttpClient do
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
 
+    # Build the HTTP client's URL with an array of query param values.
     it "array of query parameter values" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       request = nylas.build_request(method: :get, path: path, query: { metadata_key: %w[key1 key2 key3] })
@@ -195,6 +218,7 @@ describe Nylas::HttpClient do
       expect(CGI.unescape(request[:url])).to eql(url + path + expected_params)
     end
 
+    # Set the metadata_pair query param.
     it "setting metadata_pair query param (set hash of key-value pairs)" do
       nylas = described_class.new(app_id: "id", app_secret: "secret", access_token: "token")
       metadata_pair = { key1: "value1", key2: "value2", key3: "value3" }

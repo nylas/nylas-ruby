@@ -23,7 +23,7 @@ class FakeAPI
 end
 
 # Illustrates all the types and such a model can be built out of. Used for testing the generic Model
-# functionality without conflating it with actual Models
+#   functionality without conflating it with actual Models.
 class FullModel
   include Nylas::Model
   self.creatable = true

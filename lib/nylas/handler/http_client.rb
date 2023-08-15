@@ -9,22 +9,26 @@ module Nylas
   require "yajl"
   require "base64"
 
-  # Plain HTTP client that can be used to interact with the Nylas API sans any type casting.
+  # Plain HTTP client that can be used to interact with the Nylas API without any type casting.
   module HttpClient
     protected
 
     attr_accessor :api_server
     attr_writer :default_headers
 
-    # Sends a request to the Nylas API and rai
-    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch
-    # @param path [String] (Optional, defaults to nil) - Relative path from the API Base. Preferred way to
-    #                      execute arbitrary or-not-yet-SDK-ified API commands.
-    # @param headers [Hash] (Optional, defaults to {}) - Additional HTTP headers to include in the payload.
-    # @param query [Hash] (Optional, defaults to {}) - Hash of names and values to include in the query
-    #                      section of the URI fragment
-    # @param payload [String,Hash] (Optional, defaults to nil) - Body to send with the request.
-    # @return Object The parsed JSON response from the API.
+    # Sends a request to the Nylas API. Returns a successful response if the request succeeds, or a
+    # failed response if the request encounters a JSON parse error.
+    #
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param path [String, nil] Relative path from the API Base. This is the preferred way to execute
+    # arbitrary or-not-yet-SDK-ified API commands.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
+    # fragment.
+    # @param payload [String, Hash, nil] Body to send with the request.
+    # @param api_key [Hash, nil] API key to send with the request.
+    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @return [Object] Parsed JSON response from the API.
     def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil, timeout: nil)
       request = build_request(method: method, path: path, headers: headers,
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
@@ -47,6 +51,18 @@ module Nylas
       end
     end
 
+    # Builds a request sent to the Nylas API.
+    #
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param path [String, nil] Relative path from the API Base.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
+    # fragment.
+    # @param payload [String, Hash, nil] Body to send with the request.
+    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @param api_key [Hash, nil] API key to send with the request.
+    # @return [Object] The request information after processing. This includes an updated payload
+    # and headers.
     def build_request(
       method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil
     )
@@ -58,6 +74,7 @@ module Nylas
       { method: method, url: url, payload: serialized_payload, headers: resulting_headers, timeout: timeout }
     end
 
+    # Sets the default headers for API requests.
     def default_headers
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
@@ -66,6 +83,7 @@ module Nylas
       }
     end
 
+    # Parses the response from the Nylas API.
     def parse_response(response)
       return response if response.is_a?(Enumerable)
 
@@ -76,17 +94,26 @@ module Nylas
 
     private
 
+    # Sends a request to the Nylas REST API.
+    #
+    # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
+    # @param url [String] URL for the API call.
+    # @param headers [Hash] HTTP headers to include in the payload.
+    # @param payload [String, Hash] Body to send with the request.
+    # @param timeout [Hash] Timeout value to send with the request.
     def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
                                     headers: headers, timeout: timeout, &block)
     end
 
+    # Handles failed responses from the Nylas API.
     def handle_failed_response(result, response, path)
       http_code = result.code.to_i
 
       handle_anticipated_failure_mode(http_code, response, path)
     end
 
+    # Handles anticipated failure states in the Nylas API.
     def handle_anticipated_failure_mode(http_code, response, path)
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
@@ -98,6 +125,7 @@ module Nylas
       end
     end
 
+    # Converts error hashes to exceptions.
     def error_hash_to_exception(response, status_code, path)
       return if !response || !response.key?(:error)
 
@@ -113,6 +141,9 @@ module Nylas
       end
     end
 
+    # Adds query parameters to a URL.
+    #
+    # @return [String] Processed URL, including query params.
     def add_query_params_to_url(url, query)
       unless query.empty?
         uri = URI.parse(url)
@@ -125,8 +156,11 @@ module Nylas
       url
     end
 
+    # Defines custom parameters for a metadata_pair query.
+    #
+    # @return [String] Custom parameter in "<key>:<value>" format.
     def custom_params(query)
-      # Convert hash to "<key>:<value>" form for metadata_pair query
+      # Convert hash to "<key>:<value>" form for metadata_pair query.
       if query.key?(:metadata_pair)
         pairs = query[:metadata_pair].map do |key, value|
           "#{key}:#{value}"
@@ -137,6 +171,7 @@ module Nylas
       query
     end
 
+    # Set the authorization header for an API query.
     def auth_header(api_key)
       { "Authorization" => "Bearer #{api_key}" }
     end

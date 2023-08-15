@@ -14,6 +14,8 @@ describe Nylas::Collection do
   let(:api) { FakeAPI.new }
 
   describe "#each" do
+    # Check and return the number of collection results on a single page, filtered by the offset,
+    # limit, and where params.
     it "Returns an enumerable for a single page of results, filtered by `offset` and `limit` and `where`" do
       allow(api).to receive(:execute)
         .with(
@@ -31,6 +33,7 @@ describe Nylas::Collection do
       expect(results.count).to be 1
     end
 
+    # Allow the API to get and use a block. (Is this all that this does?)
     it "allows you to use a block directly" do
       allow(api).to receive(:execute)
         .with(
@@ -53,6 +56,7 @@ describe Nylas::Collection do
     end
   end
 
+  # Find a set of collection objects, filtered by the limit and where params.
   describe "#find_each" do
     it "iterates over every page filtered based on `limit` and `where`" do
       collection = described_class.new(model: FullModel, api: api)
@@ -78,7 +82,9 @@ describe Nylas::Collection do
     end
   end
 
+  # Find collection objects.
   describe "#find" do
+    # Find and retrieve a single collection object without filtering on the where param.
     it "retrieves a single object, without filtering based upon `where` clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).with(
@@ -95,6 +101,7 @@ describe Nylas::Collection do
       expect(instance.api).to eq(api)
     end
 
+    # Find and retrieve a single collection object, filtering on the view param.
     it "retrieves with `view` argument in query if clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).and_return(example_instance_hash)
@@ -112,6 +119,7 @@ describe Nylas::Collection do
       )
     end
 
+    # Find and retrieve a single collection object without filtering on the view param.
     it "retrieves without `view` argument in query if not clauses earlier in the chain" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute).and_return(example_instance_hash)
@@ -129,6 +137,7 @@ describe Nylas::Collection do
       )
     end
 
+    # Allow the api param to be sent to a collection's related attributes.
     it "allows `api` to be sent to the related attributes" do
       collection = described_class.new(model: FullModel, api: api)
       expected_response = example_instance_hash.merge(
@@ -152,6 +161,7 @@ describe Nylas::Collection do
     end
   end
 
+  # Generate and throw a "not implemented" error when the model is not searchable.
   describe "#where" do
     it "raises a NotImplementedError stating the model is not searchable when the model is not searchable" do
       collection = described_class.new(model: NonFilterableModel, api: api)
@@ -159,6 +169,8 @@ describe Nylas::Collection do
     end
   end
 
+  # Send collection data to an endpoint using POST. If the model cannot be created, a "not implemented"
+  # error is generated and thrown.
   describe "#create" do
     it "sends the data to the appropriate endpoint using a post"
     it "Raises a not implemented error if the model is not creatable" do
@@ -167,7 +179,9 @@ describe Nylas::Collection do
     end
   end
 
+  # Count the number of objects in a collection.
   describe "#count" do
+    # Return the number of objects in a collection.
     it "returns collection count" do
       FullModel.countable = true
       collection = described_class.new(model: FullModel, api: api)
@@ -183,6 +197,7 @@ describe Nylas::Collection do
       expect(collection.count).to be 1
     end
 
+    # Return the number of objects in a collection, filtered by the where param.
     it "returns collection count filtered by `where`" do
       collection = described_class.new(model: FullModel, api: api)
       allow(api).to receive(:execute)
@@ -197,6 +212,7 @@ describe Nylas::Collection do
       expect(collection.where(id: "1234").count).to be 1
     end
 
+    # If a collection that cannot be counted is found, the collection count is still returned.
     describe "models that are not countable" do
       it "still returns collection count" do
         FullModel.countable = false
@@ -215,6 +231,7 @@ describe Nylas::Collection do
     end
   end
 
+  # Set and generate HTTP errors.
   describe "HTTP errors" do
     http_codes_errors = {
       400 => Nylas::InvalidRequest,
@@ -235,6 +252,7 @@ describe Nylas::Collection do
     }
 
     http_codes_errors.each do |code, error|
+      # Generate and throw an error based on the error type and error code.
       it "raises error if API returns #{error} with #{code}" do
         api = Nylas::API.new
         model = instance_double("Model")
