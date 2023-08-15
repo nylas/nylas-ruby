@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Nylas::Component do
+  # Deserialize a component's JSON attributes into Ruby objects.
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do
       client = Nylas::HttpClient.new(
@@ -43,7 +44,9 @@ describe Nylas::Component do
     end
   end
 
+  # Save components as JSON payloads.
   describe "saving" do
+    # Send a POST call for a component with no ID set.
     it "POST with no ID set" do
       client = Nylas::HttpClient.new(
         app_id: "not-real",
@@ -89,6 +92,7 @@ describe Nylas::Component do
       )
     end
 
+    # Send a PUT call for a component with an ID set.
     it "PUT with ID set" do
       client = Nylas::HttpClient.new(
         app_id: "not-real",

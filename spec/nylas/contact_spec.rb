@@ -25,6 +25,7 @@ describe Nylas::Contact do
   end
   let(:api) { FakeAPI.new }
 
+  # Update a contact by sending its serialized attributes to the server.
   describe "#update" do
     it "Sends the serialized version of attributes to the server" do
       contact = described_class.from_json(full_json, api: api)
@@ -55,6 +56,7 @@ describe Nylas::Contact do
     end
   end
 
+  # Deserialize a contact's JSON attributes into a fully inflated Contact object.
   describe ".from_json" do
     it "deserializes into a fully inflated Contact object" do
       contact = described_class.from_json(full_json, api: api)
@@ -93,6 +95,7 @@ describe Nylas::Contact do
     end
   end
 
+  # Serialize a contact's JSON attributes into a hash of primitives.
   describe "#to_h" do
     it "serializes attributes into a hash of primitives" do
       contact = described_class.from_json(full_json, api: api)
@@ -126,6 +129,7 @@ describe Nylas::Contact do
     end
   end
 
+  # Convert a contact's attributes to a JSON string.
   describe "#to_json" do
     it "returns a string of JSON" do
       contact = described_class.from_json(full_json, api: api)

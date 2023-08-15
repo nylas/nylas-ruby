@@ -3,7 +3,9 @@
 require "spec_helper"
 
 describe Nylas::DeltasCollection do
+  # Find a set of delta objects.
   describe "#find_each" do
+    # Allow the search to iterate until responses are empty.
     it "supports iterating until the responses are empty" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute)
@@ -40,6 +42,7 @@ describe Nylas::DeltasCollection do
     end
   end
 
+  # Retrieve the latest results from the latest_cursor endpoint.
   describe "#latest" do
     it "retrieves the results for the cursor that comes from the latest_cursor end point" do
       api = instance_double(Nylas::API)
