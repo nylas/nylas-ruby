@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Nylas::Event do
+  # Deserialize an event's JSON attributes into Ruby objects.
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do
       api = instance_double(Nylas::API)
@@ -108,7 +109,9 @@ describe Nylas::Event do
     end
   end
 
+  # Check the account's calendar for its availability.
   describe "busy?" do
+    # Return true when the account's busy param is true.
     it "returns true when busy attribute from API return true" do
       api = instance_double(Nylas::API)
       data = {
@@ -122,6 +125,7 @@ describe Nylas::Event do
       expect(event).to be_busy
     end
 
+    # Return false when the account's busy param is false.
     it "returns false when busy attribute from API return false" do
       api = instance_double(Nylas::API)
       data = {
@@ -136,7 +140,9 @@ describe Nylas::Event do
     end
   end
 
+  # Check if the account's calendar is Read-only.
   describe "#read_only?" do
+    # Return true when the account calendar's read_only param is true.
     it "returns true when read_only attribute from API return true" do
       api = instance_double(Nylas::API)
       data = {
@@ -150,6 +156,7 @@ describe Nylas::Event do
       expect(event).to be_read_only
     end
 
+    # Return false when the account calendar's read_only param is false.
     it "returns false when read_only attribute from API return false" do
       api = instance_double(Nylas::API)
       data = {
@@ -164,7 +171,9 @@ describe Nylas::Event do
     end
   end
 
+  # Request an event RSVP from attendees.
   describe "#rsvp" do
+    # Request an RSVP from attendees with the given status, and notify attendees.
     it "calls `Rsvp` with the given status and flag to notify_participants" do
       api = instance_double(Nylas::API)
       data = {
@@ -190,6 +199,7 @@ describe Nylas::Event do
     end
   end
 
+  # Exclude the account_id param from the payload when an event is saved.
   describe "account_id" do
     context "when saving" do
       it "is excluded from payload" do
@@ -219,6 +229,7 @@ describe Nylas::Event do
     end
   end
 
+  # Exclude the object from the payload when an event is saved.
   describe "object" do
     context "when saving" do
       it "is excluded from payload" do
@@ -246,8 +257,10 @@ describe Nylas::Event do
     end
   end
 
+  # Exclude the ID from the payload when an event is saved and send a conferencing object.
   describe "id" do
     context "when saving" do
+      # Exclude the ID from the payload when an event is saved.
       it "is excluded from payload" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -270,6 +283,7 @@ describe Nylas::Event do
         )
       end
 
+      # Always send a conferencing object, even if the settings are empty.
       it "sends the conferencing autocreate object even if settings is empty" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -304,6 +318,7 @@ describe Nylas::Event do
         )
       end
 
+      # Send a conferencing object if only the details param is set.
       it "sends the conferencing object if details alone is set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -348,6 +363,7 @@ describe Nylas::Event do
         )
       end
 
+      # Generate and throw an error if both conferencing details and autocreate are set.
       it "throws an error if both conferencing details and autocreate are set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -375,6 +391,7 @@ describe Nylas::Event do
         expect { event.save }.to raise_error(ArgumentError, error)
       end
 
+      # Generate and throw an error if the number of participants exceeds the event's capacity.
       it "throws an error if capacity is less than the amount of participants" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -390,6 +407,7 @@ describe Nylas::Event do
         expect { event.save }.to raise_error(ArgumentError, error)
       end
 
+      # Do not generate or throw an error if the event's capacity is -1.
       it "does not throw an error if capacity is -1" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -404,6 +422,8 @@ describe Nylas::Event do
         expect { event.save }.not_to raise_error
       end
 
+      # Do not generate or throw an error if the number of participants is less than or equal to the
+      # event's capacity.
       it "does not throw an error if participants less than or equal to capacity" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -423,8 +443,10 @@ describe Nylas::Event do
     end
   end
 
+  # Set the reminder interval when the event is saved.
   describe "reminder_minutes" do
     context "when saving" do
+      # Format the reminder_minutes param's numeric value to match the expected format.
       it "is formatted properly if set to a numeric value" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -446,6 +468,7 @@ describe Nylas::Event do
         )
       end
 
+      # Do not format the reminder_minutes param's value if it matches the expected format.
       it "is left as-is if user already formatted properly" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -467,6 +490,7 @@ describe Nylas::Event do
         )
       end
 
+      # Do not send a reminder if the reminder_minutes param is not set.
       it "does not send reminder_minutes if unset" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -488,8 +512,11 @@ describe Nylas::Event do
     end
   end
 
+  # Set how an event's participants will be notified about the event and its updates.
   describe "notify_participants" do
+    # Set how an event's participants will be notified when the event is created.
     context "when creating" do
+      # Send the notify_participants param in the query params when an event is created.
       it "sends notify_participants in query params" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -517,6 +544,7 @@ describe Nylas::Event do
         )
       end
 
+      # Do not send query params when the notify_participants param is not set.
       it "sends nothing when `notify_participants` is not set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute).and_return({})
@@ -542,7 +570,9 @@ describe Nylas::Event do
       end
     end
 
+    # Set how an event's participants will be notified when the event is updated.
     context "when updating" do
+      # Send the notify_participants param in the query params when an event is updated.
       it "sends notify_participants in query params" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute)
@@ -570,6 +600,7 @@ describe Nylas::Event do
         )
       end
 
+      # Do not send query params when the notify_participants param is not set.
       it "sends nothing when `notify_participants` is not set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute)
@@ -595,7 +626,9 @@ describe Nylas::Event do
       end
     end
 
+    # Set how an event's participants will be notified when the event is deleted.
     context "when deleting" do
+      # Send the notify_participants param in the query params when the event is deleted.
       it "sends notify_participants in query params" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute)
@@ -621,6 +654,7 @@ describe Nylas::Event do
         )
       end
 
+      # Do not send query params when the notify_participants param is not set.
       it "sends nothing when `notify_participants` is not set" do
         api = instance_double(Nylas::API)
         allow(api).to receive(:execute)
@@ -645,7 +679,9 @@ describe Nylas::Event do
     end
   end
 
+  # Set how an event's participants will be notified when generating an ICS file.
   describe "generating an ICS" do
+    # Send the event ID when the ICS file is generated.
     it "sends the event ID if set" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute).and_return({})
@@ -671,6 +707,7 @@ describe Nylas::Event do
       )
     end
 
+    # If the event ID is not set, send the event object when the ICS file is generated.
     it "sends the event object if event id is not set" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute).and_return({})
@@ -700,6 +737,7 @@ describe Nylas::Event do
       )
     end
 
+    # Generate and throw an error if the event's calendar ID is not set.
     it "throws an error if event has no calendar ID set" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute).and_return({})
@@ -716,6 +754,7 @@ describe Nylas::Event do
       expect { event.generate_ics }.to raise_error(ArgumentError, error)
     end
 
+    # Generate and throw an error if the event does not have a set object.
     it "throws an error if event has no when object set" do
       api = instance_double(Nylas::API)
       allow(api).to receive(:execute).and_return({})

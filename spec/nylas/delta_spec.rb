@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Nylas::Delta do
+  # Initialize Delta.
   it "initialize data" do
     data = {
       object: "message",
@@ -54,7 +55,9 @@ describe Nylas::Delta do
     )
   end
 
+  # Create a model based on a given object.
   describe "#model" do
+    # Create a model based on a given object.
     it "returns model based on given `object`" do
       data = {
         object: "message"
@@ -65,6 +68,7 @@ describe Nylas::Delta do
       expect(delta.model).to be_a(Nylas::Message)
     end
 
+    # Return nil if the object is nil.
     it "returns `nil` if `object` is nil" do
       data = {
         type: "message"

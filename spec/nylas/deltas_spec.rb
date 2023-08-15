@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Nylas::Deltas do
+  # Inflate an account.running event.
   it "safely inflates an account.running event" do
     data = {
       "deltas": [
@@ -35,6 +36,7 @@ describe Nylas::Deltas do
     expect(delta.object_attributes).to be_nil
   end
 
+  # Inflate a message.created event.
   it "savely inflates a message.created event" do
     data = {
       "deltas": [
@@ -83,6 +85,7 @@ describe Nylas::Deltas do
     expect(delta.model.received_date).to eql Time.at(1_514_339_665)
   end
 
+  # Parse stream data from multiple deltas.
   it "parses stream data from multiple changes" do
     data = {
       "deltas": [
@@ -158,6 +161,7 @@ describe Nylas::Deltas do
     expect(event_delta.account_id).to eq("acc-id")
   end
 
+  # Parses deltas if the attributes param is nil.
   it "parses deltas if `attributes` is `nil`" do
     data = {
       "deltas": [
@@ -178,6 +182,7 @@ describe Nylas::Deltas do
     )
   end
 
+  # Parses deltas if the attributes param is not present.
   it "parses deltas if `attributes` is not present" do
     data = {
       "deltas": [
@@ -200,6 +205,7 @@ describe Nylas::Deltas do
     )
   end
 
+  # Parses deltas if the attributes param is an empty hash.
   it "parses deltas if `attributes` is empty hash" do
     data = {
       "deltas": [

@@ -3,6 +3,7 @@
 require "spec_helper"
 
 describe Nylas::FreeBusy do
+  # Set read and write values for an email message.
   describe "#email" do
     it "reads and write value for email" do
       email = "test@example.com"
@@ -13,6 +14,7 @@ describe Nylas::FreeBusy do
     end
   end
 
+  # Set read and write values for an object.
   describe "#object" do
     it "reads and write value for object" do
       object = "free_busy"
@@ -23,6 +25,7 @@ describe Nylas::FreeBusy do
     end
   end
 
+  # Set read and write values for time_slots.
   describe "#time_slots" do
     it "reads and write value for time_slots" do
       time_slots = [

@@ -3,32 +3,41 @@
 require "spec_helper"
 
 describe Nylas::Draft do
+  # Restrict the ability to filter on a draft.
   it "is not filterable" do
     expect(described_class).not_to be_filterable
   end
 
+  # Allow a draft to be created.
   it "is creatable" do
     expect(described_class).to be_creatable
   end
 
+  # Allow a draft to be displayed.
   it "is showable" do
     expect(described_class).to be_showable
   end
 
+  # Allow a draft to be listed.
   it "is listable" do
     expect(described_class).to be_listable
   end
 
+  # Allow a draft to be updated.
   it "is updatable" do
     expect(described_class).to be_updatable
   end
 
+  # Allow a draft to be destroyed.
   it "is destroyable" do
     expect(described_class).to be_destroyable
   end
 
+  # Update a draft.
   describe "update" do
+    # Update a draft using a key from the files hash.
     context "with `files` key" do
+      # If the files hash is present, remove it from the payload and set the file_ids hash key.
       it "if `files` present, remove from the payload and sets the proper file_ids key" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         file = Nylas::File.new(id: "abc-123")
@@ -55,7 +64,9 @@ describe Nylas::Draft do
       end
     end
 
+    # Update a draft when the key from the files hash does not exist.
     context "when `files` key does not exists" do
+      # Do not set the file_ids hash key or make changes to the payload.
       it "does not set the file_ids key or make any further changes to the payload" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         data = {
@@ -80,6 +91,7 @@ describe Nylas::Draft do
       end
     end
 
+    # Update a local draft object version number.
     it "updates the local draft object version number on update" do
       expected_response = {
         id: "draft-1234",
@@ -100,6 +112,7 @@ describe Nylas::Draft do
       expect(draft.version).to eq(1)
     end
 
+    # Send a draft's version number if the user does not manually add it.
     it "sends the version number if the user does not manually add it" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
       data = {
@@ -130,8 +143,11 @@ describe Nylas::Draft do
     end
   end
 
+  # Create a draft.
   describe "#create" do
+    # Create a draft when the key from the files hash exists.
     context "when `files` key exists" do
+      # Remove the files hash from the payload and set the file_ids hash key.
       it "removes `files` from the payload and sets the proper file_ids key" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         file = Nylas::File.new(id: "abc-123")
@@ -159,7 +175,9 @@ describe Nylas::Draft do
       end
     end
 
+    # Create a draft when the key from the files hash does not exist.
     context "when `files` key does not exists" do
+      # Do not modify the files hash or the filed_ids hash.
       it "does nothing" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         data = {
@@ -185,8 +203,11 @@ describe Nylas::Draft do
     end
   end
 
+  # Save a draft.
   describe "save" do
+    # Save a draft when the key from the files hash exists.
     context "when `files` key exists" do
+      # Remove the files hash from the payload and set the file_ids hash key.
       it "removes `files` from the payload and sets the proper file_ids key" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         file = Nylas::File.new(id: "abc-123")
@@ -214,7 +235,9 @@ describe Nylas::Draft do
       end
     end
 
+    # Save a draft when the key from the files hash does not exist.
     context "when `files` key does not exists" do
+      # Do not modify the files hash or the file_ids hash.
       it "does nothing" do
         api = instance_double(Nylas::API, execute: JSON.parse("{}"))
         data = {
@@ -239,6 +262,7 @@ describe Nylas::Draft do
       end
     end
 
+    # Update the local draft version number when it is saved.
     it "updates the local draft object version number on save" do
       expected_response = {
         id: "draft-1234",
@@ -259,7 +283,9 @@ describe Nylas::Draft do
     end
   end
 
+  # Send a draft.
   describe "#send!" do
+    # Send the payload if the draft was not created on the server.
     it "sends the payload if the draft was not created on the server" do
       api = instance_double(Nylas::API)
       draft = described_class.from_hash({ reply_to_message_id: "mess-1234",
@@ -281,6 +307,7 @@ describe Nylas::Draft do
       )
     end
 
+    # Allow tracking when a draft is sent.
     it "includes tracking when sending the draft" do
       api = instance_double(Nylas::API)
       draft = described_class.from_hash({ id: "draft-1234", "version": 5 }, api: api)
@@ -303,6 +330,7 @@ describe Nylas::Draft do
     end
   end
 
+  # Deserialize a draft's JSON attributes into Ruby objects.
   describe ".from_json" do
     it "Deserializes all the attributes into Ruby objects" do
       api = instance_double(Nylas::API)
