@@ -18,7 +18,7 @@ module Nylas
       # @return [Array(Hash, String)] Created Nylas object and API Request ID.
       def create(identifier:, query_params: {}, request_body: nil)
         post(
-          path: "#{host}/v3/grants/#{identifier}/#{resource_name}",
+          path: "#{api_uri}/v3/grants/#{identifier}/#{resource_name}",
           query_params: query_params,
           request_body: request_body
         )
@@ -35,7 +35,7 @@ module Nylas
       # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
       def list(identifier:, query_params: {})
         get(
-          path: "#{host}/v3/grants/#{identifier}/#{resource_name}",
+          path: "#{api_uri}/v3/grants/#{identifier}/#{resource_name}",
           query_params: query_params
         )
       end
@@ -52,7 +52,7 @@ module Nylas
       # @return [Array(Hash, String)] Nylas object and API request ID.
       def find(identifier:, object_id:, query_params: {})
         get(
-          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{api_uri}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query_params: query_params
         )
       end
@@ -70,7 +70,7 @@ module Nylas
       # @return [Array(Hash, String)] Updated Nylas object and API Request ID.
       def update(identifier:, object_id:, query_params: {}, request_body: nil)
         put(
-          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{api_uri}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query_params: query_params,
           request_body: request_body
         )
@@ -88,7 +88,7 @@ module Nylas
       # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
       def destroy(identifier:, object_id:, query_params: {})
         _, request_id = delete(
-          path: "#{host}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
+          path: "#{api_uri}/v3/grants/#{identifier}/#{resource_name}/#{object_id}",
           query_params: query_params
         )
 

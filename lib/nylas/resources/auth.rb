@@ -92,7 +92,7 @@ module Nylas
     # @return [Boolean] True if the access token was revoked successfully.
     def revoke(token)
       post(
-        path: "#{host}/v3/connect/revoke",
+        path: "#{api_uri}/v3/connect/revoke",
         query_params: {
           token: token
         }
@@ -138,7 +138,7 @@ module Nylas
     # @param config [Hash] Configuration for the query.
     # @return [Array(Hash, String)] List of components for the authentication URL.
     def url_auth_builder(config)
-      builder = URI.parse(host)
+      builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
       builder.query = build_query(config)
 
@@ -185,7 +185,7 @@ module Nylas
     def execute_token_request(request)
       execute(
         method: :post,
-        path: "#{host}/v3/connect/token",
+        path: "#{api_uri}/v3/connect/token",
         query: {},
         payload: request,
         headers: {},

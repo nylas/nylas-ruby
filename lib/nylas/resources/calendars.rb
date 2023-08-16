@@ -19,12 +19,11 @@ module Nylas
 
     # Checks multiple calendars to find available time slots for a single meeting.
     #
-    # @param path_params [Hash, {}] Path params to pass to the request.
     # @param request_body [Hash, nil] Request body to pass to the request.
     # @return [Array(Hash, String)] Availability object and API request ID.
-    def get_availability(path_params: {}, request_body: nil)
+    def get_availability(request_body: nil)
       post(
-        path: "#{host}/grants/#{path_params[:grant_id]}/calendars/availability",
+        path: "#{api_uri}/v3/calendars/availability",
         request_body: request_body
       )
     end

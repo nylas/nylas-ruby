@@ -129,7 +129,7 @@ module Nylas
     def error_hash_to_exception(response, status_code, path)
       return if !response || !response.key?(:error)
 
-      if %W[#{host}/v3/connect/token #{host}/v3/connect/revoke].include?(path)
+      if %W[#{api_uri}/v3/connect/token #{api_uri}/v3/connect/revoke].include?(path)
         NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
                             response[:error_code], status_code)
       else
