@@ -7,12 +7,12 @@ module Nylas
     def initialize(resource_name, sdk_instance)
       @resource_name = resource_name
       @api_key = sdk_instance.api_key
-      @host = sdk_instance.host
+      @api_uri = sdk_instance.api_uri
       @timeout = sdk_instance.timeout
     end
 
     private
 
-    attr_reader :resource_name, :api_key, :host, :timeout
+    attr_reader :resource_name, :api_key, :api_uri, :timeout
   end
 end

@@ -37,7 +37,7 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [String, nil] Request body to pass to the call.
+      # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
       def post(path:, query_params: {}, request_body: nil, headers: {})
@@ -64,7 +64,7 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [String, nil] Request body to pass to the call.
+      # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
       def put(path:, query_params: {}, request_body: nil, headers: {})
@@ -91,7 +91,7 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [String, nil] Request body to pass to the call.
+      # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
       def patch(path:, query_params: {}, request_body: nil, headers: {})

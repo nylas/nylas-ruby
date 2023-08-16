@@ -21,7 +21,7 @@ module Nylas
     #
     # @return [Array(Hash, String)] Application object and API Request ID.
     def info
-      get(path: "#{host}/v3/applications")
+      get(path: "#{api_uri}/v3/applications")
     end
   end
 end
