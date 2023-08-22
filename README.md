@@ -4,6 +4,7 @@
 
 # Nylas Ruby SDK
 
+[![Gem (including prereleases)](https://img.shields.io/gem/v/nylas?include_prereleases)](https://rubygems.org/gems/nylas)
 [![codecov](https://codecov.io/gh/nylas/nylas-ruby/branch/main/graph/badge.svg?token=IKH0YMH4KA)](https://codecov.io/gh/nylas/nylas-ruby)
 
 This is the GitHub repository for the Nylas Ruby SDK. This repo is primarily for anyone who wants to make contributions to the SDK or install it from source. For documentation on how to use this SDK to access the Nylas Email, Calendar, or Contacts APIs, see the official [Ruby SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/ruby/).
@@ -102,6 +103,12 @@ calendars, _request_ids = nylas.calendars.list(identifier: "GRANT_ID")
 ## 📚 Documentation
 
 Nylas maintains a [reference guide for the Ruby SDK](https://nylas-ruby-sdk-reference.pages.dev/) to help you get familiar with the available methods and classes.
+
+## ✨ Upgrading from 5.x
+
+See [UPGRADE.md](UPGRADE.md) for instructions on upgrading from 5.x to 6.x.
+
+**Note**: The Ruby SDK v6.x is not compatible with the Nylas API earlier than v3-beta.
 
 ## 💙 Contributing
 
