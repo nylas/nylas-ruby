@@ -22,32 +22,36 @@ module Nylas
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
     # @param path [String, nil] Relative path from the API Base. This is the preferred way to execute
     # arbitrary or-not-yet-SDK-ified API commands.
+    # @param timeout [Hash, nil] Timeout value to send with the request.
     # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
     # fragment.
     # @param payload [String, Hash, nil] Body to send with the request.
     # @param api_key [Hash, nil] API key to send with the request.
-    # @param timeout [Hash, nil] Timeout value to send with the request.
     # @return [Object] Parsed JSON response from the API.
-    def execute(method:, path: nil, headers: {}, query: {}, payload: nil, api_key: nil, timeout: nil)
+    def execute(method:, path:, timeout:, headers: {}, query: {}, payload: nil, api_key: nil)
       request = build_request(method: method, path: path, headers: headers,
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
-      rest_client_execute(**request) do |response, _request, result|
-        content_type = nil
+      begin
+        rest_client_execute(**request) do |response, _request, result|
+          content_type = nil
 
-        if response.headers && response.headers[:content_type]
-          content_type = response.headers[:content_type].downcase
-        end
+          if response.headers && response.headers[:content_type]
+            content_type = response.headers[:content_type].downcase
+          end
 
-        begin
-          response = parse_response(response) if content_type == "application/json"
-        rescue Nylas::JsonParseError
+          begin
+            response = parse_response(response) if content_type == "application/json"
+          rescue Nylas::JsonParseError
+            handle_failed_response(result, response, path)
+            raise
+          end
+
           handle_failed_response(result, response, path)
-          raise
+          return response
         end
-
-        handle_failed_response(result, response, path)
-        return response
+      rescue Timeout::Error => _e
+        raise Nylas::NylasSdkTimeoutError.new(request.path, timeout)
       end
     end
 

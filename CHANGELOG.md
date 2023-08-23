@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.0-beta.2 / TBD
+* Added additional error classes
+* Set default timeout to 30 seconds
+
 ### 6.0.0-beta.1 / 2023-08-16
 * **BREAKING CHANGE**: Ruby SDK v6 supports the Nylas API v3 exclusively, dropping support for any endpoints that are not available in v3.
 * **BREAKING CHANGE**: Officially support minimum Ruby v3
