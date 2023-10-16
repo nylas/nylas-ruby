@@ -2,6 +2,7 @@
 
 ### 6.0.0-beta.2 / TBD
 * Added additional error classes
+* Added support for free/busy endpoint
 * Set default timeout to 30 seconds
 
 ### 6.0.0-beta.1 / 2023-08-16
