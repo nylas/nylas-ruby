@@ -12,11 +12,15 @@ module GemConfig
     gem.platform = "ruby"
     gem.required_ruby_version = ">= 3.0"
     gem.metadata = metadata
-    gem.email = "support@nylas.com"
-    gem.authors = ["Nylas, Inc."]
+    add_author_info(gem)
     dev_dependencies.each do |dependency|
       gem.add_development_dependency(*dependency)
     end
+  end
+
+  def self.add_author_info(gem)
+    gem.email = "support@nylas.com"
+    gem.authors = ["Nylas, Inc."]
   end
 
   def self.metadata

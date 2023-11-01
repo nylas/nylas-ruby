@@ -5,6 +5,7 @@ require "rest-client"
 require_relative "../errors"
 require_relative "../version"
 
+# Module for working with HTTP Client
 module Nylas
   require "yajl"
   require "base64"
@@ -34,11 +35,7 @@ module Nylas
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
       begin
         rest_client_execute(**request) do |response, _request, result|
-          content_type = nil
-
-          if response.headers && response.headers[:content_type]
-            content_type = response.headers[:content_type].downcase
-          end
+          content_type = get_content_type(response)
 
           begin
             response = parse_response(response) if content_type == "application/json"
@@ -53,6 +50,13 @@ module Nylas
       rescue Timeout::Error => _e
         raise Nylas::NylasSdkTimeoutError.new(request.path, timeout)
       end
+    end
+
+    def get_content_type(response)
+      if response.headers && response.headers[:content_type]
+        content_type = response.headers[:content_type].downcase
+      end
+      content_type
     end
 
     # Builds a request sent to the Nylas API.
@@ -137,12 +141,16 @@ module Nylas
         NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
                             response[:error_code], status_code)
       else
-        error_obj = response[:error]
-        provider_error = error_obj.fetch(:provider_error, nil)
-
-        NylasApiError.new(error_obj[:type], error_obj[:message], status_code, provider_error,
-                          response[:request_id])
+        throw_error(response)
       end
+    end
+
+    def throw_error(response)
+      error_obj = response[:error]
+      provider_error = error_obj.fetch(:provider_error, nil)
+
+      NylasApiError.new(error_obj[:type], error_obj[:message], status_code, provider_error,
+                        response[:request_id])
     end
 
     # Adds query parameters to a URL.
