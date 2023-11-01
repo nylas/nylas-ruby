@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "resources/calendars"
+require_relative "resources/messages"
 require_relative "resources/events"
 require_relative "resources/auth"
 require_relative "resources/webhooks"
@@ -43,6 +44,13 @@ module Nylas
     # @return [Nylas::Events] Event resources for your Nylas application
     def events
       Events.new(self)
+    end
+
+    # The event resources for your Nylas application.
+    #
+    # @return [Nylas::Messages] Message resources for your Nylas application
+    def messages
+      Messages.new(self)
     end
 
     # The auth resources for your Nylas application.

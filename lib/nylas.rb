@@ -7,7 +7,7 @@ require "rest-client"
 #   See https://github.com/sparklemotion/http-cookie/issues/27
 #   and https://github.com/sparklemotion/http-cookie/issues/6
 #
-# CookieJar uses unsafe class caching for dynamically loading cookie jars. 
+# CookieJar uses unsafe class caching for dynamically loading cookie jars.
 # If two rest-client instances are instantiated at the same time (in threads), non-deterministic
 # behaviour can occur whereby the Hash cookie jar isn't properly loaded and cached.
 # Forcing an instantiation of the jar onload will force the CookieJar to load before the system has
