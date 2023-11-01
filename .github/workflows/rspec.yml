@@ -20,17 +20,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - gemfile: rails5
-            ruby: 2.5
-          - gemfile: rails6
-            ruby: 2.5
-          - gemfile: rails5
-            ruby: 2.6
-          - gemfile: rails6
-            ruby: 2.6
-          - gemfile: rails6
-            ruby: 3.0
-    name: Ruby ${{ matrix.ruby }}, Gemfile ${{ matrix.gemfile }}
+            - ruby: 3.0
+            - ruby: 3.1
+            - ruby: 3.2
+    name: Ruby ${{ matrix.ruby }}
     steps:
     - uses: actions/checkout@v2
 
@@ -42,8 +35,8 @@ jobs:
 
     - name: Bundle install
       run: |
-        bundle config set gemfile "${GITHUB_WORKSPACE}/gemfiles/Gemfile.${{ matrix.gemfile }}"
-        bundle install --jobs 4 --retry 3
+        bundle config set gemfile "${GITHUB_WORKSPACE}/Gemfile"
+        bundle install
 
     - name: Run tests
       run: bundle exec rspec spec
