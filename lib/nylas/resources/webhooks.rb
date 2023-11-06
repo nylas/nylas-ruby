@@ -1,7 +1,7 @@
-# frozen_string_literal: true
+# frozen_string_literal: trues
 
 require_relative "resource"
-require_relative "../handler/grants_api_operations"
+require_relative "../handler/api_operations"
 
 module Nylas
   # Module representing the possible 'trigger' values in a Webhook.
@@ -21,17 +21,65 @@ module Nylas
     MESSAGE_SEND_FAILED = "message.send_failed"
   end
 
-  # Webhooks
+  # Nylas Webhooks API
   class Webhooks < Resource
-    include GrantsApiOperations::Create
-    include GrantsApiOperations::Update
-    include GrantsApiOperations::List
-    include GrantsApiOperations::Destroy
-    include GrantsApiOperations::Find
+    include ApiOperations::Get
+    include ApiOperations::Post
+    include ApiOperations::Put
+    include ApiOperations::Delete
 
-    # Initializes webhooks.
-    def initialize(parent)
-      super("webhooks", parent)
+    # Return all webhooks.
+    #
+    # @return [Array(Array(Hash), String)] The list of webhooks and API Request ID.
+    def list
+      get(
+        path: "#{api_uri}/v3/webhook"
+      )
+    end
+
+    # Return a webhook.
+    #
+    # @param webhook_id [String] The id of the webhook to return.
+    # @return [Array(Hash, String)] The webhook and API request ID.
+    def find(webhook_id:)
+      get(
+        path: "#{api_uri}/v3/webhook/#{webhook_id}"
+      )
+    end
+
+    # Creates a webhook.
+    #
+    # @param request_body [Hash] The values to create the webhook with.
+    # @return [Array(Hash, String)] The created webhook and API Request ID.
+    def create(request_body:)
+      post(
+        path: "#{api_uri}/v3/webhook",
+        request_body: request_body
+      )
+    end
+
+    # Updates a webhook.
+    #
+    # @param webhook_id [String] The id of the webhook to update.
+    # @param request_body [Hash] The values to update the webhook with
+    # @return [Array(Hash, String)] The updated webhook and API Request ID.
+    def update(webhook_id:, request_body:)
+      put(
+        path: "#{api_uri}/v3/webhook/#{webhook_id}",
+        request_body: request_body
+      )
+    end
+
+    # Deletes a webhook.
+    #
+    # @param webhook_id [String] The id of the webhook to delete.
+    # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
+    def destroy(webhook_id:)
+      _, request_id = delete(
+        path: "#{api_uri}/v3/webhook/#{webhook_id}"
+      )
+
+      [true, request_id]
     end
   end
 end
