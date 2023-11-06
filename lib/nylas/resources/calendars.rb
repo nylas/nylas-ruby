@@ -35,7 +35,7 @@ module Nylas
       )
     end
 
-    # Creates a calendar.
+    # Create a calendar.
     #
     # @param identifier [String] Grant ID or email account in which to create the object.
     # @param request_body [Hash] The values to create the calendar with.
@@ -47,7 +47,7 @@ module Nylas
       )
     end
 
-    # Updates a calendar.
+    # Update a calendar.
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param calendar_id [String] The id of the calendar to update.
@@ -61,7 +61,7 @@ module Nylas
       )
     end
 
-    # Deletes a calendar.
+    # Delete a calendar.
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
     # @param calendar_id [String] The id of the calendar to delete.

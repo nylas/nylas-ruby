@@ -43,7 +43,7 @@ module Nylas
       )
     end
 
-    # Updates a grant.
+    # Update a grant.
     #
     # @param grant_id [String] The id of the grant to update.
     # @param request_body [Hash] The values to update the grant with
@@ -55,7 +55,7 @@ module Nylas
       )
     end
 
-    # Deletes a grant.
+    # Delete a grant.
     #
     # @param grant_id [String] The id of the grant to delete.
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.

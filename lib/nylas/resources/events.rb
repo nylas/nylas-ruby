@@ -36,7 +36,7 @@ module Nylas
       )
     end
 
-    # Creates an event.
+    # Create an event.
     #
     # @param identifier [String] Grant ID or email account in which to create the object.
     # @param request_body [Hash] The values to create the event with.
@@ -50,7 +50,7 @@ module Nylas
       )
     end
 
-    # Updates an event.
+    # Update an event.
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param event_id [String] The id of the event to update.
@@ -65,7 +65,7 @@ module Nylas
       )
     end
 
-    # Deletes an event.
+    # Delete an event.
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
     # @param event_id [String] The id of the event to delete.

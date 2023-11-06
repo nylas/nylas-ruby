@@ -30,7 +30,7 @@ module Nylas
       )
     end
 
-    # Creates a redirect uri.
+    # Create a redirect uri.
     #
     # @param request_body [Hash] The values to create the redirect uri with.
     # @return [Array(Hash, String)] The created redirect uri and API Request ID.
@@ -41,7 +41,7 @@ module Nylas
       )
     end
 
-    # Updates a redirect uri.
+    # Update a redirect uri.
     #
     # @param redirect_uri_id [String] The id of the redirect uri to update.
     # @param request_body [Hash] The values to update the redirect uri with
@@ -53,7 +53,7 @@ module Nylas
       )
     end
 
-    # Deletes a redirect uri.
+    # Delete a redirect uri.
     #
     # @param redirect_uri_id [String] The id of the redirect uri to delete.
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.

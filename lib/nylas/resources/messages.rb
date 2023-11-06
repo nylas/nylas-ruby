@@ -34,7 +34,7 @@ module Nylas
       )
     end
 
-    # Updates a message.
+    # Update a message.
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param message_id [String] The id of the message to update.
@@ -48,7 +48,7 @@ module Nylas
       )
     end
 
-    # Deletes a message.
+    # Delete a message.
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
     # @param message_id [String] The id of the message to delete.
