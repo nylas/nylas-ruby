@@ -13,7 +13,7 @@ module Nylas
 
     # Initializes the application.
     def initialize(sdk_instance)
-      super("applications", sdk_instance)
+      super(sdk_instance)
       @redirect_uris = RedirectUris.new(sdk_instance)
     end
 

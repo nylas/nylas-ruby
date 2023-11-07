@@ -18,7 +18,7 @@ module Nylas
 
     # Initializes Auth.
     def initialize(sdk_instance)
-      super("auth", sdk_instance)
+      super(sdk_instance)
 
       @grants = Grants.new(sdk_instance)
     end

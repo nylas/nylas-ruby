@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "resources/calendars"
+require_relative "resources/connectors"
 require_relative "resources/messages"
 require_relative "resources/events"
 require_relative "resources/auth"
@@ -37,6 +38,13 @@ module Nylas
     # @return [Nylas::Calendars] Calendar resources for your Nylas application.
     def calendars
       Calendars.new(self)
+    end
+
+    # The connector resources for your Nylas application.
+    #
+    # @return [Nylas::Connectors] Connector resources for your Nylas application.
+    def connectors
+      Connectors.new(self)
     end
 
     # The event resources for your Nylas application.

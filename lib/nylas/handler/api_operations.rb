@@ -13,7 +13,7 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
+      # @return Nylas data object and API Request ID.
       def get(path:, query_params: {})
         response = execute(
           method: :get,
@@ -39,7 +39,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
+      # @return Nylas data object and API Request ID.
       def post(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :post,
@@ -66,7 +66,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
+      # @return Nylas data object and API Request ID.
       def put(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :put,
@@ -93,7 +93,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @param request_body [String, Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
+      # @return Nylas data object and API Request ID.
       def patch(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :patch,
@@ -119,7 +119,7 @@ module Nylas
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return [Array(Hash, String)] List of Nylas objects and API Request ID.
+      # @return Nylas data object and API Request ID.
       def delete(path:, query_params: {}, headers: {})
         response = execute(
           method: :delete,
