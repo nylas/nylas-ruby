@@ -77,17 +77,21 @@ module Nylas
       url = path
       url = add_query_params_to_url(url, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
-      serialized_payload = payload&.to_json
+      if !payload.nil? && !payload["multipart"]
+        payload = payload&.to_json
+        resulting_headers["Content-type"] = "application/json"
+      elsif !payload.nil? && payload["multipart"]
+        payload.delete("multipart")
+      end
 
-      { method: method, url: url, payload: serialized_payload, headers: resulting_headers, timeout: timeout }
+      { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
     end
 
     # Sets the default headers for API requests.
     def default_headers
       @default_headers ||= {
         "X-Nylas-API-Wrapper" => "ruby",
-        "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
-        "Content-type" => "application/json"
+        "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}"
       }
     end
 

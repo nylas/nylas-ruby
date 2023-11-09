@@ -37,3 +37,5 @@ require_relative "nylas/resources/grants"
 require_relative "nylas/resources/messages"
 require_relative "nylas/resources/redirect_uris"
 require_relative "nylas/resources/webhooks"
+
+require_relative "nylas/utils/file_utils"
