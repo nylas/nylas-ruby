@@ -38,7 +38,6 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param message_id [String] The id of the message to return.
-    #   Use "primary" to refer to the primary message associated with grant.
     # @return [Array(Hash, String)] The message and API request ID.
     def find(identifier:, message_id:)
       get(
@@ -50,7 +49,6 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param message_id [String] The id of the message to update.
-    #   Use "primary" to refer to the primary message associated with grant.
     # @param request_body [Hash] The values to update the message with
     # @return [Array(Hash, String)] The updated message and API Request ID.
     def update(identifier:, message_id:, request_body:)
@@ -64,7 +62,6 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
     # @param message_id [String] The id of the message to delete.
-    #   Use "primary" to refer to the primary message associated with grant.
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
     def destroy(identifier:, message_id:)
       _, request_id = delete(
@@ -78,6 +75,8 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
     # @param request_body [Hash] The values to create the message with.
+    #   If you're attaching files, you must pass an array of [File] objects, or
+    #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The sent message and the API Request ID.
     def send(identifier:, request_body:)
       form_body, opened_files = FileUtils.build_form_request(request_body)

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "mime/types"
+
 module Nylas
   # A collection of file-related utilities.
   module FileUtils
@@ -24,6 +26,24 @@ module Nylas
       form_data.merge!({ "multipart" => true, "message" => message_payload })
 
       [form_data, opened_files]
+    end
+
+    # Build the request to attach a file to a message/draft object.
+    # @param file_path [String] The path to the file to attach.
+    # @return [Hash] The request that will attach the file to the message/draft
+    def self.attach_file_request_builder(file_path)
+      filename = File.basename(file_path)
+      content_type = MIME::Types.type_for(file_path).first.to_s
+      content_type = "application/octet-stream" if content_type.empty?
+      size = File.size(file_path)
+      content = File.new(file_path, "rb")
+
+      {
+        filename: filename,
+        content_type: content_type,
+        size: size,
+        content: content
+      }
     end
   end
 end

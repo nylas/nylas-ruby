@@ -38,7 +38,9 @@ module Nylas
     # Create an draft.
     #
     # @param identifier [String] Grant ID or email account in which to create the draft.
-    # @param request_body [Hash] The values to create the draft with.
+    # @param request_body [Hash] The values to create the message with.
+    #   If you're attaching files, you must pass an array of [File] objects, or
+    #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The created draft and API Request ID.
     def create(identifier:, request_body:)
       form_body, opened_files = FileUtils.build_form_request(request_body)
@@ -56,7 +58,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to update the draft.
     # @param draft_id [String] The id of the draft to update.
-    # @param request_body [Hash] The values to update the draft with
+    # @param request_body [Hash] The values to create the message with.
+    #   If you're attaching files, you must pass an array of [File] objects, or
+    #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The updated draft and API Request ID.
     def update(identifier:, draft_id:, request_body:)
       form_body, opened_files = FileUtils.build_form_request(request_body)
