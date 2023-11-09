@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "resource"
+require_relative "smart_compose"
 require_relative "../handler/api_operations"
 
 module Nylas
@@ -9,6 +10,15 @@ module Nylas
     include ApiOperations::Get
     include ApiOperations::Put
     include ApiOperations::Delete
+
+    attr_reader :smart_compose
+
+    # Initializes the messages resource.
+    # @param sdk_instance [Nylas::API] The API instance to which the resource is bound.
+    def initialize(sdk_instance)
+      super(sdk_instance)
+      @smart_compose = SmartCompose.new(sdk_instance)
+    end
 
     # Return all messages.
     #
