@@ -47,6 +47,13 @@ module Nylas
       Connectors.new(self)
     end
 
+    # The draft resources for your Nylas application.
+    #
+    # @return [Nylas::Drafts] Draft resources for your Nylas application.
+    def drafts
+      Drafts.new(self)
+    end
+
     # The event resources for your Nylas application.
     #
     # @return [Nylas::Events] Event resources for your Nylas application
