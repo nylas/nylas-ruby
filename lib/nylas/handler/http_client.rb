@@ -145,11 +145,11 @@ module Nylas
         NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
                             response[:error_code], status_code)
       else
-        throw_error(response)
+        throw_error(response, status_code)
       end
     end
 
-    def throw_error(response)
+    def throw_error(response, status_code)
       error_obj = response[:error]
       provider_error = error_obj.fetch(:provider_error, nil)
 
@@ -161,7 +161,7 @@ module Nylas
     #
     # @return [String] Processed URL, including query params.
     def add_query_params_to_url(url, query)
-      unless query.empty?
+      unless query.nil? || query.empty?
         uri = URI.parse(url)
         query = custom_params(query)
         params = URI.decode_www_form(uri.query || "") + query.to_a
