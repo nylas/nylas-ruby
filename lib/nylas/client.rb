@@ -33,6 +33,13 @@ module Nylas
       Applications.new(self)
     end
 
+    # The auth resources for your Nylas application.
+    #
+    # @return [Nylas::Auth] Auth resources for your Nylas application.
+    def auth
+      Auth.new(self)
+    end
+
     # The calendar resources for your Nylas application.
     #
     # @return [Nylas::Calendars] Calendar resources for your Nylas application.
@@ -68,11 +75,11 @@ module Nylas
       Messages.new(self)
     end
 
-    # The auth resources for your Nylas application.
+    # The thread resources for your Nylas application.
     #
-    # @return [Nylas::Auth] Auth resources for your Nylas application.
-    def auth
-      Auth.new(self)
+    # @return [Nylas::Threads] Thread resources for your Nylas application.
+    def threads
+      Threads.new(self)
     end
 
     # The webhook resources for your Nylas application.

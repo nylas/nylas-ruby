@@ -36,6 +36,8 @@ require_relative "nylas/resources/drafts"
 require_relative "nylas/resources/events"
 require_relative "nylas/resources/grants"
 require_relative "nylas/resources/messages"
+require_relative "nylas/resources/smart_compose"
+require_relative "nylas/resources/threads"
 require_relative "nylas/resources/redirect_uris"
 require_relative "nylas/resources/webhooks"
 
