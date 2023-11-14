@@ -7,6 +7,7 @@ require_relative "resources/events"
 require_relative "resources/auth"
 require_relative "resources/webhooks"
 require_relative "resources/applications"
+require_relative "resources/folders"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects.
@@ -54,7 +55,14 @@ module Nylas
       Events.new(self)
     end
 
-    # The event resources for your Nylas application.
+    # The folder resources for your Nylas application.
+    #
+    # @return [Nylas::Folder] Folder resources for your Nylas application
+    def folders
+      Folders.new(self)
+    end
+
+    # The message resources for your Nylas application.
     #
     # @return [Nylas::Messages] Message resources for your Nylas application
     def messages
