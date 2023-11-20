@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "http_client"
+
 module Nylas
   # Allows resources to perform API operations on the Nylas API endpoints without exposing the HTTP
   # client to the end user.
