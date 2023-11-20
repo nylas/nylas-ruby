@@ -60,7 +60,7 @@ module Nylas
     # fragment.
     # @param api_key [Hash, nil] API key to send with the request.
     # @yieldparam chunk [String] A chunk of the response body.
-    # @return [nil, Object] Returns nil when a block is given (streaming mode).
+    # @return [nil, String] Returns nil when a block is given (streaming mode).
     #     When no block is provided, the return is the entire raw response body.
     def download_request(path:, timeout:, headers: {}, query: {}, api_key: nil, &block)
       request = build_request(method: :get, path: path, headers: headers,
@@ -84,7 +84,7 @@ module Nylas
             end
           end
         end
-      rescue Net::OpenTimeout, Net::ReadTimeout => e
+      rescue Net::OpenTimeout, Net::ReadTimeout
         raise Nylas::NylasSdkTimeoutError.new(request[:url], timeout)
       end
     end

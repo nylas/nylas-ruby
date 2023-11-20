@@ -32,7 +32,7 @@ module Nylas
     # @param attachment_id [String] The ID of the attachment to be downloaded.
     # @param query_params [Hash] The query parameters to include in the request.
     # @yieldparam chunk [String] A chunk of the response body.
-    # @return [nil, Object] Returns nil when a block is given (streaming mode).
+    # @return [nil, String] Returns nil when a block is given (streaming mode).
     #   When no block is provided, the return is the entire raw response body.
     def download(identifier:, attachment_id:, query_params:, &block)
       download_request(
@@ -49,7 +49,7 @@ module Nylas
     # @param identifier [String] Grant ID or email account to query.
     # @param attachment_id [String] The ID of the attachment to be downloaded.
     # @param query_params [Hash] The query parameters to include in the request.
-    # @return [nil, Object] Returns nil when a block is given (streaming mode).
+    # @return [nil, Array(Integer)] Returns nil when a block is given (streaming mode).
     #   When no block is provided, the return is the entire raw response body.
     def download_bytes(identifier:, attachment_id:, query_params:)
       data = download_request(
@@ -59,7 +59,7 @@ module Nylas
         timeout: timeout
       )
 
-      data.bytes
+      data&.bytes
     end
   end
 end
