@@ -34,6 +34,13 @@ module Nylas
       Applications.new(self)
     end
 
+    # The attachments resources for your Nylas application.
+    #
+    # @return [Nylas::Attachments] Attachment resources for your Nylas application.
+    def attachments
+      Attachments.new(self)
+    end
+
     # The auth resources for your Nylas application.
     #
     # @return [Nylas::Auth] Auth resources for your Nylas application.
