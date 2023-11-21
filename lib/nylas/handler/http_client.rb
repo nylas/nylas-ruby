@@ -63,26 +63,14 @@ module Nylas
     # @return [nil, String] Returns nil when a block is given (streaming mode).
     #     When no block is provided, the return is the entire raw response body.
     def download_request(path:, timeout:, headers: {}, query: {}, api_key: nil, &block)
-      request = build_request(method: :get, path: path, headers: headers,
-                              query: query, api_key: api_key, timeout: timeout)
-      uri = URI(request[:url])
+      request, uri, http = setup_http(path, timeout, headers, query, api_key)
 
       begin
-        Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: timeout,
-                                            open_timeout: timeout) do |http|
+        http.start do |setup_http|
           get_request = Net::HTTP::Get.new(uri)
           request[:headers].each { |key, value| get_request[key] = value }
 
-          http.request(get_request) do |response|
-            if response.is_a?(Net::HTTPSuccess)
-              return response.body unless block_given?
-
-              response.read_body(&block)
-            else
-              parse_json_evaluate_error(response.code.to_i, response.body, path, response["Content-Type"])
-              break
-            end
-          end
+          handle_response(setup_http, get_request, path, &block)
         end
       rescue Net::OpenTimeout, Net::ReadTimeout
         raise Nylas::NylasSdkTimeoutError.new(request[:url], timeout)
@@ -146,6 +134,30 @@ module Nylas
     def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
       ::RestClient::Request.execute(method: method, url: url, payload: payload,
                                     headers: headers, timeout: timeout, &block)
+    end
+
+    def setup_http(path, timeout, headers, query, api_key)
+      request = build_request(method: :get, path: path, headers: headers,
+                              query: query, api_key: api_key, timeout: timeout)
+      uri = URI(request[:url])
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.read_timeout = timeout
+      http.open_timeout = timeout
+      [request, uri, http]
+    end
+
+    def handle_response(http, get_request, path, &block)
+      http.request(get_request) do |response|
+        if response.is_a?(Net::HTTPSuccess)
+          return response.body unless block_given?
+
+          response.read_body(&block)
+        else
+          parse_json_evaluate_error(response.code.to_i, response.body, path, response["Content-Type"])
+          break
+        end
+      end
     end
 
     # Parses the response from the Nylas API and evaluates for errors.

@@ -24,7 +24,7 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to generate a message suggestion for.
     # @param message_id [String] The id of the message to reply to.
-    # @param request_body [Hash] The prompt that smart compose will use to generate a message reply suggestion.
+    # @param request_body [Hash] The prompt that smart compose will use to generate a message reply.
     # @return [Array(Hash, String)] The generated message reply and API Request ID.
     def compose_message_reply(identifier:, message_id:, request_body:)
       post(
