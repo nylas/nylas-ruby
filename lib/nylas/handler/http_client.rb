@@ -23,11 +23,11 @@ module Nylas
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
     # @param path [String, nil] Relative path from the API Base. This is the preferred way to execute
     # arbitrary or-not-yet-SDK-ified API commands.
-    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @param timeout [Integer, nil] Timeout value to send with the request.
     # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
     # fragment.
-    # @param payload [String, Hash, nil] Body to send with the request.
+    # @param payload [Hash, nil] Body to send with the request.
     # @param api_key [Hash, nil] API key to send with the request.
     # @return [Object] Parsed JSON response from the API.
     def execute(method:, path:, timeout:, headers: {}, query: {}, payload: nil, api_key: nil)
@@ -35,28 +35,58 @@ module Nylas
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
       begin
         rest_client_execute(**request) do |response, _request, result|
-          content_type = get_content_type(response)
-
-          begin
-            response = parse_response(response) if content_type == "application/json"
-          rescue Nylas::JsonParseError
-            handle_failed_response(result, response, path)
-            raise
+          content_type = nil
+          if response.headers && response.headers[:content_type]
+            content_type = response.headers[:content_type].downcase
           end
 
-          handle_failed_response(result, response, path)
-          return response
+          parse_json_evaluate_error(result.code.to_i, response, path, content_type)
         end
       rescue Timeout::Error => _e
         raise Nylas::NylasSdkTimeoutError.new(request.path, timeout)
       end
     end
 
-    def get_content_type(response)
-      if response.headers && response.headers[:content_type]
-        content_type = response.headers[:content_type].downcase
+    # Sends a request to the Nylas API, specifically for downloading data.
+    # This method supports streaming the response by passing a block, which will be executed
+    # with each chunk of the response body as it is read. If no block is provided, the entire
+    # response body is returned.
+    #
+    # @param path [String] Relative path from the API Base. This is the preferred way to execute
+    # arbitrary or-not-yet-SDK-ified API commands.
+    # @param timeout [Integer] Timeout value to send with the request.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
+    # fragment.
+    # @param api_key [Hash, nil] API key to send with the request.
+    # @yieldparam chunk [String] A chunk of the response body.
+    # @return [nil, String] Returns nil when a block is given (streaming mode).
+    #     When no block is provided, the return is the entire raw response body.
+    def download_request(path:, timeout:, headers: {}, query: {}, api_key: nil, &block)
+      request = build_request(method: :get, path: path, headers: headers,
+                              query: query, api_key: api_key, timeout: timeout)
+      uri = URI(request[:url])
+
+      begin
+        Net::HTTP.start(uri.host, uri.port, use_ssl: true, read_timeout: timeout,
+                                            open_timeout: timeout) do |http|
+          get_request = Net::HTTP::Get.new(uri)
+          request[:headers].each { |key, value| get_request[key] = value }
+
+          http.request(get_request) do |response|
+            if response.is_a?(Net::HTTPSuccess)
+              return response.body unless block_given?
+
+              response.read_body(&block)
+            else
+              parse_json_evaluate_error(response.code.to_i, response.body, path, response["Content-Type"])
+              break
+            end
+          end
+        end
+      rescue Net::OpenTimeout, Net::ReadTimeout
+        raise Nylas::NylasSdkTimeoutError.new(request[:url], timeout)
       end
-      content_type
     end
 
     # Builds a request sent to the Nylas API.
@@ -66,8 +96,8 @@ module Nylas
     # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
     # fragment.
-    # @param payload [String, Hash, nil] Body to send with the request.
-    # @param timeout [Hash, nil] Timeout value to send with the request.
+    # @param payload [Hash, nil] Body to send with the request.
+    # @param timeout [Integer, nil] Timeout value to send with the request.
     # @param api_key [Hash, nil] API key to send with the request.
     # @return [Object] The request information after processing. This includes an updated payload
     # and headers.
@@ -118,15 +148,21 @@ module Nylas
                                     headers: headers, timeout: timeout, &block)
     end
 
-    # Handles failed responses from the Nylas API.
-    def handle_failed_response(result, response, path)
-      http_code = result.code.to_i
+    # Parses the response from the Nylas API and evaluates for errors.
+    def parse_json_evaluate_error(http_code, response, path, content_type = nil)
+      begin
+        response = parse_response(response) if content_type == "application/json"
+      rescue Nylas::JsonParseError
+        handle_failed_response(http_code, response, path)
+        raise
+      end
 
-      handle_anticipated_failure_mode(http_code, response, path)
+      handle_failed_response(http_code, response, path)
+      response
     end
 
-    # Handles anticipated failure states in the Nylas API.
-    def handle_anticipated_failure_mode(http_code, response, path)
+    # Handles failed responses from the Nylas API.
+    def handle_failed_response(http_code, response, path)
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
       case response
