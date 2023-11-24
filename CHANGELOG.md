@@ -1,5 +1,8 @@
 # Changelog
 
+### 6.0.0-beta.3 / TBD
+* Fixed issue when sending message without attachments
+
 ### 6.0.0-beta.2 / 2023-11-21
 * Added additional error classes
 * Added support for free/busy endpoint

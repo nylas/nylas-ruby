@@ -11,9 +11,14 @@ module Nylas
     # @!visibility private
     def self.build_form_request(request_body)
       attachments = request_body.delete(:attachments) || request_body.delete("attachments") || []
-      message_payload = request_body.to_json
+
+      # RestClient will not send a multipart request if there are no attachments
+      # so we need to return the message payload to be used as a json payload
+      return [request_body, []] if attachments.empty?
 
       # Prepare the data to return
+      message_payload = request_body.to_json
+
       form_data = {}
       opened_files = []
 
