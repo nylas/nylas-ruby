@@ -200,6 +200,23 @@ module Nylas
       client.as(client.app_secret).get(path: path, auth_method: HttpClient::AuthMethod::BASIC)
     end
 
+    # Returns list of IP addresses
+    # @param email_address [String] The email address to detect the provider for
+    # @return [Hash] The provider information
+    # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
+    def detect_provider(email_address)
+      payload = {
+        "client_id" => app_id,
+        "client_secret" => client.app_secret,
+        "email_address" => email_address
+      }
+      response = client.as(client.app_secret).execute(
+        method: :post,
+        path: "/connect/detect-provider",
+        payload: JSON.dump(payload),
+      )
+    end
+
     # @param message [Hash, String, #send!]
     # @return [Message] The resulting message
     def send!(message)
