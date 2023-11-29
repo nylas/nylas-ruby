@@ -62,6 +62,13 @@ module Nylas
       Connectors.new(self)
     end
 
+    # The contact resources for your Nylas application.
+    #
+    # @return [Nylas::Contacts] Contact resources for your Nylas application.
+    def contacts
+      Contacts.new(self)
+    end
+
     # The draft resources for your Nylas application.
     #
     # @return [Nylas::Drafts] Draft resources for your Nylas application.

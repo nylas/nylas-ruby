@@ -1,6 +1,7 @@
 # Changelog
 
 ### 6.0.0-beta.3 / TBD
+* Add support for contacts API
 * Fixed issue when sending message without attachments
 
 ### 6.0.0-beta.2 / 2023-11-21
