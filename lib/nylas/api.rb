@@ -210,10 +210,11 @@ module Nylas
         "client_secret" => client.app_secret,
         "email_address" => email_address
       }
-      response = client.as(client.app_secret).execute(
+
+      client.as(client.app_secret).execute(
         method: :post,
         path: "/connect/detect-provider",
-        payload: JSON.dump(payload),
+        payload: JSON.dump(payload)
       )
     end
 
