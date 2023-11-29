@@ -93,7 +93,7 @@ module Nylas
     # @return [Array(Array(Hash), String)] The free/busy response.
     def get_free_busy(identifier:, request_body:)
       post(
-        path: "#{api_uri}/v3/grants/#{identifier}/calendars/availability",
+        path: "#{api_uri}/v3/grants/#{identifier}/calendars/free-busy",
         request_body: request_body
       )
     end
