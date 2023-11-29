@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fix contact picture encoding error
+
 ### 5.17.0 / 2022-04-04
 * Add support for verifying webhook signatures
 * Add `event.updated_at`
