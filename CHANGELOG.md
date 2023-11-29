@@ -1,5 +1,26 @@
 # Changelog
 
+### 6.0.0-beta.3 / TBD
+* Fixed issue when sending message without attachments
+
+### 6.0.0-beta.2 / 2023-11-21
+* Added additional error classes
+* Added support for free/busy endpoint
+* Added support for Messages, Drafts, and Smart Compose APIs
+* Added support for custom authentication, connectors, and credentials APIs
+* Added support for folders API
+* Added support for attachments API
+* Set default timeout to 30 seconds
+
+### 6.0.0-beta.1 / 2023-08-16
+* **BREAKING CHANGE**: Ruby SDK v6 supports the Nylas API v3 exclusively, dropping support for any endpoints that are not available in v3.
+* **BREAKING CHANGE**: Officially support minimum Ruby v3
+* **BREAKING CHANGE**: Removed all models and typing from the SDK
+* **REMOVED**: Local Webhook development support is removed due to incompatibility
+* Rewrote the majority of SDK to be more modular and efficient
+* Created error classes for the different API errors as well as SDK-specific errors
+* Added a configurable timeout for outgoing calls to the API
+
 ### 5.17.0 / 2022-04-04
 * Add support for verifying webhook signatures
 * Add `event.updated_at`

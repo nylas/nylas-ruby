@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 describe Nylas::Calendar do
+  # Set and modify JSON calendar attributes.
   describe "JSONs" do
     let(:calendar) do
       api = instance_double(Nylas::API)
@@ -24,6 +25,7 @@ describe Nylas::Calendar do
       described_class.from_json(JSON.dump(data), api: api)
     end
 
+    # Deserialize all JSON calendar attributes into Ruby objects.
     it "Deserializes all the attributes into Ruby objects" do
       expect(calendar.id).to eql "cal-8766"
       expect(calendar.object).to eql "calendar"
@@ -39,6 +41,7 @@ describe Nylas::Calendar do
       expect(calendar.read_only).to be true
     end
 
+    # Serialize all JSON calendar attributes that are not Read-only for the Nylas API.
     it "Serializes all non-read only attributes for the API" do
       expected_json = {
         id: "cal-8766",
@@ -61,6 +64,7 @@ describe Nylas::Calendar do
     end
   end
 
+  # Serialize all calendar attributes into Ruby objects.
   describe "read on" do
     it "Serializes all the attributes into Ruby objects" do
       api = instance_double(Nylas::API)
@@ -98,7 +102,9 @@ describe Nylas::Calendar do
     end
   end
 
+  # Check if a calendar is Read-only.
   describe "#read_only?" do
+    # Sends a call to the Nylas API and returns `true` when the calendar is Read-only.
     it "returns true when read_only attribute from API return true" do
       api = instance_double(Nylas::API)
       data = {
@@ -110,6 +116,7 @@ describe Nylas::Calendar do
       expect(calendar).to be_read_only
     end
 
+    # Send a call to the Nylas API. Returns false when the calendar is not Read-only.
     it "returns false when read_only attribute from API return false" do
       api = instance_double(Nylas::API)
       data = {
@@ -122,7 +129,9 @@ describe Nylas::Calendar do
     end
   end
 
+  # Check if a calendar is the primary for an account.
   describe "#primary?" do
+    # Send a call to the Nylas API. Returns true when the calendar is the primary for an account.
     it "returns true when is_primary attribute from API return true" do
       api = instance_double(Nylas::API)
       data = {
@@ -134,6 +143,7 @@ describe Nylas::Calendar do
       expect(calendar).to be_primary
     end
 
+    # Send a call to the Nylas API. Returns false when the calendar is not the primary for an account.
     it "returns false when is_primary attribute from API return false" do
       api = instance_double(Nylas::API)
       data = {
@@ -146,6 +156,7 @@ describe Nylas::Calendar do
     end
   end
 
+  # Set constraints for retrieveng events from a calendar.
   describe "#events" do
     it "sets the constraints properly for getting child events" do
       api = instance_double(Nylas::API, execute: JSON.parse("{}"))
