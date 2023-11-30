@@ -18,9 +18,7 @@ describe Nylas::SearchCollection do
 
       collection = described_class.new(model: FullModel, api: api)
 
-      results = collection.each.to_a
-
-      expect(results.count).to be 1
+      expect(collection.count).to be 1
     end
   end
 end
