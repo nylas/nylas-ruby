@@ -148,7 +148,7 @@ describe Nylas::Contact do
 
     it "creates the Tempfile with the correct encoding" do
       contact = described_class.from_json(full_json, api: api)
-      expect(contact.picture.external_encoding.name).to eql("ascii-8bit")
+      expect(contact.picture.external_encoding.name).to eql("ASCII-8BIT")
     end
   end
 end
