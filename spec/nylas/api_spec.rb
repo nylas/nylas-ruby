@@ -5,6 +5,39 @@ require "spec_helper"
 # This spec is the only one that should have any webmock stuff going on, everything else should use the
 # FakeAPI to see what requests were made and what they included.
 describe Nylas::API do
+  describe "#detect_provider" do
+    # tests the detect_providr method
+    it "returns the provider" do
+      url = "https://api.nylas.com/connect/detect-provider"
+      client = Nylas::HttpClient.new(app_id: "not-real", app_secret: "also-not-real")
+      data = {
+        "client_id" => "not-real",
+        "client_secret" => "also-not-real",
+        "email_address" => "test@gmail.com"
+      }
+      response = {
+        auth_name: "gmail",
+        detected: true,
+        email_address: "test@gmail.com",
+        is_imap: false,
+        provider_name: "gmail"
+      }
+
+      stub_request(:post, url)
+        .to_return(
+          status: 200,
+          body: response.to_json,
+          headers: { "content-type" => "application/json" }
+        )
+      api = described_class.new(client: client)
+      res = api.detect_provider("test@gmail.com")
+
+      expect(res).to eq(response)
+      expect(WebMock).to have_requested(:post, url)
+        .with(body: data)
+    end
+  end
+
   describe "#exchange_code_for_token" do
     it "retrieves oauth token with code" do
       client = Nylas::HttpClient.new(app_id: "fake-app", app_secret: "fake-secret")
