@@ -87,5 +87,20 @@ module Nylas
 
       [true, request_id]
     end
+    
+    # Send an draft.
+    #
+    # @param identifier [String] Grant ID or email account from which to send the draft.
+    # @param draft_id [String] The id of the draft to send.
+    # @return [Array(Hash, String)] The sent message draft and the API Request ID.
+    def send(identifier:, draft_id:)
+    
+      response = post(
+        path: "#{api_uri}/v3/grants/#{identifier}/drafts/#{draft_id}"
+      )
+
+      response
+    end    
+    
   end
 end
