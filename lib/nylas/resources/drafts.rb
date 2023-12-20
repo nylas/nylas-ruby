@@ -90,8 +90,8 @@ module Nylas
     
     # Send an draft.
     #
-    # @param identifier [String] Grant ID or email account from which to delete an object.
-    # @param draft_id [String] The id of the draft to delete.
+    # @param identifier [String] Grant ID or email account from which to send the draft.
+    # @param draft_id [String] The id of the draft to send.
     # @return [Array(Hash, String)] The sent message draft and the API Request ID.
     def send(identifier:, draft_id:)
     
