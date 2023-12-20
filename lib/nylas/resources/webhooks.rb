@@ -19,6 +19,9 @@ module Nylas
     GRANT_EXPIRED = "grant.expired"
     MESSAGE_SEND_SUCCESS = "message.send_success"
     MESSAGE_SEND_FAILED = "message.send_failed"
+    MESSAGE_OPENED = "message.opened"
+    MESSAGE_LINK_CLICKED = "message.link_clicked"
+    THREAD_REPLIED = "thread.replied"
   end
 
   # Nylas Webhooks API
