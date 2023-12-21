@@ -34,7 +34,7 @@ module Nylas
 
       def cast(value)
         return JSON.parse(value, symbolize_names: true) if value.is_a?(String)
-        
+
         value if value.respond_to?(:key)
       end
     end
