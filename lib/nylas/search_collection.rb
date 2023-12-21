@@ -6,5 +6,9 @@ module Nylas
     def resources_path
       "#{model.resources_path(api: api)}/search"
     end
+
+    def count
+      self.class.new(model: model, api: api, constraints: constraints).find_each.map.count
+    end
   end
 end
