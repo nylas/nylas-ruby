@@ -132,4 +132,28 @@ describe Nylas::Contact do
       expect(JSON.parse(contact.to_json)).to eql(JSON.parse(full_json))
     end
   end
+
+  describe "#picture" do
+    it "returns a Tempfile" do
+      contact = described_class.from_json(full_json, api: api)
+      expect(contact.picture).to be_a(Tempfile)
+    end
+
+    it "caches the picture in @picture_tempfile" do
+      contact = described_class.from_json(full_json, api: api)
+      expect(contact.picture).to be_a(Tempfile)
+      expect(contact.picture).to be_a(Tempfile)
+      expect(api.requests.length).to be(1)
+    end
+
+    it "creates the Tempfile with the correct encoding" do
+      # Skip test if Ruby version is less than 3.0 due to how it handles IO streams
+      if Gem::Version.new(RUBY_VERSION) < Gem::Version.new("3.0")
+        skip "Test requires Ruby version 3.x or higher"
+      end
+
+      contact = described_class.from_json(full_json, api: api)
+      expect(contact.picture.external_encoding.name).to eql("ASCII-8BIT")
+    end
+  end
 end

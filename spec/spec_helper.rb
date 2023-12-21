@@ -18,6 +18,10 @@ class FakeAPI
     requests.push(method: method, path: path, payload: payload, query: query, auth_method: auth_method)
   end
 
+  def get(path: nil, headers: {}, query: {}, auth_method: nil)
+    requests.push(method: :get, path: path, query: query, headers: headers, auth_method: auth_method)
+  end
+
   def requests
     @requests ||= []
   end

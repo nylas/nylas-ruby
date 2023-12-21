@@ -44,7 +44,7 @@ module Nylas
     def picture
       return @picture_tempfile if @picture_tempfile
 
-      @picture_tempfile = Tempfile.new
+      @picture_tempfile = Tempfile.new(encoding: "ascii-8bit")
       @picture_tempfile.write(api.get(path: "#{resource_path}/picture"))
       @picture_tempfile.close
       @picture_tempfile

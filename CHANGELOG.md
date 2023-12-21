@@ -3,6 +3,8 @@
 ### Unreleased
 * Add support for count on message/thread search
 * Add support for detect provider endpoint
+* Add accept header by default
+* Fix contact picture encoding error
 
 ### 5.17.0 / 2022-04-04
 * Add support for verifying webhook signatures
