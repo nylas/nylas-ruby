@@ -182,7 +182,8 @@ module Nylas
         "X-Nylas-Client-Id" => @app_id,
         "Nylas-API-Version" => SUPPORTED_API_VERSION,
         "User-Agent" => "Nylas Ruby SDK #{Nylas::VERSION} - #{RUBY_VERSION}",
-        "Content-type" => "application/json"
+        "Content-type" => "application/json",
+        "Accept" => "application/json"
       }
     end
 

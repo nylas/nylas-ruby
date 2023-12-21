@@ -200,12 +200,31 @@ module Nylas
       client.as(client.app_secret).get(path: path, auth_method: HttpClient::AuthMethod::BASIC)
     end
 
+    # Returns list of IP addresses
+    # @param email_address [String] The email address to detect the provider for
+    # @return [Hash] The provider information
+    # hash has keys of :updated_at (unix timestamp) and :ip_addresses (array of strings)
+    def detect_provider(email_address)
+      payload = {
+        "client_id" => app_id,
+        "client_secret" => client.app_secret,
+        "email_address" => email_address
+      }
+
+      client.as(client.app_secret).execute(
+        method: :post,
+        path: "/connect/detect-provider",
+        payload: JSON.dump(payload)
+      )
+    end
+
     # @param message [Hash, String, #send!]
     # @return [Message] The resulting message
     def send!(message)
       return message.send! if message.respond_to?(:send!)
       return NewMessage.new(**message.merge(api: self)).send! if message.respond_to?(:key?)
-      return RawMessage.new(message, api: self).send! if message.is_a? String
+
+      RawMessage.new(message, api: self).send! if message.is_a? String
     end
 
     # Allows you to get an API that acts as a different user but otherwise has the same settings
