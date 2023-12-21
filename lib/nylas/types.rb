@@ -34,7 +34,8 @@ module Nylas
 
       def cast(value)
         return JSON.parse(value, symbolize_names: true) if value.is_a?(String)
-        return value if value.respond_to?(:key)
+        
+        value if value.respond_to?(:key)
       end
     end
     Types.registry[:hash] = HashType.new
