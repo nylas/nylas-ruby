@@ -34,6 +34,17 @@ module Nylas
       execute_token_request(request)
     end
 
+    # Create a Grant via Custom Authentication.
+    #
+    # @param request_body [Hash] The values to create the Grant with.
+    # @return [Array(Hash, String)] Created grant and API Request ID.
+    def custom_authentication(request_body)
+      post(
+        path: "#{api_uri}/v3/connect/custom",
+        request_body: request_body
+      )
+    end
+
     # Refreshes an access token.
     #
     # @param request [Hash] Code exchange request.

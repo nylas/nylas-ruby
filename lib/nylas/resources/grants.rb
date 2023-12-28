@@ -7,7 +7,6 @@ module Nylas
   # Grants
   class Grants < Resource
     include ApiOperations::Get
-    include ApiOperations::Post
     include ApiOperations::Put
     include ApiOperations::Delete
 
@@ -29,17 +28,6 @@ module Nylas
     def find(grant_id:)
       get(
         path: "#{api_uri}/v3/grant/#{grant_id}"
-      )
-    end
-
-    # Create a Grant via Custom Authentication.
-    #
-    # @param request_body [Hash] The values to create the Grant with.
-    # @return [Array(Hash, String)] Created grant and API Request ID.
-    def create(request_body)
-      post(
-        path: "#{api_uri}/v3/#{resource_name}/custom",
-        request_body: request_body
       )
     end
 
