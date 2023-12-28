@@ -16,15 +16,6 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Get
 
-    # Initializes Auth.
-    def initialize(sdk_instance)
-      super(sdk_instance)
-
-      @grants = Grants.new(sdk_instance)
-    end
-
-    attr_reader :grants
-
     # Builds the URL for authenticating users to your application with OAuth 2.0.
     #
     # @param config [Hash] Configuration for building the URL.
