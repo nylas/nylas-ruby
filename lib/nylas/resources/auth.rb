@@ -16,15 +16,6 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Get
 
-    # Initializes Auth.
-    def initialize(sdk_instance)
-      super(sdk_instance)
-
-      @grants = Grants.new(sdk_instance)
-    end
-
-    attr_reader :grants
-
     # Builds the URL for authenticating users to your application with OAuth 2.0.
     #
     # @param config [Hash] Configuration for building the URL.
@@ -41,6 +32,17 @@ module Nylas
       request[:grant_type] = "authorization_code"
 
       execute_token_request(request)
+    end
+
+    # Create a Grant via Custom Authentication.
+    #
+    # @param request_body [Hash] The values to create the Grant with.
+    # @return [Array(Hash, String)] Created grant and API Request ID.
+    def custom_authentication(request_body)
+      post(
+        path: "#{api_uri}/v3/connect/custom",
+        request_body: request_body
+      )
     end
 
     # Refreshes an access token.

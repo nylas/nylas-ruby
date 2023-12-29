@@ -1,6 +1,8 @@
 # Changelog
 
 ### 6.0.0-beta.3 / TBD
+* **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
+* **BREAKING CHANGE**: Moved `Grants.create()` to `Auth.customAuthentication()`
 * Add support for contacts API
 * Fixed issue when sending message without attachments
 
