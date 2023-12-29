@@ -151,9 +151,9 @@ module Nylas
     # @return [Array(Hash, String)] List of encoded parameters for the query.
     def build_query(config)
       params = {
-        "client_id" => config[:client_id],
-        "redirect_uri" => config[:redirect_uri],
-        "access_type" => config[:access_type] || "online",
+        "client_id" => config[:config][:client_id],
+        "redirect_uri" => config[:config][:redirect_uri],
+        "access_type" => config[:config][:access_type] || "online",
         "response_type" => "code"
       }
       set_params(config)
