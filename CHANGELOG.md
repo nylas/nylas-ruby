@@ -4,6 +4,7 @@
 * **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
 * **BREAKING CHANGE**: Moved `Grants.create()` to `Auth.customAuthentication()`
 * Add support for contacts API
+* Add support for send RSVP
 * Add draft send support
 * Add missing webhook triggers
 * Fixed issue when sending message without attachments
