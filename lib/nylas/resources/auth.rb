@@ -158,32 +158,17 @@ module Nylas
         "access_type" => config[:access_type] || "online",
         "response_type" => "code"
       }
-      set_params(config)
-
-      URI.encode_www_form(params)
-    end
-
-    # Set the parameters for the query
-    def set_params(config)
       params["provider"] = config[:provider] if config[:provider]
-      set_config_params(config)
-      set_more_config(config)
-    end
-
-    # Set login related configurations
-    def set_config_params(config)
+      params["prompt"] = config[:prompt] if config[:prompt]
+      params["metadata"] = config[:metadata] if config[:metadata]
+      params["state"] = config[:state] if config[:state]
+      params["scope"] = config[:scope].join(" ") if config[:scope]
       if config[:login_hint]
         params["login_hint"] = config[:login_hint]
         params["include_grant_scopes"] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
       end
-      params["scope"] = config[:scope].join(" ") if config[:scope]
-    end
 
-    # More config
-    def set_more_config(config)
-      params["prompt"] = config[:prompt] if config[:prompt]
-      params["metadata"] = config[:metadata] if config[:metadata]
-      params["state"] = config[:state] if config[:state]
+      URI.encode_www_form(params)
     end
 
     # Hashes the secret for PKCE authentication.
