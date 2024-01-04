@@ -5,6 +5,7 @@
 * **BREAKING CHANGE**: Moved `Grants.create()` to `Auth.customAuthentication()`
 * Add support for contacts API
 * Fixed issue when sending message without attachments
+* Fixed issue when building an OAuth2 URL
 
 ### 6.0.0-beta.2 / 2023-11-21
 * Added additional error classes
