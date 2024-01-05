@@ -1,5 +1,9 @@
 # Changelog
 
+### 6.0.0-beta.4 / TBD
+* Fixed list and find scheduled messages
+* Fixed incorrect PKCE code challenge generation
+
 ### 6.0.0-beta.3 / 2024-01-04
 * **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
 * **BREAKING CHANGE**: Moved `Grants.create()` to `Auth.customAuthentication()`
