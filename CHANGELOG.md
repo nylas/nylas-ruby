@@ -3,6 +3,7 @@
 ### 6.0.0-beta.4 / TBD
 * Fixed list and find scheduled messages
 * Fixed incorrect PKCE code challenge generation
+* Fixed incompatible types when building OAuth2 URL
 
 ### 6.0.0-beta.3 / 2024-01-04
 * **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
