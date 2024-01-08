@@ -107,7 +107,7 @@ module Nylas
     # Builds the query with admin consent authentication for Microsoft.
     #
     # @param config [Hash] Configuration for the query.
-    # @return [Array(Hash, String)] Updated list of parameters, including those specific to admin
+    # @return [String] Updated list of parameters, including those specific to admin
     # consent.
     def build_query_with_admin_consent(config)
       params = build_query(config)
@@ -116,14 +116,14 @@ module Nylas
       params["response_type"] = "adminconsent"
       params["credential_id"] = config["credentialId"]
 
-      params
+      URI.encode_www_form(params)
     end
 
     # Builds the query with PKCE.
     #
     # @param config [Hash] Configuration for the query.
     # @param secret_hash [Hash] Hashed secret.
-    # @return [Array(Hash, String)] Updated list of encoded parameters, including those specific
+    # @return [String] Updated list of encoded parameters, including those specific
     # to PKCE.
     def build_query_with_pkce(config, secret_hash)
       params = build_query(config)
@@ -138,11 +138,11 @@ module Nylas
     # Builds the authentication URL.
     #
     # @param config [Hash] Configuration for the query.
-    # @return [Array(Hash, String)] List of components for the authentication URL.
+    # @return [URI] List of components for the authentication URL.
     def url_auth_builder(config)
       builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
-      builder.query = build_query(config)
+      builder.query = URI.encode_www_form(build_query(config))
 
       builder
     end
@@ -150,7 +150,7 @@ module Nylas
     # Builds the query.
     #
     # @param config [Hash] Configuration for the query.
-    # @return [Array(Hash, String)] List of encoded parameters for the query.
+    # @return [Hash] List of parameters to encode in the query.
     def build_query(config)
       params = {
         "client_id" => config[:client_id],
@@ -168,7 +168,7 @@ module Nylas
         params["include_grant_scopes"] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
       end
 
-      URI.encode_www_form(params)
+      params
     end
 
     # Hash a plain text secret for use in PKCE.
