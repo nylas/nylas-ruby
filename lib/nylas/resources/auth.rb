@@ -171,13 +171,13 @@ module Nylas
       URI.encode_www_form(params)
     end
 
-    # Hashes the secret for PKCE authentication.
+    # Hash a plain text secret for use in PKCE.
     #
-    # @param secret [String] Randomly-generated authentication secret.
-    # @return [Hash] Hashed authentication secret.
+    # @param secret [String] The plain text secret to hash.
+    # @return [String] The hashed secret with base64 encoding (without padding).
     def hash_pkce_secret(secret)
-      Digest::SHA256.digest(secret).unpack1("H*")
-      Base64.strict_encode64(Digest::SHA256.digest(secret))
+      sha256_hash = Digest::SHA256.hexdigest(secret)
+      Base64.urlsafe_encode64(sha256_hash, padding: false)
     end
 
     # Sends the token request to the Nylas API.
