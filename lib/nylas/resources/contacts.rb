@@ -79,7 +79,7 @@ module Nylas
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Array(Hash), String)] The list of contact groups and API Request ID.
-    def contact_groups(identifier:, query_params: nil)
+    def list_groups(identifier:, query_params: nil)
       get(
         path: "#{api_uri}/v3/grants/#{identifier}/contacts/groups",
         query_params: query_params
