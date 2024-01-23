@@ -13,6 +13,7 @@ module Nylas
     self.destroyable = true
     self.id_listable = true
     self.countable = true
+    self.filterable = true
 
     attribute :id, :string
     attribute :object, :string

@@ -3,8 +3,8 @@
 require "spec_helper"
 
 describe Nylas::Draft do
-  it "is not filterable" do
-    expect(described_class).not_to be_filterable
+  it "is filterable" do
+    expect(described_class).to be_filterable
   end
 
   it "is creatable" do
