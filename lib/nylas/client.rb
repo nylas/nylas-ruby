@@ -117,5 +117,12 @@ module Nylas
     def webhooks
       Webhooks.new(self)
     end
+    
+    # The smart compose resources for your Nylas application.
+    #
+    # @return [Nylas::SmartCompose] Smart Compose resources for your Nylas application.
+    def smartcompose
+      SmartCompose.new(self)
+    end     
   end
 end
