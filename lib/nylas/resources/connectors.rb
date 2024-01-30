@@ -10,6 +10,7 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Put
     include ApiOperations::Delete
+    include ApiOperations::Patch
 
     # Access the Credentials API
     attr_reader :credentials
@@ -59,7 +60,7 @@ module Nylas
     # @param request_body [Hash] The values to update the connector with
     # @return [Array(Hash, String)] The updated connector and API Request ID.
     def update(provider:, request_body:)
-      put(
+      patch(
         path: "#{api_uri}/v3/connectors/#{provider}",
         request_body: request_body
       )
