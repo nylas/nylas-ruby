@@ -146,15 +146,15 @@ describe Nylas::HttpClient do
   end
 
   describe "#execute" do
-    let(:mock_request) { double(:request, redirection_history: nil) }
+    let(:mock_request) { instance_double("request", redirection_history: nil) }
 
     it "returns the response" do
       response_json = {
         "foo" => "bar"
       }
       request_params = { method: :get, path: "https://test.api.nylas.com/foo", timeout: 30 }
-      mock_http_res = double(:response, to_hash: {}, code: 200,
-                                        headers: { content_type: "application/json" })
+      mock_http_res = instance_double("response", to_hash: {}, code: 200,
+                                                  headers: { content_type: "application/json" })
       mock_response = RestClient::Response.create(response_json.to_json, mock_http_res, mock_request)
       allow(RestClient::Request).to receive(:execute).and_return(mock_response)
 
