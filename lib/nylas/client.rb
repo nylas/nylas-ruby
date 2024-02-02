@@ -90,6 +90,13 @@ module Nylas
       Folders.new(self)
     end
 
+    # The grants resources for your Nylas application.
+    #
+    # @return [Nylas::Grants] Grant resources for your Nylas application
+    def grants
+      Grants.new(self)
+    end
+
     # The message resources for your Nylas application.
     #
     # @return [Nylas::Messages] Message resources for your Nylas application

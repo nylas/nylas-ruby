@@ -93,6 +93,6 @@ module Nylas
         query_params: query_params,
         request_body: request_body
       )
-    end    
+    end
   end
 end

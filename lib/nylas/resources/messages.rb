@@ -94,21 +94,21 @@ module Nylas
     # Retrieve your scheduled messages.
     #
     # @param identifier [String] Grant ID or email account from which to find the scheduled message from.
-    # @param schedule_id [String] The id of the scheduled message to stop.
     # @return [Array(Hash, String)] The list of scheduled messages and the API Request ID.
-    def list_scheduled_messages(identifier:, schedule_id:)
+    def list_scheduled_messages(identifier:)
       get(
-        path: "#{api_uri}/v3/grants/#{identifier}/messages/schedules/#{schedule_id}"
+        path: "#{api_uri}/v3/grants/#{identifier}/messages/schedules"
       )
     end
 
     # Retrieve your scheduled messages.
     #
     # @param identifier [String] Grant ID or email account from which to list the scheduled messages from.
+    # @param schedule_id [String] The id of the scheduled message to stop.
     # @return [Array(Hash, String)] The scheduled message and the API Request ID.
-    def find_scheduled_messages(identifier:)
+    def find_scheduled_messages(identifier:, schedule_id:)
       get(
-        path: "#{api_uri}/v3/grants/#{identifier}/messages/schedules"
+        path: "#{api_uri}/v3/grants/#{identifier}/messages/schedules/#{schedule_id}"
       )
     end
 

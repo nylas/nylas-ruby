@@ -1,8 +1,20 @@
 # Changelog
 
-### 6.0.0-beta.3 / TBD
+### 6.0.0-beta.4 / TBD
+* Fixed list and find scheduled messages
+* Fixed incorrect PKCE code challenge generation
+* Fixed incompatible types when building OAuth2 URL
+
+### 6.0.0-beta.3 / 2024-01-04
+* **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
+* **BREAKING CHANGE**: Moved `Grants.create()` to `Auth.customAuthentication()`
 * Add support for contacts API
+* Add support for send RSVP
+* Add draft send support
+* Add missing webhook triggers
 * Fixed issue when sending message without attachments
+* Fixed issue when building an OAuth2 URL
+* Fixed free-busy endpoint path
 
 ### 6.0.0-beta.2 / 2023-11-21
 * Added additional error classes
