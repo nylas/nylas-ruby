@@ -92,8 +92,7 @@ module Nylas
     def build_request(
       method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil
     )
-      url = path
-      url = add_query_params_to_url(url, query)
+      url = build_url(path, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
       if !payload.nil? && !payload["multipart"]
         payload = payload&.to_json
@@ -206,33 +205,43 @@ module Nylas
     end
 
     # Adds query parameters to a URL.
-    #
+    # @param url [String] The base URL.
+    # @param query [Hash] The query parameters to add to the URL.
     # @return [String] Processed URL, including query params.
-    def add_query_params_to_url(url, query)
+    def build_url(url, query = nil)
       unless query.nil? || query.empty?
         uri = URI.parse(url)
-        query = custom_params(query)
-        params = URI.decode_www_form(uri.query || "") + query.to_a
-        uri.query = URI.encode_www_form(params)
+        uri = build_query(uri, query)
         url = uri.to_s
       end
 
       url
     end
 
-    # Defines custom parameters for a metadata_pair query.
-    #
-    # @return [String] Custom parameter in "<key>:<value>" format.
-    def custom_params(query)
-      # Convert hash to "<key>:<value>" form for metadata_pair query.
-      if query.key?(:metadata_pair)
-        pairs = query[:metadata_pair].map do |key, value|
-          "#{key}:#{value}"
+    # Build the query string for a URI.
+    # @param uri [URI] URL to add the query to.
+    # @param query [Hash] The query params to include in the query.
+    # @return [URI] The URI object with the query parameters included.
+    def build_query(uri, query)
+      query.each do |key, value|
+        case value
+        when Array
+          value.each do |item|
+            qs = "#{URI.encode_www_form_component(key)}=#{URI.encode_www_form_component(item)}"
+            uri.query = [uri.query, qs].compact.join("&")
+          end
+        when Hash
+          value.each do |k, v|
+            qs = "#{URI.encode_www_form_component(key)}=#{URI.encode_www_form_component("#{k}:#{v}")}"
+            uri.query = [uri.query, qs].compact.join("&")
+          end
+        else
+          qs = "#{URI.encode_www_form_component(key)}=#{URI.encode_www_form_component(value)}"
+          uri.query = [uri.query, qs].compact.join("&")
         end
-        query[:metadata_pair] = pairs
       end
 
-      query
+      uri
     end
 
     # Set the authorization header for an API query.
