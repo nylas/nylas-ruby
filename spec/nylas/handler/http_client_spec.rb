@@ -157,17 +157,18 @@ describe Nylas::HttpClient do
 
     it "returns the response" do
       response_json = {
-        "foo" => "bar"
+        foo: "bar"
       }
       request_params = { method: :get, path: "https://test.api.nylas.com/foo", timeout: 30 }
       mock_http_res = instance_double("response", to_hash: {}, code: 200,
                                                   headers: { content_type: "application/json" })
       mock_response = RestClient::Response.create(response_json.to_json, mock_http_res, mock_request)
-      allow(RestClient::Request).to receive(:execute).and_return(mock_response)
+      mock_response.headers[:content_type] = "application/json"
+      allow(RestClient::Request).to receive(:execute).and_yield(mock_response, mock_request, mock_http_res)
 
       response = http_client.send(:execute, **request_params)
 
-      expect(response.body).to eq(response_json.to_json)
+      expect(response).to eq(response_json)
     end
 
     it "raises a timeout error" do
