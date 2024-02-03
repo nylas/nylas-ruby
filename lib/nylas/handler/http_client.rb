@@ -42,8 +42,8 @@ module Nylas
 
           parse_json_evaluate_error(result.code.to_i, response, path, content_type)
         end
-      rescue Timeout::Error => _e
-        raise Nylas::NylasSdkTimeoutError.new(request.path, timeout)
+      rescue RestClient::Exceptions::OpenTimeout, RestClient::Exceptions::ReadTimeout
+        raise Nylas::NylasSdkTimeoutError.new(request[:path], timeout)
       end
     end
 
