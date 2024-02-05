@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - v6.0.0-beta
   pull_request:
 
 jobs:
@@ -29,7 +28,7 @@ jobs:
         run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
       - name: Set env CLOUDFLARE_BRANCH
         run: |
-          if [[ $BRANCH == 'v6.0.0-beta' && $GITHUB_EVENT_NAME == 'push' ]]; then
+          if [[ $BRANCH == 'main' && $GITHUB_EVENT_NAME == 'push' ]]; then
               echo "CLOUDFLARE_BRANCH=main" >> "$GITHUB_ENV"
           else
               echo "CLOUDFLARE_BRANCH=$BRANCH" >> "$GITHUB_ENV"
