@@ -10,6 +10,7 @@
 * Fixed incompatible types when building OAuth2 URL
 * Fixed construction of query parameters
 * Fixed construction of OAuth2 URL
+* Fixed typo in paths for `Grants` class
 
 ### 6.0.0-beta.3 / 2024-01-04
 * **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`
