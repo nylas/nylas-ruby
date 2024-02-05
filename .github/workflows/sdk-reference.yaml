@@ -3,6 +3,7 @@ name: sdk-reference
 on:
   push:
     branches:
+      - main
       - v6.0.0-beta
   pull_request:
 

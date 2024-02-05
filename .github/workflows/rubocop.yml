@@ -9,9 +9,9 @@ name: Rubocop
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, v6.0.0-beta ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, v6.0.0-beta ]
 
 jobs:
   test:
