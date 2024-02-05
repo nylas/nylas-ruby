@@ -8,7 +8,7 @@ module Nylas
   class Credentials < Resource
     include ApiOperations::Get
     include ApiOperations::Post
-    include ApiOperations::Put
+    include ApiOperations::Patch
     include ApiOperations::Delete
 
     # Return all credentials.
@@ -53,7 +53,7 @@ module Nylas
     # @param request_body [Hash] The values to update the connector with
     # @return [Array(Hash, String)] The updated connector and API Request ID.
     def update(provider:, credential_id:, request_body:)
-      put(
+      patch(
         path: "#{api_uri}/v3/connectors/#{provider}/creds/#{credential_id}",
         request_body: request_body
       )
