@@ -2,10 +2,12 @@
 
 ### 6.0.0-beta.4 / TBD
 * **BREAKING CHANGE**: Renamed `Applications.info()` to `Applications.get_details()` for consistency
+* **BREAKING CHANGE**: Changed return type of `Auth.url_for_oauth2_pkce()` from `OpenStruct` to a hash for consistency
 * Fixed list and find scheduled messages
 * Fixed incorrect PKCE code challenge generation
 * Fixed incompatible types when building OAuth2 URL
 * Fixed construction of query parameters
+* Fixed construction of OAuth2 URL
 
 ### 6.0.0-beta.3 / 2024-01-04
 * **BREAKING CHANGE**: Moved grants API out of `Auth` to `NylasClient`

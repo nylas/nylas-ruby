@@ -21,6 +21,7 @@ module Nylas
     # @param config [Hash] Configuration for building the URL.
     # @return [String] URL for hosted authentication.
     def url_for_oauth2(config)
+      config = config.transform_keys(&:to_sym)
       url_auth_builder(config).to_s
     end
 
@@ -59,7 +60,7 @@ module Nylas
     #   IMPORTANT: You must store the 'secret' returned to use it inside the CodeExchange flow.
     #
     # @param config [Hash] Configuration for building the URL.
-    # @return [OpenStruct] URL for hosted authentication with the secret and the hashed secret.
+    # @return [Hash] URL for hosted authentication with the secret and the hashed secret.
     def url_for_oauth2_pkce(config)
       url = url_auth_builder(config)
 
@@ -71,7 +72,7 @@ module Nylas
       url.query = build_query_with_pkce(config, secret_hash)
 
       # Returns the URL with secret and hashed secret.
-      OpenStruct.new(secret: secret, secret_hash: secret_hash, url: url.to_s)
+      { secret: secret, secret_hash: secret_hash, url: url.to_s }
     end
 
     # Builds the URL for admin consent authentication for Microsoft.
@@ -81,9 +82,7 @@ module Nylas
     def url_for_admin_consent(config)
       config_with_provider = config.merge("provider" => "microsoft")
       url = url_auth_builder(config_with_provider)
-
-      query_params = build_query_with_admin_consent(config)
-      url.query = URI.encode_www_form(query_params)
+      url.query = build_query_with_admin_consent(config)
 
       url.to_s
     end
@@ -110,13 +109,15 @@ module Nylas
     # @return [String] Updated list of parameters, including those specific to admin
     # consent.
     def build_query_with_admin_consent(config)
+      config = config.transform_keys(&:to_sym)
       params = build_query(config)
 
       # Appends new params specific for admin consent.
+      params["provider"] = "microsoft"
       params["response_type"] = "adminconsent"
-      params["credential_id"] = config["credentialId"]
+      params["credential_id"] = config[:credential_id] if config[:credential_id]
 
-      URI.encode_www_form(params)
+      URI.encode_www_form(params).gsub("+", "%20")
     end
 
     # Builds the query with PKCE.
@@ -126,13 +127,14 @@ module Nylas
     # @return [String] Updated list of encoded parameters, including those specific
     # to PKCE.
     def build_query_with_pkce(config, secret_hash)
+      config = config.transform_keys(&:to_sym)
       params = build_query(config)
 
       # Appends new PKCE specific params.
       params["code_challenge_method"] = "s256"
       params["code_challenge"] = secret_hash
 
-      URI.encode_www_form(params)
+      URI.encode_www_form(params).gsub("+", "%20")
     end
 
     # Builds the authentication URL.
@@ -142,7 +144,7 @@ module Nylas
     def url_auth_builder(config)
       builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
-      builder.query = URI.encode_www_form(build_query(config))
+      builder.query = URI.encode_www_form(build_query(config)).gsub!("+", "%20")
 
       builder
     end
