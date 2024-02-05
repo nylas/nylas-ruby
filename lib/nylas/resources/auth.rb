@@ -21,7 +21,6 @@ module Nylas
     # @param config [Hash] Configuration for building the URL.
     # @return [String] URL for hosted authentication.
     def url_for_oauth2(config)
-      config = config.transform_keys(&:to_sym)
       url_auth_builder(config).to_s
     end
 
@@ -109,13 +108,12 @@ module Nylas
     # @return [String] Updated list of parameters, including those specific to admin
     # consent.
     def build_query_with_admin_consent(config)
-      config = config.transform_keys(&:to_sym)
       params = build_query(config)
 
       # Appends new params specific for admin consent.
-      params["provider"] = "microsoft"
-      params["response_type"] = "adminconsent"
-      params["credential_id"] = config[:credential_id] if config[:credential_id]
+      params[:provider] = "microsoft"
+      params[:response_type] = "adminconsent"
+      params[:credential_id] = config[:credential_id] if config[:credential_id]
 
       URI.encode_www_form(params).gsub("+", "%20")
     end
@@ -127,12 +125,11 @@ module Nylas
     # @return [String] Updated list of encoded parameters, including those specific
     # to PKCE.
     def build_query_with_pkce(config, secret_hash)
-      config = config.transform_keys(&:to_sym)
       params = build_query(config)
 
       # Appends new PKCE specific params.
-      params["code_challenge_method"] = "s256"
-      params["code_challenge"] = secret_hash
+      params[:code_challenge_method] = "s256"
+      params[:code_challenge] = secret_hash
 
       URI.encode_www_form(params).gsub("+", "%20")
     end
@@ -155,19 +152,19 @@ module Nylas
     # @return [Hash] List of parameters to encode in the query.
     def build_query(config)
       params = {
-        "client_id" => config[:client_id],
-        "redirect_uri" => config[:redirect_uri],
-        "access_type" => config[:access_type] || "online",
-        "response_type" => "code"
+        client_id: config[:client_id],
+        redirect_uri: config[:redirect_uri],
+        access_type: config[:access_type] || "online",
+        response_type: "code"
       }
-      params["provider"] = config[:provider] if config[:provider]
-      params["prompt"] = config[:prompt] if config[:prompt]
-      params["metadata"] = config[:metadata] if config[:metadata]
-      params["state"] = config[:state] if config[:state]
-      params["scope"] = config[:scope].join(" ") if config[:scope]
+      params[:provider] = config[:provider] if config[:provider]
+      params[:prompt] = config[:prompt] if config[:prompt]
+      params[:metadata] = config[:metadata] if config[:metadata]
+      params[:state] = config[:state] if config[:state]
+      params[:scope] = config[:scope].join(" ") if config[:scope]
       if config[:login_hint]
-        params["login_hint"] = config[:login_hint]
-        params["include_grant_scopes"] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
+        params[:login_hint] = config[:login_hint]
+        params[:include_grant_scopes] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
       end
 
       params
