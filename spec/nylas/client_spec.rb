@@ -46,6 +46,7 @@ describe Nylas::Client do
         expect(nylas.contacts).to be_a(Nylas::Contacts)
         expect(nylas.drafts).to be_a(Nylas::Drafts)
         expect(nylas.events).to be_a(Nylas::Events)
+        expect(nylas.grants).to be_a(Nylas::Grants)
         expect(nylas.folders).to be_a(Nylas::Folders)
         expect(nylas.messages).to be_a(Nylas::Messages)
         expect(nylas.threads).to be_a(Nylas::Threads)
