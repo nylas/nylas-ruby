@@ -5,6 +5,9 @@ SimpleCov.start do
   add_filter "/spec/"
 end
 
+require "simplecov-cobertura"
+SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
+
 require "nylas"
 require "support/nylas_helpers"
 
