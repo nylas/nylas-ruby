@@ -46,6 +46,31 @@ describe Nylas::RedirectUris do
     end
   end
 
+  describe "#create" do
+    it "calls the post method with the correct parameters" do
+      request_body = {
+        url: "http://localhost/abc",
+        platform: "web",
+        settings: {
+          origin: "string",
+          bundle_id: "string",
+          app_store_id: "string",
+          team_id: "string",
+          package_name: "string",
+          sha1_certificate_fingerprint: "string"
+        }
+      }
+      path = "#{api_uri}/v3/applications/redirect-uris"
+      allow(redirect_uris).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      redirect_uri_response = redirect_uris.create(request_body: request_body)
+
+      expect(redirect_uri_response).to eq(response)
+    end
+  end
+
   describe "#update" do
     it "calls the patch method with the correct parameters" do
       redirect_uri_id = "redirect_uri-123"
