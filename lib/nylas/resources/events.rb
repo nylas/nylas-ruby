@@ -86,7 +86,7 @@ module Nylas
     # @param event_id [String] The id of the event to respond to.
     # @param request_body [Hash] The status values to send the RSVP with.
     # @param query_params [Hash] The query parameters to include in the request
-    # @return [Hash] Response object with the API Request ID.
+    # @return [(Hash, String)] Response object with the API Request ID.
     def send_rsvp(identifier:, event_id:, request_body:, query_params:)
       post(
         path: "#{api_uri}/v3/grants/#{identifier}/events/#{event_id}/send-rsvp",
