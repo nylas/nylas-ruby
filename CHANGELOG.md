@@ -1,6 +1,6 @@
 # Changelog
 
-### 6.0.0-beta.4 / TBD
+### 6.0.0-beta.4 / 2024-02-05
 * **BREAKING CHANGE**: Renamed `Applications.info()` to `Applications.get_details()` for consistency
 * **BREAKING CHANGE**: Changed return type of `Auth.url_for_oauth2_pkce()` from `OpenStruct` to a hash for consistency
 * Added support for detecting providers
