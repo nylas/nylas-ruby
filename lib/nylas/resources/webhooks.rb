@@ -84,5 +84,38 @@ module Nylas
 
       [true, request_id]
     end
+
+    # Update the webhook secret value for a destination.
+    # @param webhook_id [String] The ID of the webhook destination to update.
+    # @return [Array(Hash, String)] The updated webhook destination and API Request ID.
+    def rotate_secret(webhook_id:)
+      put(
+        path: "#{api_uri}/v3/webhooks/#{webhook_id}/rotate-secret",
+        request_body: {}
+      )
+    end
+
+    # Get the current list of IP addresses that Nylas sends webhooks from
+    # @return [Array(Hash, String)] List of IP addresses that Nylas sends webhooks from and API Request ID.
+    def ip_addresses
+      get(
+        path: "#{api_uri}/v3/webhooks/ip-addresses"
+      )
+    end
+
+    # Extract the challenge parameter from a URL
+    # @param url [String] The URL sent by Nylas containing the challenge parameter
+    # @return [String] The challenge parameter
+    def self.extract_challenge_parameter(url)
+      url_object = URI.parse(url)
+      query = CGI.parse(url_object.query || "")
+
+      challenge_parameter = query["challenge"]
+      if challenge_parameter.nil? || challenge_parameter.empty? || challenge_parameter.first.nil?
+        raise "Invalid URL or no challenge parameter found."
+      end
+
+      challenge_parameter.first
+    end
   end
 end
