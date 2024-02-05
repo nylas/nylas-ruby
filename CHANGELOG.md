@@ -1,6 +1,7 @@
 # Changelog
 
 ### 6.0.0-beta.4 / TBD
+* **BREAKING CHANGE**: Renamed `Applications.info()` to `Applications.get_details()` for consistency
 * Fixed list and find scheduled messages
 * Fixed incorrect PKCE code challenge generation
 * Fixed incompatible types when building OAuth2 URL
