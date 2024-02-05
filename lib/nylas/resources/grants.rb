@@ -16,7 +16,7 @@ module Nylas
     # @return [Array(Array(Hash), String)] The list of grants and API Request ID.
     def list(query_params: nil)
       get(
-        path: "#{api_uri}/v3/grant",
+        path: "#{api_uri}/v3/grants",
         query_params: query_params
       )
     end
@@ -27,7 +27,7 @@ module Nylas
     # @return [Array(Hash, String)] The grant and API request ID.
     def find(grant_id:)
       get(
-        path: "#{api_uri}/v3/grant/#{grant_id}"
+        path: "#{api_uri}/v3/grants/#{grant_id}"
       )
     end
 
@@ -38,7 +38,7 @@ module Nylas
     # @return [Array(Hash, String)] The updated grant and API Request ID.
     def update(grant_id:, request_body:)
       put(
-        path: "#{api_uri}/v3/grant/#{grant_id}",
+        path: "#{api_uri}/v3/grants/#{grant_id}",
         request_body: request_body
       )
     end
@@ -49,7 +49,7 @@ module Nylas
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
     def destroy(grant_id:)
       _, request_id = delete(
-        path: "#{api_uri}/v3/grant/#{grant_id}"
+        path: "#{api_uri}/v3/grants/#{grant_id}"
       )
 
       [true, request_id]

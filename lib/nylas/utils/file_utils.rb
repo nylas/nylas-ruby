@@ -38,8 +38,12 @@ module Nylas
     # @return [Hash] The request that will attach the file to the message/draft
     def self.attach_file_request_builder(file_path)
       filename = File.basename(file_path)
-      content_type = MIME::Types.type_for(file_path).first.to_s
-      content_type = "application/octet-stream" if content_type.empty?
+      content_type = MIME::Types.type_for(file_path)
+      content_type = if !content_type.nil? && !content_type.empty?
+                       content_type.first.to_s
+                     else
+                       "application/octet-stream"
+                     end
       size = File.size(file_path)
       content = File.new(file_path, "rb")
 

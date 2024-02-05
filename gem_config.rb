@@ -45,7 +45,7 @@ module GemConfig
     [["rspec", "~> 3.12"],
      ["rspec-json_matcher", "~> 0.2.0"],
      ["webmock", "~> 3.18", ">= 3.18.1"],
-     ["simplecov", "~> 0.21.2"],
+     ["simplecov", "~> 0.22.0"],
      ["simplecov-cobertura", "~> 2.1.0"],
      ["webrick", "~> 1.8", ">= 1.8.1"]]
   end

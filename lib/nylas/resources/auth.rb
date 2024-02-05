@@ -59,7 +59,7 @@ module Nylas
     #   IMPORTANT: You must store the 'secret' returned to use it inside the CodeExchange flow.
     #
     # @param config [Hash] Configuration for building the URL.
-    # @return [OpenStruct] URL for hosted authentication with the secret and the hashed secret.
+    # @return [Hash] URL for hosted authentication with the secret and the hashed secret.
     def url_for_oauth2_pkce(config)
       url = url_auth_builder(config)
 
@@ -71,7 +71,7 @@ module Nylas
       url.query = build_query_with_pkce(config, secret_hash)
 
       # Returns the URL with secret and hashed secret.
-      OpenStruct.new(secret: secret, secret_hash: secret_hash, url: url.to_s)
+      { secret: secret, secret_hash: secret_hash, url: url.to_s }
     end
 
     # Builds the URL for admin consent authentication for Microsoft.
@@ -81,9 +81,7 @@ module Nylas
     def url_for_admin_consent(config)
       config_with_provider = config.merge("provider" => "microsoft")
       url = url_auth_builder(config_with_provider)
-
-      query_params = build_query_with_admin_consent(config)
-      url.query = URI.encode_www_form(query_params)
+      url.query = build_query_with_admin_consent(config)
 
       url.to_s
     end
@@ -102,6 +100,16 @@ module Nylas
       true
     end
 
+    # Detects the provider of an email address.
+    # @param params [Hash] Parameters to detect the provider.
+    # @return [Array(Hash, String)] Detected provider, if found and API Request ID.
+    def detect_provider(params)
+      post(
+        path: "#{api_uri}/v3/providers/detect",
+        query_params: params
+      )
+    end
+
     private
 
     # Builds the query with admin consent authentication for Microsoft.
@@ -113,10 +121,11 @@ module Nylas
       params = build_query(config)
 
       # Appends new params specific for admin consent.
-      params["response_type"] = "adminconsent"
-      params["credential_id"] = config["credentialId"]
+      params[:provider] = "microsoft"
+      params[:response_type] = "adminconsent"
+      params[:credential_id] = config[:credential_id] if config[:credential_id]
 
-      URI.encode_www_form(params)
+      URI.encode_www_form(params).gsub("+", "%20")
     end
 
     # Builds the query with PKCE.
@@ -129,10 +138,10 @@ module Nylas
       params = build_query(config)
 
       # Appends new PKCE specific params.
-      params["code_challenge_method"] = "s256"
-      params["code_challenge"] = secret_hash
+      params[:code_challenge_method] = "s256"
+      params[:code_challenge] = secret_hash
 
-      URI.encode_www_form(params)
+      URI.encode_www_form(params).gsub("+", "%20")
     end
 
     # Builds the authentication URL.
@@ -142,7 +151,7 @@ module Nylas
     def url_auth_builder(config)
       builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
-      builder.query = URI.encode_www_form(build_query(config))
+      builder.query = URI.encode_www_form(build_query(config)).gsub!("+", "%20")
 
       builder
     end
@@ -153,19 +162,19 @@ module Nylas
     # @return [Hash] List of parameters to encode in the query.
     def build_query(config)
       params = {
-        "client_id" => config[:client_id],
-        "redirect_uri" => config[:redirect_uri],
-        "access_type" => config[:access_type] || "online",
-        "response_type" => "code"
+        client_id: config[:client_id],
+        redirect_uri: config[:redirect_uri],
+        access_type: config[:access_type] || "online",
+        response_type: "code"
       }
-      params["provider"] = config[:provider] if config[:provider]
-      params["prompt"] = config[:prompt] if config[:prompt]
-      params["metadata"] = config[:metadata] if config[:metadata]
-      params["state"] = config[:state] if config[:state]
-      params["scope"] = config[:scope].join(" ") if config[:scope]
+      params[:provider] = config[:provider] if config[:provider]
+      params[:prompt] = config[:prompt] if config[:prompt]
+      params[:metadata] = config[:metadata] if config[:metadata]
+      params[:state] = config[:state] if config[:state]
+      params[:scope] = config[:scope].join(" ") if config[:scope]
       if config[:login_hint]
-        params["login_hint"] = config[:login_hint]
-        params["include_grant_scopes"] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
+        params[:login_hint] = config[:login_hint]
+        params[:include_grant_scopes] = config[:include_grant_scopes].to_s if config[:include_grant_scopes]
       end
 
       params
@@ -184,6 +193,8 @@ module Nylas
     #
     # @param request [Hash] Code exchange request.
     def execute_token_request(request)
+      request[:client_secret] = api_key if request[:client_secret].nil?
+
       execute(
         method: :post,
         path: "#{api_uri}/v3/connect/token",

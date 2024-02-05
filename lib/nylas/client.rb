@@ -18,7 +18,7 @@ module Nylas
     #
     # @param api_key [String, nil] API key to use for the client session.
     # @param api_uri [String] Client session's host.
-    # @param timeout [String, nil] Timeout value to use for the client session.
+    # @param timeout [Integer, nil] Timeout value to use for the client session.
     def initialize(api_key:,
                    api_uri: Config::DEFAULT_REGION_URL,
                    timeout: nil)

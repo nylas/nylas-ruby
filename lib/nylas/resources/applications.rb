@@ -17,10 +17,10 @@ module Nylas
       @redirect_uris = RedirectUris.new(sdk_instance)
     end
 
-    # Gets the application object.
+    # Get application details.
     #
-    # @return [Array(Hash, String)] Application object and API Request ID.
-    def info
+    # @return [Array(Hash, String)] Application details and API Request ID.
+    def get_details
       get(path: "#{api_uri}/v3/applications")
     end
   end

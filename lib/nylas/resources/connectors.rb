@@ -8,9 +8,8 @@ module Nylas
   class Connectors < Resource
     include ApiOperations::Get
     include ApiOperations::Post
-    include ApiOperations::Put
-    include ApiOperations::Delete
     include ApiOperations::Patch
+    include ApiOperations::Delete
 
     # Access the Credentials API
     attr_reader :credentials

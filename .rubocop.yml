@@ -21,29 +21,23 @@ Metrics/BlockLength:
     - "*.gemspec"
     - "spec/**/*_spec.rb"
 
-Metrics/ParameterLists:
-  Max: 8
-  Exclude:
-    - "lib/nylas/calendar_collection.rb"
+Metrics/AbcSize:
+  Enabled: false
 
 Metrics/MethodLength:
-  Max: 20
-  Exclude:
-    - "lib/nylas/calendar_collection.rb"
-    - "lib/nylas/services/tunnel.rb"
-
-Metrics/AbcSize:
-  Exclude:
-    - "lib/nylas/services/tunnel.rb"
+  Enabled: false
 
 Metrics/ModuleLength:
-  Max: 200
-  Exclude:
-    - "lib/nylas/model.rb"
+  Enabled: false
 
-Naming/FileName:
-  Exclude:
-    - "lib/nylas-streaming.rb"
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
 
 Metrics/ClassLength:
   Enabled: false
@@ -58,4 +52,7 @@ RSpec/MultipleExpectations:
   Enabled: false
 
 RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/FilePath:
   Enabled: false
