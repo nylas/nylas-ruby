@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module NylasHelpers
   def api_key
     "api-key-123"

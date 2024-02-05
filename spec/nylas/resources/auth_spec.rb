@@ -54,8 +54,10 @@ describe Nylas::Auth do
         result = auth.url_for_oauth2_pkce(config)
 
         expect(result[:secret]).to eq("nylas")
-        expect(result[:secret_hash]).to eq("ZTk2YmY2Njg2YTNjMzUxMGU5ZTkyN2RiNzA2OWNiMWNiYTliOTliMDIyZjQ5NDgzYTZjZTMyNzA4MDllNjhhMg")
-        expect(result[:url]).to eq("https://test.api.nylas.com/v3/connect/auth?client_id=abc-123&redirect_uri=https%3A%2F%2Fexample.com%2Foauth%2Fcallback&access_type=online&response_type=code&provider=google&prompt=select_provider%2Cdetect&state=abc-123-state&scope=email.read_only%20calendar%20contacts&login_hint=test%40gmail.com&code_challenge_method=s256&code_challenge=ZTk2YmY2Njg2YTNjMzUxMGU5ZTkyN2RiNzA2OWNiMWNiYTliOTliMDIyZjQ5NDgzYTZjZTMyNzA4MDllNjhhMg")
+        expect(result[:secret_hash])
+          .to eq("ZTk2YmY2Njg2YTNjMzUxMGU5ZTkyN2RiNzA2OWNiMWNiYTliOTliMDIyZjQ5NDgzYTZjZTMyNzA4MDllNjhhMg")
+        expect(result[:url])
+          .to eq("https://test.api.nylas.com/v3/connect/auth?client_id=abc-123&redirect_uri=https%3A%2F%2Fexample.com%2Foauth%2Fcallback&access_type=online&response_type=code&provider=google&prompt=select_provider%2Cdetect&state=abc-123-state&scope=email.read_only%20calendar%20contacts&login_hint=test%40gmail.com&code_challenge_method=s256&code_challenge=ZTk2YmY2Njg2YTNjMzUxMGU5ZTkyN2RiNzA2OWNiMWNiYTliOTliMDIyZjQ5NDgzYTZjZTMyNzA4MDllNjhhMg")
       end
     end
   end
