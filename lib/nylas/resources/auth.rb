@@ -183,6 +183,8 @@ module Nylas
     #
     # @param request [Hash] Code exchange request.
     def execute_token_request(request)
+      request[:client_secret] = api_key if request[:client_secret].nil?
+
       execute(
         method: :post,
         path: "#{api_uri}/v3/connect/token",

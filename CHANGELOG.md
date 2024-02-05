@@ -3,6 +3,7 @@
 ### 6.0.0-beta.4 / TBD
 * **BREAKING CHANGE**: Renamed `Applications.info()` to `Applications.get_details()` for consistency
 * **BREAKING CHANGE**: Changed return type of `Auth.url_for_oauth2_pkce()` from `OpenStruct` to a hash for consistency
+* Default `client_secret` to the configured `api_key` for token exchange methods if not provided
 * Fixed list and find scheduled messages
 * Fixed incorrect PKCE code challenge generation
 * Fixed incompatible types when building OAuth2 URL
