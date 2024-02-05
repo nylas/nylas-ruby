@@ -102,11 +102,9 @@ describe Nylas::Contacts do
     it "calls the post method with the correct parameters" do
       identifier = "abc-123-grant-id"
       request_body = {
-        name: "My New Contact",
-        description: "Description of my new contact",
-        location: "Los Angeles, CA",
-        timezone: "America/Los_Angeles",
-        metadata: { foo: "value" }
+        given_name: "John",
+        surname: "Doe",
+        company_name: "Nylas"
       }
       path = "#{api_uri}/v3/grants/#{identifier}/contacts"
       allow(contacts).to receive(:post)
@@ -124,11 +122,9 @@ describe Nylas::Contacts do
       identifier = "abc-123-grant-id"
       contact_id = "5d3qmne77v32r8l4phyuksl2x"
       request_body = {
-        name: "My New Contact",
-        description: "Description of my new contact",
-        location: "Los Angeles, CA",
-        timezone: "America/Los_Angeles",
-        metadata: { foo: "value" }
+        given_name: "John",
+        surname: "Doe",
+        company_name: "Nylas"
       }
       path = "#{api_uri}/v3/grants/#{identifier}/contacts/#{contact_id}"
       allow(contacts).to receive(:put)
