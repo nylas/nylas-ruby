@@ -1,0 +1,45 @@
+name: sdk-reference
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    environment:
+      name: sdk-reference
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+      # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+      # change this to (see https://github.com/ruby/setup-ruby#versioning):
+      # uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+        with:
+          ruby-version: 3.0
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Run rubocop
+        run: bundle exec yard
+      - name: Set env BRANCH
+        run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
+      - name: Set env CLOUDFLARE_BRANCH
+        run: |
+          if [[ $BRANCH == 'main' && $GITHUB_EVENT_NAME == 'push' ]]; then
+              echo "CLOUDFLARE_BRANCH=main" >> "$GITHUB_ENV"
+          else
+              echo "CLOUDFLARE_BRANCH=$BRANCH" >> "$GITHUB_ENV"
+          fi
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        id: deploy
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: nylas-ruby-sdk-reference
+          directory: doc
+          wranglerVersion: "3"
+          branch: ${{ env.CLOUDFLARE_BRANCH }}

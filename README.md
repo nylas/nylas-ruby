@@ -4,30 +4,29 @@
 
 # Nylas Ruby SDK
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/nylas/nylas-ruby/CI)](https://github.com/nylas/nylas-ruby/actions/workflows/rspec.yml)
+[![Gem (including prereleases)](https://img.shields.io/gem/v/nylas?include_prereleases)](https://rubygems.org/gems/nylas)
 [![codecov](https://codecov.io/gh/nylas/nylas-ruby/branch/main/graph/badge.svg?token=IKH0YMH4KA)](https://codecov.io/gh/nylas/nylas-ruby)
 
-The Nylas Communications Platform allows developers to quickly build features that connect to every inbox, calendar, and contacts book in the world. Nylas makes it easy to build an integration that can be completed in days, and provides pre-built security and compliance features, and a 99.9% guaranteed uptime. Integrations with the Nylas Communications Platform are secure, reliable, and easy to use and maintain.
+This is the GitHub repository for the Nylas Ruby SDK. This repo is primarily for anyone who wants to make contributions to the SDK or install it from source. For documentation on how to use this SDK to access the Nylas Email, Calendar, or Contacts APIs, see the official [Ruby SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/ruby/).
 
-Nylas provides REST APIs for [Email](https://docs.nylas.com/docs/quickstart-email), [Calendar](https://docs.nylas.com/docs/quickstart-calendar), and [Contacts](https://docs.nylas.com/docs/quickstart-contacts), and the Ruby SDK is the quickest way to build your first integration using Ruby.
+The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/email/), [Calendar](https://developer.nylas.com/docs/calendar/), and [Contacts](https://developer.nylas.com/docs/contacts/), and the Nylas SDK is the quickest way to build your integration using Ruby.
 
-This is the GitHub repository for the Nylas Ruby SDK and is primarily for anyone who wants to make contributions to the SDK or install it from source. If you are looking to use Ruby to access the Nylas Email, Calendar, or Contacts API you should refer to our official [Ruby](https://docs.nylas.com/docs/quickstart-ruby) [SDK Quickstart Guide](https://docs.nylas.com/docs/quickstart-ruby).
+Here are some resources to help you get started:
 
-Here are some additional resources to help you get started:
+- [Sign up for the Nylas v3 Beta program to access the v3 Dashboard](https://info.nylas.com/apiv3betasignup.html?utm_source=github&utm_medium=devrel-surfaces&utm_campaign=&utm_content=ruby-sdk-upgrade)
+- [Nylas API v3 Quickstart Guide](https://developer.nylas.com/docs/v3-beta/v3-quickstart/)
+- [Nylas SDK Reference](https://nylas-ruby-sdk-reference.pages.dev/)
+- [Nylas API Reference](https://developer.nylas.com/docs/api/v3-beta/)
+- [Nylas Samples repo for code samples and example applications](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=ruby)
 
-- [Nylas SDK Tutorials](https://docs.nylas.com/docs/tutorials)
-- [Get Started with the Nylas Communications Platform](https://docs.nylas.com/docs/getting-started)
-- [Sign up for your Nylas developer account.](https://nylas.com/register)
-- [Nylas API Reference](https://docs.nylas.com/reference)
-
-If you have a question that needs an answer, please reach out to support@nylas.com to get help.
+If you have a question about the Nylas Communications Platform, [contact Nylas Support](https://support.nylas.com/) for help.
 
 ## ⚙️ Install
-### Prerequisites
-- Ruby 2.3 or above.
-- Ruby Frameworks: `rest-client`, `json`, `yajl-ruby`.
 
-We support Rails 4.2 and above. A more detailed compatibility list can be found in our [list of Gemfiles](https://github.com/nylas/nylas-ruby/tree/master/gemfiles).
+### Prerequisites
+
+- Ruby 3.0 or above.
+- Ruby Frameworks: `rest-client` and `yajl-ruby`.
 
 ### Install
 
@@ -43,7 +42,7 @@ And then execute:
 bundle
 ```
 
-To run scripts that use the Nylas Ruby SDK, install the nylas gem.
+To run scripts that use the Nylas Ruby SDK, install the `nylas` gem.
 
 ```bash
 gem install nylas
@@ -56,7 +55,7 @@ git clone https://github.com/nylas/nylas-ruby.git && cd nylas-ruby
 bundle install
 ```
 
-### Setup Ruby SDK for Development
+### Set up Ruby SDK for Development
 
 Install [RubyGems](https://rubygems.org/pages/download) if you don't already have it:
 
@@ -76,52 +75,47 @@ You can run tests locally using ```rspec```:
 ```shell
 rspec spec
 ```
-    
-### MacOS 10.11 (El Capitan) Note
-
-Apple stopped bundling OpenSSL with MacOS 10.11. However, one of the dependencies of this gem (EventMachine) requires it. If you're on El Capitan and are unable to install the gem, try running the following commands in a terminal:
-
-```bash
-sudo brew install openssl
-sudo brew link openssl --force
-gem install nylas
-```
 
 ## ⚡️ Usage
 
-To use this SDK, you first need to [sign up for a free Nylas developer account](https://nylas.com/register).
+To use this SDK, you must first [sign up for the v3 Beta and get a free Nylas account](https://info.nylas.com/apiv3betasignup.html?utm_source=github&utm_medium=devrel-surfaces&utm_campaign=&utm_content=ruby-sdk-upgrade).
 
-Then, follow our guide to [setup your first app and get your API access keys](https://docs.nylas.com/docs/get-your-developer-api-keys).
+Then, follow the Quickstart guide to [set up your first app and get your API keys](https://developer.nylas.com/docs/v3-beta/v3-quickstart/).
 
-All of the functionality of the Nylas Communications Platform is available through the `API` object. To access data for an account that’s connected to Nylas, create a new API client object and pass the variables you gathered when you got your developer API keys. In the following example, replace `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN` with your values.
+For code examples that demonstrate how to use this SDK, take a look at our [Ruby repos in the Nylas Samples collection](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=ruby).
 
+### 🚀 Making Your First Request
+
+All of the functionality of the Nylas Communications Platform is available through the `Client` object. To access data for an account that’s connected to Nylas, create a new API client object and pass in your Nylas API key. In the following example, replace `NYLAS_API_KEY` with your Nylas API Key, and you can provide other additional configurations such as the Nylas API url and the timeout.
 
 ```ruby
 require 'nylas'
 
-nylas = Nylas::API.new(
-    app_id: CLIENT_ID,
-    app_secret: CLIENT_SECRET,
-    access_token: ACCESS_TOKEN
+nylas = Nylas::Client.new(
+  api_key: "NYLAS_API_KEY",
 )
 ```
 
-Now, you can use `nylas` to access full email, calendar, and contacts functionality. For example, here is how you would print the subject line for the most recent email message to the console.
-
+Now, you can use `nylas` to access full email, calendar, and contacts functionality, for example to list all the calendars for a given account:
 
 ```ruby
-message = nylas.messages.first
-puts(message.subject)
+calendars, _request_ids = nylas.calendars.list(identifier: "GRANT_ID")
 ```
 
-To learn more about how to use the Nylas Ruby SDK, please refer to our [Ruby](https://docs.nylas.com/docs/quickstart-ruby) [SDK QuickStart Guide](https://docs.nylas.com/docs/quickstart-ruby).
+## 📚 Documentation
+
+Nylas maintains a [reference guide for the Ruby SDK](https://nylas-ruby-sdk-reference.pages.dev/) to help you get familiar with the available methods and classes.
+
+## ✨ Upgrading from 5.x
+
+See [UPGRADE.md](UPGRADE.md) for instructions on upgrading from 5.x to 6.x.
+
+**Note**: The Ruby SDK v6.x is not compatible with the Nylas API earlier than v3-beta. If you are using Nylas v2.7 or earlier, continue using the v5.x Nylas Ruby SDK.
 
 ## 💙 Contributing
 
 Please refer to [Contributing](Contributing.md) for information about how to make contributions to this project. We welcome questions, bug reports, and pull requests.
 
-Taking part in Hacktoberfest 2023 (i.e. issue is tagged with `hacktoberfest`)? Read our [Nylas Hacktoberfest 2023 contribution guidelines](https://github.com/nylas-samples/nylas-hacktoberfest-2023/blob/main/readme.md).
-
 ## 📝 License
 
-This project is licensed under the terms of the MIT license. Please refer to [LICENSE](LICENSE.txt) for the full terms. 
+This project is licensed under the terms of the MIT license. Please refer to [LICENSE](LICENSE.txt) for the full terms.

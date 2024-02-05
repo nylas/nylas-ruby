@@ -9,28 +9,22 @@ name: Rubocop
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        gemfile: [rubocop]
-    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
-      BUNDLE_GEMFILE: gemfiles/Gemfile.${{ matrix.gemfile }}
-
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Ruby
-        # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-        # change this to (see https://github.com/ruby/setup-ruby#versioning):
-        # uses: ruby/setup-ruby@v1
-        uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
-        with:
-          ruby-version: 3.0
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Run rubocop
-        run: bundle exec rubocop --config .rubocop.yml
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+    # uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+      with:
+        ruby-version: 3.0
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Generate docs
+      run: bundle exec rubocop --config .rubocop.yml
