@@ -19,13 +19,10 @@ describe Nylas::RedirectUris do
   end
 
   describe "#list" do
-    let(:list_response) do
-      [[response[0]], response[1], "mock_next_cursor"]
-    end
-
     it "calls the get method with the correct parameters" do
       path = "#{api_uri}/v3/applications/redirect-uris"
-      allow(redirect_uris).to receive(:get_list)
+      list_response = [[response[0]], response[1]]
+      allow(redirect_uris).to receive(:get)
         .with(path: path)
         .and_return(list_response)
 

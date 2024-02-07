@@ -13,9 +13,9 @@ module Nylas
     # Return all grants.
     #
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String, String)] The list of grants, API Request ID, and next cursor.
+    # @return [Array(Array(Hash), String)] The list of grants and API Request ID.
     def list(query_params: nil)
-      get_list(
+      get(
         path: "#{api_uri}/v3/grants",
         query_params: query_params
       )

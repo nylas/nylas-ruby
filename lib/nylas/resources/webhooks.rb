@@ -33,9 +33,9 @@ module Nylas
 
     # Return all webhooks.
     #
-    # @return [Array(Array(Hash), String, String)] The list of webhooks, API Request ID, and next cursor.
+    # @return [Array(Array(Hash), String)] The list of webhooks and API Request ID.
     def list
-      get_list(
+      get(
         path: "#{api_uri}/v3/webhooks"
       )
     end

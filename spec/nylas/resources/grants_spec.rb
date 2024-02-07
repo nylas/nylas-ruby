@@ -18,13 +18,10 @@ describe Nylas::Grants do
   end
 
   describe "#list" do
-    let(:list_response) do
-      [[response[0]], response[1], "mock_next_cursor"]
-    end
-
     it "calls the get method with the correct parameters" do
       path = "#{api_uri}/v3/grants"
-      allow(grants).to receive(:get_list)
+      list_response = [[response[0]], response[1]]
+      allow(grants).to receive(:get)
         .with(path: path, query_params: nil)
         .and_return(list_response)
 

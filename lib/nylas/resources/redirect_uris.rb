@@ -13,9 +13,9 @@ module Nylas
 
     # Return all redirect uris.
     #
-    # @return [Array(Array(Hash), String, String)] The list of redirect uris, API Request ID, and next cursor.
+    # @return [Array(Array(Hash), String)] The list of redirect uris and API Request ID.
     def list
-      get_list(
+      get(
         path: "#{api_uri}/v3/applications/redirect-uris"
       )
     end

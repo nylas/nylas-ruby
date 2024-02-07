@@ -18,12 +18,12 @@ describe Nylas::Connectors do
 
   describe "#list" do
     let(:list_response) do
-      [[response[0]], response[1], "mock_next_cursor"]
+      [[response[0]], response[1]]
     end
 
     it "calls the get method with the correct parameters" do
       path = "#{api_uri}/v3/connectors"
-      allow(connectors).to receive(:get_list)
+      allow(connectors).to receive(:get)
         .with(path: path, query_params: nil)
         .and_return(list_response)
 
@@ -35,7 +35,7 @@ describe Nylas::Connectors do
     it "calls the get method with the correct parameters and query params" do
       path = "#{api_uri}/v3/connectors"
       query_params = { foo: "bar" }
-      allow(connectors).to receive(:get_list)
+      allow(connectors).to receive(:get)
         .with(path: path, query_params: query_params)
         .and_return(list_response)
 
