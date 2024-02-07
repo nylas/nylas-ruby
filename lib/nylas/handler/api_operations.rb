@@ -11,13 +11,37 @@ module Nylas
       protected
 
       include HttpClient
+      # Performs a GET call to the Nylas API for a list response.
+      #
+      # @param path [String] Destination path for the call.
+      # @param query_params [Hash, {}] Query params to pass to the call.
+      # @return [(Array, String, String)] Nylas data array, the API Request ID, and the next cursor (if available).
+      def list(path:, query_params: {})
+        get_raw(path: path, query_params: query_params)
+
+        [response[:data], response[:request_id], response[:next_cursor]]
+      end
+
+      # Performs a GET call to the Nylas API for a single item response.
+      #
+      # @param path [String] Destination path for the call.
+      # @param query_params [Hash, {}] Query params to pass to the call.
+      # @return [(Hash, String)] Nylas data object and API Request ID.
+      def get(path:, query_params: {})
+        get_raw(path: path, query_params: query_params)
+
+        [response[:data], response[:request_id]]
+      end
+
+      private
+
       # Performs a GET call to the Nylas API.
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return Nylas data object and API Request ID.
-      def get(path:, query_params: {})
-        response = execute(
+      # @return [Hash] The JSON response from the Nylas API.
+      def get_raw(path:, query_params: {})
+        execute(
           method: :get,
           path: path,
           query: query_params,
@@ -25,8 +49,6 @@ module Nylas
           api_key: api_key,
           timeout: timeout
         )
-
-        [response[:data], response[:request_id]]
       end
     end
 
