@@ -26,9 +26,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of messages and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of messages, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/grants/#{identifier}/messages",
         query_params: query_params
       )
@@ -94,7 +94,7 @@ module Nylas
     # Retrieve your scheduled messages.
     #
     # @param identifier [String] Grant ID or email account from which to find the scheduled message from.
-    # @return [Array(Hash, String)] The list of scheduled messages and the API Request ID.
+    # @return [Array(Array(Hash), String)] The list of scheduled messages and the API Request ID.
     def list_scheduled_messages(identifier:)
       get(
         path: "#{api_uri}/v3/grants/#{identifier}/messages/schedules"

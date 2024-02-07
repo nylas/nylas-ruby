@@ -15,9 +15,9 @@ module Nylas
     #
     # @param provider [String] The provider associated to the credential to list from
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of credentials and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of credentials, API Request ID, and next cursor.
     def list(provider:, query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/connectors/#{provider}/creds",
         query_params: query_params
       )

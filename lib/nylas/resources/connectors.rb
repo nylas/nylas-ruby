@@ -24,9 +24,9 @@ module Nylas
     # Return all connectors.
     #
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of connectors and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of connectors, API Request ID, and next cursor.
     def list(query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/connectors",
         query_params: query_params
       )

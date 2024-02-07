@@ -14,9 +14,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of threads and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of threads, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/grants/#{identifier}/threads",
         query_params: query_params
       )
