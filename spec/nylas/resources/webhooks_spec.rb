@@ -17,10 +17,13 @@ describe Nylas::Webhooks do
   end
 
   describe "#list" do
+    let(:list_response) do
+      [[response[0]], response[1], "mock_next_cursor"]
+    end
+
     it "calls the get method with the correct parameters" do
       path = "#{api_uri}/v3/webhooks"
-      list_response = [[response[0]], response[1]]
-      allow(webhooks).to receive(:get)
+      allow(webhooks).to receive(:get_list)
         .with(path: path)
         .and_return(list_response)
 

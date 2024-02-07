@@ -17,7 +17,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @return [Array([Hash, Array], String)] Nylas data object and API Request ID.
       def get(path:, query_params: {})
-        get_raw(path: path, query_params: query_params)
+        response = get_raw(path: path, query_params: query_params)
 
         [response[:data], response[:request_id]]
       end
@@ -28,7 +28,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @return [Array(Array(Hash), String, String)] Nylas data array, API Request ID, and next cursor.
       def get_list(path:, query_params: {})
-        get_raw(path: path, query_params: query_params)
+        response = get_raw(path: path, query_params: query_params)
 
         [response[:data], response[:request_id], response[:next_cursor]]
       end

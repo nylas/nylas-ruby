@@ -12,11 +12,14 @@ describe Nylas::Credentials do
   end
 
   describe "#list" do
+    let(:list_response) do
+      [[response[0]], response[1], "mock_next_cursor"]
+    end
+
     it "calls the get method with the correct parameters" do
       provider = "google"
       path = "#{api_uri}/v3/connectors/#{provider}/creds"
-      list_response = [[response[0]], response[1]]
-      allow(credentials).to receive(:get)
+      allow(credentials).to receive(:get_list)
         .with(path: path, query_params: nil)
         .and_return(list_response)
 
@@ -29,8 +32,7 @@ describe Nylas::Credentials do
       provider = "google"
       path = "#{api_uri}/v3/connectors/#{provider}/creds"
       query_params = { foo: "bar" }
-      list_response = [[response[0]], response[1]]
-      allow(credentials).to receive(:get)
+      allow(credentials).to receive(:get_list)
         .with(path: path, query_params: query_params)
         .and_return(list_response)
 
