@@ -11,17 +11,6 @@ module Nylas
       protected
 
       include HttpClient
-      # Performs a GET call to the Nylas API for a list response.
-      #
-      # @param path [String] Destination path for the call.
-      # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return [(Array, String, String)] Nylas data array, the API Request ID, and the next cursor (if available).
-      def list(path:, query_params: {})
-        get_raw(path: path, query_params: query_params)
-
-        [response[:data], response[:request_id], response[:next_cursor]]
-      end
-
       # Performs a GET call to the Nylas API for a single item response.
       #
       # @param path [String] Destination path for the call.
@@ -31,6 +20,17 @@ module Nylas
         get_raw(path: path, query_params: query_params)
 
         [response[:data], response[:request_id]]
+      end
+
+      # Performs a GET call to the Nylas API for a list response.
+      #
+      # @param path [String] Destination path for the call.
+      # @param query_params [Hash, {}] Query params to pass to the call.
+      # @return [(Array(Hash), String, String)] Nylas data array, the API Request ID, and the next cursor (if available).
+      def get_list(path:, query_params: {})
+        get_raw(path: path, query_params: query_params)
+
+        [response[:data], response[:request_id], response[:next_cursor]]
       end
 
       private
