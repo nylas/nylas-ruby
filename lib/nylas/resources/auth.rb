@@ -151,7 +151,7 @@ module Nylas
     def url_auth_builder(config)
       builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
-      builder.query = URI.encode_www_form(build_query(config)).gsub!("+", "%20")
+      builder.query = URI.encode_www_form(build_query(config)).gsub(/\+/, "%20")
 
       builder
     end
