@@ -15,9 +15,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of contacts and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of contacts, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/grants/#{identifier}/contacts",
         query_params: query_params
       )
@@ -78,9 +78,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
-    # @return [Array(Array(Hash), String)] The list of contact groups and API Request ID.
+    # @return [Array(Array(Hash), String, String)] The list of contact groups and API Request ID.
     def list_groups(identifier:, query_params: nil)
-      get(
+      get_list(
         path: "#{api_uri}/v3/grants/#{identifier}/contacts/groups",
         query_params: query_params
       )
