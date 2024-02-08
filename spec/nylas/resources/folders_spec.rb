@@ -19,11 +19,14 @@ describe Nylas::Folders do
   end
 
   describe "#list" do
+    let(:list_response) do
+      [[response[0]], response[1], "mock_next_cursor"]
+    end
+
     it "calls the get method with the correct parameters" do
       identifier = "abc-123-grant-id"
       path = "#{api_uri}/v3/grants/#{identifier}/folders"
-      list_response = [[response[0]], response[1]]
-      allow(folders).to receive(:get)
+      allow(folders).to receive(:get_list)
         .with(path: path)
         .and_return(list_response)
 

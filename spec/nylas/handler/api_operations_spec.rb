@@ -19,9 +19,6 @@ class APIOperations
 end
 
 describe Nylas::ApiOperations do
-  let(:api_key) { "api-key-123" }
-  let(:api_uri) { "https://test.api.nylas.com" }
-  let(:timeout) { 60 }
   let(:api_operations) { APIOperations.new(api_key, api_uri, timeout) }
   let(:mock_response) do
     {
@@ -66,6 +63,56 @@ describe Nylas::ApiOperations do
         response = api_operations.send(:get, path: path)
 
         expect(response).to eq([mock_response[:data], mock_response[:request_id]])
+      end
+    end
+
+    describe "#get_list" do
+      let(:list_response) do
+        {
+          request_id: "mock_request_id",
+          data: [
+            {
+              id: "mock_id",
+              foo: "bar"
+            }
+          ],
+          next_cursor: "mock_cursor"
+        }
+      end
+
+      it "returns a list response" do
+        path = "#{api_uri}/path"
+        query_params = { foo: "bar" }
+        allow(api_operations).to receive(:execute).with(
+          method: :get,
+          path: path,
+          query: query_params,
+          payload: nil,
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(list_response)
+
+        response = api_operations.send(:get_list, path: path, query_params: query_params)
+
+        expect(response).to eq([list_response[:data], list_response[:request_id],
+                                list_response[:next_cursor]])
+      end
+
+      it "returns a list response with default query_params" do
+        path = "#{api_uri}/path"
+        allow(api_operations).to receive(:execute).with(
+          method: :get,
+          path: path,
+          query: {},
+          payload: nil,
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(list_response)
+
+        response = api_operations.send(:get_list, path: path)
+
+        expect(response).to eq([list_response[:data], list_response[:request_id],
+                                list_response[:next_cursor]])
       end
     end
   end

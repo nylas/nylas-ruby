@@ -21,11 +21,14 @@ describe Nylas::Calendars do
   end
 
   describe "#list" do
+    let(:list_response) do
+      [[response[0]], response[1], "mock_next_cursor"]
+    end
+
     it "calls the get method with the correct parameters" do
       identifier = "abc-123-grant-id"
       path = "#{api_uri}/v3/grants/#{identifier}/calendars"
-      list_response = [[response[0]], response[1]]
-      allow(calendars).to receive(:get)
+      allow(calendars).to receive(:get_list)
         .with(path: path, query_params: nil)
         .and_return(list_response)
 
@@ -38,8 +41,7 @@ describe Nylas::Calendars do
       identifier = "abc-123-grant-id"
       query_params = { foo: "bar" }
       path = "#{api_uri}/v3/grants/#{identifier}/calendars"
-      list_response = [[response[0]], response[1]]
-      allow(calendars).to receive(:get)
+      allow(calendars).to receive(:get_list)
         .with(path: path, query_params: query_params)
         .and_return(list_response)
 

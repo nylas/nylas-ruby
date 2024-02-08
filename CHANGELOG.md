@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fixed a bug where the `next_cursor` field was omitted for list responses
+
 ### 6.0.0 / 2024-02-05
 * **BREAKING CHANGE**: Ruby SDK v6 supports the Nylas API v3 exclusively, dropping support for any endpoints that are not available in v3.
 * **BREAKING CHANGE**: Officially support minimum Ruby v3
