@@ -1,6 +1,7 @@
 # Changelog
 
-### Unreleased
+### 6.0.1 / 2024-04-12
+* Fixed a bug during OAuth URL building
 * Fixed a bug where the `next_cursor` field was omitted for list responses
 
 ### 6.0.0 / 2024-02-05
