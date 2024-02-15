@@ -100,9 +100,9 @@ describe Nylas::Webhooks do
   describe "#rotate_secret" do
     it "calls the put method with the correct parameters" do
       webhook_id = "webhook-123"
-      path = "#{api_uri}/v3/webhooks/#{webhook_id}/rotate-secret"
+      path = "#{api_uri}/v3/webhooks/rotate-secret/#{webhook_id}"
 
-      allow(webhooks).to receive(:put)
+      allow(webhooks).to receive(:post)
         .with(path: path, request_body: {})
 
       webhooks.rotate_secret(webhook_id: webhook_id)
