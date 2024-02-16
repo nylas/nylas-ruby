@@ -76,5 +76,15 @@ module Nylas
 
       [true, request_id]
     end
+    
+    # Detects the provider of an email address.
+    # @param params [Hash] Parameters to detect the provider.
+    # @return [Array(Hash, String)] Detected provider, if found and API Request ID.
+    def detect_provider(params)
+      post(
+        path: "#{api_uri}/v3/providers/detect",
+        query_params: params
+      )
+    end    
   end
 end
