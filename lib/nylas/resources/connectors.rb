@@ -85,6 +85,6 @@ module Nylas
         path: "#{api_uri}/v3/providers/detect",
         query_params: params
       )
-    end    
+    end
   end
 end
