@@ -9,6 +9,7 @@ module Nylas
     include ApiOperations::Get
     include ApiOperations::Put
     include ApiOperations::Delete
+    include ApiOperations::Patch
 
     # Return all grants.
     #
@@ -37,7 +38,7 @@ module Nylas
     # @param request_body [Hash] The values to update the grant with
     # @return [Array(Hash, String)] The updated grant and API Request ID.
     def update(grant_id:, request_body:)
-      put(
+      patch(
         path: "#{api_uri}/v3/grants/#{grant_id}",
         request_body: request_body
       )

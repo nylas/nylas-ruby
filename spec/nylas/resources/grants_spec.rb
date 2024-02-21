@@ -56,7 +56,7 @@ describe Nylas::Grants do
         scope: %w[https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile]
       }
       path = "#{api_uri}/v3/grants/#{grant_id}"
-      allow(grants).to receive(:put)
+      allow(grants).to receive(:patch)
         .with(path: path, request_body: request_body)
         .and_return(response)
 
