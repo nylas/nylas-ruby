@@ -89,8 +89,8 @@ module Nylas
     # @param webhook_id [String] The ID of the webhook destination to update.
     # @return [Array(Hash, String)] The updated webhook destination and API Request ID.
     def rotate_secret(webhook_id:)
-      put(
-        path: "#{api_uri}/v3/webhooks/#{webhook_id}/rotate-secret",
+      post(
+        path: "#{api_uri}/v3/webhooks/rotate-secret/#{webhook_id}",
         request_body: {}
       )
     end
