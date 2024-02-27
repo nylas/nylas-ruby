@@ -1,6 +1,10 @@
 # Changelog
 
-### 6.0.1 / 2024-04-12
+### 6.0.2 / 2024-02-27
+* Fixed the HTTP operation of updating grants
+* Fixed endpoint URL of rotating webhooks
+
+### 6.0.1 / 2024-02-12
 * Fixed a bug during OAuth URL building
 * Fixed a bug where the `next_cursor` field was omitted for list responses
 
