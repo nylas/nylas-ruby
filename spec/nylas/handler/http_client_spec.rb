@@ -181,7 +181,7 @@ describe Nylas::HttpClient do
     end
   end
 
-  describe "#build_http_query" do
+  describe "#build_query" do
     it "returns the correct query params" do
       uri = URI.parse("https://test.api.nylas.com/foo")
       params = {
@@ -190,7 +190,7 @@ describe Nylas::HttpClient do
         map: { key1: "value1", key2: "value2" }
       }
 
-      final_uri = http_client.send(:build_http_query, uri, params)
+      final_uri = http_client.send(:build_query, uri, params)
 
       expect(final_uri.to_s).to eq("https://test.api.nylas.com/foo?foo=bar&list=a&list=b&list=c&map=key1%3Avalue1&map=key2%3Avalue2")
     end
