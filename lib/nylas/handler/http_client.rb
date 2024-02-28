@@ -211,7 +211,7 @@ module Nylas
     def build_url(url, query = nil)
       unless query.nil? || query.empty?
         uri = URI.parse(url)
-        uri = build_query(uri, query)
+        uri = build_http_query(uri, query)
         url = uri.to_s
       end
 
@@ -222,7 +222,7 @@ module Nylas
     # @param uri [URI] URL to add the query to.
     # @param query [Hash] The query params to include in the query.
     # @return [URI] The URI object with the query parameters included.
-    def build_query(uri, query)
+    def build_http_query(uri, query)
       query.each do |key, value|
         case value
         when Array
