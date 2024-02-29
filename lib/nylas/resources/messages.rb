@@ -79,11 +79,20 @@ module Nylas
     #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The sent message and the API Request ID.
     def send(identifier:, request_body:)
-      form_body, opened_files = FileUtils.build_form_request(request_body)
+      payload = request_body
+      opened_files = []
+
+      # Use form data only if the attachment size is greater than 3mb
+      attachments = request_body[:attachments] || request_body["attachments"] || []
+      attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
+
+      if attachment_size >= FileUtils::FORM_DATA_ATTACHMENT_SIZE
+        payload, opened_files = FileUtils.build_form_request(request_body)
+      end
 
       response = post(
         path: "#{api_uri}/v3/grants/#{identifier}/messages/send",
-        request_body: form_body
+        request_body: payload
       )
 
       opened_files.each(&:close)
