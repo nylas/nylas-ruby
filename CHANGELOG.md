@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Improved message sending and draft create/update performance
+
 ### 6.0.2 / 2024-02-27
 * Fixed the HTTP operation of updating grants
 * Fixed endpoint URL of rotating webhooks
