@@ -141,12 +141,38 @@ describe Nylas::Messages do
         subject: "Hello from Nylas!",
         to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
         cc: [{ name: "Arya Stark", email: "astark@gmail.com" }],
+        body: "This is the body of my message message.",
+        attachments: [{
+          filename: "file.txt",
+          content_type: "text/plain",
+          size: 100,
+          content: mock_file
+        }]
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/messages/send"
+
+      allow(messages).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      message_response = messages.send(identifier: identifier, request_body: request_body)
+
+      expect(message_response).to eq(response)
+    end
+
+    it "calls the post method with the correct parameters and large attachments" do
+      identifier = "abc-123-grant-id"
+      mock_file = instance_double("file")
+      request_body = {
+        subject: "Hello from Nylas!",
+        to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
+        cc: [{ name: "Arya Stark", email: "astark@gmail.com" }],
         body: "This is the body of my message message."
       }
       attachment = {
         filename: "file.txt",
         content_type: "text/plain",
-        size: 100,
+        size: 3 * 1024 * 1024,
         content: mock_file
       }
       expected_compiled_request = {
