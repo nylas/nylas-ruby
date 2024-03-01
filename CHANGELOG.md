@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Change default timeout to match API (90 seconds)
+
 ### 6.0.2 / 2024-02-27
 * Fixed the HTTP operation of updating grants
 * Fixed endpoint URL of rotating webhooks
