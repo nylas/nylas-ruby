@@ -118,7 +118,7 @@ module Nylas
     # @return [String] Updated list of parameters, including those specific to admin
     # consent.
     def build_query_with_admin_consent(config)
-      params = build_query(config)
+      params = build_http_query(config)
 
       # Appends new params specific for admin consent.
       params[:provider] = "microsoft"
@@ -135,7 +135,7 @@ module Nylas
     # @return [String] Updated list of encoded parameters, including those specific
     # to PKCE.
     def build_query_with_pkce(config, secret_hash)
-      params = build_query(config)
+      params = build_http_query(config)
 
       # Appends new PKCE specific params.
       params[:code_challenge_method] = "s256"
@@ -151,7 +151,7 @@ module Nylas
     def url_auth_builder(config)
       builder = URI.parse(api_uri)
       builder.path = "/v3/connect/auth"
-      builder.query = URI.encode_www_form(build_query(config)).gsub(/\+/, "%20")
+      builder.query = URI.encode_www_form(build_http_query(config)).gsub(/\+/, "%20")
 
       builder
     end
@@ -160,7 +160,7 @@ module Nylas
     #
     # @param config [Hash] Configuration for the query.
     # @return [Hash] List of parameters to encode in the query.
-    def build_query(config)
+    def build_http_query(config)
       params = {
         client_id: config[:client_id],
         redirect_uri: config[:redirect_uri],
