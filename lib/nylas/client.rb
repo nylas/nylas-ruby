@@ -24,7 +24,7 @@ module Nylas
                    timeout: nil)
       @api_key = api_key
       @api_uri = api_uri
-      @timeout = timeout || 30
+      @timeout = timeout || 90
     end
 
     # The application resources for your Nylas application.

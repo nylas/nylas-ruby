@@ -8,7 +8,7 @@ describe Nylas::Client do
 
         expect(nylas.api_key).to eq("fake-key")
         expect(nylas.api_uri).to eq("https://api.us.nylas.com")
-        expect(nylas.timeout).to eq(30)
+        expect(nylas.timeout).to eq(90)
       end
     end
 
@@ -18,7 +18,7 @@ describe Nylas::Client do
 
         expect(nylas.api_key).to eq("fake-key")
         expect(nylas.api_uri).to eq("https://custom.nylas.com")
-        expect(nylas.timeout).to eq(30)
+        expect(nylas.timeout).to eq(90)
       end
     end
 
