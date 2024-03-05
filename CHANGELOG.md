@@ -1,8 +1,9 @@
 # Changelog
 
-### Unreleased
+### 6.0.3 / 2024-03-05
 * Improved message sending and draft create/update performance
 * Change default timeout to match API (90 seconds)
+* Fixed error when invoking `Auth.detect_provider`
 
 ### 6.0.2 / 2024-02-27
 * Fixed the HTTP operation of updating grants
