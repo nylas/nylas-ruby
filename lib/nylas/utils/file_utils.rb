@@ -5,6 +5,9 @@ require "mime/types"
 module Nylas
   # A collection of file-related utilities.
   module FileUtils
+    # The maximum size of an attachment that can be sent using json
+    FORM_DATA_ATTACHMENT_SIZE = 3 * 1024 * 1024
+
     # Build a form request for the API.
     # @param request_body The values to create the message with.
     # @return The form data to send to the API and the opened files.

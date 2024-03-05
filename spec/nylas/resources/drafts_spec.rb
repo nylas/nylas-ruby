@@ -97,7 +97,33 @@ describe Nylas::Drafts do
       expect(draft_response).to eq(response)
     end
 
-    it "calls the post method with the correct parameters and attachments" do
+    it "calls the post method with the correct parameters for small attachments" do
+      identifier = "abc-123-grant-id"
+      mock_file = instance_double("file")
+      request_body = {
+        subject: "Hello from Nylas!",
+        to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
+        cc: [{ name: "Arya Stark", email: "astark@gmail.com" }],
+        body: "This is the body of my draft message.",
+        attachments: [{
+          filename: "file.txt",
+          content_type: "text/plain",
+          size: 100,
+          content: mock_file
+        }]
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/drafts"
+
+      allow(drafts).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      draft_response = drafts.create(identifier: identifier, request_body: request_body)
+
+      expect(draft_response).to eq(response)
+    end
+
+    it "calls the post method with the correct parameters for large attachments" do
       identifier = "abc-123-grant-id"
       mock_file = instance_double("file")
       request_body = {
@@ -109,7 +135,7 @@ describe Nylas::Drafts do
       attachment = {
         filename: "file.txt",
         content_type: "text/plain",
-        size: 100,
+        size: 3 * 1024 * 1024,
         content: mock_file
       }
       expected_compiled_request = {
@@ -161,12 +187,39 @@ describe Nylas::Drafts do
         subject: "Hello from Nylas!",
         to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
         cc: [{ name: "Arya Stark", email: "astark@gmail.com" }],
+        body: "This is the body of my draft message.",
+        attachments: [{
+          filename: "file.txt",
+          content_type: "text/plain",
+          size: 100,
+          content: mock_file
+        }]
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/drafts/#{draft_id}"
+      allow(drafts).to receive(:put)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      draft_response = drafts.update(identifier: identifier, draft_id: draft_id,
+                                     request_body: request_body)
+
+      expect(draft_response).to eq(response)
+    end
+
+    it "calls the put method with the correct parameters for large attachments" do
+      identifier = "abc-123-grant-id"
+      draft_id = "5d3qmne77v32r8l4phyuksl2x"
+      mock_file = instance_double("file")
+      request_body = {
+        subject: "Hello from Nylas!",
+        to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
+        cc: [{ name: "Arya Stark", email: "astark@gmail.com" }],
         body: "This is the body of my draft message."
       }
       attachment = {
         filename: "file.txt",
         content_type: "text/plain",
-        size: 100,
+        size: 3 * 1024 * 1024,
         content: mock_file
       }
       expected_compiled_request = {
