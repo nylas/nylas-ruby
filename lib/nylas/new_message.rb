@@ -26,6 +26,8 @@ module Nylas
 
     attribute :tracking, :message_tracking
 
+    has_n_of_attribute :custom_headers, :hash
+
     # Sends the new message
     # @return [Message] The sent message
     # @raise [RuntimeError] if the API response data was not a hash
