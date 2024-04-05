@@ -14,7 +14,11 @@ describe Nylas::NewMessage do
       subject: "A draft emails subject",
       body: "<h1>A draft Email</h1>",
       file_ids: [1234, 5678],
-      tracking: { opens: true }
+      tracking: { opens: true },
+      custom_headers: [
+        { "name" => "List-Unsubscribe-Post", "value" => "List-Unsubscribe=One-Click" },
+        { "name" => "List-Unsubscribe", "value" => "<https://example.com/unsubscribe>" }
+      ]
     }
 
     it "sends the message directly" do
