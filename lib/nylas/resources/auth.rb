@@ -16,7 +16,8 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Get
 
-    # Get info about a specific token based on the identifier you include. Use either the ID Token or Access Token.
+    # Get info about a specific token based on the identifier you include. 
+    # Use either the ID Token or Access Token.
     #
     # @param ID of the request.
     # @return [Hash] Token Info.
