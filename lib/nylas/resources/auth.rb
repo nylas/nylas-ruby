@@ -20,7 +20,7 @@ module Nylas
     #
     # @param ID of the request.
     # @return [Hash] Token Info.
-    def accessTokenInfo(query_params: nil)
+    def access_Token_Info(query_params: nil)
       get(
         path: "#{api_uri}/v3/connect/tokeninfo",
         query_params: query_params
