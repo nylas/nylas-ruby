@@ -119,7 +119,7 @@
 ### 5.3.0 / 2021-08-18
 * Add support for Neural API
 * Fix issue where `Delta` did not have a header attribute for expanded headers
-* Fix ArgumentError when calling `Nylas::API#send!` due to missing double splat (**)
+* Fix ArgumentError when calling `NylasV2::API#send!` due to missing double splat (**)
 * Fix issue where server errors are not reported if HTML is returned
 * Fix issue where expanded `Thread` objects were not returning messages
 
@@ -200,7 +200,7 @@
 * Fix issue when calling `.save` on `message` (https://github.com/nylas/nylas-ruby/pull/233)
 * Add support for Rails 6.
 * Fix issue for updating `message` with sending `label_ids` (https://github.com/nylas/nylas-ruby/pull/231)
-* Support for `when` in `Nylas::Event` for more attributes.
+* Support for `when` in `NylasV2::Event` for more attributes.
 * Add internal transfer api to support initialize related objects.
 * Fix encoding issues when downloading attachments.
 
@@ -220,7 +220,7 @@
 
 * Drop support for Ruby 2.2 and 2.3: they have reached end-of-life
 * Add support for Ruby 2.5 and 2.6
-* Add `scopes` argument to `Nylas::API#authenticate` for
+* Add `scopes` argument to `NylasV2::API#authenticate` for
   [selective sync](https://docs.nylas.com/docs/how-to-use-selective-sync)
 * Add `Account#revoke_all`
 * Add X-Nylas-Client-Id header for HTTP requests
@@ -277,7 +277,7 @@
 
 * Deprecate the tags API
 * Remove the archive!/unarchive! methods
-* Expose `starred`, `unread`, `has_attachments` in Nylas::Thread
+* Expose `starred`, `unread`, `has_attachments` in NylasV2::Thread
 
 [full changelog](https://github.com/nylas/nylas-ruby/compare/v1.2.1...v1.3.0)
 
@@ -303,4 +303,3 @@
 * various test cleanups ([Steven Harman](https://github.com/stevenharman))
 
 [full changelog](https://github.com/nylas/nylas-ruby/compare/v1.0.0...v1.1.0)
-

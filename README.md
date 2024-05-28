@@ -91,7 +91,7 @@ All of the functionality of the Nylas Communications Platform is available throu
 ```ruby
 require 'nylas'
 
-nylas = Nylas::Client.new(
+nylas = NylasV2::Client.new(
   api_key: "NYLAS_API_KEY",
 )
 ```

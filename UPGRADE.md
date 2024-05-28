@@ -21,7 +21,7 @@ The first step to using the new SDK is to initialize a new instance of the Nylas
 ```ruby
 require 'nylas'
 
-nylas = Nylas::API.new(
+nylas = NylasV2::API.new(
   api_key: "NYLAS_API_KEY",
 )
 ```
@@ -37,7 +37,7 @@ For example, to get a list of calendars, you can do so like:
 ```ruby
 require 'nylas'
 
-nylas = Nylas::API.new(
+nylas = NylasV2::API.new(
   api_key: "NYLAS_API_KEY",
 )
 
@@ -71,7 +71,7 @@ Putting it all together, the following example code shows how to make a request 
 ```ruby
 require 'nylas'
 
-nylas = Nylas::API.new(
+nylas = NylasV2::API.new(
   api_key: "NYLAS_APP_KEY",
 )
 
@@ -92,12 +92,12 @@ begin
       location: "My event location", # Location is optional
     }
   )
-rescue Nylas::NylasApiError => e
+rescue NylasV2::NylasApiError => e
   # Handle the error
   puts e.message
   puts e.request_id
   puts e.status_code
-rescue Nylas::NylasSdkTimeoutError => e
+rescue NylasV2::NylasSdkTimeoutError => e
   # Handle the error
   puts e.message
   puts e.url
@@ -117,7 +117,7 @@ The following code shows how to authenticate a user into a Nylas application:
 ```ruby
 require 'nylas'
 
-nylas = Nylas::API.new(
+nylas = NylasV2::API.new(
   api_key: "NYLAS_APP_KEY",
 )
 

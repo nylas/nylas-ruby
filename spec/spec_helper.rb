@@ -8,10 +8,10 @@ end
 require "simplecov-cobertura"
 SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 
-require "nylas"
-require "support/nylas_helpers"
+require "nylas_v2"
+require "support/nylas_v2_helpers"
 
 RSpec.configure do |config|
-  # Include the NylasHelpers module in all example groups
-  config.include NylasHelpers
+  # Include the NylasV2Helpers module in all example groups
+  config.include NylasV2Helpers
 end
