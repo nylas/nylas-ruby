@@ -22,6 +22,9 @@ module Nylas
     MESSAGE_OPENED = "message.opened"
     MESSAGE_LINK_CLICKED = "message.link_clicked"
     THREAD_REPLIED = "thread.replied"
+    FOLDER_CREATED = "folder.created" 
+    FOLDER_UPDATE = "folder.updated"
+    FOLDER_DELETED  = "folder.deleted"
   end
 
   # Nylas Webhooks API
