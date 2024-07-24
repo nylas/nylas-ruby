@@ -66,12 +66,13 @@ describe Nylas::Messages do
     it "calls the get method with the correct parameters" do
       identifier = "abc-123-grant-id"
       message_id = "5d3qmne77v32r8l4phyuksl2x"
+      query_params = { fields: "include_headers" }
       path = "#{api_uri}/v3/grants/#{identifier}/messages/#{message_id}"
       allow(messages).to receive(:get)
-        .with(path: path)
+        .with(path: path, message_id: message_id, query_params: query_params)
         .and_return(response)
 
-      message_response = messages.find(identifier: identifier, message_id: message_id)
+      message_response = messages.find(identifier: identifier, message_id: message_id, query_params: query_params)
 
       expect(message_response).to eq(response)
     end
@@ -87,13 +88,14 @@ describe Nylas::Messages do
         folders: ["folder-123"],
         metadata: { foo: "bar" }
       }
+      query_params = { fields: "include_headers" }
       path = "#{api_uri}/v3/grants/#{identifier}/messages/#{message_id}"
       allow(messages).to receive(:put)
-        .with(path: path, request_body: request_body)
+        .with(path: path, request_body: request_body, query_params: query_params)
         .and_return(response)
 
       message_response = messages.update(identifier: identifier, message_id: message_id,
-                                         request_body: request_body)
+                                         request_body: request_body, query_params: query_params)
 
       expect(message_response).to eq(response)
     end
