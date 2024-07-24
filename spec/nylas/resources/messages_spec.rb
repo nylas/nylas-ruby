@@ -72,7 +72,8 @@ describe Nylas::Messages do
         .with(path: path, query_params: query_params)
         .and_return(response)
 
-      message_response = messages.find(identifier: identifier, message_id: message_id, query_params: query_params)
+      message_response = messages.find(identifier: identifier, message_id: message_id,
+                                       query_params: query_params)
 
       expect(message_response).to eq(response)
     end
