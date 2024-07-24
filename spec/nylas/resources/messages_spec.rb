@@ -69,7 +69,7 @@ describe Nylas::Messages do
       query_params = { fields: "include_headers" }
       path = "#{api_uri}/v3/grants/#{identifier}/messages/#{message_id}"
       allow(messages).to receive(:get)
-        .with(path: path, message_id: message_id, query_params: query_params)
+        .with(path: path, query_params: query_params)
         .and_return(response)
 
       message_response = messages.find(identifier: identifier, message_id: message_id, query_params: query_params)
