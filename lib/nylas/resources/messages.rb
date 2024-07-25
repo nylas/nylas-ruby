@@ -75,6 +75,18 @@ module Nylas
       [true, request_id]
     end
 
+    # Clean a message.
+    #
+    # @param identifier [String] Grant ID or email account from which to clean a message.
+    # @param request_body [Hash] The options to clean a message with
+    # @return [Array(Hash)] The list of clean messages.
+    def clean_messages(identifier:, request_body:)
+      put(
+        path: "#{api_uri}/v3/grants/#{identifier}/messages/clean",
+        request_body: request_body
+      )
+    end
+
     # Send a message.
     #
     # @param identifier [String] Grant ID or email account from which to delete an object.
