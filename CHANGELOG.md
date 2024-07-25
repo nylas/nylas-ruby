@@ -1,5 +1,11 @@
 # Changelog
 
+### 6.1.0 / 2024-06-25
+* Added query support for messages
+* Added support for clean messages
+* Added support for getting access token info
+* Added new webhook triggers
+
 ### 6.0.3 / 2024-03-05
 * Improved message sending and draft create/update performance
 * Change default timeout to match API (90 seconds)
