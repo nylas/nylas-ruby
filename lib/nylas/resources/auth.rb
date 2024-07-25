@@ -16,6 +16,18 @@ module Nylas
     include ApiOperations::Post
     include ApiOperations::Get
 
+    # Get info about a specific token based on the identifier you include.
+    # Use either the ID Token or Access Token.
+    #
+    # @param ID of the request.
+    # @return [Hash] Token Info.
+    def access_token_info(query_params: nil)
+      get(
+        path: "#{api_uri}/v3/connect/tokeninfo",
+        query_params: query_params
+      )
+    end
+
     # Builds the URL for authenticating users to your application with OAuth 2.0.
     #
     # @param config [Hash] Configuration for building the URL.
