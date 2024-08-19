@@ -78,4 +78,50 @@ describe Nylas::FileUtils do
       expect(form_request).to eq([request_body, []])
     end
   end
+
+  describe "#build_json_request" do
+    let(:mock_file) { instance_double("file") }
+
+    it "encodes the content of each attachment" do
+      allow(mock_file).to receive(:read).and_return("file content")
+      attachments = [{ content: mock_file }]
+
+      result, opened_files = described_class.build_json_request(attachments)
+
+      expect(result.first[:content]).to eq(Base64.encode64("file content"))
+      expect(opened_files).to include(mock_file)
+    end
+
+    it "skips attachments with no content" do
+      attachments = [{ content: nil }]
+
+      result, opened_files = described_class.build_json_request(attachments)
+
+      expect(result.first[:content]).to be_nil
+      expect(opened_files).to be_empty
+    end
+
+    it "returns empty arrays when attachments are empty" do
+      attachments = []
+
+      result, opened_files = described_class.build_json_request(attachments)
+
+      expect(result).to eq([])
+      expect(opened_files).to eq([])
+    end
+
+    it "handles multiple attachments" do
+      mock_file1 = instance_double("file1")
+      mock_file2 = instance_double("file2")
+      allow(mock_file1).to receive(:read).and_return("file content 1")
+      allow(mock_file2).to receive(:read).and_return("file content 2")
+      attachments = [{ content: mock_file1 }, { content: mock_file2 }]
+
+      result, opened_files = described_class.build_json_request(attachments)
+
+      expect(result[0][:content]).to eq(Base64.encode64("file content 1"))
+      expect(result[1][:content]).to eq(Base64.encode64("file content 2"))
+      expect(opened_files).to include(mock_file1, mock_file2)
+    end
+  end
 end
