@@ -63,7 +63,7 @@ module Nylas
       opened_files = []
 
       # Use form data only if the attachment size is greater than 3mb
-      attachments = payload[:attachments] || []
+      attachments = payload[:attachments]
       attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
 
       # Handle the attachment encoding depending on the size
