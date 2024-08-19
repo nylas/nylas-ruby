@@ -36,6 +36,24 @@ module Nylas
       [form_data, opened_files]
     end
 
+    # Build a json attachment request for the API.
+    # @param attachments The attachments to send with the message.
+    # @return The properly-formatted json data to send to the API and the opened files.
+    # @!visibility private
+    def self.build_json_request(attachments)
+      opened_files = []
+
+      attachments.each_with_index do |attachment, _index|
+        current_attachment = attachment[:content]
+        next unless current_attachment
+
+        attachment[:content] = Base64.encode64(current_attachment.read)
+        opened_files << current_attachment
+      end
+
+      [attachments, opened_files]
+    end
+
     # Build the request to attach a file to a message/draft object.
     # @param file_path [String] The path to the file to attach.
     # @return [Hash] The request that will attach the file to the message/draft
