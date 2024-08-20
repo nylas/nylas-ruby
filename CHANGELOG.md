@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 6.1.1 / 2024-08-20
 * Fixed sending attachments less than 3MB
 
 ### 6.1.0 / 2024-06-25
