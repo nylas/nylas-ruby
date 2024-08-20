@@ -36,6 +36,50 @@ module Nylas
       [form_data, opened_files]
     end
 
+    # Build a json attachment request for the API.
+    # @param attachments The attachments to send with the message. Can be a file object or a base64 string.
+    # @return The properly-formatted json data to send to the API and the opened files.
+    # @!visibility private
+    def self.build_json_request(attachments)
+      opened_files = []
+
+      attachments.each_with_index do |attachment, _index|
+        current_attachment = attachment[:content]
+        next unless current_attachment
+
+        if current_attachment.respond_to?(:read)
+          attachment[:content] = Base64.strict_encode64(current_attachment.read)
+          opened_files << current_attachment
+        else
+          attachment[:content] = current_attachment
+        end
+      end
+
+      [attachments, opened_files]
+    end
+
+    # Handle encoding the message payload.
+    # @param request_body The values to create the message with.
+    # @return The encoded message payload and any opened files.
+    # @!visibility private
+    def self.handle_message_payload(request_body)
+      payload = request_body.transform_keys(&:to_sym)
+      opened_files = []
+
+      # Use form data only if the attachment size is greater than 3mb
+      attachments = payload[:attachments]
+      attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
+
+      # Handle the attachment encoding depending on the size
+      if attachment_size >= FORM_DATA_ATTACHMENT_SIZE
+        payload, opened_files = build_form_request(request_body)
+      else
+        payload[:attachments], opened_files = build_json_request(attachments) unless attachments.nil?
+      end
+
+      [payload, opened_files]
+    end
+
     # Build the request to attach a file to a message/draft object.
     # @param file_path [String] The path to the file to attach.
     # @return [Hash] The request that will attach the file to the message/draft

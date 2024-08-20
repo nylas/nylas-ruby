@@ -100,6 +100,8 @@ describe Nylas::Drafts do
     it "calls the post method with the correct parameters for small attachments" do
       identifier = "abc-123-grant-id"
       mock_file = instance_double("file")
+      allow(mock_file).to receive(:read).and_return("file content")
+      allow(mock_file).to receive(:close).and_return(true)
       request_body = {
         subject: "Hello from Nylas!",
         to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],
@@ -183,6 +185,8 @@ describe Nylas::Drafts do
       identifier = "abc-123-grant-id"
       draft_id = "5d3qmne77v32r8l4phyuksl2x"
       mock_file = instance_double("file")
+      allow(mock_file).to receive(:read).and_return("file content")
+      allow(mock_file).to receive(:close).and_return(true)
       request_body = {
         subject: "Hello from Nylas!",
         to: [{ name: "Jon Snow", email: "jsnow@gmail.com" }],

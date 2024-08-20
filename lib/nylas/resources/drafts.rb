@@ -40,19 +40,11 @@ module Nylas
     # @param identifier [String] Grant ID or email account in which to create the draft.
     # @param request_body [Hash] The values to create the message with.
     #   If you're attaching files, you must pass an array of [File] objects, or
-    #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
+    #   you can pass in base64 encoded strings if the total attachment size is less than 3mb.
+    #   You can also use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The created draft and API Request ID.
     def create(identifier:, request_body:)
-      payload = request_body
-      opened_files = []
-
-      # Use form data only if the attachment size is greater than 3mb
-      attachments = request_body[:attachments] || request_body["attachments"] || []
-      attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
-
-      if attachment_size >= FileUtils::FORM_DATA_ATTACHMENT_SIZE
-        payload, opened_files = FileUtils.build_form_request(request_body)
-      end
+      payload, opened_files = FileUtils.handle_message_payload(request_body)
 
       response = post(
         path: "#{api_uri}/v3/grants/#{identifier}/drafts",
@@ -70,19 +62,11 @@ module Nylas
     # @param draft_id [String] The id of the draft to update.
     # @param request_body [Hash] The values to create the message with.
     #   If you're attaching files, you must pass an array of [File] objects, or
-    #   you can use {FileUtils::attach_file_request_builder} to build each object attach.
+    #   you can pass in base64 encoded strings if the total attachment size is less than 3mb.
+    #   You can also use {FileUtils::attach_file_request_builder} to build each object attach.
     # @return [Array(Hash, String)] The updated draft and API Request ID.
     def update(identifier:, draft_id:, request_body:)
-      payload = request_body
-      opened_files = []
-
-      # Use form data only if the attachment size is greater than 3mb
-      attachments = request_body[:attachments] || request_body["attachments"] || []
-      attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
-
-      if attachment_size >= FileUtils::FORM_DATA_ATTACHMENT_SIZE
-        payload, opened_files = FileUtils.build_form_request(request_body)
-      end
+      payload, opened_files = FileUtils.handle_message_payload(request_body)
 
       response = put(
         path: "#{api_uri}/v3/grants/#{identifier}/drafts/#{draft_id}",

@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fixed sending attachments less than 3MB
+
 ### 6.1.0 / 2024-06-25
 * Added query support for messages
 * Added support for clean messages
