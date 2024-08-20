@@ -37,7 +37,7 @@ module Nylas
     end
 
     # Build a json attachment request for the API.
-    # @param attachments The attachments to send with the message.
+    # @param attachments The attachments to send with the message. Can be a file object or a base64 string.
     # @return The properly-formatted json data to send to the API and the opened files.
     # @!visibility private
     def self.build_json_request(attachments)
@@ -47,8 +47,12 @@ module Nylas
         current_attachment = attachment[:content]
         next unless current_attachment
 
-        attachment[:content] = Base64.encode64(current_attachment.read)
-        opened_files << current_attachment
+        if current_attachment.respond_to?(:read)
+          attachment[:content] = Base64.strict_encode64(current_attachment.read)
+          opened_files << current_attachment
+        else
+          attachment[:content] = current_attachment
+        end
       end
 
       [attachments, opened_files]
