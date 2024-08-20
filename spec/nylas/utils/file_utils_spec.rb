@@ -88,7 +88,7 @@ describe Nylas::FileUtils do
 
       result, opened_files = described_class.build_json_request(attachments)
 
-      expect(result.first[:content]).to eq(Base64.encode64("file content"))
+      expect(result.first[:content]).to eq(Base64.strict_encode64("file content"))
       expect(opened_files).to include(mock_file)
     end
 
@@ -119,9 +119,18 @@ describe Nylas::FileUtils do
 
       result, opened_files = described_class.build_json_request(attachments)
 
-      expect(result[0][:content]).to eq(Base64.encode64("file content 1"))
-      expect(result[1][:content]).to eq(Base64.encode64("file content 2"))
+      expect(result[0][:content]).to eq(Base64.strict_encode64("file content 1"))
+      expect(result[1][:content]).to eq(Base64.strict_encode64("file content 2"))
       expect(opened_files).to include(mock_file1, mock_file2)
+    end
+
+    it "sends a b64 string without further encoding" do
+      attachments = [{ content: "SGVsbG8gd29ybGQ=" }]
+
+      result, opened_files = described_class.build_json_request(attachments)
+
+      expect(result.first[:content]).to match(Base64.strict_encode64("Hello world"))
+      expect(opened_files).to be_empty
     end
   end
 
@@ -149,7 +158,7 @@ describe Nylas::FileUtils do
 
       payload, opened_files = described_class.handle_message_payload(request_body)
 
-      expect(payload[:attachments].first[:content]).to eq(Base64.encode64("file content"))
+      expect(payload[:attachments].first[:content]).to eq(Base64.strict_encode64("file content"))
       expect(opened_files).to include(mock_file)
     end
 
