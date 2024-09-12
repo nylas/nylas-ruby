@@ -86,9 +86,9 @@ describe Nylas::FileUtils do
 
       allow(mock_file).to receive(:closed?).and_return(true)
 
-      expect {
+      expect do
         described_class.build_form_request(request_body)
-      }.to raise_error(ArgumentError, "The file at index 0 is closed and no file_path was provided.")
+      end.to raise_error(ArgumentError, "The file at index 0 is closed and no file_path was provided.")
     end
 
     it "opens the file if it is closed and file_path is provided" do
