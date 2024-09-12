@@ -79,6 +79,43 @@ describe Nylas::FileUtils do
 
       expect(form_request).to eq([request_body, []])
     end
+
+    it "raises an error if the file is closed and no file_path is provided" do
+      attachments = [{ content: mock_file }]
+      request_body = { attachments: attachments }
+
+      allow(mock_file).to receive(:closed?).and_return(true)
+
+      expect {
+        described_class.build_form_request(request_body)
+      }.to raise_error(ArgumentError, "The file at index 0 is closed and no file_path was provided.")
+    end
+
+    it "opens the file if it is closed and file_path is provided" do
+      file_path = "/path/to/file.txt"
+      attachments = [{ content: mock_file, file_path: file_path }]
+      request_body = { attachments: attachments }
+
+      allow(mock_file).to receive(:closed?).and_return(true)
+      allow(File).to receive(:open).with(file_path, "rb").and_return(mock_file)
+
+      form_data, opened_files = described_class.build_form_request(request_body)
+
+      expect(form_data).to include("file0" => mock_file)
+      expect(opened_files).to include(mock_file)
+    end
+
+    it "adds the file to form_data if it is open" do
+      attachments = [{ content: mock_file }]
+      request_body = { attachments: attachments }
+
+      allow(mock_file).to receive(:closed?).and_return(false)
+
+      form_data, opened_files = described_class.build_form_request(request_body)
+
+      expect(form_data).to include("file0" => mock_file)
+      expect(opened_files).to include(mock_file)
+    end
   end
 
   describe "#build_json_request" do
