@@ -21,7 +21,8 @@ describe Nylas::FileUtils do
         filename: "file.txt",
         content_type: "text/plain",
         size: 100,
-        content: mock_file
+        content: mock_file,
+        file_path: file_path
       )
     end
 
@@ -37,7 +38,8 @@ describe Nylas::FileUtils do
         filename: "file.txt",
         content_type: "application/octet-stream",
         size: file_size,
-        content: mock_file
+        content: mock_file,
+        file_path: file_path
       )
     end
   end
