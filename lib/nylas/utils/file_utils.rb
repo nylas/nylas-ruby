@@ -98,7 +98,8 @@ module Nylas
         filename: filename,
         content_type: content_type,
         size: size,
-        content: content
+        content: content,
+        file_path: file_path
       }
     end
   end
