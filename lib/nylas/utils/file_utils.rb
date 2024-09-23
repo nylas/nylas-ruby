@@ -13,20 +13,29 @@ module Nylas
     # @return The form data to send to the API and the opened files.
     # @!visibility private
     def self.build_form_request(request_body)
-      attachments = request_body.delete(:attachments) || request_body.delete("attachments") || []
+      attachments = request_body[:attachments] || request_body["attachments"] || []
+      serializable_body = request_body.reject { |key, _| [:attachments, "attachments"].include?(key) }
+      request_body_copy = Marshal.load(Marshal.dump(serializable_body))
 
       # RestClient will not send a multipart request if there are no attachments
-      # so we need to return the message payload to be used as a json payload
-      return [request_body, []] if attachments.empty?
+      return [request_body_copy, []] if attachments.empty?
 
       # Prepare the data to return
-      message_payload = request_body.to_json
+      message_payload = request_body_copy.to_json
 
       form_data = {}
       opened_files = []
 
       attachments.each_with_index do |attachment, index|
         file = attachment[:content] || attachment["content"]
+        if file.respond_to?(:closed?) && file.closed?
+          unless attachment[:file_path]
+            raise ArgumentError, "The file at index #{index} is closed and no file_path was provided."
+          end
+
+          file = File.open(attachment[:file_path], "rb")
+        end
+
         form_data.merge!({ "file#{index}" => file })
         opened_files << file
       end
@@ -98,7 +107,8 @@ module Nylas
         filename: filename,
         content_type: content_type,
         size: size,
-        content: content
+        content: content,
+        file_path: file_path
       }
     end
   end
