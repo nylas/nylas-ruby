@@ -14,10 +14,12 @@ module Nylas
     # Return all folders.
     #
     # @param identifier [String] Grant ID or email account to query.
+    # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Array(Hash), String, String)] The list of folders, API Request ID, and next cursor.
-    def list(identifier:)
+    def list(identifier:, query_params: nil)
       get_list(
-        path: "#{api_uri}/v3/grants/#{identifier}/folders"
+        path: "#{api_uri}/v3/grants/#{identifier}/folders",
+        query_params: query_params
       )
     end
 

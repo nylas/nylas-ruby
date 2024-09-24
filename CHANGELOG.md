@@ -1,6 +1,7 @@
 # Changelog
 
 ### Unreleased
+* Added query support for folders
 * Added dependency on `ostruct` gem
 * Enable SDK to reattach large files to messages on retry
 
