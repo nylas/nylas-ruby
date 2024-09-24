@@ -1,9 +1,10 @@
 # Changelog
 
-### Unreleased
+### 6.2.0 / 2024-09-24
 * Added query support for folders
 * Added dependency on `ostruct` gem
 * Enable SDK to reattach large files to messages on retry
+* Downgraded `rest-client` to `2.0` for better compatibility
 
 ### 6.1.1 / 2024-08-20
 * Fixed sending attachments less than 3MB
