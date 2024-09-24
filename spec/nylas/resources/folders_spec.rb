@@ -27,7 +27,7 @@ describe Nylas::Folders do
       identifier = "abc-123-grant-id"
       path = "#{api_uri}/v3/grants/#{identifier}/folders"
       allow(folders).to receive(:get_list)
-        .with(path: path)
+        .with(path: path, query_params: nil)
         .and_return(list_response)
 
       folders_response = folders.list(identifier: identifier)
