@@ -65,7 +65,7 @@ describe Nylas::Tunnel do
     end
 
     it "calls the functions with the default values" do
-      default_webhooks = WebhookTrigger.constants(false).map { |c| WebhookTrigger.const_get c }
+      default_webhooks = Nylas::V2::WebhookTrigger.constants(false).map { |c| Nylas::V2::WebhookTrigger.const_get c }
 
       described_class.open_webhook_tunnel(api)
 
@@ -78,7 +78,7 @@ describe Nylas::Tunnel do
     it "calls the functions with the correct values" do
       config = {
         region: "ireland",
-        triggers: [WebhookTrigger::ACCOUNT_CONNECTED]
+        triggers: [Nylas::V2::WebhookTrigger::ACCOUNT_CONNECTED]
       }
 
       described_class.open_webhook_tunnel(api, config)
@@ -95,7 +95,7 @@ describe Nylas::Tunnel do
       allow(client).to receive(:execute).and_return({})
       callback_domain = "domain.com"
       tunnel_path = "tunnel"
-      triggers = [WebhookTrigger::EVENT_CREATED]
+      triggers = [Nylas::V2::WebhookTrigger::EVENT_CREATED]
 
       described_class.register_webhook_callback(api, callback_domain, tunnel_path, triggers)
 

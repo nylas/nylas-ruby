@@ -2,7 +2,7 @@
 set -e
 
 bin/test
-SDK_VERSION=`ruby -e "require './lib/nylas/version' ; puts Nylas::VERSION"`
+SDK_VERSION=`ruby -e "require './lib/nylas/v2/version' ; puts Nylas::V2::VERSION"`
 echo "Going to release version $SDK_VERSION of the SDK!"
 
 gem build nylas.gemspec

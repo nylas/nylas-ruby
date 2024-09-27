@@ -16,14 +16,14 @@ demonstrate { api.webhooks.find(example_webhook.id).to_h }
 demonstrate do
   api.webhooks.create(
     callback_url: ENV['NYLAS_WEBHOOK_URL'],
-    state: WebhookState::ACTIVE,
-    triggers: [WebhookTrigger::EVENT_CREATED],
+    state: Nylas::V2::WebhookState::ACTIVE,
+    triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
   )
 end
 
 # Update the status of the webhook
 created_webhook = api.webhooks.last
-demonstrate { created_webhook.update(WebhookState::INACTIVE) }
+demonstrate { created_webhook.update(Nylas::V2::WebhookState::INACTIVE) }
 
 # Delete webhook
 demonstrate { created_webhook.destroy }

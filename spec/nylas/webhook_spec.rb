@@ -31,7 +31,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -53,7 +53,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -83,13 +83,13 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
       webhook = described_class.from_json(JSON.dump(data), api: api)
 
-      webhook.update(state: WebhookState::INACTIVE)
+      webhook.update(state: Nylas::V2::WebhookState::INACTIVE)
 
       expect(api).to have_received(:execute).with(
         auth_method: Nylas::HttpClient::AuthMethod::BASIC,
@@ -109,7 +109,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -128,7 +128,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -156,7 +156,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
@@ -184,7 +184,7 @@ describe Nylas::Webhook do
         application_id: "app-123",
         callback_url: "https://url.com/callback",
         state: "active",
-        triggers: [WebhookTrigger::EVENT_CREATED],
+        triggers: [Nylas::V2::WebhookTrigger::EVENT_CREATED],
         version: "v1"
       }
 
