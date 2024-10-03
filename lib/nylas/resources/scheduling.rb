@@ -9,16 +9,33 @@ require_relative "sessions"
 module Nylas
   # Nylas Scheduling API
   class Scheduling < Resource
-    attr_reader :confiugrations, :bookings, :sessions, :availability
+    # The configuration resources for your Nylas application.
+    #
+    # @return [Nylas::Scheduling::Confiugrations] Scheduling configuration resources
+    # for your Nylas application.
+    def configurations
+      Configurations.new(self)
+    end
 
-    # Initializes the scheduling resource.
-    # @param sdk_instance [Nylas::API] The API instance to which the resource is bound.
-    def initialize(sdk_instance)
-      super(sdk_instance)
-      @configurations = Configurations.new(sdk_instance)
-      @bookings = Bookings.new(sdk_instance)
-      @sessions = Sessions.new(sdk_instance)
-      @availability = Availability.new(sdk_instance)
+    # The Booking resources for your Nylas application.
+    #
+    # @return [Nylas::Scheduling::Bookings] Scheduling booking resources for your Nylas application.
+    def bookings
+      Bookings.new(self)
+    end
+
+    # The Session resources for your Nylas application.
+    #
+    # @return [Nylas::Scheduling::Sessions] Scheduling session resources for your Nylas application.
+    def sessions
+      Sessions.new(self)
+    end
+
+    # The availability resources for your Nylas application.
+    #
+    # @return [Nylas::Scheduling::Availability] Scheduling availability resources for your Nylas application.
+    def availability
+      Availability.new(self)
     end
   end
 end
