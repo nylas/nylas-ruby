@@ -5,7 +5,7 @@ require_relative "../handler/api_operations"
 
 module Nylas
   # Nylas Messages API
-  class Configurations < Resource
+  class Sessions < Resource
     include ApiOperations::Post
     include ApiOperations::Delete
 
