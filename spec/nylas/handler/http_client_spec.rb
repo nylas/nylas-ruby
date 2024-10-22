@@ -23,7 +23,8 @@ describe Nylas::HttpClient do
     it "returns the default headers" do
       expect(http_client.send(:default_headers)).to eq(
         "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
-        "X-Nylas-API-Wrapper" => "ruby"
+        "X-Nylas-API-Wrapper" => "ruby",
+        "Accept-Encoding" => "gzip"
       )
     end
   end
@@ -64,7 +65,8 @@ describe Nylas::HttpClient do
       expect(request[:headers]).to eq(
         "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
         "X-Nylas-API-Wrapper" => "ruby",
-        "Authorization" => "Bearer fake-key"
+        "Authorization" => "Bearer fake-key",
+        "Accept-Encoding" => "gzip"
       )
     end
 
@@ -84,7 +86,8 @@ describe Nylas::HttpClient do
         "X-Nylas-API-Wrapper" => "ruby",
         "Authorization" => "Bearer fake-key",
         "X-Custom-Header" => "custom-value",
-        "X-Custom-Header-2" => "custom-value-2"
+        "X-Custom-Header-2" => "custom-value-2",
+        "Accept-Encoding" => "gzip"
       )
     end
 
@@ -98,7 +101,8 @@ describe Nylas::HttpClient do
       expect(request[:headers]).to eq(
         "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
         "X-Nylas-API-Wrapper" => "ruby",
-        "Authorization" => "Bearer fake-key"
+        "Authorization" => "Bearer fake-key",
+        "Accept-Encoding" => "gzip"
       )
       expect(request[:timeout]).to eq(30)
     end
@@ -114,7 +118,8 @@ describe Nylas::HttpClient do
       expect(request[:headers]).to eq(
         "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
         "X-Nylas-API-Wrapper" => "ruby",
-        "Authorization" => "Bearer fake-key"
+        "Authorization" => "Bearer fake-key",
+        "Accept-Encoding" => "gzip"
       )
     end
 
@@ -131,7 +136,8 @@ describe Nylas::HttpClient do
           "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
           "X-Nylas-API-Wrapper" => "ruby",
           "Authorization" => "Bearer fake-key",
-          "Content-type" => "application/json"
+          "Content-type" => "application/json",
+          "Accept-Encoding" => "gzip"
         )
       end
 
@@ -146,7 +152,8 @@ describe Nylas::HttpClient do
         expect(request[:headers]).to eq(
           "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
           "X-Nylas-API-Wrapper" => "ruby",
-          "Authorization" => "Bearer fake-key"
+          "Authorization" => "Bearer fake-key",
+          "Accept-Encoding" => "gzip"
         )
       end
     end
