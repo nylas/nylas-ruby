@@ -42,6 +42,21 @@ describe Nylas::FileUtils do
         file_path: file_path
       )
     end
+
+    it "accepts optional filename parameter" do
+      file_path = "/path/to/file.txt"
+      filename = "customm-file.txt"
+
+      attach_file_req = described_class.attach_file_request_builder(file_path, filename)
+
+      expect(attach_file_req).to eq(
+        filename: "customm-file.txt",
+        content_type: "text/plain",
+        size: 100,
+        content: mock_file,
+        file_path: file_path
+      )
+    end
   end
 
   describe "#build_form_request" do
