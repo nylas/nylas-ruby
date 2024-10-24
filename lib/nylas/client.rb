@@ -8,6 +8,11 @@ require_relative "resources/auth"
 require_relative "resources/webhooks"
 require_relative "resources/applications"
 require_relative "resources/folders"
+require_relative "resources/scheduler"
+require_relative "resources/configurations"
+require_relative "resources/sessions"
+require_relative "resources/availability"
+require_relative "resources/bookings"
 
 module Nylas
   # Methods to retrieve data from the Nylas API as Ruby objects.
@@ -116,6 +121,12 @@ module Nylas
     # @return [Nylas::Webhooks] Webhook resources for your Nylas application.
     def webhooks
       Webhooks.new(self)
+    end
+
+    # The Scheduler resources for your Nylas application.
+    # @return [Nylas::Scheduler] Scheduler resources for your Nylas application.
+    def scheduler
+      Scheduler.new(self)
     end
   end
 end
