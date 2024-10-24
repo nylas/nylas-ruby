@@ -10,10 +10,14 @@ module Nylas
   # This class provides access to the Scheduler resources, including
   # configurations, bookings, sessions, and availability.
   #
-  # @attr_reader [Nylas::Configurations] configurations The Scheduler configurations resource for your Nylas application.
-  # @attr_reader [Nylas::Bookings] bookings The Scheduler bookings resource for your Nylas application.
-  # @attr_reader [Nylas::Sessions] sessions The Scheduler sessions resource for your Nylas application.
-  # @attr_reader [Nylas::Availability] availability The Scheduler availability resource for your Nylas application.
+  # @attr_reader [Nylas::Configurations] configurations The Scheduler configurations resource for your 
+  # Nylas application.
+  # @attr_reader [Nylas::Bookings] bookings The Scheduler bookings resource for your 
+  # Nylas application.
+  # @attr_reader [Nylas::Sessions] sessions The Scheduler sessions resource for your
+  # Nylas application.
+  # @attr_reader [Nylas::Availability] availability The Scheduler availability resource for your 
+  # Nylas application.
   class Scheduler
     attr_reader :configurations, :sessions, :bookings, :availability
 
