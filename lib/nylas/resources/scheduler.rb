@@ -1,7 +1,9 @@
-require_relative './configurations'
-require_relative './sessions'
-require_relative './bookings'
-require_relative './availability'
+# frozen_string_literal: true
+
+require_relative "./configurations"
+require_relative "./sessions"
+require_relative "./bookings"
+require_relative "./availability"
 
 module Nylas
   class Scheduler
