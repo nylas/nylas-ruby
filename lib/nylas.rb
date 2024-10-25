@@ -43,5 +43,6 @@ require_relative "nylas/resources/smart_compose"
 require_relative "nylas/resources/threads"
 require_relative "nylas/resources/redirect_uris"
 require_relative "nylas/resources/webhooks"
+require_relative "nylas/resources/scheduler"
 
 require_relative "nylas/utils/file_utils"
