@@ -4,7 +4,7 @@ require_relative "resource"
 require_relative "../handler/api_operations"
 
 module Nylas
-  # Nylas Messages API
+  # Nylas Scheduler Configurations API
   class Configurations < Resource
     include ApiOperations::Get
     include ApiOperations::Post
