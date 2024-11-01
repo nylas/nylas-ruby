@@ -1,8 +1,5 @@
 # Changelog
 
-### Unreleased
-* Added support for `Accept-Encoding: gzip` in HTTP headers
-
 ### 6.2.0 / 2024-09-24
 * Added query support for folders
 * Added dependency on `ostruct` gem
