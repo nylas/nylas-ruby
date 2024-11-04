@@ -2,7 +2,7 @@
 
 ### Unreleased
 * Added support for scheduler APIs
-* Added `select` field to `Folders` find
+* Added `select` field to `Folders` & `Threads` find
 
 
 ### 6.2.0 / 2024-09-24
