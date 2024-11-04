@@ -26,10 +26,12 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param thread_id [String] The id of the thread to return.
+    # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The thread and API request ID.
-    def find(identifier:, thread_id:)
+    def find(identifier:, thread_id:, query_params: nil)
       get(
-        path: "#{api_uri}/v3/grants/#{identifier}/threads/#{thread_id}"
+        path: "#{api_uri}/v3/grants/#{identifier}/threads/#{thread_id}",
+        query_params: query_params
       )
     end
 

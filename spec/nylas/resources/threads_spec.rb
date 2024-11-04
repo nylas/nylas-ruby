@@ -90,11 +90,24 @@ describe Nylas::Threads do
       thread_id = "5d3qmne77v32r8l4phyuksl2x"
       path = "#{api_uri}/v3/grants/#{identifier}/threads/#{thread_id}"
       allow(threads).to receive(:get)
-        .with(path: path)
+        .with(path: path, query_params: nil)
         .and_return(response)
 
       thread_response = threads.find(identifier: identifier, thread_id: thread_id)
 
+      expect(thread_response).to eq(response)
+    end
+
+    it "calls the get method with the correct query parameters" do
+      identifier = "abc-123-grant-id"
+      thread_id = "5d3qmne77v32r8l4phyuksl2x"
+      query_params = { foo: "bar" }
+      path = "#{api_uri}/v3/grants/#{identifier}/threads/#{thread_id}"
+      allow(threads).to receive(:get)
+        .with(path: path, query_params: query_params)
+        .and_return(response)
+
+      thread_response = threads.find(identifier: identifier, thread_id: thread_id, query_params: query_params)
       expect(thread_response).to eq(response)
     end
   end
