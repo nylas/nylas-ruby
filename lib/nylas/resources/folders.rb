@@ -27,6 +27,7 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param folder_id [String] The id of the folder to return.
+    # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The folder and API request ID.
     def find(identifier:, folder_id:, query_params: nil)
       get(

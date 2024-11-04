@@ -106,4 +106,27 @@ describe Nylas::Folders do
       expect(folder_response).to eq([true, response[1]])
     end
   end
+
+  describe "#find_select" do
+    let(:select_response) do
+      [{
+        id: "5d3qmne77v32r8l4phyuksl2x",
+        grant_id: "abc-123-grant-id"
+      }, "mock_request_id"]
+    end
+
+    it "calls the get method with the correct query parameters" do
+      identifier = "abc-123-grant-id"
+      folder_id = "5d3qmne77v32r8l4phyuksl2x"
+      query_params = { select: "id,grant_id" }
+      path = "#{api_uri}/v3/grants/#{identifier}/folders/#{folder_id}"
+      allow(folders).to receive(:get)
+        .with(path: path, query_params: query_params)
+        .and_return(select_response)
+
+      folder_response = folders.find(identifier: identifier, folder_id: folder_id, query_params: query_params)
+
+      expect(folder_response).to eq(select_response)
+    end
+  end
 end
