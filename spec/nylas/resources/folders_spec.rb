@@ -42,7 +42,7 @@ describe Nylas::Folders do
       folder_id = "5d3qmne77v32r8l4phyuksl2x"
       path = "#{api_uri}/v3/grants/#{identifier}/folders/#{folder_id}"
       allow(folders).to receive(:get)
-        .with(path: path)
+        .with(path: path, query_params: nil)
         .and_return(response)
 
       folder_response = folders.find(identifier: identifier, folder_id: folder_id)

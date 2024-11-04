@@ -28,9 +28,10 @@ module Nylas
     # @param identifier [String] Grant ID or email account to query.
     # @param folder_id [String] The id of the folder to return.
     # @return [Array(Hash, String)] The folder and API request ID.
-    def find(identifier:, folder_id:)
+    def find(identifier:, folder_id:, query_params: nil)
       get(
-        path: "#{api_uri}/v3/grants/#{identifier}/folders/#{folder_id}"
+        path: "#{api_uri}/v3/grants/#{identifier}/folders/#{folder_id}",
+        query_params: query_params
       )
     end
 
