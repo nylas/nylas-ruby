@@ -91,9 +91,10 @@ module Nylas
 
     # Build the request to attach a file to a message/draft object.
     # @param file_path [String] The path to the file to attach.
+    # @param filename [String] The name of the attached file. Optional, derived from file_path by default.
     # @return [Hash] The request that will attach the file to the message/draft
-    def self.attach_file_request_builder(file_path)
-      filename = File.basename(file_path)
+    def self.attach_file_request_builder(file_path, filename = nil)
+      filename ||= File.basename(file_path)
       content_type = MIME::Types.type_for(file_path)
       content_type = if !content_type.nil? && !content_type.empty?
                        content_type.first.to_s
