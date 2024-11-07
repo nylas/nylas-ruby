@@ -1,5 +1,10 @@
 # Changelog
 
+### Unreleased
+* Added support for scheduler APIs
+* Added `query_params` field to `Folders` & `Threads` find
+
+
 ### 6.2.0 / 2024-09-24
 * Added query support for folders
 * Added dependency on `ostruct` gem
