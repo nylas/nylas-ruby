@@ -1,8 +1,9 @@
 # Changelog
 
-### Unreleased
+### 6.2.1 / 2024-11-12
 * Added support for scheduler APIs
 * Added `query_params` field to `Folders` & `Threads` find
+* Added custom filename support for attachments
 
 
 ### 6.2.0 / 2024-09-24
