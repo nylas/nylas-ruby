@@ -192,7 +192,7 @@ describe Nylas::FileUtils do
     let(:mock_file) { instance_double("file") }
 
     it "returns form data when attachment size is greater than 3MB" do
-      large_attachment = { size: 4 * 1024 * 1024, content: mock_file }
+      large_attachment = { size: 4 * 1024 * 1024, content: mock_file, filename: 'file.txt', content_type: 'text/plain' }
       request_body = { attachments: [large_attachment] }
 
       allow(mock_file).to receive(:read).and_return("file content")
@@ -202,6 +202,8 @@ describe Nylas::FileUtils do
 
       expect(payload).to include("multipart" => true)
       expect(opened_files).to include(mock_file)
+      expect(mock_file.original_filename).to eq('file.txt')
+      expect(mock_file.content_type).to eq('text/plain')
     end
 
     it "returns json data when attachment size is less than 3MB" do

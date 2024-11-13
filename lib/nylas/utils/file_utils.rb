@@ -36,6 +36,13 @@ module Nylas
           file = File.open(attachment[:file_path], "rb")
         end
 
+        # Setting original filename and content type if available. See code rest-client#lib/restclient/payload.rb
+        filename = attachment[:filename] || attachment["filename"]
+        file.define_singleton_method(:original_filename) { filename } if filename
+
+        content_type = attachment[:content_type] || attachment["content_type"]
+        file.define_singleton_method(:content_type) { content_type } if content_type
+
         form_data.merge!({ "file#{index}" => file })
         opened_files << file
       end
