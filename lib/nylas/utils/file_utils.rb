@@ -36,7 +36,7 @@ module Nylas
           file = File.open(attachment[:file_path], "rb")
         end
 
-        # Setting original filename and content type if available. See code rest-client#lib/restclient/payload.rb
+        # Setting original filename and content type if available. See rest-client#lib/restclient/payload.rb
         filename = attachment[:filename] || attachment["filename"]
         file.define_singleton_method(:original_filename) { filename } if filename
 
