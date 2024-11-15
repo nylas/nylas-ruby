@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Add support for private Scheduling configuration.
+
 ### 6.2.1 / 2024-11-12
 * Added support for scheduler APIs
 * Added `query_params` field to `Folders` & `Threads` find

@@ -24,7 +24,20 @@ describe Nylas::Bookings do
         .with(path: path, query_params: nil)
         .and_return(response)
 
-      bookings_response = bookings.find(booking_id: booking_id, query_params: nil)
+      bookings_response = bookings.find(booking_id: booking_id)
+
+      expect(bookings_response).to eq(response)
+    end
+
+    it "calls the get method with the correct query params" do
+      booking_id = "booking-123"
+      query_params = { "foo": "bar" }
+      path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
+      allow(bookings).to receive(:get)
+        .with(path: path, query_params: query_params)
+        .and_return(response)
+
+      bookings_response = bookings.find(booking_id: booking_id, query_params: query_params)
 
       expect(bookings_response).to eq(response)
     end
@@ -50,7 +63,32 @@ describe Nylas::Bookings do
         .with(path: path, request_body: request_body, query_params: nil)
         .and_return(response)
 
-      bookings_response = bookings.create(request_body: request_body, query_params: nil)
+      bookings_response = bookings.create(request_body: request_body)
+
+      expect(bookings_response).to eq(response)
+    end
+
+    it "calls the post method with the correct query parameters" do
+      request_body = {
+        start_time: 1730194200,
+        end_time: 1730196000,
+        participants: [
+          {
+            email: "scheduler-booking@nylas.com"
+          }
+        ],
+        guest: {
+          name: "TEST",
+          email: "test@nylas.com"
+        }
+      }
+      query_params = { "foo": "bar" }
+      path = "#{api_uri}/v3/scheduling/bookings"
+      allow(bookings).to receive(:post)
+        .with(path: path, request_body: request_body, query_params: query_params)
+        .and_return(response)
+
+      bookings_response = bookings.create(request_body: request_body, query_params: query_params)
 
       expect(bookings_response).to eq(response)
     end
@@ -70,15 +108,35 @@ describe Nylas::Bookings do
 
       bookings_response = bookings.update(
         request_body: request_body,
+        booking_id: booking_id
+      )
+
+      expect(bookings_response).to eq(response)
+    end
+
+    it "calls the patch method with the correct query parameters" do
+      booking_id = "booking-123"
+      query_params = { "foo": "bar" }
+      request_body = {
+        start_time: 1730194200,
+        end_time: 1730196000
+      }
+      path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
+      allow(bookings).to receive(:patch)
+        .with(path: path, request_body: request_body, query_params: query_params)
+        .and_return(response)
+
+      bookings_response = bookings.update(
+        request_body: request_body,
         booking_id: booking_id,
-        query_params: nil
+        query_params: query_params
       )
 
       expect(bookings_response).to eq(response)
     end
   end
 
-  describe "#confirm_booking" do
+  describe "#confirm" do
     it "calls the put method with the correct parameters" do
       booking_id = "booking-123"
       request_body = {
@@ -90,10 +148,30 @@ describe Nylas::Bookings do
         .with(path: path, request_body: request_body, query_params: nil)
         .and_return(response)
 
-      bookings_response = bookings.confirm_booking(
+      bookings_response = bookings.confirm(
+        booking_id: booking_id,
+        request_body: request_body
+      )
+
+      expect(bookings_response).to eq(response)
+    end
+
+    it "calls the put method with the correct query parameters" do
+      booking_id = "booking-123"
+      query_params = { "foo": "bar" }
+      request_body = {
+        salt: "_salt",
+        status: "cancelled"
+      }
+      path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
+      allow(bookings).to receive(:put)
+        .with(path: path, request_body: request_body, query_params: query_params)
+        .and_return(response)
+
+      bookings_response = bookings.confirm(
         booking_id: booking_id,
         request_body: request_body,
-        query_params: nil
+        query_params: query_params
       )
 
       expect(bookings_response).to eq(response)
@@ -110,7 +188,19 @@ describe Nylas::Bookings do
         .with(path: path, query_params: nil)
         .and_return(delete_response)
 
-      bookings_response = bookings.destroy(booking_id: booking_id, query_params: nil)
+      bookings_response = bookings.destroy(booking_id: booking_id)
+      expect(bookings_response).to eq(delete_response)
+    end
+
+    it "calls the delete method with the correct query parameters" do
+      booking_id = "booking-123"
+      query_params = { "foo": "bar" }
+      path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
+      allow(bookings).to receive(:delete)
+        .with(path: path, query_params: query_params)
+        .and_return(delete_response)
+
+      bookings_response = bookings.destroy(booking_id: booking_id, query_params: query_params)
       expect(bookings_response).to eq(delete_response)
     end
   end
