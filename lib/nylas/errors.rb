@@ -21,7 +21,7 @@ module Nylas
     # @param type [Hash] Error type.
     # @param message [String] Error message.
     # @param status_code [Integer] Error status code.
-    # @param provider_error [String, nil] Provider error.
+    # @param provider_error [Hash, nil] The error from the provider.
     # @param request_id [Hash, nil] The ID of the request.
     def initialize(type, message, status_code, provider_error = nil, request_id = nil)
       super(message)
