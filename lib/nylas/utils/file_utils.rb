@@ -43,7 +43,9 @@ module Nylas
         content_type = attachment[:content_type] || attachment["content_type"]
         file.define_singleton_method(:content_type) { content_type } if content_type
 
-        form_data.merge!({ "file#{index}" => file })
+        content_id = attachment[:content_id] || attachment["content_id"] || "file#{index}"
+
+        form_data.merge!({ content_id => file })
         opened_files << file
       end
 
@@ -100,7 +102,7 @@ module Nylas
     # @param file_path [String] The path to the file to attach.
     # @param filename [String] The name of the attached file. Optional, derived from file_path by default.
     # @return [Hash] The request that will attach the file to the message/draft
-    def self.attach_file_request_builder(file_path, filename = nil)
+    def self.attach_file_request_builder(file_path, filename = nil, content_id = nil)
       filename ||= File.basename(file_path)
       content_type = MIME::Types.type_for(file_path)
       content_type = if !content_type.nil? && !content_type.empty?
@@ -110,12 +112,12 @@ module Nylas
                      end
       size = File.size(file_path)
       content = File.new(file_path, "rb")
-
       {
         filename: filename,
         content_type: content_type,
         size: size,
         content: content,
+        content_id: content_id,
         file_path: file_path
       }
     end
