@@ -22,6 +22,7 @@ describe Nylas::FileUtils do
         content_type: "text/plain",
         size: 100,
         content: mock_file,
+        content_id: nil,
         file_path: file_path
       )
     end
@@ -39,6 +40,7 @@ describe Nylas::FileUtils do
         content_type: "application/octet-stream",
         size: file_size,
         content: mock_file,
+        content_id: nil,
         file_path: file_path
       )
     end
@@ -54,6 +56,23 @@ describe Nylas::FileUtils do
         content_type: "text/plain",
         size: 100,
         content: mock_file,
+        content_id: nil,
+        file_path: file_path
+      )
+    end
+
+    it "accepts optional content_id parameter" do
+      file_path = "/path/to/file.txt"
+      content_id = "content-id-123"
+
+      attach_file_req = described_class.attach_file_request_builder(file_path, nil, content_id)
+
+      expect(attach_file_req).to eq(
+        filename: "file.txt",
+        content_type: "text/plain",
+        size: 100,
+        content: mock_file,
+        content_id: content_id,
         file_path: file_path
       )
     end
