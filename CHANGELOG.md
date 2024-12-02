@@ -4,6 +4,7 @@
 * Added support for private Scheduling configuration.
 * Added ability to add optional `content_id` to support inline image on `send`.
 * Added custom filename support for large attachments.
+* Adjusted the gendoc to show that the `provider_error` is a Hash.
 
 ### 6.2.1 / 2024-11-12
 * Added support for scheduler APIs
