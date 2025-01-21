@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fixed issue where errors were not properly thrown due to an instance type of `String` instead of `Hash`
+
 ### 6.2.2 / 2024-12-02
 * Added support for private Scheduling configuration.
 * Added ability to add optional `content_id` to support inline image on `send`.
