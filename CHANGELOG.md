@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 6.2.3 / 2025-01-23
 * Fixed issue where errors were not properly thrown due to an instance type of `String` instead of `Hash`
 
 ### 6.2.2 / 2024-12-02
