@@ -165,6 +165,14 @@ describe Nylas::FileUtils do
       expect(opened_files).to include(mock_file)
     end
 
+    it "removed the file_path key from the attachment" do
+      attachments = [{ content: mock_file, file_path: "/path/to/file.txt" }]
+
+      result, _opened_files = described_class.build_json_request(attachments)
+
+      expect(result.first).not_to have_key(:file_path)
+    end
+
     it "skips attachments with no content" do
       attachments = [{ content: nil }]
 
