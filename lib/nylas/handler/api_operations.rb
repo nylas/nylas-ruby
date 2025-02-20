@@ -15,22 +15,22 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return [Array([Hash, Array], String)] Nylas data object and API Request ID.
+      # @return [Array([Hash, Array], String, Hash)] Nylas data object, API Request ID, and response headers.
       def get(path:, query_params: {})
         response = get_raw(path: path, query_params: query_params)
 
-        [response[:data], response[:request_id]]
+        [response[:data], response[:request_id], response[:headers]]
       end
 
       # Performs a GET call to the Nylas API for a list response.
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return [Array(Array(Hash), String, String)] Nylas data array, API Request ID, and next cursor.
+      # @return [Array(Array(Hash), String, String, Hash)] Nylas data array, API Request ID, next cursor, and response headers.
       def get_list(path:, query_params: {})
         response = get_raw(path: path, query_params: query_params)
 
-        [response[:data], response[:request_id], response[:next_cursor]]
+        [response[:data], response[:request_id], response[:next_cursor], response[:headers]]
       end
 
       private
@@ -63,7 +63,7 @@ module Nylas
       # @param query_params [Hash, {}] Query params to pass to the call.
       # @param request_body [Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return Nylas data object and API Request ID.
+      # @return [Array(Hash, String, Hash)] Nylas data object, API Request ID, and response headers.
       def post(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :post,
@@ -75,7 +75,7 @@ module Nylas
           timeout: timeout
         )
 
-        [response[:data], response[:request_id]]
+        [response[:data], response[:request_id], response[:headers]]
       end
     end
 

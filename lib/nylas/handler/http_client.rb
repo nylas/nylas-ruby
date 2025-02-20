@@ -40,7 +40,10 @@ module Nylas
             content_type = response.headers[:content_type].downcase
           end
 
-          parse_json_evaluate_error(result.code.to_i, response, path, content_type)
+          parsed_response = parse_json_evaluate_error(result.code.to_i, response, path, content_type)
+          # Include headers in the response
+          parsed_response[:headers] = response.headers unless parsed_response.nil?
+          parsed_response
         end
       rescue RestClient::Exceptions::OpenTimeout, RestClient::Exceptions::ReadTimeout
         raise Nylas::NylasSdkTimeoutError.new(request[:path], timeout)
