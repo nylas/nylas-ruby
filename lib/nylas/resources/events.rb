@@ -94,5 +94,18 @@ module Nylas
         request_body: request_body
       )
     end
+
+    # Returns a list of recurring events, recurring event exceptions, and single events
+    # from the specifiedcalendar within a given time frame.
+    #
+    # @param identifier [String] Grant ID or email account to import events from.
+    # @param query_params [Hash] The query parameters to include in the request
+    # @return [(Array(Hash), String, String)] The list of events, API Request ID, and next cursor.
+    def events_import(identifier:, query_params:)
+      get_list(
+        path: "#{api_uri}/v3/grants/#{identifier}/events/import",
+        query_params: query_params
+      )
+    end
   end
 end
