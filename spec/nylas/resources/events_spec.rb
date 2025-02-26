@@ -174,4 +174,38 @@ describe Nylas::Events do
                        query_params: query_params)
     end
   end
+
+  describe "#events_import" do
+    let(:identifier) { "grant-123" }
+    let(:query_params) { { calendar_id: "cal-123", start_time: 1234567890, end_time: 1234599999 } }
+
+    it "calls get_list with the correct parameters" do
+      allow(events).to receive(:get_list)
+        .with(
+          path: "#{api_uri}/v3/grants/#{identifier}/events/import",
+          query_params: query_params
+        )
+        .and_return([[], "request-id", "next-cursor"])
+
+      result = events.list_import_events(identifier: identifier, query_params: query_params)
+      expect(result).to eq([[], "request-id", "next-cursor"])
+    end
+
+    it "returns events, request_id and cursor" do
+      expected_response = [
+        [{ "id" => "event-123", "title" => "Test Event" }],
+        "request-id-abc",
+        "next-cursor-xyz"
+      ]
+
+      allow(events).to receive(:get_list).and_return(expected_response)
+
+      response = events.list_import_events(identifier: identifier, query_params: query_params)
+
+      expect(response).to eq(expected_response)
+      expect(response[0]).to be_an(Array)
+      expect(response[1]).to be_a(String)
+      expect(response[2]).to be_a(String)
+    end
+  end
 end
