@@ -187,7 +187,7 @@ describe Nylas::Events do
         )
         .and_return([[], "request-id", "next-cursor"])
 
-      result = events.events_import(identifier: identifier, query_params: query_params)
+      result = events.list_import_events(identifier: identifier, query_params: query_params)
       expect(result).to eq([[], "request-id", "next-cursor"])
     end
 
@@ -200,7 +200,7 @@ describe Nylas::Events do
 
       allow(events).to receive(:get_list).and_return(expected_response)
 
-      response = events.events_import(identifier: identifier, query_params: query_params)
+      response = events.list_import_events(identifier: identifier, query_params: query_params)
 
       expect(response).to eq(expected_response)
       expect(response[0]).to be_an(Array)
