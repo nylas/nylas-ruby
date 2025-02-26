@@ -26,7 +26,8 @@ module Nylas
       #
       # @param path [String] Destination path for the call.
       # @param query_params [Hash, {}] Query params to pass to the call.
-      # @return [Array(Array(Hash), String, String, Hash)] Nylas data array, API Request ID, next cursor, and response headers.
+      # @return [Array<Array<Hash>, String, String, Hash>]
+      #   Nylas data array, API Request ID, next cursor, and response headers.response headers.
       def get_list(path:, query_params: {})
         response = get_raw(path: path, query_params: query_params)
 
