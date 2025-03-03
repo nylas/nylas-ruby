@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Removed `file_path` from `File` object to match the Send API schema
+
 ### 6.2.3 / 2025-01-23
 * Fixed issue where errors were not properly thrown due to an instance type of `String` instead of `Hash`
 

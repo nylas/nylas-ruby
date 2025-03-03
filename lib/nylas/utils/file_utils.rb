@@ -62,6 +62,7 @@ module Nylas
       opened_files = []
 
       attachments.each_with_index do |attachment, _index|
+        attachment.delete(:file_path)
         current_attachment = attachment[:content]
         next unless current_attachment
 
