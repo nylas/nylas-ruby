@@ -1,7 +1,9 @@
 # Changelog
 
-### Unreleased
+### 6.3.0 / 2025-03-03
 * Removed `file_path` from `File` object to match the Send API schema
+* Added events import function to the RubySDK
+* Added response headers to Ruby SDK 
 
 ### 6.2.3 / 2025-01-23
 * Fixed issue where errors were not properly thrown due to an instance type of `String` instead of `Hash`
