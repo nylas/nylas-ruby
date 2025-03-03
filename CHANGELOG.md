@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 6.3.0 / 2025-03-03
 * Removed `file_path` from `File` object to match the Send API schema
 
 ### 6.2.3 / 2025-01-23
