@@ -22,6 +22,7 @@ module Nylas
     MESSAGE_CREATED = "message.created"
     MESSAGE_UPDATED = "message.updated"
     MESSAGE_OPENED = "message.opened"
+    MESSAGE_BOUNCE_DETECTED = "message.bounce_detected"
     MESSAGE_LINK_CLICKED = "message.link_clicked"
     THREAD_REPLIED = "thread.replied"
     FOLDER_CREATED = "folder.created"
