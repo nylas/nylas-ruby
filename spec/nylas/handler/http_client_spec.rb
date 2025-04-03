@@ -234,6 +234,31 @@ describe Nylas::HttpClient do
       expect(err_obj.provider_error).to eq("This is the provider error")
       expect(err_obj.type).to eq("api_error")
     end
+
+    it "raises the correct error with headers" do
+      response = {
+        request_id: "request-id",
+        error: {
+          type: "api_error",
+          message: "An unexpected error occurred",
+          provider_error: "This is the provider error"
+        }
+      }
+      headers = {
+        "x-request-id": "request-id-from-headers",
+        "x-ratelimit-limit": "100",
+        "x-ratelimit-remaining": "99"
+      }
+
+      err_obj = http_client.send(:throw_error, response, 400, headers)
+
+      expect(err_obj).to be_a(Nylas::NylasApiError)
+      expect(err_obj.message).to eq("An unexpected error occurred")
+      expect(err_obj.request_id).to eq("request-id")
+      expect(err_obj.provider_error).to eq("This is the provider error")
+      expect(err_obj.type).to eq("api_error")
+      expect(err_obj.headers).to eq(headers)
+    end
   end
 
   describe "#error_hash_to_exception" do
@@ -286,6 +311,31 @@ describe Nylas::HttpClient do
       expect(err_obj.message).to eq("The request is missing a required parameter")
       expect(err_obj.error_uri).to eq("https://tools.ietf.org/html/rfc6749#section-5.2")
       expect(err_obj.error_code).to eq(400)
+    end
+
+    it "raises the correct error with headers" do
+      response = {
+        request_id: "request-id",
+        error: {
+          type: "api_error",
+          message: "An unexpected error occurred",
+          provider_error: "This is the provider error"
+        },
+        headers: {
+          "x-request-id": "request-id-from-headers",
+          "x-ratelimit-limit": "100",
+          "x-ratelimit-remaining": "99"
+        }
+      }
+
+      err_obj = http_client.send(:error_hash_to_exception, response, 400, "https://test.api.nylas.com/foo")
+
+      expect(err_obj).to be_a(Nylas::NylasApiError)
+      expect(err_obj.message).to eq("An unexpected error occurred")
+      expect(err_obj.request_id).to eq("request-id")
+      expect(err_obj.provider_error).to eq("This is the provider error")
+      expect(err_obj.type).to eq("api_error")
+      expect(err_obj.headers).to eq(response[:headers])
     end
   end
 
