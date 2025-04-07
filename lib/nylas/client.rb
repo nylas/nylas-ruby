@@ -8,6 +8,7 @@ require_relative "resources/auth"
 require_relative "resources/webhooks"
 require_relative "resources/applications"
 require_relative "resources/folders"
+require_relative "resources/notetakers"
 require_relative "resources/scheduler"
 
 module Nylas
@@ -123,6 +124,12 @@ module Nylas
     # @return [Nylas::Scheduler] Scheduler resources for your Nylas application.
     def scheduler
       Scheduler.new(self)
+    end
+
+    # The Notetaker resources for your Nylas application.
+    # @return [Nylas::Notetakers] Notetaker resources for your Nylas application.
+    def notetakers
+      Notetakers.new(self)
     end
   end
 end
