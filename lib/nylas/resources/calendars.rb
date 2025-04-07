@@ -39,6 +39,7 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to create the object.
     # @param request_body [Hash] The values to create the calendar with.
+    #   This can include a `notetaker` object with settings and calendar sync rules for the Notetaker bot.
     # @return [Array(Hash, String)] The created calendar and API Request ID.
     def create(identifier:, request_body:)
       post(
@@ -52,7 +53,8 @@ module Nylas
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param calendar_id [String] The id of the calendar to update.
     #   Use "primary" to refer to the primary calendar associated with grant.
-    # @param request_body [Hash] The values to update the calendar with
+    # @param request_body [Hash] The values to update the calendar with.
+    #   This can include a `notetaker` object with settings and calendar sync rules for the Notetaker bot.
     # @return [Array(Hash, String)] The updated calendar and API Request ID.
     def update(identifier:, calendar_id:, request_body:)
       put(

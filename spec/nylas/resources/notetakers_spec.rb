@@ -37,7 +37,7 @@ describe Nylas::Notetakers do
     end
 
     it "calls the get method with the correct parameters without identifier" do
-      path = "#{api_uri}/v3/grants/notetakers"
+      path = "#{api_uri}/v3/notetakers"
       allow(notetakers).to receive(:get_list)
         .with(path: path, query_params: nil)
         .and_return(list_response)
@@ -77,7 +77,7 @@ describe Nylas::Notetakers do
 
     it "calls the get method with the correct parameters without identifier" do
       notetaker_id = "note123"
-      path = "#{api_uri}/v3/grants/notetakers/#{notetaker_id}"
+      path = "#{api_uri}/v3/notetakers/#{notetaker_id}"
       allow(notetakers).to receive(:get)
         .with(path: path, query_params: nil)
         .and_return(response)
@@ -122,7 +122,7 @@ describe Nylas::Notetakers do
           transcription: true
         }
       }
-      path = "#{api_uri}/v3/grants/notetakers"
+      path = "#{api_uri}/v3/notetakers"
       allow(notetakers).to receive(:post)
         .with(path: path, request_body: request_body)
         .and_return(response)
@@ -167,7 +167,7 @@ describe Nylas::Notetakers do
           video_recording: false
         }
       }
-      path = "#{api_uri}/v3/grants/notetakers/#{notetaker_id}"
+      path = "#{api_uri}/v3/notetakers/#{notetaker_id}"
       allow(notetakers).to receive(:patch)
         .with(path: path, request_body: request_body)
         .and_return(response)
@@ -213,7 +213,7 @@ describe Nylas::Notetakers do
 
     it "calls the get method with the correct parameters without identifier" do
       notetaker_id = "note123"
-      path = "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/media"
+      path = "#{api_uri}/v3/notetakers/#{notetaker_id}/media"
       allow(notetakers).to receive(:get)
         .with(path: path, query_params: nil)
         .and_return(media_response)
@@ -250,7 +250,7 @@ describe Nylas::Notetakers do
 
     it "calls the post method with the correct parameters without identifier" do
       notetaker_id = "note123"
-      path = "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/leave"
+      path = "#{api_uri}/v3/notetakers/#{notetaker_id}/leave"
       allow(notetakers).to receive(:post)
         .with(path: path, request_body: {})
         .and_return(leave_response)
@@ -281,14 +281,14 @@ describe Nylas::Notetakers do
 
     it "calls the delete method with the correct parameters without identifier" do
       notetaker_id = "note123"
-      path = "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/cancel"
+      path = "#{api_uri}/v3/notetakers/#{notetaker_id}/cancel"
       allow(notetakers).to receive(:delete)
         .with(path: path)
-        .and_return([nil, "mock_request_id"])
+        .and_return([true, "mock_request_id"])
 
-      cancel_response_result = notetakers.cancel(notetaker_id: notetaker_id)
+      cancel_response = notetakers.cancel(notetaker_id: notetaker_id)
 
-      expect(cancel_response_result).to eq(cancel_response)
+      expect(cancel_response).to eq([true, "mock_request_id"])
     end
   end
 end

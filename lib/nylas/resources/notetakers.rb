@@ -18,11 +18,7 @@ module Nylas
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Array(Hash), String, String)] The list of notetakers, API Request ID, and next cursor.
     def list(identifier: nil, query_params: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers"
-             else
-               "#{api_uri}/v3/grants/notetakers"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers" : "#{api_uri}/v3/notetakers"
 
       get_list(
         path: path,
@@ -37,11 +33,7 @@ module Nylas
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The notetaker and API request ID.
     def find(notetaker_id:, identifier: nil, query_params: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}"
-             else
-               "#{api_uri}/v3/grants/notetakers/#{notetaker_id}"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}" : "#{api_uri}/v3/notetakers/#{notetaker_id}"
 
       get(
         path: path,
@@ -55,11 +47,7 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account in which to create the object.
     # @return [Array(Hash, String)] The created notetaker and API Request ID.
     def create(request_body:, identifier: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers"
-             else
-               "#{api_uri}/v3/grants/notetakers"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers" : "#{api_uri}/v3/notetakers"
 
       post(
         path: path,
@@ -74,11 +62,7 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account in which to update an object.
     # @return [Array(Hash, String)] The updated notetaker and API Request ID.
     def update(notetaker_id:, request_body:, identifier: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}"
-             else
-               "#{api_uri}/v3/grants/notetakers/#{notetaker_id}"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}" : "#{api_uri}/v3/notetakers/#{notetaker_id}"
 
       patch(
         path: path,
@@ -93,11 +77,7 @@ module Nylas
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The media data and API request ID.
     def download_media(notetaker_id:, identifier: nil, query_params: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/media"
-             else
-               "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/media"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/media" : "#{api_uri}/v3/notetakers/#{notetaker_id}/media"
 
       get(
         path: path,
@@ -111,11 +91,7 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account to query.
     # @return [Array(Hash, String)] The response data and API request ID.
     def leave(notetaker_id:, identifier: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/leave"
-             else
-               "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/leave"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/leave" : "#{api_uri}/v3/notetakers/#{notetaker_id}/leave"
 
       post(
         path: path,
@@ -129,11 +105,7 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account from which to delete an object.
     # @return [Array(TrueClass, String)] True and the API Request ID for the cancel operation.
     def cancel(notetaker_id:, identifier: nil)
-      path = if identifier
-               "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/cancel"
-             else
-               "#{api_uri}/v3/grants/notetakers/#{notetaker_id}/cancel"
-             end
+      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/cancel" : "#{api_uri}/v3/notetakers/#{notetaker_id}/cancel"
 
       _, request_id = delete(
         path: path

@@ -2,6 +2,7 @@
 
 ### Unreleased
 * Added support for Notetaker APIs
+* Added support for Notetaker via the calendar and event APIs
 
 ### 6.3.0 / 2025-03-03
 * Removed `file_path` from `File` object to match the Send API schema
