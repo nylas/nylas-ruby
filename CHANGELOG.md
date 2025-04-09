@@ -1,5 +1,9 @@
 # Changelog
 
+### Unreleased
+* Added support for Notetaker APIs
+* Added support for Notetaker via the calendar and event APIs
+
 ### 6.3.0 / 2025-03-03
 * Removed `file_path` from `File` object to match the Send API schema
 * Added events import function to the RubySDK
@@ -53,7 +57,7 @@
 * **BREAKING CHANGE**: Officially support minimum Ruby v3
 * **BREAKING CHANGE**: Removed all models and typing from the SDK
 * **REMOVED**: Local Webhook development support is removed due to incompatibility
-* Rewrote the majority of SDK to be more modular and efficient
+* Rewritten the majority of SDK to be more modular and efficient
 * Created error classes for the different API errors as well as SDK-specific errors
 * Added a configurable timeout for outgoing calls to the API
 
