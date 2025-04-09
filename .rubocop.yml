@@ -1,6 +1,9 @@
 inherit_from: .rubocop_todo.yml
 
-require: rubocop-rspec
+require:
+  - rubocop-rspec
+  - rubocop-capybara
+
 AllCops:
   TargetRubyVersion: 3.0
   DisplayCopNames: true
