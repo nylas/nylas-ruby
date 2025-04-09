@@ -51,6 +51,8 @@ describe Nylas::Client do
         expect(nylas.messages).to be_a(Nylas::Messages)
         expect(nylas.threads).to be_a(Nylas::Threads)
         expect(nylas.webhooks).to be_a(Nylas::Webhooks)
+        expect(nylas.scheduler).to be_a(Nylas::Scheduler)
+        expect(nylas.notetakers).to be_a(Nylas::Notetakers)
       end
     end
   end

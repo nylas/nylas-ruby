@@ -40,6 +40,7 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to create the object.
     # @param request_body [Hash] The values to create the event with.
+    #   This can include a `notetaker` object with settings for the Notetaker bot.
     # @param query_params [Hash] The query parameters to include in the request.
     # @return [Array(Hash, String)] The created event and API Request ID.
     def create(identifier:, request_body:, query_params:)
@@ -54,7 +55,8 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param event_id [String] The id of the event to update.
-    # @param request_body [Hash] The values to update the event with
+    # @param request_body [Hash] The values to update the event with.
+    #   This can include a `notetaker` object with settings for the Notetaker bot.
     # @param query_params [Hash] The query parameters to include in the request
     # @return [Array(Hash, String)] The updated event and API Request ID.
     def update(identifier:, event_id:, request_body:, query_params:)

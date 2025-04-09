@@ -113,6 +113,40 @@ describe Nylas::Events do
 
       expect(event_response).to eq(response)
     end
+
+    it "calls the post method with notetaker settings" do
+      identifier = "abc-123-grant-id"
+      query_params = { calendar_id: "5d3qmne77v32r8l4phyuksl2x" }
+      request_body = {
+        when: {
+          start_time: 1661874192,
+          end_time: 1661877792,
+          start_timezone: "America/New_York",
+          end_timezone: "America/New_York"
+        },
+        description: "Description of my new event",
+        location: "Los Angeles, CA",
+        metadata: { foo: "value" },
+        notetaker: {
+          id: "notetaker-123",
+          name: "Custom Notetaker",
+          meeting_settings: {
+            video_recording: true,
+            audio_recording: true,
+            transcription: true
+          }
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/events"
+      allow(events).to receive(:post)
+        .with(path: path, request_body: request_body, query_params: query_params)
+        .and_return(response)
+
+      event_response = events.create(identifier: identifier, request_body: request_body,
+                                     query_params: query_params)
+
+      expect(event_response).to eq(response)
+    end
   end
 
   describe "#update" do
@@ -130,6 +164,33 @@ describe Nylas::Events do
         description: "Description of my new event",
         location: "Los Angeles, CA",
         metadata: { foo: "value" }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/events/#{event_id}"
+      allow(events).to receive(:put)
+        .with(path: path, request_body: request_body, query_params: query_params)
+        .and_return(response)
+
+      event_response = events.update(identifier: identifier, event_id: event_id,
+                                     request_body: request_body, query_params: query_params)
+
+      expect(event_response).to eq(response)
+    end
+
+    it "calls the put method with notetaker settings" do
+      identifier = "abc-123-grant-id"
+      event_id = "5d3qmne77v32r8l4phyuksl2x"
+      query_params = { calendar_id: "5d3qmne77v32r8l4phyuksl2x" }
+      request_body = {
+        description: "Updated event with notetaker",
+        notetaker: {
+          id: "notetaker-456",
+          name: "Updated Notetaker",
+          meeting_settings: {
+            video_recording: false,
+            audio_recording: true,
+            transcription: true
+          }
+        }
       }
       path = "#{api_uri}/v3/grants/#{identifier}/events/#{event_id}"
       allow(events).to receive(:put)

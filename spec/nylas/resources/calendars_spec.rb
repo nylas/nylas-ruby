@@ -85,6 +85,40 @@ describe Nylas::Calendars do
 
       expect(calendar_response).to eq(response)
     end
+
+    it "calls the post method with notetaker settings" do
+      identifier = "abc-123-grant-id"
+      request_body = {
+        name: "My New Calendar",
+        description: "Description of my new calendar",
+        location: "Los Angeles, CA",
+        timezone: "America/Los_Angeles",
+        metadata: { foo: "value" },
+        notetaker: {
+          name: "Custom Notetaker",
+          meeting_settings: {
+            video_recording: true,
+            audio_recording: true,
+            transcription: true
+          },
+          rules: {
+            event_selection: %w[internal external],
+            participant_filter: {
+              participants_gte: 3,
+              participants_lte: 10
+            }
+          }
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/calendars"
+      allow(calendars).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      calendar_response = calendars.create(identifier: identifier, request_body: request_body)
+
+      expect(calendar_response).to eq(response)
+    end
   end
 
   describe "#update" do
@@ -97,6 +131,37 @@ describe Nylas::Calendars do
         location: "Los Angeles, CA",
         timezone: "America/Los_Angeles",
         metadata: { foo: "value" }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/calendars/#{calendar_id}"
+      allow(calendars).to receive(:put)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      calendar_response = calendars.update(identifier: identifier, calendar_id: calendar_id,
+                                           request_body: request_body)
+
+      expect(calendar_response).to eq(response)
+    end
+
+    it "calls the put method with notetaker settings" do
+      identifier = "abc-123-grant-id"
+      calendar_id = "5d3qmne77v32r8l4phyuksl2x"
+      request_body = {
+        name: "My Updated Calendar",
+        notetaker: {
+          name: "Custom Notetaker",
+          meeting_settings: {
+            video_recording: false,
+            audio_recording: true,
+            transcription: true
+          },
+          rules: {
+            event_selection: %w[own_events],
+            participant_filter: {
+              participants_gte: 2
+            }
+          }
+        }
       }
       path = "#{api_uri}/v3/grants/#{identifier}/calendars/#{calendar_id}"
       allow(calendars).to receive(:put)
