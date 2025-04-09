@@ -191,22 +191,26 @@ module Nylas
     def error_hash_to_exception(response, status_code, path)
       return if !response || !response.key?(:error)
 
+      # Safely get headers without risking KeyError
+      headers = response.key?(:headers) ? response[:headers] : nil
+
       if %W[#{api_uri}/v3/connect/token #{api_uri}/v3/connect/revoke].include?(path)
         NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
                             response[:error_code], status_code)
       else
-        throw_error(response, status_code)
+        throw_error(response, status_code, headers)
       end
     end
 
-    def throw_error(response, status_code)
+    def throw_error(response, status_code, headers = nil)
       error_obj = response[:error]
 
       # If `error_obj` is just a string, turn it into a hash with default keys.
       if error_obj.is_a?(String)
         error_obj = {
           type: "NylasApiError",
-          message: error_obj
+          message: error_obj,
+          headers: headers
         }
       end
 
@@ -217,7 +221,8 @@ module Nylas
         error_obj[:message],
         status_code,
         provider_error,
-        response[:request_id]
+        response[:request_id],
+        headers
       )
     end
 
