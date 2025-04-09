@@ -33,7 +33,12 @@ module Nylas
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The notetaker and API request ID.
     def find(notetaker_id:, identifier: nil, query_params: nil)
-      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}" : "#{api_uri}/v3/notetakers/#{notetaker_id}"
+      base_path = "#{api_uri}/v3"
+      path = if identifier
+               "#{base_path}/grants/#{identifier}/notetakers/#{notetaker_id}"
+             else
+               "#{base_path}/notetakers/#{notetaker_id}"
+             end
 
       get(
         path: path,
@@ -62,7 +67,12 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account in which to update an object.
     # @return [Array(Hash, String)] The updated notetaker and API Request ID.
     def update(notetaker_id:, request_body:, identifier: nil)
-      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}" : "#{api_uri}/v3/notetakers/#{notetaker_id}"
+      base_path = "#{api_uri}/v3"
+      path = if identifier
+               "#{base_path}/grants/#{identifier}/notetakers/#{notetaker_id}"
+             else
+               "#{base_path}/notetakers/#{notetaker_id}"
+             end
 
       patch(
         path: path,
@@ -77,7 +87,12 @@ module Nylas
     # @param query_params [Hash, nil] Query params to pass to the request.
     # @return [Array(Hash, String)] The media data and API request ID.
     def download_media(notetaker_id:, identifier: nil, query_params: nil)
-      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/media" : "#{api_uri}/v3/notetakers/#{notetaker_id}/media"
+      base_path = "#{api_uri}/v3"
+      path = if identifier
+               "#{base_path}/grants/#{identifier}/notetakers/#{notetaker_id}/media"
+             else
+               "#{base_path}/notetakers/#{notetaker_id}/media"
+             end
 
       get(
         path: path,
@@ -91,7 +106,12 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account to query.
     # @return [Array(Hash, String)] The response data and API request ID.
     def leave(notetaker_id:, identifier: nil)
-      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/leave" : "#{api_uri}/v3/notetakers/#{notetaker_id}/leave"
+      base_path = "#{api_uri}/v3"
+      path = if identifier
+               "#{base_path}/grants/#{identifier}/notetakers/#{notetaker_id}/leave"
+             else
+               "#{base_path}/notetakers/#{notetaker_id}/leave"
+             end
 
       post(
         path: path,
@@ -105,7 +125,12 @@ module Nylas
     # @param identifier [String, nil] Grant ID or email account from which to delete an object.
     # @return [Array(TrueClass, String)] True and the API Request ID for the cancel operation.
     def cancel(notetaker_id:, identifier: nil)
-      path = identifier ? "#{api_uri}/v3/grants/#{identifier}/notetakers/#{notetaker_id}/cancel" : "#{api_uri}/v3/notetakers/#{notetaker_id}/cancel"
+      base_path = "#{api_uri}/v3"
+      path = if identifier
+               "#{base_path}/grants/#{identifier}/notetakers/#{notetaker_id}/cancel"
+             else
+               "#{base_path}/notetakers/#{notetaker_id}/cancel"
+             end
 
       _, request_id = delete(
         path: path
