@@ -14,7 +14,7 @@ module Nylas
 
   # Error class representing a failed response from the Nylas API.
   class NylasApiError < AbstractNylasApiError
-    attr_accessor :type, :request_id, :provider_error, :status_code
+    attr_accessor :type, :request_id, :provider_error, :status_code, :headers
 
     # Initializes an error and assigns the given attributes to it.
     #
@@ -23,24 +23,26 @@ module Nylas
     # @param status_code [Integer] Error status code.
     # @param provider_error [Hash, nil] The error from the provider.
     # @param request_id [Hash, nil] The ID of the request.
-    def initialize(type, message, status_code, provider_error = nil, request_id = nil)
+    def initialize(type, message, status_code, provider_error = nil, request_id = nil, headers = nil)
       super(message)
       self.type = type
       self.status_code = status_code
       self.provider_error = provider_error
       self.request_id = request_id
+      self.headers = headers
     end
 
     # Parses the error response.
     #
     # @param response [Hash] Response from the Nylas API.
     # @param status_code [Integer] Error status code.
-    def self.parse_error_response(response, status_code)
+    def self.parse_error_response(response, status_code, headers = nil)
       new(
         response["type"],
         response["message"],
         status_code,
-        response["provider_error"]
+        response["provider_error"],
+        headers
       )
     end
   end
