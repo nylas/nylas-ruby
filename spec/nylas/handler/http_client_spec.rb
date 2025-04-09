@@ -46,6 +46,12 @@ describe Nylas::HttpClient do
 
       expect { http_client.send(:parse_response, response) }.to raise_error(Nylas::JsonParseError)
     end
+
+    it "raises an error if the response is empty" do
+      response = ""
+
+      expect { http_client.send(:parse_response, response) }.to raise_error(Nylas::JsonParseError)
+    end
   end
 
   describe "#build_request" do

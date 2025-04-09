@@ -119,7 +119,7 @@ module Nylas
     def parse_response(response)
       return response if response.is_a?(Enumerable)
 
-      Yajl::Parser.new(symbolize_names: true).parse(response)
+      Yajl::Parser.new(symbolize_names: true).parse(response) || raise(Nylas::JsonParseError)
     rescue Yajl::ParseError
       raise Nylas::JsonParseError
     end
