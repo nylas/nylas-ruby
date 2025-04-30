@@ -1,8 +1,10 @@
 # Changelog
 
-### Unreleased
+### 6.4.0 / 2025-04-30
 * Added support for Notetaker APIs
 * Added support for Notetaker via the calendar and event APIs
+* Added MESSAGE_BOUNCE_DETECTED to the webhook triggers
+* Fixed issue to raise an explicit exception when the response lacks a JSON body (#520)
 
 ### 6.3.0 / 2025-03-03
 * Removed `file_path` from `File` object to match the Send API schema
