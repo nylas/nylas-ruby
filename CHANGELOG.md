@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Fixed issue where special characters in URL paths (like #) were being treated as URL fragments. Added proper URL encoding for path components in HTTP requests
+
 ### 6.4.0 / 2025-04-30
 * Added support for Notetaker APIs
 * Added support for Notetaker via the calendar and event APIs

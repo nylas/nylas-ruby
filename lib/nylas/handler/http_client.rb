@@ -231,6 +231,12 @@ module Nylas
     # @param query [Hash] The query parameters to add to the URL.
     # @return [String] Processed URL, including query params.
     def build_url(url, query = nil)
+      if url
+        base_url, *path_parts = url.split("/")
+        encoded_path = [base_url, *path_parts.map { |part| URI.encode_www_form_component(part) }].join("/")
+        url = encoded_path
+      end
+
       unless query.nil? || query.empty?
         uri = URI.parse(url)
         uri = build_query(uri, query)
