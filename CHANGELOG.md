@@ -1,5 +1,17 @@
 # Changelog
 
+### Unreleased
+* Added support for new `fields` query parameter values in Messages API:
+  - `include_tracking_options`: Returns messages and their tracking settings
+  - `raw_mime`: Returns the grant_id, object, id, and raw_mime fields only
+* Added support for `tracking_options` field in message responses containing:
+  - `opens`: Boolean indicating if message open tracking is enabled
+  - `thread_replies`: Boolean indicating if thread replied tracking is enabled
+  - `links`: Boolean indicating if link clicked tracking is enabled
+  - `label`: String label describing the message tracking purpose
+* Added support for `raw_mime` field in message responses containing Base64url-encoded message data
+* Added `MessageFields` module with constants for all valid field values to improve developer experience
+
 ### 6.4.0 / 2025-04-30
 * Added support for Notetaker APIs
 * Added support for Notetaker via the calendar and event APIs

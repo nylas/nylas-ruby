@@ -6,6 +6,19 @@ require_relative "../handler/api_operations"
 require_relative "../utils/file_utils"
 
 module Nylas
+  # Module representing the possible 'fields' values for Messages API requests.
+  # @see https://developer.nylas.com/docs/api/messages#get-/v3/grants/-identifier-/messages
+  module MessageFields
+    # Return the standard message payload (default)
+    STANDARD = "standard"
+    # Return messages and their custom headers
+    INCLUDE_HEADERS = "include_headers"
+    # Return messages and their tracking settings
+    INCLUDE_TRACKING_OPTIONS = "include_tracking_options"
+    # Return the grant_id, object, id, and raw_mime fields only
+    RAW_MIME = "raw_mime"
+  end
+
   # Nylas Messages API
   class Messages < Resource
     include ApiOperations::Get
@@ -26,6 +39,11 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
+    #   You can use the fields parameter to specify which data to return:
+    #   - MessageFields::STANDARD (default): Returns the standard message payload
+    #   - MessageFields::INCLUDE_HEADERS: Returns messages and their custom headers
+    #   - MessageFields::INCLUDE_TRACKING_OPTIONS: Returns messages and their tracking settings
+    #   - MessageFields::RAW_MIME: Returns the grant_id, object, id, and raw_mime fields only
     # @return [Array(Array(Hash), String, String)] The list of messages, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
       get_list(
@@ -39,6 +57,11 @@ module Nylas
     # @param identifier [String] Grant ID or email account to query.
     # @param message_id [String] The id of the message to return.
     # @param query_params [Hash, nil] Query params to pass to the request.
+    #   You can use the fields parameter to specify which data to return:
+    #   - MessageFields::STANDARD (default): Returns the standard message payload
+    #   - MessageFields::INCLUDE_HEADERS: Returns messages and their custom headers
+    #   - MessageFields::INCLUDE_TRACKING_OPTIONS: Returns messages and their tracking settings
+    #   - MessageFields::RAW_MIME: Returns the grant_id, object, id, and raw_mime fields only
     # @return [Array(Hash, String)] The message and API request ID.
     def find(identifier:, message_id:, query_params: nil)
       get(

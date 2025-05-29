@@ -9,6 +9,8 @@ examples/
 ├── README.md                 # This file
 ├── events/                   # Event-related examples
 │   └── event_notetaker_example.rb    # Example of creating events with Notetaker
+├── messages/                 # Message-related examples
+│   └── message_fields_example.rb     # Example of using new message fields functionality
 └── notetaker/               # Standalone Notetaker examples
     ├── README.md            # Notetaker-specific documentation
     └── notetaker_example.rb # Basic Notetaker functionality example
@@ -38,6 +40,18 @@ Before running any example, make sure to:
   - Creating an event with a Notetaker bot
   - Retrieving Notetaker details
   - Updating event and Notetaker settings
+
+### Messages
+- `messages/message_fields_example.rb`: Shows how to use the new message fields functionality, including:
+  - Retrieving messages with tracking options
+  - Getting raw MIME data from messages
+  - Using MessageFields constants for better code readability
+  - Comparing different field options (standard, headers, tracking, raw MIME)
+
+  Additional environment variables needed:
+  ```bash
+  export NYLAS_GRANT_ID="your_grant_id"
+  ```
 
 ### Notetaker
 - `notetaker/notetaker_example.rb`: Shows basic Notetaker functionality, including:
