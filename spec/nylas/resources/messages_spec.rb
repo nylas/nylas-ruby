@@ -142,7 +142,7 @@ describe Nylas::Messages do
 
       expect(messages_response).to eq(list_response_with_raw_mime)
       expect(messages_response[0][0][:raw_mime]).not_to be_nil
-      expect(messages_response[0][0][:raw_mime]).to match(/^[A-Za-z0-9+\/]*={0,2}$/) # Base64 pattern
+      expect(messages_response[0][0][:raw_mime]).to match(%r{^[A-Za-z0-9+/]*={0,2}$}) # Base64 pattern
     end
   end
 
@@ -196,7 +196,7 @@ describe Nylas::Messages do
 
       expect(message_response).to eq(response_with_raw_mime)
       expect(message_response[0][:raw_mime]).not_to be_nil
-      expect(message_response[0][:raw_mime]).to match(/^[A-Za-z0-9+\/]*={0,2}$/) # Base64 pattern
+      expect(message_response[0][:raw_mime]).to match(%r{^[A-Za-z0-9+/]*={0,2}$}) # Base64 pattern
       # When raw_mime is requested, only grant_id, object, id, and raw_mime should be present
       expect(message_response[0].keys.sort).to eq(%i[grant_id id object raw_mime])
     end
@@ -399,7 +399,7 @@ describe Nylas::Messages do
       list_response_with_tracking = [
         [response_with_tracking_options[0]], response_with_tracking_options[1], "mock_next_cursor"
       ]
-      
+
       allow(messages).to receive(:get_list)
         .with(path: path, query_params: query_params)
         .and_return(list_response_with_tracking)
@@ -415,7 +415,7 @@ describe Nylas::Messages do
       message_id = "5d3qmne77v32r8l4phyuksl2x"
       query_params = { fields: Nylas::MessageFields::RAW_MIME }
       path = "#{api_uri}/v3/grants/#{identifier}/messages/#{message_id}"
-      
+
       allow(messages).to receive(:get)
         .with(path: path, query_params: query_params)
         .and_return(response_with_raw_mime)
