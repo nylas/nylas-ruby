@@ -1,6 +1,11 @@
 # Changelog
 
 ### Unreleased
+* Replaced `rest-client` dependency with `httparty` for improved maintainability and security
+  - `rest-client` is no longer actively maintained and has known security vulnerabilities
+  - `httparty` is actively maintained and provides better performance
+  - All existing functionality remains backwards compatible - no customer code changes required
+  - Removed workaround for `rest-client` cookie jar threading bug
 * Added support for new `fields` query parameter values in Messages API:
   - `include_tracking_options`: Returns messages and their tracking settings
   - `raw_mime`: Returns the grant_id, object, id, and raw_mime fields only
