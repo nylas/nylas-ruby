@@ -10,7 +10,8 @@ examples/
 ├── events/                   # Event-related examples
 │   └── event_notetaker_example.rb    # Example of creating events with Notetaker
 ├── messages/                 # Message-related examples
-│   └── message_fields_example.rb     # Example of using new message fields functionality
+│   ├── message_fields_example.rb     # Example of using new message fields functionality
+│   └── file_upload_example.rb        # Example of file upload functionality with HTTParty migration
 └── notetaker/               # Standalone Notetaker examples
     ├── README.md            # Notetaker-specific documentation
     └── notetaker_example.rb # Basic Notetaker functionality example
@@ -51,6 +52,19 @@ Before running any example, make sure to:
   Additional environment variables needed:
   ```bash
   export NYLAS_GRANT_ID="your_grant_id"
+  ```
+
+- `messages/file_upload_example.rb`: Demonstrates file upload functionality with the HTTParty migration, including:
+  - Sending messages with small attachments (<3MB) - handled as JSON with base64 encoding
+  - Sending messages with large attachments (>3MB) - handled as multipart form data
+  - Creating test files of appropriate sizes for demonstration
+  - File handling logic and processing differences
+  - Verification that HTTParty migration works for both upload methods
+
+  Additional environment variables needed:
+  ```bash
+  export NYLAS_GRANT_ID="your_grant_id"
+  export NYLAS_TEST_EMAIL="test@example.com"  # Email address to send test messages to
   ```
 
 ### Notetaker
