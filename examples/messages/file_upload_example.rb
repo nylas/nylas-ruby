@@ -69,21 +69,25 @@ def create_small_test_file
   temp_file
 end
 
-def create_large_test_file
-  puts "\n=== Creating Large Test File (>3MB) ==="
+def find_or_create_large_test_file
+  puts "\n=== Finding Large Test File (>3MB) ==="
   
-  # Create a 5MB test file
-  content = "B" * (5 * 1024 * 1024)  # 5MB of 'B' characters
+  # Look for an existing large file, or create one if needed
+  large_file_path = File.expand_path("large_test_file.txt", __dir__)
   
-  temp_file = Tempfile.new(['large_test', '.txt'])
-  temp_file.write(content)
-  temp_file.rewind
+  unless File.exist?(large_file_path) && File.size(large_file_path) > 3 * 1024 * 1024
+    puts "- Creating 5MB test file on disk..."
+    content = "B" * (5 * 1024 * 1024)  # 5MB of 'B' characters
+    File.write(large_file_path, content)
+    puts "- Created permanent test file: #{large_file_path}"
+  else
+    puts "- Found existing test file: #{large_file_path}"
+  end
   
-  puts "- Created test file: #{temp_file.path}"
-  puts "- File size: #{File.size(temp_file.path)} bytes (#{File.size(temp_file.path) / (1024.0 * 1024).round(2)} MB)"
+  puts "- File size: #{File.size(large_file_path)} bytes (#{File.size(large_file_path) / (1024.0 * 1024).round(2)} MB)"
   puts "- This will be sent as multipart form data"
   
-  temp_file
+  large_file_path
 end
 
 def send_message_with_small_attachment(nylas, grant_id, recipient_email, test_file)
@@ -123,23 +127,23 @@ def send_message_with_small_attachment(nylas, grant_id, recipient_email, test_fi
   end
 end
 
-def send_message_with_large_attachment(nylas, grant_id, recipient_email, test_file)
+def send_message_with_large_attachment(nylas, grant_id, recipient_email, test_file_path)
   puts "\n=== Sending Message with Large Attachment ==="
   
   begin
     # Build the file attachment
-    file_attachment = Nylas::FileUtils.attach_file_request_builder(test_file.path)
+    file_attachment = Nylas::FileUtils.attach_file_request_builder(test_file_path)
     
     request_body = {
       subject: "Test Email with Large Attachment (>3MB) - HTTParty Migration Test",
       to: [{ email: recipient_email }],
-      body: "This is a test email with a large attachment (>3MB) to verify the HTTParty migration works correctly.\n\nFile size: #{File.size(test_file.path)} bytes\nSent at: #{Time.now}",
+      body: "This is a test email with a large attachment (>3MB) to verify the HTTParty migration works correctly.\n\nFile size: #{File.size(test_file_path)} bytes\nSent at: #{Time.now}",
       attachments: [file_attachment]
     }
     
     puts "- Sending message with large attachment..."
     puts "- Recipient: #{recipient_email}"
-    puts "- Attachment size: #{File.size(test_file.path)} bytes"
+    puts "- Attachment size: #{File.size(test_file_path)} bytes"
     puts "- Expected handling: Multipart form data"
     
     response, request_id = nylas.messages.send(
@@ -165,7 +169,7 @@ def demonstrate_file_utils_handling
   
   # Create temporary files to test the file handling logic
   small_file = create_small_test_file
-  large_file = create_large_test_file
+  large_file_path = find_or_create_large_test_file
   
   begin
     # Test small file handling
@@ -173,7 +177,7 @@ def demonstrate_file_utils_handling
     puts "- Small file attachment structure: #{small_attachment.keys}"
     
     # Test large file handling  
-    large_attachment = Nylas::FileUtils.attach_file_request_builder(large_file.path)
+    large_attachment = Nylas::FileUtils.attach_file_request_builder(large_file_path)
     puts "- Large file attachment structure: #{large_attachment.keys}"
     
     # Demonstrate the SDK's file size handling
@@ -197,8 +201,7 @@ def demonstrate_file_utils_handling
   ensure
     small_file.close
     small_file.unlink
-    large_file.close  
-    large_file.unlink
+    # Note: We keep the large file on disk for future use
   end
 end
 
@@ -232,14 +235,14 @@ def main
     
     # Create test files
     small_file = create_small_test_file
-    large_file = create_large_test_file
+    large_file_path = find_or_create_large_test_file
     
     begin
       # Test 1: Send message with small attachment
       small_response = send_message_with_small_attachment(nylas, grant_id, test_email, small_file)
       
       # Test 2: Send message with large attachment  
-      large_response = send_message_with_large_attachment(nylas, grant_id, test_email, large_file)
+      large_response = send_message_with_large_attachment(nylas, grant_id, test_email, large_file_path)
       
       puts "\n=== Summary ==="
       puts "✅ Both small and large file uploads completed successfully!"
@@ -248,12 +251,10 @@ def main
       puts "- HTTParty migration verified for both file handling methods"
       
     ensure
-      # Clean up test files
+      # Clean up temporary small file only
       small_file.close
       small_file.unlink
-      large_file.close
-      large_file.unlink
-      puts "\n🧹 Cleaned up temporary test files"
+      puts "\n🧹 Cleaned up temporary small file (large file kept on disk for reuse)"
     end
     
   rescue => e
