@@ -7,7 +7,7 @@ class TestHttpClientIntegration
   include Nylas::HttpClient
 end
 
-describe "Nylas::HttpClient Integration Tests" do
+describe Nylas::HttpClient do
   subject(:http_client) do
     http_client = TestHttpClientIntegration.new
     allow(http_client).to receive(:api_uri).and_return("https://test.api.nylas.com")
@@ -15,7 +15,7 @@ describe "Nylas::HttpClient Integration Tests" do
     http_client
   end
 
-  describe "file upload functionality" do
+  describe "Integration Tests - file upload functionality" do
     it "correctly identifies file uploads in payload" do
       # Create a temporary file for testing
       temp_file = Tempfile.new("test")
@@ -60,27 +60,29 @@ describe "Nylas::HttpClient Integration Tests" do
         payload: payload
       }
 
-      # Mock HTTParty to verify multipart option is set
-      expect(HTTParty).to receive(:post) do |_url, options|
-        expect(options[:multipart]).to be true
-        expect(options[:body]).to include("file" => temp_file)
+      # Setup HTTParty spy and mock response
+      mock_response = instance_double("HTTParty::Response",
+                                      body: '{"success": true}',
+                                      headers: { "content-type" => "application/json" },
+                                      code: 200)
 
-        # Return a mock response
-        instance_double("HTTParty::Response",
-                        body: '{"success": true}',
-                        headers: { "content-type" => "application/json" },
-                        code: 200)
-      end
+      allow(HTTParty).to receive(:post).and_return(mock_response)
 
       response = http_client.send(:execute, **request_params)
       expect(response[:success]).to be true
+
+      # Verify multipart option was set correctly
+      expect(HTTParty).to have_received(:post) do |_url, options|
+        expect(options[:multipart]).to be true
+        expect(options[:body]).to include("file" => temp_file)
+      end
 
       temp_file.close
       temp_file.unlink
     end
   end
 
-  describe "backwards compatibility" do
+  describe "Integration Tests - backwards compatibility" do
     it "maintains the same response format as rest-client" do
       response_json = { "data" => { "id" => "123", "name" => "test" } }
 
