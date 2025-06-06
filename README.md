@@ -26,7 +26,7 @@ If you have a question about the Nylas Communications Platform, [contact Nylas S
 ### Prerequisites
 
 - Ruby 3.0 or above.
-- Ruby Frameworks: `rest-client` and `yajl-ruby`.
+- Ruby Frameworks: `httparty` and `yajl-ruby`.
 
 ### Install
 

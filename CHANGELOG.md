@@ -1,6 +1,11 @@
 # Changelog
 
 ### Unreleased
+* Replaced `rest-client` dependency with `httparty` for improved maintainability and security
+  - `rest-client` is no longer actively maintained and has known security vulnerabilities
+  - `httparty` is actively maintained and provides better performance
+  - All existing functionality remains backwards compatible - no customer code changes required
+  - Removed workaround for `rest-client` cookie jar threading bug
 * Added support for new `fields` query parameter values in Messages API:
   - `include_tracking_options`: Returns messages and their tracking settings
   - `raw_mime`: Returns the grant_id, object, id, and raw_mime fields only
@@ -11,6 +16,11 @@
   - `label`: String label describing the message tracking purpose
 * Added support for `raw_mime` field in message responses containing Base64url-encoded message data
 * Added `MessageFields` module with constants for all valid field values to improve developer experience
+* Fixed multipart email sending bug where large attachments would fail due to multipart flag key mismatch (#525)
+  - `FileUtils.handle_message_payload` transforms keys to symbols (`:multipart`)
+  - `HttpClient.build_request` was only checking for string keys (`"multipart"`)
+  - Now checks for both string and symbol keys to maintain full backwards compatibility
+  - Prevents encoding errors when sending emails with attachments larger than 3MB
 
 ### 6.4.0 / 2025-04-30
 * Added support for Notetaker APIs

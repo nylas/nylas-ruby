@@ -1,5 +1,7 @@
 .env
 **/*/.env
+# Example test files
+examples/messages/large_test_file.txt
 *.gem
 *.rbc
 .bundle
