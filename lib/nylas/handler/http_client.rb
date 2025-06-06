@@ -98,11 +98,17 @@ module Nylas
     )
       url = build_url(path, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
-      if !payload.nil? && !payload["multipart"]
+      
+      # Check for multipart flag using both string and symbol keys for backwards compatibility
+      is_multipart = !payload.nil? && (payload["multipart"] || payload[:multipart])
+      
+      if !payload.nil? && !is_multipart
         payload = payload&.to_json
         resulting_headers["Content-type"] = "application/json"
-      elsif !payload.nil? && payload["multipart"]
+      elsif is_multipart
+        # Remove multipart flag from both possible key types
         payload.delete("multipart")
+        payload.delete(:multipart)
       end
 
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }

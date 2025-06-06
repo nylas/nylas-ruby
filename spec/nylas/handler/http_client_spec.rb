@@ -141,7 +141,7 @@ describe Nylas::HttpClient do
         )
       end
 
-      it "returns the correct request with a multipart flag" do
+      it "returns the correct request with a multipart flag (string key)" do
         payload = { "multipart" => true }
         request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
                                                    payload: payload, api_key: "fake-key")
@@ -153,6 +153,97 @@ describe Nylas::HttpClient do
           "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
           "X-Nylas-API-Wrapper" => "ruby",
           "Authorization" => "Bearer fake-key"
+        )
+      end
+
+      it "returns the correct request with a multipart flag (symbol key)" do
+        payload = { :multipart => true }
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        expect(request[:payload]).to eq({})
+        expect(request[:headers]).to eq(
+          "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+          "X-Nylas-API-Wrapper" => "ruby",
+          "Authorization" => "Bearer fake-key"
+        )
+      end
+
+      it "handles mixed payload with both multipart keys (backwards compatibility)" do
+        payload = { "multipart" => true, :multipart => true, "data" => "test", :other => "value" }
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        expect(request[:payload]).to eq({ "data" => "test", :other => "value" })
+        expect(request[:headers]).to eq(
+          "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+          "X-Nylas-API-Wrapper" => "ruby",
+          "Authorization" => "Bearer fake-key"
+        )
+      end
+
+      it "properly handles multipart payload with file-like content (simulating FileUtils.handle_message_payload output)" do
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        # This simulates what FileUtils.handle_message_payload returns for large attachments
+        payload = {
+          :multipart => true,  # Symbol key as set by FileUtils.handle_message_payload
+          "message" => '{"to":[{"email":"test@example.com"}],"subject":"Test"}',
+          "file0" => mock_file
+        }
+
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        # Multipart should be removed, leaving only the actual payload
+        expect(request[:payload]).to eq({
+          "message" => '{"to":[{"email":"test@example.com"}],"subject":"Test"}',
+          "file0" => mock_file
+        })
+        # Should NOT have Content-type: application/json since it's multipart
+        expect(request[:headers]).to eq(
+          "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+          "X-Nylas-API-Wrapper" => "ruby",
+          "Authorization" => "Bearer fake-key"
+        )
+      end
+
+      it "treats payload as JSON when multipart flag is false (string key)" do
+        payload = { "multipart" => false, "data" => "test" }
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        expect(request[:payload]).to eq('{"multipart":false,"data":"test"}')
+        expect(request[:headers]).to eq(
+          "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+          "X-Nylas-API-Wrapper" => "ruby",
+          "Authorization" => "Bearer fake-key",
+          "Content-type" => "application/json"
+        )
+      end
+
+      it "treats payload as JSON when multipart flag is false (symbol key)" do
+        payload = { :multipart => false, "data" => "test" }
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        expect(request[:payload]).to eq('{"multipart":false,"data":"test"}')
+        expect(request[:headers]).to eq(
+          "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+          "X-Nylas-API-Wrapper" => "ruby",
+          "Authorization" => "Bearer fake-key",
+          "Content-type" => "application/json"
         )
       end
     end

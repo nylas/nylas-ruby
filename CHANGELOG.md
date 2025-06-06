@@ -16,6 +16,11 @@
   - `label`: String label describing the message tracking purpose
 * Added support for `raw_mime` field in message responses containing Base64url-encoded message data
 * Added `MessageFields` module with constants for all valid field values to improve developer experience
+* Fixed multipart email sending bug where large attachments would fail due to multipart flag key mismatch (#525)
+  - `FileUtils.handle_message_payload` transforms keys to symbols (`:multipart`)
+  - `HttpClient.build_request` was only checking for string keys (`"multipart"`)
+  - Now checks for both string and symbol keys to maintain full backwards compatibility
+  - Prevents encoding errors when sending emails with attachments larger than 3MB
 
 ### 6.4.0 / 2025-04-30
 * Added support for Notetaker APIs
