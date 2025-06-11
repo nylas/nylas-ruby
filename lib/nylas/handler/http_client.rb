@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require "rest-client"
+require "httparty"
+require "net/http"
 
 require_relative "../errors"
 require_relative "../version"
@@ -34,18 +35,18 @@ module Nylas
       request = build_request(method: method, path: path, headers: headers,
                               query: query, payload: payload, api_key: api_key, timeout: timeout)
       begin
-        rest_client_execute(**request) do |response, _request, result|
+        httparty_execute(**request) do |response, _request, result|
           content_type = nil
-          if response.headers && response.headers[:content_type]
-            content_type = response.headers[:content_type].downcase
+          if response.headers && response.headers["content-type"]
+            content_type = response.headers["content-type"].downcase
           end
 
-          parsed_response = parse_json_evaluate_error(result.code.to_i, response, path, content_type)
+          parsed_response = parse_json_evaluate_error(result.code.to_i, response.body, path, content_type)
           # Include headers in the response
           parsed_response[:headers] = response.headers unless parsed_response.nil?
           parsed_response
         end
-      rescue RestClient::Exceptions::OpenTimeout, RestClient::Exceptions::ReadTimeout
+      rescue Net::OpenTimeout, Net::ReadTimeout
         raise Nylas::NylasSdkTimeoutError.new(request[:path], timeout)
       end
     end
@@ -97,11 +98,17 @@ module Nylas
     )
       url = build_url(path, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
-      if !payload.nil? && !payload["multipart"]
+
+      # Check for multipart flag using both string and symbol keys for backwards compatibility
+      is_multipart = !payload.nil? && (payload["multipart"] || payload[:multipart])
+
+      if !payload.nil? && !is_multipart
         payload = payload&.to_json
         resulting_headers["Content-type"] = "application/json"
-      elsif !payload.nil? && payload["multipart"]
+      elsif is_multipart
+        # Remove multipart flag from both possible key types
         payload.delete("multipart")
+        payload.delete(:multipart)
       end
 
       { method: method, url: url, payload: payload, headers: resulting_headers, timeout: timeout }
@@ -126,16 +133,52 @@ module Nylas
 
     private
 
-    # Sends a request to the Nylas REST API.
+    # Sends a request to the Nylas REST API using HTTParty.
     #
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
     # @param url [String] URL for the API call.
     # @param headers [Hash] HTTP headers to include in the payload.
     # @param payload [String, Hash] Body to send with the request.
     # @param timeout [Hash] Timeout value to send with the request.
-    def rest_client_execute(method:, url:, headers:, payload:, timeout:, &block)
-      ::RestClient::Request.execute(method: method, url: url, payload: payload,
-                                    headers: headers, timeout: timeout, &block)
+    def httparty_execute(method:, url:, headers:, payload:, timeout:)
+      options = {
+        headers: headers,
+        timeout: timeout
+      }
+
+      # Handle multipart uploads
+      if payload.is_a?(Hash) && file_upload?(payload)
+        options[:multipart] = true
+        options[:body] = payload
+      elsif payload
+        options[:body] = payload
+      end
+
+      response = HTTParty.send(method, url, options)
+
+      # Create a compatible response object that mimics RestClient::Response
+      result = create_response_wrapper(response)
+
+      # Call the block with the response in the same format as rest-client
+      if block_given?
+        yield response, nil, result
+      else
+        response
+      end
+    end
+
+    # Create a response wrapper that mimics RestClient::Response.code behavior
+    def create_response_wrapper(response)
+      OpenStruct.new(code: response.code)
+    end
+
+    # Check if payload contains file uploads
+    def file_upload?(payload)
+      return false unless payload.is_a?(Hash)
+
+      payload.values.any? do |value|
+        value.respond_to?(:read) || (value.is_a?(File) && !value.closed?)
+      end
     end
 
     def setup_http(path, timeout, headers, query, api_key)

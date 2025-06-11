@@ -281,5 +281,56 @@ describe Nylas::FileUtils do
       expect(payload).to include("multipart" => true)
       expect(opened_files).to include(mock_file)
     end
+
+    # Test for the bug fix: ensure FileUtils.handle_message_payload output works with HttpClient.build_request
+    it "produces payload compatible with HttpClient.build_request (fixes issue #525)" do
+      # Create a test HTTP client to test the integration
+      test_client = Class.new do
+        include Nylas::HttpClient
+        attr_accessor :api_server
+
+        def api_uri
+          "https://api.nylas.com"
+        end
+
+        def auth_header(api_key)
+          { "Authorization" => "Bearer #{api_key}" }
+        end
+      end.new
+
+      large_attachment = {
+        size: 4 * 1024 * 1024,
+        content: mock_file,
+        filename: "large_file.txt",
+        content_type: "text/plain"
+      }
+      request_body = {
+        to: [{ email: "test@example.com" }],
+        subject: "Test email with large attachment",
+        body: "This is a test email",
+        attachments: [large_attachment]
+      }
+
+      allow(mock_file).to receive(:read).and_return("file content")
+      allow(File).to receive(:size).and_return(large_attachment[:size])
+
+      # This should return a payload with symbol keys (including :multipart => true) from transform_keys
+      payload, _opened_files = described_class.handle_message_payload(request_body)
+
+      # Before the fix, this would fail because build_request only checked for string "multipart"
+      # After the fix, it should properly handle the symbol :multipart key
+      expect do
+        request = test_client.send(:build_request,
+                                   method: :post,
+                                   path: "/v3/grants/test/messages/send",
+                                   payload: payload,
+                                   api_key: "test-key")
+
+        # The request should be properly formatted for multipart
+        expect(request[:payload]).not_to include(:multipart) # Should be removed
+        expect(request[:payload]).not_to include("multipart") # Should be removed
+        expect(request[:headers]).not_to include("Content-type") # Should NOT be JSON
+      end.not_to raise_error
+    end
   end
 end
