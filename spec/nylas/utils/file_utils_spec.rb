@@ -327,9 +327,9 @@ describe Nylas::FileUtils do
                                    api_key: "test-key")
 
         # The request should be properly formatted for multipart
-        expect(request[:payload]).not_to include(:multipart)  # Should be removed
-        expect(request[:payload]).not_to include("multipart")  # Should be removed
-        expect(request[:headers]).not_to include("Content-type")  # Should NOT be JSON
+        expect(request[:payload]).not_to include(:multipart) # Should be removed
+        expect(request[:payload]).not_to include("multipart") # Should be removed
+        expect(request[:headers]).not_to include("Content-type") # Should NOT be JSON
       end.not_to raise_error
     end
   end
