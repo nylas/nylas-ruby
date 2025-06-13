@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### 6.5.0 / 2025-06-13
 * Replaced `rest-client` dependency with `httparty` for improved maintainability and security
   - `rest-client` is no longer actively maintained and has known security vulnerabilities
   - `httparty` is actively maintained and provides better performance
