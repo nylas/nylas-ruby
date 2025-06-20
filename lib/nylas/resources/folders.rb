@@ -15,6 +15,7 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account to query.
     # @param query_params [Hash, nil] Query params to pass to the request.
+    #   - include_hidden_folders [Boolean] (Microsoft only) When true, includes hidden folders.
     # @return [Array(Array(Hash), String, String)] The list of folders, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
       get_list(
