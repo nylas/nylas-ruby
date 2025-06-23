@@ -35,9 +35,35 @@ describe Nylas::Folders do
       expect(folders_response).to eq(list_response)
     end
 
-    it "calls the get method with the correct query parameters including include_hidden_folders" do
+    it "calls the get method with query parameters including single_level" do
       identifier = "abc-123-grant-id"
-      query_params = { include_hidden_folders: true }
+      query_params = { single_level: true }
+      path = "#{api_uri}/v3/grants/#{identifier}/folders"
+      allow(folders).to receive(:get_list)
+        .with(path: path, query_params: query_params)
+        .and_return(list_response)
+
+      folders_response = folders.list(identifier: identifier, query_params: query_params)
+
+      expect(folders_response).to eq(list_response)
+    end
+
+    it "calls the get method with query parameters including single_level set to false" do
+      identifier = "abc-123-grant-id"
+      query_params = { single_level: false }
+      path = "#{api_uri}/v3/grants/#{identifier}/folders"
+      allow(folders).to receive(:get_list)
+        .with(path: path, query_params: query_params)
+        .and_return(list_response)
+
+      folders_response = folders.list(identifier: identifier, query_params: query_params)
+
+      expect(folders_response).to eq(list_response)
+    end
+
+    it "calls the get method with multiple query parameters including single_level" do
+      identifier = "abc-123-grant-id"
+      query_params = { single_level: true, limit: 10, include_hidden_folders: true }
       path = "#{api_uri}/v3/grants/#{identifier}/folders"
       allow(folders).to receive(:get_list)
         .with(path: path, query_params: query_params)
