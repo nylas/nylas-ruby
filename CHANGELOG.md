@@ -2,9 +2,7 @@
 
 ### [Unreleased]
 * Added support for `single_level` query parameter in Folders API for Microsoft accounts
-  - When true, retrieves folders from a single-level hierarchy only
-  - When false (default), retrieves folders across a multi-level hierarchy
-  - Added folder examples demonstrating the new `single_level` parameter usage
+* Added support for `include_hidden_folders` query parameter in folders list endpoint for Microsoft accounts to control whether hidden folders are included in the response
 
 ### 6.5.0 / 2025-06-13
 * Replaced `rest-client` dependency with `httparty` for improved maintainability and security

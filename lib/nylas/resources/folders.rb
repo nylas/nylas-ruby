@@ -19,6 +19,7 @@ module Nylas
     #   - single_level: (Boolean) For Microsoft accounts only. If true, retrieves folders from
     #     a single-level hierarchy only. If false (default), retrieves folders across a
     #     multi-level hierarchy.
+    #   - include_hidden_folders [Boolean] (Microsoft only) When true, includes hidden folders.
     # @return [Array(Array(Hash), String, String)] The list of folders, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
       get_list(

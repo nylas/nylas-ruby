@@ -63,7 +63,7 @@ describe Nylas::Folders do
 
     it "calls the get method with multiple query parameters including single_level" do
       identifier = "abc-123-grant-id"
-      query_params = { single_level: true, limit: 10 }
+      query_params = { single_level: true, limit: 10, include_hidden_folders: true }
       path = "#{api_uri}/v3/grants/#{identifier}/folders"
       allow(folders).to receive(:get_list)
         .with(path: path, query_params: query_params)
