@@ -108,6 +108,29 @@ describe Nylas::FileUtils do
       expect(form_request).to eq([expected_response_form, [mock_file]])
     end
 
+    # Test for the UTF-8 encoding compatibility - FileUtils should produce standard UTF-8 JSON
+    it "produces standard UTF-8 JSON that will be handled by HttpClient for HTTParty compatibility" do
+      utf8_request_body = {
+        to: [{ email: "test@example.com", name: "Tëst Récipient 👤" }],
+        subject: "UTF-8 Test: Ñylas 🚀 Tëst with Émojis",
+        body: "Message with UTF-8: ñ, é, ü, 中文, العربية, 🚀 ⚡ 💯"
+      }
+
+      request_body_with_attachment = utf8_request_body.merge(attachments: [attachment])
+
+      form_data, _opened_files = described_class.build_form_request(request_body_with_attachment)
+
+      # The message payload should remain UTF-8 encoded (HttpClient will handle HTTParty compatibility)
+      message_payload = form_data["message"]
+      expect(message_payload.encoding).to eq(Encoding::UTF_8)
+
+      # JSON should contain the original UTF-8 characters
+      parsed_message = JSON.parse(message_payload)
+      expect(parsed_message["subject"]).to eq("UTF-8 Test: Ñylas 🚀 Tëst with Émojis")
+      expect(parsed_message["body"]).to eq("Message with UTF-8: ñ, é, ü, 中文, العربية, 🚀 ⚡ 💯")
+      expect(parsed_message["to"][0]["name"]).to eq("Tëst Récipient 👤")
+    end
+
     it "returns the correct form request when there are no attachments" do
       form_request = described_class.build_form_request(request_body)
 
