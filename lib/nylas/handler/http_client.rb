@@ -149,7 +149,7 @@ module Nylas
       # Handle multipart uploads
       if payload.is_a?(Hash) && file_upload?(payload)
         options[:multipart] = true
-        options[:body] = payload
+        options[:body] = prepare_multipart_payload(payload)
       elsif payload
         options[:body] = payload
       end
@@ -179,6 +179,26 @@ module Nylas
       payload.values.any? do |value|
         value.respond_to?(:read) || (value.is_a?(File) && !value.closed?)
       end
+    end
+
+    # Prepare multipart payload for HTTParty compatibility
+    # HTTParty requires all multipart fields to have compatible encodings
+    def prepare_multipart_payload(payload)
+      # Only modify the "message" field if it exists and contains UTF-8 characters
+      # that could cause encoding conflicts with binary file data
+      if payload.key?("message") && payload["message"].is_a?(String)
+        # Check if the message contains non-ASCII characters that could cause encoding issues
+        message = payload["message"]
+        if message.encoding == Encoding::UTF_8 && !message.ascii_only?
+          # Create a copy of the payload with BINARY encoded message for HTTParty compatibility
+          # This preserves the original UTF-8 content while preventing encoding conflicts
+          modified_payload = payload.dup
+          modified_payload["message"] = message.dup.force_encoding(Encoding::BINARY)
+          return modified_payload
+        end
+      end
+
+      payload
     end
 
     def setup_http(path, timeout, headers, query, api_key)

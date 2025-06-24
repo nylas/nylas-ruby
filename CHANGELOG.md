@@ -3,6 +3,7 @@
 ### [Unreleased]
 * Added support for `single_level` query parameter in Folders API for Microsoft accounts
 * Added support for `include_hidden_folders` query parameter in folders list endpoint for Microsoft accounts to control whether hidden folders are included in the response
+* Fix multipart form data encoding compatibility issue with UTF-8 characters in multipart attachment payloads.
 
 ### 6.5.0 / 2025-06-13
 * Replaced `rest-client` dependency with `httparty` for improved maintainability and security
