@@ -608,4 +608,47 @@ describe Nylas::HttpClient do
       end.to raise_error(Nylas::NylasSdkTimeoutError)
     end
   end
+
+  describe "#prepare_multipart_payload" do
+    let(:mock_file) { instance_double("File") }
+
+    it "leaves ASCII-only message payloads unchanged" do
+      payload = { "message" => '{"subject":"ASCII only"}', "file0" => mock_file }
+      result = http_client.send(:prepare_multipart_payload, payload)
+      expect(result).to eq(payload)
+      expect(result["message"].encoding).to eq(Encoding::UTF_8)
+    end
+
+    it "converts UTF-8 non-ASCII message payloads to ASCII-8BIT for HTTParty compatibility" do
+      utf8_message = '{"subject":"UTF-8 Test: Ñylas 🚀","body":"Message with UTF-8: ñ, é, ü, 中文, العربية, 🚀"}'
+      payload = { "message" => utf8_message, "file0" => mock_file }
+
+      result = http_client.send(:prepare_multipart_payload, payload)
+
+      # Should create a copy with ASCII-8BIT encoded message
+      expect(result).not_to equal(payload) # Different object
+      expect(result["message"].encoding).to eq(Encoding::ASCII_8BIT)
+      expect(result["file0"]).to eq(mock_file)
+
+      # Original payload should remain unchanged
+      expect(payload["message"].encoding).to eq(Encoding::UTF_8)
+
+      # Content should be preserved when parsed as JSON
+      parsed = JSON.parse(result["message"])
+      expect(parsed["subject"]).to eq("UTF-8 Test: Ñylas 🚀")
+      expect(parsed["body"]).to eq("Message with UTF-8: ñ, é, ü, 中文, العربية, 🚀")
+    end
+
+    it "leaves non-message fields unchanged" do
+      payload = { "other_field" => "value", "file0" => mock_file }
+      result = http_client.send(:prepare_multipart_payload, payload)
+      expect(result).to eq(payload)
+    end
+
+    it "handles payloads without message field" do
+      payload = { "file0" => mock_file }
+      result = http_client.send(:prepare_multipart_payload, payload)
+      expect(result).to eq(payload)
+    end
+  end
 end
