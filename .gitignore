@@ -2,6 +2,9 @@
 **/*/.env
 # Example test files
 examples/messages/large_test_file.txt
+examples/messages/small_pdf_test_file.pdf
+examples/messages/large_pdf_test_file.pdf
+examples/messages/large_jpg_test_file.jpg
 *.gem
 *.rbc
 .bundle

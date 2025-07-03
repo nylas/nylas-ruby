@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "webmock/rspec"
+require "stringio"
 
 class TestHttpClient
   include Nylas::HttpClient
@@ -246,6 +247,49 @@ describe Nylas::HttpClient do
           "Content-type" => "application/json"
         )
       end
+    end
+
+    # Test for binary content attachment detection
+    it "detects binary content attachments prepared by FileUtils for multipart" do
+      # Simulate what FileUtils.build_form_request creates for binary content attachments
+      binary_content = "some binary file content".dup # Create mutable string
+      binary_content.define_singleton_method(:original_filename) { "test.bin" }
+      binary_content.define_singleton_method(:content_type) { "application/octet-stream" }
+
+      payload = {
+        "message" => '{"to":[{"email":"test@example.com"}],"subject":"Test"}',
+        "file0" => binary_content
+      }
+
+      # Should be detected as multipart even though content is a string, not a File object
+      expect(http_client.send(:file_upload?, payload)).to be true
+    end
+
+    it "does not detect regular payloads as file uploads" do
+      payload = {
+        "message" => "regular message",
+        "data" => "some data"
+      }
+
+      expect(http_client.send(:file_upload?, payload)).to be false
+    end
+
+    it "does not detect payloads with message field but no attachment fields" do
+      payload = {
+        "message" => '{"to":[{"email":"test@example.com"}]}',
+        "other_field" => "some value"
+      }
+
+      expect(http_client.send(:file_upload?, payload)).to be false
+    end
+
+    it "does not detect payloads with attachment fields but no message field" do
+      payload = {
+        "file0" => "some content",
+        "other_field" => "some value"
+      }
+
+      expect(http_client.send(:file_upload?, payload)).to be false
     end
   end
 
@@ -606,6 +650,92 @@ describe Nylas::HttpClient do
         http_client.send(:download_request, path: "https://test.api.nylas.com/foo",
                                             timeout: 30)
       end.to raise_error(Nylas::NylasSdkTimeoutError)
+    end
+  end
+
+  describe "#prepare_multipart_payload" do
+    it "leaves ASCII-only message payloads unchanged" do
+      payload = { "message" => "Hello World" }
+      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+
+      expect(result["message"]).to eq("Hello World")
+      expect(result["message"].encoding).to eq(Encoding::UTF_8)
+      expect(temp_files).to be_empty
+    end
+
+    it "leaves non-message fields unchanged" do
+      payload = { "other_field" => "value", "data" => "content" }
+      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+
+      expect(result).to eq(payload)
+      expect(temp_files).to be_empty
+    end
+
+    it "handles payloads without message field" do
+      payload = { "data" => "content" }
+      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+
+      expect(result).to eq(payload)
+      expect(temp_files).to be_empty
+    end
+
+    it "converts binary content attachments to StringIO objects" do
+      binary_content = "binary file content".dup
+      binary_content.define_singleton_method(:original_filename) { "test.bin" }
+      binary_content.define_singleton_method(:content_type) { "application/octet-stream" }
+
+      payload = {
+        "message" => '{"subject":"test"}',
+        "file0" => binary_content,
+        "other_field" => "value"
+      }
+
+      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+
+      # Message should be preserved
+      expect(result["message"]).to eq('{"subject":"test"}')
+
+      # Binary content should be converted to StringIO
+      expect(result["file0"]).to be_a(StringIO)
+      expect(result["file0"].read).to eq("binary file content")
+      result["file0"].rewind # Reset for next read
+
+      # Singleton methods should be preserved
+      expect(result["file0"].original_filename).to eq("test.bin")
+      expect(result["file0"].content_type).to eq("application/octet-stream")
+
+      # Other fields should be unchanged
+      expect(result["other_field"]).to eq("value")
+
+      # No temp files need cleanup with StringIO
+      expect(temp_files).to be_empty
+    end
+
+    it "handles multiple binary content attachments" do
+      content1 = "content 1".dup
+      content1.define_singleton_method(:original_filename) { "file1.txt" }
+
+      content2 = "content 2".dup
+      content2.define_singleton_method(:original_filename) { "file2.txt" }
+
+      payload = {
+        "message" => '{"subject":"test"}',
+        "file0" => content1,
+        "file1" => content2
+      }
+
+      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+
+      expect(result["file0"]).to be_a(StringIO)
+      expect(result["file0"].read).to eq("content 1")
+      expect(result["file0"].original_filename).to eq("file1.txt")
+
+      expect(result["file1"]).to be_a(StringIO)
+      expect(result["file1"].read).to eq("content 2")
+      expect(result["file1"].original_filename).to eq("file2.txt")
+
+      # No temp files need cleanup with StringIO
+      expect(temp_files).to be_empty
     end
   end
 end

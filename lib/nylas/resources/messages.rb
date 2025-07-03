@@ -126,7 +126,7 @@ module Nylas
         request_body: payload
       )
 
-      opened_files.each(&:close)
+      opened_files.each { |file| file.close if file.respond_to?(:close) }
 
       response
     end

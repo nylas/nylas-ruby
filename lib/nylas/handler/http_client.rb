@@ -146,24 +146,39 @@ module Nylas
         timeout: timeout
       }
 
-      # Handle multipart uploads
-      if payload.is_a?(Hash) && file_upload?(payload)
-        options[:multipart] = true
-        options[:body] = payload
-      elsif payload
-        options[:body] = payload
-      end
+      temp_files_to_cleanup = []
 
-      response = HTTParty.send(method, url, options)
+      begin
+        # Handle multipart uploads
+        if payload.is_a?(Hash) && file_upload?(payload)
+          options[:multipart] = true
+          options[:body], temp_files_to_cleanup = prepare_multipart_payload(payload)
+        elsif payload
+          options[:body] = payload
+        end
 
-      # Create a compatible response object that mimics RestClient::Response
-      result = create_response_wrapper(response)
+        response = HTTParty.send(method, url, options)
 
-      # Call the block with the response in the same format as rest-client
-      if block_given?
-        yield response, nil, result
-      else
-        response
+        # Create a compatible response object that mimics RestClient::Response
+        result = create_response_wrapper(response)
+
+        # Call the block with the response in the same format as rest-client
+        if block_given?
+          yield response, nil, result
+        else
+          response
+        end
+      ensure
+        # Clean up any temporary files we created
+        temp_files_to_cleanup.each do |tempfile|
+          tempfile.close unless tempfile.closed?
+          begin
+            tempfile.unlink
+          rescue StandardError
+            nil
+          end
+          # Don't fail if file is already deleted
+        end
       end
     end
 
@@ -176,9 +191,69 @@ module Nylas
     def file_upload?(payload)
       return false unless payload.is_a?(Hash)
 
-      payload.values.any? do |value|
+      # Check for traditional file uploads (File objects or objects that respond to :read)
+      has_file_objects = payload.values.any? do |value|
         value.respond_to?(:read) || (value.is_a?(File) && !value.closed?)
       end
+
+      return true if has_file_objects
+
+      # Check if payload was prepared by FileUtils.build_form_request for multipart uploads
+      # This handles binary content attachments that are strings with added singleton methods
+      has_message_field = payload.key?("message") && payload["message"].is_a?(String)
+      has_attachment_fields = payload.keys.any? { |key| key.is_a?(String) && key.match?(/^file\d+$/) }
+
+      # If we have both a "message" field and "file{N}" fields, this indicates
+      # the payload was prepared by FileUtils.build_form_request for multipart upload
+      has_message_field && has_attachment_fields
+    end
+
+    # Prepare multipart payload for HTTParty compatibility
+    # HTTParty requires all multipart fields to have compatible encodings
+    def prepare_multipart_payload(payload)
+      require "stringio"
+
+      modified_payload = payload.dup
+
+      # Handle binary content attachments (file0, file1, etc.) by converting them to enhanced StringIO
+      # HTTParty expects file uploads to be objects with full file-like interface
+      payload.each do |key, value|
+        next unless key.is_a?(String) && key.match?(/^file\d+$/) && value.is_a?(String)
+
+        # Create an enhanced StringIO object for HTTParty compatibility
+        string_io = create_file_like_stringio(value)
+
+        # Preserve filename and content_type if they exist as singleton methods
+        if value.respond_to?(:original_filename)
+          string_io.define_singleton_method(:original_filename) { value.original_filename }
+        end
+
+        if value.respond_to?(:content_type)
+          string_io.define_singleton_method(:content_type) { value.content_type }
+        end
+
+        modified_payload[key] = string_io
+      end
+
+      # Return modified payload and empty array (no temp files to cleanup)
+      [modified_payload, []]
+    end
+
+    # Create a StringIO object that behaves more like a File for HTTParty compatibility
+    def create_file_like_stringio(content)
+      string_io = StringIO.new(content)
+
+      # Add methods that HTTParty/multipart-post might expect
+      string_io.define_singleton_method(:path) { nil }
+      string_io.define_singleton_method(:local_path) { nil }
+      string_io.define_singleton_method(:respond_to_missing?) do |method_name, include_private = false|
+        File.instance_methods.include?(method_name) || super(method_name, include_private)
+      end
+
+      # Ensure binary mode for consistent behavior
+      string_io.binmode if string_io.respond_to?(:binmode)
+
+      string_io
     end
 
     def setup_http(path, timeout, headers, query, api_key)
