@@ -656,27 +656,24 @@ describe Nylas::HttpClient do
   describe "#prepare_multipart_payload" do
     it "normalizes message payloads to ASCII-8BIT encoding for HTTParty compatibility" do
       payload = { "message" => "Hello World" }
-      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+      result = http_client.send(:prepare_multipart_payload, payload)
 
       expect(result["message"]).to eq("Hello World")
       expect(result["message"].encoding).to eq(Encoding::ASCII_8BIT)
-      expect(temp_files).to be_empty
     end
 
     it "leaves non-message fields unchanged" do
       payload = { "other_field" => "value", "data" => "content" }
-      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+      result = http_client.send(:prepare_multipart_payload, payload)
 
       expect(result).to eq(payload)
-      expect(temp_files).to be_empty
     end
 
     it "handles payloads without message field" do
       payload = { "data" => "content" }
-      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+      result = http_client.send(:prepare_multipart_payload, payload)
 
       expect(result).to eq(payload)
-      expect(temp_files).to be_empty
     end
 
     it "converts binary content attachments to StringIO objects" do
@@ -690,7 +687,7 @@ describe Nylas::HttpClient do
         "other_field" => "value"
       }
 
-      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+      result = http_client.send(:prepare_multipart_payload, payload)
 
       # Message should be preserved
       expect(result["message"]).to eq('{"subject":"test"}')
@@ -706,9 +703,6 @@ describe Nylas::HttpClient do
 
       # Other fields should be unchanged
       expect(result["other_field"]).to eq("value")
-
-      # No temp files need cleanup with StringIO
-      expect(temp_files).to be_empty
     end
 
     it "handles multiple binary content attachments" do
@@ -724,7 +718,7 @@ describe Nylas::HttpClient do
         "file1" => content2
       }
 
-      result, temp_files = http_client.send(:prepare_multipart_payload, payload)
+      result = http_client.send(:prepare_multipart_payload, payload)
 
       expect(result["file0"]).to be_a(StringIO)
       expect(result["file0"].read).to eq("content 1")
@@ -733,9 +727,6 @@ describe Nylas::HttpClient do
       expect(result["file1"]).to be_a(StringIO)
       expect(result["file1"].read).to eq("content 2")
       expect(result["file1"].original_filename).to eq("file2.txt")
-
-      # No temp files need cleanup with StringIO
-      expect(temp_files).to be_empty
     end
   end
 end

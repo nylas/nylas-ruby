@@ -3,7 +3,7 @@
 ### [Unreleased]
 * Added support for `single_level` query parameter in Folders API for Microsoft accounts
 * Added support for `include_hidden_folders` query parameter in folders list endpoint for Microsoft accounts to control whether hidden folders are included in the response
-* Replace Tempfile with StringIO for multipart uploads to eliminate filesystem dependencies and improve compatibility with read-only containers and AWS Lambda environments
+* Added support for passing in string contents for multipart and base64 (<3MB) attachments (#528) 
 * Fixed HTTParty encoding compatibility issue with multipart requests (#528)
 
 ### 6.5.0 / 2025-06-13

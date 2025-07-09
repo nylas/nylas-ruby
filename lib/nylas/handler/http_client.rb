@@ -103,6 +103,7 @@ module Nylas
       is_multipart = !payload.nil? && (payload["multipart"] || payload[:multipart])
 
       if !payload.nil? && !is_multipart
+        normalize_json_encodings!(payload)
         payload = payload&.to_json
         resulting_headers["Content-type"] = "application/json"
       elsif is_multipart
@@ -146,39 +147,24 @@ module Nylas
         timeout: timeout
       }
 
-      temp_files_to_cleanup = []
+      # Handle multipart uploads
+      if payload.is_a?(Hash) && file_upload?(payload)
+        options[:multipart] = true
+        options[:body] = prepare_multipart_payload(payload)
+      elsif payload
+        options[:body] = payload
+      end
 
-      begin
-        # Handle multipart uploads
-        if payload.is_a?(Hash) && file_upload?(payload)
-          options[:multipart] = true
-          options[:body], temp_files_to_cleanup = prepare_multipart_payload(payload)
-        elsif payload
-          options[:body] = payload
-        end
+      response = HTTParty.send(method, url, options)
 
-        response = HTTParty.send(method, url, options)
+      # Create a compatible response object that mimics RestClient::Response
+      result = create_response_wrapper(response)
 
-        # Create a compatible response object that mimics RestClient::Response
-        result = create_response_wrapper(response)
-
-        # Call the block with the response in the same format as rest-client
-        if block_given?
-          yield response, nil, result
-        else
-          response
-        end
-      ensure
-        # Clean up any temporary files we created
-        temp_files_to_cleanup.each do |tempfile|
-          tempfile.close unless tempfile.closed?
-          begin
-            tempfile.unlink
-          rescue StandardError
-            nil
-          end
-          # Don't fail if file is already deleted
-        end
+      # Call the block with the response in the same format as rest-client
+      if block_given?
+        yield response, nil, result
+      else
+        response
       end
     end
 
@@ -241,8 +227,7 @@ module Nylas
         modified_payload[key] = string_io
       end
 
-      # Return modified payload and empty array (no temp files to cleanup)
-      [modified_payload, []]
+      modified_payload
     end
 
     # Normalize string encodings in multipart payload to prevent HTTParty encoding conflicts
@@ -254,6 +239,31 @@ module Nylas
         # Force all string values to ASCII-8BIT encoding for multipart compatibility
         # HTTParty/multipart-post expects binary encoding for consistent concatenation
         payload[key] = value.dup.force_encoding(Encoding::ASCII_8BIT)
+      end
+    end
+
+    # Normalize JSON encodings for attachment content to ensure binary data is base64 encoded.
+    # This handles cases where users pass raw binary content directly instead of file objects.
+    def normalize_json_encodings!(payload)
+      return unless payload.is_a?(Hash)
+
+      # Handle attachment content encoding for JSON serialization
+      attachments = payload[:attachments] || payload["attachments"]
+      return unless attachments
+
+      attachments.each do |attachment|
+        content = attachment[:content] || attachment["content"]
+        next unless content.is_a?(String)
+
+        # If content appears to be binary (non-UTF-8), base64 encode it
+        next unless content.encoding == Encoding::ASCII_8BIT || !content.valid_encoding?
+
+        encoded_content = Base64.strict_encode64(content)
+        if attachment.key?(:content)
+          attachment[:content] = encoded_content
+        else
+          attachment["content"] = encoded_content
+        end
       end
     end
 
