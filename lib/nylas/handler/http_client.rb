@@ -215,21 +215,27 @@ module Nylas
 
       modified_payload = payload.dup
 
+      # First, normalize all string encodings to prevent HTTParty encoding conflicts
+      normalize_multipart_encodings!(modified_payload)
+
       # Handle binary content attachments (file0, file1, etc.) by converting them to enhanced StringIO
       # HTTParty expects file uploads to be objects with full file-like interface
-      payload.each do |key, value|
+      modified_payload.each do |key, value|
         next unless key.is_a?(String) && key.match?(/^file\d+$/) && value.is_a?(String)
+
+        # Get the original value to check for singleton methods
+        original_value = payload[key]
 
         # Create an enhanced StringIO object for HTTParty compatibility
         string_io = create_file_like_stringio(value)
 
         # Preserve filename and content_type if they exist as singleton methods
-        if value.respond_to?(:original_filename)
-          string_io.define_singleton_method(:original_filename) { value.original_filename }
+        if original_value.respond_to?(:original_filename)
+          string_io.define_singleton_method(:original_filename) { original_value.original_filename }
         end
 
-        if value.respond_to?(:content_type)
-          string_io.define_singleton_method(:content_type) { value.content_type }
+        if original_value.respond_to?(:content_type)
+          string_io.define_singleton_method(:content_type) { original_value.content_type }
         end
 
         modified_payload[key] = string_io
@@ -239,8 +245,22 @@ module Nylas
       [modified_payload, []]
     end
 
+    # Normalize string encodings in multipart payload to prevent HTTParty encoding conflicts
+    # This ensures all string fields use consistent ASCII-8BIT encoding for multipart compatibility
+    def normalize_multipart_encodings!(payload)
+      payload.each do |key, value|
+        next unless value.is_a?(String)
+
+        # Force all string values to ASCII-8BIT encoding for multipart compatibility
+        # HTTParty/multipart-post expects binary encoding for consistent concatenation
+        payload[key] = value.dup.force_encoding(Encoding::ASCII_8BIT)
+      end
+    end
+
     # Create a StringIO object that behaves more like a File for HTTParty compatibility
     def create_file_like_stringio(content)
+      # Content is already normalized to ASCII-8BIT by normalize_multipart_encodings!
+      # Create StringIO with the normalized binary content
       string_io = StringIO.new(content)
 
       # Add methods that HTTParty/multipart-post might expect
@@ -250,7 +270,7 @@ module Nylas
         File.instance_methods.include?(method_name) || super(method_name, include_private)
       end
 
-      # Ensure binary mode for consistent behavior
+      # Set binary mode for file-like behavior
       string_io.binmode if string_io.respond_to?(:binmode)
 
       string_io

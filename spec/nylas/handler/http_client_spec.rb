@@ -654,12 +654,12 @@ describe Nylas::HttpClient do
   end
 
   describe "#prepare_multipart_payload" do
-    it "leaves ASCII-only message payloads unchanged" do
+    it "normalizes message payloads to ASCII-8BIT encoding for HTTParty compatibility" do
       payload = { "message" => "Hello World" }
       result, temp_files = http_client.send(:prepare_multipart_payload, payload)
 
       expect(result["message"]).to eq("Hello World")
-      expect(result["message"].encoding).to eq(Encoding::UTF_8)
+      expect(result["message"].encoding).to eq(Encoding::ASCII_8BIT)
       expect(temp_files).to be_empty
     end
 
