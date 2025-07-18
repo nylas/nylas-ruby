@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "cgi"
 require_relative "resource"
 require_relative "../handler/api_operations"
 
