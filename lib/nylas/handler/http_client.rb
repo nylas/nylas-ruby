@@ -103,6 +103,7 @@ module Nylas
       is_multipart = !payload.nil? && (payload["multipart"] || payload[:multipart])
 
       if !payload.nil? && !is_multipart
+        normalize_json_encodings!(payload)
         payload = payload&.to_json
         resulting_headers["Content-type"] = "application/json"
       elsif is_multipart
@@ -149,7 +150,7 @@ module Nylas
       # Handle multipart uploads
       if payload.is_a?(Hash) && file_upload?(payload)
         options[:multipart] = true
-        options[:body] = payload
+        options[:body] = prepare_multipart_payload(payload)
       elsif payload
         options[:body] = payload
       end
@@ -176,9 +177,113 @@ module Nylas
     def file_upload?(payload)
       return false unless payload.is_a?(Hash)
 
-      payload.values.any? do |value|
+      # Check for traditional file uploads (File objects or objects that respond to :read)
+      has_file_objects = payload.values.any? do |value|
         value.respond_to?(:read) || (value.is_a?(File) && !value.closed?)
       end
+
+      return true if has_file_objects
+
+      # Check if payload was prepared by FileUtils.build_form_request for multipart uploads
+      # This handles binary content attachments that are strings with added singleton methods
+      has_message_field = payload.key?("message") && payload["message"].is_a?(String)
+      has_attachment_fields = payload.keys.any? { |key| key.is_a?(String) && key.match?(/^file\d+$/) }
+
+      # If we have both a "message" field and "file{N}" fields, this indicates
+      # the payload was prepared by FileUtils.build_form_request for multipart upload
+      has_message_field && has_attachment_fields
+    end
+
+    # Prepare multipart payload for HTTParty compatibility
+    # HTTParty requires all multipart fields to have compatible encodings
+    def prepare_multipart_payload(payload)
+      require "stringio"
+
+      modified_payload = payload.dup
+
+      # First, normalize all string encodings to prevent HTTParty encoding conflicts
+      normalize_multipart_encodings!(modified_payload)
+
+      # Handle binary content attachments (file0, file1, etc.) by converting them to enhanced StringIO
+      # HTTParty expects file uploads to be objects with full file-like interface
+      modified_payload.each do |key, value|
+        next unless key.is_a?(String) && key.match?(/^file\d+$/) && value.is_a?(String)
+
+        # Get the original value to check for singleton methods
+        original_value = payload[key]
+
+        # Create an enhanced StringIO object for HTTParty compatibility
+        string_io = create_file_like_stringio(value)
+
+        # Preserve filename and content_type if they exist as singleton methods
+        if original_value.respond_to?(:original_filename)
+          string_io.define_singleton_method(:original_filename) { original_value.original_filename }
+        end
+
+        if original_value.respond_to?(:content_type)
+          string_io.define_singleton_method(:content_type) { original_value.content_type }
+        end
+
+        modified_payload[key] = string_io
+      end
+
+      modified_payload
+    end
+
+    # Normalize string encodings in multipart payload to prevent HTTParty encoding conflicts
+    # This ensures all string fields use consistent ASCII-8BIT encoding for multipart compatibility
+    def normalize_multipart_encodings!(payload)
+      payload.each do |key, value|
+        next unless value.is_a?(String)
+
+        # Force all string values to ASCII-8BIT encoding for multipart compatibility
+        # HTTParty/multipart-post expects binary encoding for consistent concatenation
+        payload[key] = value.dup.force_encoding(Encoding::ASCII_8BIT)
+      end
+    end
+
+    # Normalize JSON encodings for attachment content to ensure binary data is base64 encoded.
+    # This handles cases where users pass raw binary content directly instead of file objects.
+    def normalize_json_encodings!(payload)
+      return unless payload.is_a?(Hash)
+
+      # Handle attachment content encoding for JSON serialization
+      attachments = payload[:attachments] || payload["attachments"]
+      return unless attachments
+
+      attachments.each do |attachment|
+        content = attachment[:content] || attachment["content"]
+        next unless content.is_a?(String)
+
+        # If content appears to be binary (non-UTF-8), base64 encode it
+        next unless content.encoding == Encoding::ASCII_8BIT || !content.valid_encoding?
+
+        encoded_content = Base64.strict_encode64(content)
+        if attachment.key?(:content)
+          attachment[:content] = encoded_content
+        else
+          attachment["content"] = encoded_content
+        end
+      end
+    end
+
+    # Create a StringIO object that behaves more like a File for HTTParty compatibility
+    def create_file_like_stringio(content)
+      # Content is already normalized to ASCII-8BIT by normalize_multipart_encodings!
+      # Create StringIO with the normalized binary content
+      string_io = StringIO.new(content)
+
+      # Add methods that HTTParty/multipart-post might expect
+      string_io.define_singleton_method(:path) { nil }
+      string_io.define_singleton_method(:local_path) { nil }
+      string_io.define_singleton_method(:respond_to_missing?) do |method_name, include_private = false|
+        File.instance_methods.include?(method_name) || super(method_name, include_private)
+      end
+
+      # Set binary mode for file-like behavior
+      string_io.binmode if string_io.respond_to?(:binmode)
+
+      string_io
     end
 
     def setup_http(path, timeout, headers, query, api_key)

@@ -3,6 +3,8 @@
 ### [Unreleased]
 * Added support for `single_level` query parameter in Folders API for Microsoft accounts
 * Added support for `include_hidden_folders` query parameter in folders list endpoint for Microsoft accounts to control whether hidden folders are included in the response
+* Added support for passing in string contents for multipart and base64 (<3MB) attachments (#528) 
+* Fixed HTTParty encoding compatibility issue with multipart requests (#528)
 
 ### 6.5.0 / 2025-06-13
 * Replaced `rest-client` dependency with `httparty` for improved maintainability and security
