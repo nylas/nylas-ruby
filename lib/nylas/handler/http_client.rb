@@ -327,8 +327,6 @@ module Nylas
     def handle_failed_response(http_code, response, path, headers = nil)
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
-      puts response.inspect
-      puts response.class.name
       case response
       when Hash
         raise error_hash_to_exception(response, http_code, path, headers)
