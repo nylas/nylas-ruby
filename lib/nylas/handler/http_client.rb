@@ -41,7 +41,7 @@ module Nylas
             content_type = response.headers["content-type"].downcase
           end
 
-          parsed_response = parse_json_evaluate_error(result.code.to_i, response.body, path, content_type)
+          parsed_response = parse_json_evaluate_error(result.code.to_i, response.body, path, content_type, response.headers)
           # Include headers in the response
           parsed_response[:headers] = response.headers unless parsed_response.nil?
           parsed_response
@@ -311,36 +311,35 @@ module Nylas
     end
 
     # Parses the response from the Nylas API and evaluates for errors.
-    def parse_json_evaluate_error(http_code, response, path, content_type = nil)
+    def parse_json_evaluate_error(http_code, response, path, content_type = nil, headers = nil)
       begin
         response = parse_response(response) if content_type == "application/json"
       rescue Nylas::JsonParseError
-        handle_failed_response(http_code, response, path)
+        handle_failed_response(http_code, response, path, headers)
         raise
       end
 
-      handle_failed_response(http_code, response, path)
+      handle_failed_response(http_code, response, path, headers)
       response
     end
 
     # Handles failed responses from the Nylas API.
-    def handle_failed_response(http_code, response, path)
+    def handle_failed_response(http_code, response, path, headers = nil)
       return if HTTP_SUCCESS_CODES.include?(http_code)
 
+      puts response.inspect
+      puts response.class.name
       case response
       when Hash
-        raise error_hash_to_exception(response, http_code, path)
+        raise error_hash_to_exception(response, http_code, path, headers)
       else
         raise NylasApiError.parse_error_response(response, http_code)
       end
     end
 
     # Converts error hashes to exceptions.
-    def error_hash_to_exception(response, status_code, path)
+    def error_hash_to_exception(response, status_code, path, headers = nil)
       return if !response || !response.key?(:error)
-
-      # Safely get headers without risking KeyError
-      headers = response.key?(:headers) ? response[:headers] : nil
 
       if %W[#{api_uri}/v3/connect/token #{api_uri}/v3/connect/revoke].include?(path)
         NylasOAuthError.new(response[:error], response[:error_description], response[:error_uri],
