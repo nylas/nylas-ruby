@@ -318,6 +318,35 @@ describe Nylas::HttpClient do
       expect(response).to eq(response_json.merge(headers: mock_headers))
     end
 
+    it "returns an error with headers" do
+      response_json = {
+        foo: "bar",
+        error: {
+          type: "api_error",
+          message: "An unexpected error occurred",
+          provider_error: "This is the provider error"
+        }
+      }
+      request_params = { method: :get, path: "https://test.api.nylas.com/foo", timeout: 30 }
+      mock_headers = {
+        "content-type" => "application/json",
+        "x-request-id" => "123",
+        "some-header" => "value"
+      }
+      mock_response = instance_double("HTTParty::Response",
+                                      body: response_json.to_json,
+                                      headers: mock_headers,
+                                      code: 429)
+
+      allow(HTTParty).to receive(:get).and_return(mock_response)
+
+      expect do
+        http_client.send(:execute, **request_params)
+      end.to raise_error(Nylas::NylasApiError) { |error|
+        expect(error.headers).to eq(mock_headers)
+      }
+    end
+
     it "raises a timeout error" do
       request_params = { method: :get, path: "https://test.api.nylas.com/foo", timeout: 30 }
       allow(HTTParty).to receive(:get).and_raise(Net::OpenTimeout)
@@ -462,22 +491,23 @@ describe Nylas::HttpClient do
           type: "api_error",
           message: "An unexpected error occurred",
           provider_error: "This is the provider error"
-        },
-        headers: {
-          "x-request-id": "request-id-from-headers",
-          "x-ratelimit-limit": "100",
-          "x-ratelimit-remaining": "99"
         }
       }
+      headers = {
+        "x-request-id": "request-id-from-headers",
+        "x-ratelimit-limit": "100",
+        "x-ratelimit-remaining": "99"
+      }
 
-      err_obj = http_client.send(:error_hash_to_exception, response, 400, "https://test.api.nylas.com/foo")
+      err_obj = http_client.send(:error_hash_to_exception, response, 400, "https://test.api.nylas.com/foo",
+                                 headers)
 
       expect(err_obj).to be_a(Nylas::NylasApiError)
       expect(err_obj.message).to eq("An unexpected error occurred")
       expect(err_obj.request_id).to eq("request-id")
       expect(err_obj.provider_error).to eq("This is the provider error")
       expect(err_obj.type).to eq("api_error")
-      expect(err_obj.headers).to eq(response[:headers])
+      expect(err_obj.headers).to eq(headers)
     end
   end
 
@@ -555,11 +585,17 @@ describe Nylas::HttpClient do
           provider_error: "This is the provider error"
         }
       }
+      headers = {
+        "x-request-id": "request-id-from-headers",
+        "x-ratelimit-limit": "100"
+      }
 
       expect do
         http_client.send(:parse_json_evaluate_error, 400, response.to_json,
-                         "https://test.api.nylas.com/foo", "application/json")
-      end.to raise_error(Nylas::NylasApiError)
+                         "https://test.api.nylas.com/foo", "application/json", headers)
+      end.to raise_error(Nylas::NylasApiError) { |error|
+        expect(error.headers).to eq(headers)
+      }
     end
 
     it "raises a NylasApiError for a non-JSON response" do
