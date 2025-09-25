@@ -1,5 +1,8 @@
 # Changelog
 
+### [Unreleased]
+* Added access to response headers
+
 ### [6.6.0]
 * Added support for `single_level` query parameter in Folders API for Microsoft accounts
 * Added support for `include_hidden_folders` query parameter in folders list endpoint for Microsoft accounts to control whether hidden folders are included in the response
