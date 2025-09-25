@@ -321,7 +321,7 @@ describe Nylas::HttpClient do
     it "returns an error with headers" do
       response_json = {
         foo: "bar",
-        error:  {
+        error: {
           type: "api_error",
           message: "An unexpected error occurred",
           provider_error: "This is the provider error"
@@ -499,7 +499,8 @@ describe Nylas::HttpClient do
         "x-ratelimit-remaining": "99"
       }
 
-      err_obj = http_client.send(:error_hash_to_exception, response, 400, "https://test.api.nylas.com/foo", headers)
+      err_obj = http_client.send(:error_hash_to_exception, response, 400, "https://test.api.nylas.com/foo",
+                                 headers)
 
       expect(err_obj).to be_a(Nylas::NylasApiError)
       expect(err_obj.message).to eq("An unexpected error occurred")
@@ -586,7 +587,7 @@ describe Nylas::HttpClient do
       }
       headers = {
         "x-request-id": "request-id-from-headers",
-        "x-ratelimit-limit": "100",
+        "x-ratelimit-limit": "100"
       }
 
       expect do

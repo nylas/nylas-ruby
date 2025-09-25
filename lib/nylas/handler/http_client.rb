@@ -41,7 +41,8 @@ module Nylas
             content_type = response.headers["content-type"].downcase
           end
 
-          parsed_response = parse_json_evaluate_error(result.code.to_i, response.body, path, content_type, response.headers)
+          parsed_response = parse_json_evaluate_error(result.code.to_i, response.body, path, content_type,
+                                                      response.headers)
           # Include headers in the response
           parsed_response[:headers] = response.headers unless parsed_response.nil?
           parsed_response

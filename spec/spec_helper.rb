@@ -5,12 +5,12 @@ require "simplecov-cobertura"
 
 SimpleCov.start do
   add_filter "/spec/"
-  
+
   # Use multiple formatters to ensure coverage data is available
   formatter SimpleCov::Formatter::MultiFormatter.new([
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::CoberturaFormatter
-  ])
+                                                       SimpleCov::Formatter::HTMLFormatter,
+                                                       SimpleCov::Formatter::CoberturaFormatter
+                                                     ])
 end
 
 require "nylas"
