@@ -1,6 +1,6 @@
 # Changelog
 
-### [Unreleased]
+### [6.7.0]
 * Added access to response headers
 
 ### [6.6.0]
