@@ -188,10 +188,19 @@ module Nylas
       # Check if payload was prepared by FileUtils.build_form_request for multipart uploads
       # This handles binary content attachments that are strings with added singleton methods
       has_message_field = payload.key?("message") && payload["message"].is_a?(String)
-      has_attachment_fields = payload.keys.any? { |key| key.is_a?(String) && key.match?(/^file\d+$/) }
 
-      # If we have both a "message" field and "file{N}" fields, this indicates
-      # the payload was prepared by FileUtils.build_form_request for multipart upload
+      # Check for attachment fields - these can have custom content_id values (not just "file{N}")
+      # FileUtils.build_form_request creates entries with string values that have singleton methods
+      # like original_filename and content_type defined on them
+      has_attachment_fields = payload.any? do |key, value|
+        next false unless key.is_a?(String) && key != "message"
+        # Check if the value is a string with attachment-like singleton methods
+        # (original_filename or content_type), which indicates it's a file content
+        value.is_a?(String) && (value.respond_to?(:original_filename) || value.respond_to?(:content_type))
+      end
+
+      # If we have both a "message" field and attachment fields with file metadata,
+      # this indicates the payload was prepared by FileUtils.build_form_request
       has_message_field && has_attachment_fields
     end
 

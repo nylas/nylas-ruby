@@ -291,6 +291,64 @@ describe Nylas::HttpClient do
 
       expect(http_client.send(:file_upload?, payload)).to be false
     end
+
+    # Bug fix tests: handle custom content_id values
+    context "when attachments use custom content_id values" do
+      it "detects file uploads with custom content_id values" do
+        # This test reproduces the bug where custom content_id values
+        # like "my-attachment" weren't being detected as file uploads
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "my-custom-attachment" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects file uploads with alphanumeric content_id values" do
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "attachment_001" => mock_file,
+          "document_pdf" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects file uploads with content_id containing special characters" do
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "inline-image-123" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects binary string attachments with custom content_id values" do
+        # When FileUtils.build_form_request passes file content as strings
+        # with singleton methods, file_upload? should still detect them
+        binary_content = "binary file content".dup
+        binary_content.define_singleton_method(:original_filename) { "test.bin" }
+        binary_content.define_singleton_method(:content_type) { "application/octet-stream" }
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "my-inline-image" => binary_content
+        }
+
+        # Currently this fails because the pattern only matches /^file\d+$/
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+    end
   end
 
   describe "#execute" do

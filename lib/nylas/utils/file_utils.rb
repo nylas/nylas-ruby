@@ -28,12 +28,13 @@ module Nylas
 
       attachments.each_with_index do |attachment, index|
         file = attachment[:content] || attachment["content"]
+        file_path = attachment[:file_path] || attachment["file_path"]
         if file.respond_to?(:closed?) && file.closed?
-          unless attachment[:file_path]
+          unless file_path
             raise ArgumentError, "The file at index #{index} is closed and no file_path was provided."
           end
 
-          file = File.open(attachment[:file_path], "rb")
+          file = File.open(file_path, "rb")
         end
 
         # Setting original filename and content type if available. See rest-client#lib/restclient/payload.rb
@@ -87,7 +88,9 @@ module Nylas
 
       # Use form data only if the attachment size is greater than 3mb
       attachments = payload[:attachments]
-      attachment_size = attachments&.sum { |attachment| attachment[:size] || 0 } || 0
+      # Support both string and symbol keys for attachment size to handle
+      # user-provided hashes that may use either key type
+      attachment_size = attachments&.sum { |attachment| attachment[:size] || attachment["size"] || 0 } || 0
 
       # Handle the attachment encoding depending on the size
       if attachment_size >= FORM_DATA_ATTACHMENT_SIZE
