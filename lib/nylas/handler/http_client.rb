@@ -194,6 +194,7 @@ module Nylas
       # like original_filename and content_type defined on them
       has_attachment_fields = payload.any? do |key, value|
         next false unless key.is_a?(String) && key != "message"
+
         # Check if the value is a string with attachment-like singleton methods
         # (original_filename or content_type), which indicates it's a file content
         value.is_a?(String) && (value.respond_to?(:original_filename) || value.respond_to?(:content_type))

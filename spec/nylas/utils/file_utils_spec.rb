@@ -248,7 +248,7 @@ describe Nylas::FileUtils do
         # The size calculation was only checking symbol keys, causing large attachments
         # to be incorrectly sent as JSON instead of multipart form data
         large_attachment = {
-          "size" => 5_400_000,  # 5.4MB - using string key
+          "size" => 5_400_000, # 5.4MB - using string key
           "content" => mock_file,
           "filename" => "large_file.txt",
           "content_type" => "text/plain"
@@ -264,7 +264,7 @@ describe Nylas::FileUtils do
         expect(opened_files).to include(mock_file)
       end
 
-      it "returns form data when attachment size (string key) with string top-level keys is greater than 3MB" do
+      it "returns form data when attachment size (string key) with string top-level keys > 3MB" do
         # Test with completely string-keyed request body
         large_attachment = {
           "size" => 5_400_000,
@@ -286,11 +286,11 @@ describe Nylas::FileUtils do
       it "handles mixed string/symbol keys in attachment hashes for size calculation" do
         # Test with multiple attachments having different key styles
         attachment1 = {
-          "size" => 2_000_000,  # String key
+          "size" => 2_000_000, # String key
           "content" => mock_file
         }
         attachment2 = {
-          size: 2_000_000,  # Symbol key
+          size: 2_000_000, # Symbol key
           content: mock_file
         }
         request_body = { attachments: [attachment1, attachment2] }
