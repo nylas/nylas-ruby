@@ -2,6 +2,7 @@
 
 require "httparty"
 require "net/http"
+require "net/http/post/multipart"
 
 require_relative "../errors"
 require_relative "../version"
@@ -135,7 +136,9 @@ module Nylas
 
     private
 
-    # Sends a request to the Nylas REST API using HTTParty.
+    # Sends a request to the Nylas REST API using HTTParty or Net::HTTP for multipart.
+    # Multipart requests use Net::HTTP::Post::Multipart (multipart-post gem) because
+    # HTTParty's multipart handling produces malformed requests that the Nylas API rejects.
     #
     # @param method [Symbol] HTTP method for the API call. Either :get, :post, :delete, or :patch.
     # @param url [String] URL for the API call.
@@ -143,30 +146,92 @@ module Nylas
     # @param payload [String, Hash] Body to send with the request.
     # @param timeout [Hash] Timeout value to send with the request.
     def httparty_execute(method:, url:, headers:, payload:, timeout:)
-      options = {
-        headers: headers,
-        timeout: timeout
-      }
-
-      # Handle multipart uploads
-      if payload.is_a?(Hash) && file_upload?(payload)
-        options[:multipart] = true
-        options[:body] = prepare_multipart_payload(payload)
-      elsif payload
-        options[:body] = payload
+      if method == :post && payload.is_a?(Hash) && file_upload?(payload)
+        response = execute_multipart_request(url: url, headers: headers, payload: payload, timeout: timeout)
+      else
+        options = { headers: headers, timeout: timeout }
+        options[:body] = payload if payload
+        response = HTTParty.send(method, url, options)
       end
 
-      response = HTTParty.send(method, url, options)
-
-      # Create a compatible response object that mimics RestClient::Response
       result = create_response_wrapper(response)
 
-      # Call the block with the response in the same format as rest-client
       if block_given?
         yield response, nil, result
       else
         response
       end
+    end
+
+    # Executes multipart POST using Net::HTTP::Post::Multipart (fixes issue #538).
+    # HTTParty's multipart produces malformed requests; multipart-post/UploadIO works correctly.
+    def execute_multipart_request(url:, headers:, payload:, timeout:)
+      uri = URI.parse(url)
+      params = build_multipart_params(payload)
+
+      req = Net::HTTP::Post::Multipart.new(uri.path, params)
+      headers.each { |key, value| req[key] = value }
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = (uri.scheme == "https")
+      http.read_timeout = timeout
+      http.open_timeout = timeout
+
+      response = http.request(req)
+
+      create_httparty_like_response(response)
+    end
+
+    # Build params hash for Net::HTTP::Post::Multipart with UploadIO for file fields.
+    def build_multipart_params(payload)
+      params = {}
+      payload.each do |key, value|
+        params[key] = if key.is_a?(String) && key != "message" && file_like_value?(value)
+                        value_to_upload_io(value)
+                      else
+                        value.to_s
+                      end
+      end
+      params
+    end
+
+    def file_like_value?(value)
+      return true if value.respond_to?(:read) && (value.is_a?(File) ? !value.closed? : true)
+      if value.is_a?(String) && (value.respond_to?(:original_filename) || value.respond_to?(:content_type))
+        return true
+      end
+
+      false
+    end
+
+    # Convert File, String, or StringIO to UploadIO for multipart-post.
+    def value_to_upload_io(value)
+      content_type = value.respond_to?(:content_type) ? value.content_type : "application/octet-stream"
+      filename = value.respond_to?(:original_filename) ? value.original_filename : "file.bin"
+
+      io = if value.respond_to?(:read) && value.respond_to?(:rewind)
+             value.rewind if value.respond_to?(:rewind)
+             value
+           else
+             require "stringio"
+             content = value.to_s
+             content = content.dup.force_encoding(Encoding::ASCII_8BIT) if content.is_a?(String)
+             StringIO.new(content)
+           end
+
+      UploadIO.new(io, content_type, filename)
+    end
+
+    # Create response object compatible with HTTParty::Response interface.
+    def create_httparty_like_response(net_http_response)
+      headers = net_http_response.to_hash
+      headers = headers.transform_values { |v| v.is_a?(Array) && v.one? ? v.first : v }
+
+      OpenStruct.new(
+        body: net_http_response.body,
+        code: net_http_response.code.to_i,
+        headers: headers
+      )
     end
 
     # Create a response wrapper that mimics RestClient::Response.code behavior

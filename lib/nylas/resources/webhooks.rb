@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "cgi"
 require_relative "resource"
 require_relative "../handler/api_operations"
 
@@ -115,14 +114,14 @@ module Nylas
     # @return [String] The challenge parameter
     def self.extract_challenge_parameter(url)
       url_object = URI.parse(url)
-      query = CGI.parse(url_object.query || "")
+      params = URI.decode_www_form(url_object.query || "")
+      challenge_pair = params.find { |k, _| k == "challenge" }
 
-      challenge_parameter = query["challenge"]
-      if challenge_parameter.nil? || challenge_parameter.empty? || challenge_parameter.first.nil?
+      if challenge_pair.nil? || challenge_pair.last.to_s.empty?
         raise "Invalid URL or no challenge parameter found."
       end
 
-      challenge_parameter.first
+      challenge_pair.last
     end
   end
 end

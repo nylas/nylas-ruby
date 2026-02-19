@@ -42,7 +42,7 @@ describe Nylas::HttpClient do
       expect(http_client.send(:file_upload?, payload)).to be false
     end
 
-    it "handles multipart requests correctly" do
+    it "handles multipart requests correctly using Net::HTTP::Post::Multipart (issue #538)" do
       temp_file = Tempfile.new("test")
       temp_file.write("test content")
       temp_file.rewind
@@ -60,22 +60,15 @@ describe Nylas::HttpClient do
         payload: payload
       }
 
-      # Setup HTTParty spy and mock response
-      mock_response = instance_double("HTTParty::Response",
-                                      body: '{"success": true}',
-                                      headers: { "content-type" => "application/json" },
-                                      code: 200)
-
-      allow(HTTParty).to receive(:post).and_return(mock_response)
+      stub_request(:post, "https://test.api.nylas.com/upload")
+        .with(headers: { "Content-Type" => %r{multipart/form-data} })
+        .to_return(status: 200, body: '{"success": true}', headers: { "Content-Type" => "application/json" })
 
       response = http_client.send(:execute, **request_params)
       expect(response[:success]).to be true
 
-      # Verify multipart option was set correctly
-      expect(HTTParty).to have_received(:post) do |_url, options|
-        expect(options[:multipart]).to be true
-        expect(options[:body]).to include("file" => temp_file)
-      end
+      expect(WebMock).to have_requested(:post, "https://test.api.nylas.com/upload")
+        .with(headers: { "Content-Type" => %r{multipart/form-data} })
 
       temp_file.close
       temp_file.unlink

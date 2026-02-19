@@ -12,6 +12,7 @@ examples/
 ├── messages/                 # Message-related examples
 │   ├── message_fields_example.rb     # Example of using new message fields functionality
 │   ├── file_upload_example.rb        # Example of file upload functionality with HTTParty migration
+│   ├── send_streaming_attachments_example.rb  # Sending attachments from a stream (no local file)
 │   └── send_message_example.rb       # Example of basic message sending functionality
 └── notetaker/               # Standalone Notetaker examples
     ├── README.md            # Notetaker-specific documentation
@@ -66,6 +67,17 @@ Before running any example, make sure to:
   ```bash
   export NYLAS_GRANT_ID="your_grant_id"
   export NYLAS_TEST_EMAIL="test@example.com"  # Email address to send test messages to
+  ```
+
+- `messages/send_streaming_attachments_example.rb`: Sending attachments from a stream (no local file on disk), including:
+  - Passing string content from an IO/stream instead of a file path
+  - Small attachments (<3MB) via JSON base64
+  - Large attachments (>3MB) via multipart: `LARGE_ATTACHMENT=1 ruby ...`
+
+  Additional environment variables needed:
+  ```bash
+  export NYLAS_GRANT_ID="your_grant_id"
+  export NYLAS_TEST_EMAIL="test@example.com"
   ```
 
 - `messages/send_message_example.rb`: Demonstrates basic message sending functionality, including:
