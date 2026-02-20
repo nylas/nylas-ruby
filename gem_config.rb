@@ -38,7 +38,7 @@ module GemConfig
     [["bundler", ">= 1.3.0"],
      ["yard", "~> 0.9.34"],
      ["rubocop", "~> 1.51"],
-     ["rubocop-rspec", "~> 2.22"],
+     ["rubocop-rspec", "~> 3.5"],
      ["rubocop-capybara", "~> 2.20"]] + testing_and_debugging_dependencies
   end
 

@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "base64"
   gem.add_runtime_dependency "httparty", "~> 0.21"
   gem.add_runtime_dependency "mime-types", "~> 3.5", ">= 3.5.1"
+  gem.add_runtime_dependency "multipart-post", "~> 2.0"
   gem.add_runtime_dependency "ostruct", "~> 0.6"
   gem.add_runtime_dependency "yajl-ruby", "~> 1.4.3", ">= 1.2.1"
 

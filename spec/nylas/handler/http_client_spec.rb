@@ -291,6 +291,96 @@ describe Nylas::HttpClient do
 
       expect(http_client.send(:file_upload?, payload)).to be false
     end
+
+    # Issue #538: multipart requests use Net::HTTP::Post::Multipart, not HTTParty
+    it "uses Net::HTTP for multipart requests (HTTParty produces malformed requests)" do
+      require "tempfile"
+      temp_file = Tempfile.new("issue538")
+      temp_file.write("x" * (4 * 1024 * 1024)) # 4MB
+      temp_file.rewind
+
+      payload = {
+        "multipart" => true,
+        "message" => '{"subject":"test","to":[{"email":"t@t.com"}]}',
+        "file0" => temp_file
+      }
+
+      stub_request(:post, "https://test.api.nylas.com/v3/grants/g1/messages/send")
+        .with(headers: { "Content-Type" => %r{multipart/form-data} })
+        .to_return(status: 200, body: '{"id":"msg-123"}', headers: { "Content-Type" => "application/json" })
+
+      response = http_client.send(:execute,
+                                  method: :post,
+                                  path: "https://test.api.nylas.com/v3/grants/g1/messages/send",
+                                  timeout: 30,
+                                  payload: payload,
+                                  api_key: "key")
+
+      expect(response[:id]).to eq("msg-123")
+      expect(WebMock).to have_requested(:post, "https://test.api.nylas.com/v3/grants/g1/messages/send")
+        .with(headers: { "Content-Type" => %r{multipart/form-data} })
+    ensure
+      temp_file&.close
+      temp_file&.unlink
+    end
+
+    # Bug fix tests: handle custom content_id values
+    context "when attachments use custom content_id values" do
+      it "detects file uploads with custom content_id values" do
+        # This test reproduces the bug where custom content_id values
+        # like "my-attachment" weren't being detected as file uploads
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "my-custom-attachment" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects file uploads with alphanumeric content_id values" do
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "attachment_001" => mock_file,
+          "document_pdf" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects file uploads with content_id containing special characters" do
+        mock_file = instance_double("file")
+        allow(mock_file).to receive(:respond_to?).with(:read).and_return(true)
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "inline-image-123" => mock_file
+        }
+
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+
+      it "detects binary string attachments with custom content_id values" do
+        # When FileUtils.build_form_request passes file content as strings
+        # with singleton methods, file_upload? should still detect them
+        binary_content = "binary file content".dup
+        binary_content.define_singleton_method(:original_filename) { "test.bin" }
+        binary_content.define_singleton_method(:content_type) { "application/octet-stream" }
+
+        payload = {
+          "message" => '{"subject":"test"}',
+          "my-inline-image" => binary_content
+        }
+
+        # Currently this fails because the pattern only matches /^file\d+$/
+        expect(http_client.send(:file_upload?, payload)).to be true
+      end
+    end
   end
 
   describe "#execute" do

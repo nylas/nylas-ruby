@@ -1,11 +1,12 @@
 inherit_from: .rubocop_todo.yml
 
-require:
+plugins:
   - rubocop-rspec
   - rubocop-capybara
 
 AllCops:
   TargetRubyVersion: 3.0
+  NewCops: disable
   DisplayCopNames: true
   DisplayStyleGuide: true
   Exclude:
@@ -57,5 +58,18 @@ RSpec/MultipleExpectations:
 RSpec/ExampleLength:
   Enabled: false
 
-RSpec/FilePath:
+RSpec/SpecFilePathFormat:
+  Enabled: false
+RSpec/SpecFilePathSuffix:
+  Enabled: false
+
+RSpec/VerifiedDoubleReference:
+  Enabled: false
+RSpec/BeEq:
+  Enabled: false
+RSpec/IdenticalEqualityAssertion:
+  Enabled: false
+RSpec/NoExpectationExample:
+  Enabled: false
+RSpec/ReceiveMessages:
   Enabled: false

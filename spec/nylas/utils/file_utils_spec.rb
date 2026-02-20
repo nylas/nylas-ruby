@@ -241,6 +241,70 @@ describe Nylas::FileUtils do
   describe "#handle_message_payload" do
     let(:mock_file) { instance_double("file") }
 
+    # Bug fix tests: handle string keys in attachment hashes
+    context "when attachment hashes use string keys" do
+      it "returns form data when attachment size (string key) is greater than 3MB" do
+        # This test reproduces the bug where users pass attachment hashes with string keys
+        # The size calculation was only checking symbol keys, causing large attachments
+        # to be incorrectly sent as JSON instead of multipart form data
+        large_attachment = {
+          "size" => 5_400_000, # 5.4MB - using string key
+          "content" => mock_file,
+          "filename" => "large_file.txt",
+          "content_type" => "text/plain"
+        }
+        request_body = { attachments: [large_attachment] }
+
+        allow(mock_file).to receive(:read).and_return("file content")
+        allow(File).to receive(:size).and_return(large_attachment["size"])
+
+        payload, opened_files = described_class.handle_message_payload(request_body)
+
+        expect(payload).to include("multipart" => true)
+        expect(opened_files).to include(mock_file)
+      end
+
+      it "returns form data when attachment size (string key) with string top-level keys > 3MB" do
+        # Test with completely string-keyed request body
+        large_attachment = {
+          "size" => 5_400_000,
+          "content" => mock_file,
+          "filename" => "large_file.txt",
+          "content_type" => "text/plain"
+        }
+        request_body = { "attachments" => [large_attachment] }
+
+        allow(mock_file).to receive(:read).and_return("file content")
+        allow(File).to receive(:size).and_return(large_attachment["size"])
+
+        payload, opened_files = described_class.handle_message_payload(request_body)
+
+        expect(payload).to include("multipart" => true)
+        expect(opened_files).to include(mock_file)
+      end
+
+      it "handles mixed string/symbol keys in attachment hashes for size calculation" do
+        # Test with multiple attachments having different key styles
+        attachment1 = {
+          "size" => 2_000_000, # String key
+          "content" => mock_file
+        }
+        attachment2 = {
+          size: 2_000_000, # Symbol key
+          content: mock_file
+        }
+        request_body = { attachments: [attachment1, attachment2] }
+
+        allow(mock_file).to receive(:read).and_return("file content")
+        allow(File).to receive(:size).and_return(2_000_000)
+
+        # Total is 4MB, should trigger multipart
+        payload, _opened_files = described_class.handle_message_payload(request_body)
+
+        expect(payload).to include("multipart" => true)
+      end
+    end
+
     it "returns form data when attachment size is greater than 3MB" do
       large_attachment = {
         size: 4 * 1024 * 1024,
