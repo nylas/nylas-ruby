@@ -1,5 +1,8 @@
 # Changelog
 
+### [6.7.1]
+* Fix large attachment handling with string keys and custom content_ids
+
 ### [6.7.0]
 * Added access to response headers
 
