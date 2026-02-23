@@ -4,6 +4,9 @@
 * Fixed HTTParty content type issue when request body is nil - POST, PUT, PATCH, and DELETE now default to empty object to ensure Content-Type: application/json is sent (#536)
 * Added support for request_body parameter on DELETE (e.g. cancellation_reason for bookings) (#536)
 
+### [6.7.1]
+* Fix large attachment handling with string keys and custom content_ids
+
 ### [6.7.0]
 * Added access to response headers
 
