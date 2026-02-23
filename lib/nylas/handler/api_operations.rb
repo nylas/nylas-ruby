@@ -58,19 +58,20 @@ module Nylas
       protected
 
       include HttpClient
-      # Performs a POST call to the Nylas API.
-      #
-      # @param path [String] Destination path for the call.
-      # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [Hash, nil] Request body to pass to the call.
-      # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # Performs a POST call to the Nylas API.
+    #
+    # @param path [String] Destination path for the call.
+    # @param query_params [Hash, {}] Query params to pass to the call.
+    # @param request_body [Hash, nil] Request body to pass to the call.
+    #   Defaults to {} when nil to ensure Content-Type: application/json is sent.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return [Array(Hash, String, Hash)] Nylas data object, API Request ID, and response headers.
       def post(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :post,
           path: path,
           query: query_params,
-          payload: request_body,
+          payload: request_body || {},
           headers: headers,
           api_key: api_key,
           timeout: timeout
@@ -85,19 +86,20 @@ module Nylas
       protected
 
       include HttpClient
-      # Performs a PUT call to the Nylas API.
-      #
-      # @param path [String] Destination path for the call.
-      # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [Hash, nil] Request body to pass to the call.
-      # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # Performs a PUT call to the Nylas API.
+    #
+    # @param path [String] Destination path for the call.
+    # @param query_params [Hash, {}] Query params to pass to the call.
+    # @param request_body [Hash, nil] Request body to pass to the call.
+    #   Defaults to {} when nil to ensure Content-Type: application/json is sent.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return Nylas data object and API Request ID.
       def put(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :put,
           path: path,
           query: query_params,
-          payload: request_body,
+          payload: request_body || {},
           headers: headers,
           api_key: api_key,
           timeout: timeout
@@ -112,19 +114,20 @@ module Nylas
       protected
 
       include HttpClient
-      # Performs a PATCH call to the Nylas API.
-      #
-      # @param path [String] Destination path for the call.
-      # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param request_body [Hash, nil] Request body to pass to the call.
-      # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # Performs a PATCH call to the Nylas API.
+    #
+    # @param path [String] Destination path for the call.
+    # @param query_params [Hash, {}] Query params to pass to the call.
+    # @param request_body [Hash, nil] Request body to pass to the call.
+    #   Defaults to {} when nil to ensure Content-Type: application/json is sent.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return Nylas data object and API Request ID.
       def patch(path:, query_params: {}, request_body: nil, headers: {})
         response = execute(
           method: :patch,
           path: path,
           query: query_params,
-          payload: request_body,
+          payload: request_body || {},
           headers: headers,
           api_key: api_key,
           timeout: timeout
@@ -139,25 +142,27 @@ module Nylas
       protected
 
       include HttpClient
-      # Performs a DELETE call to the Nylas API.
-      #
-      # @param path [String] Destination path for the call.
-      # @param query_params [Hash, {}] Query params to pass to the call.
-      # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
-      # @return Nylas data object and API Request ID.
-      def delete(path:, query_params: {}, headers: {})
-        response = execute(
-          method: :delete,
-          path: path,
-          query: query_params,
-          headers: headers,
-          payload: nil,
-          api_key: api_key,
-          timeout: timeout
-        )
+    # Performs a DELETE call to the Nylas API.
+    #
+    # @param path [String] Destination path for the call.
+    # @param query_params [Hash, {}] Query params to pass to the call.
+    # @param request_body [Hash, nil] Optional request body (e.g. cancellation_reason for bookings).
+    #   Defaults to {} to ensure Content-Type: application/json is sent.
+    # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
+    # @return Nylas data object and API Request ID.
+    def delete(path:, query_params: {}, request_body: nil, headers: {})
+      response = execute(
+        method: :delete,
+        path: path,
+        query: query_params,
+        headers: headers,
+        payload: request_body || {},
+        api_key: api_key,
+        timeout: timeout
+      )
 
-        [response[:data], response[:request_id]]
-      end
+      [response[:data], response[:request_id]]
+    end
     end
   end
 end

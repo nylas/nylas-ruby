@@ -64,11 +64,13 @@ module Nylas
     # Delete a booking.
     # @param booking_id [String] The id of the booking to delete.
     # @param query_params [Hash, nil] Query params to pass to the request.
+    # @param request_body [Hash, nil] Optional body params (e.g. cancellation_reason).
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
-    def destroy(booking_id:, query_params: nil)
+    def destroy(booking_id:, query_params: nil, request_body: nil)
       _, request_id = delete(
         path: "#{api_uri}/v3/scheduling/bookings/#{booking_id}",
-        query_params: query_params
+        query_params: query_params,
+        request_body: request_body
       )
 
       [true, request_id]
