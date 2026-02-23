@@ -185,7 +185,7 @@ describe Nylas::Bookings do
       booking_id = "booking-123"
       path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
       allow(bookings).to receive(:delete)
-        .with(path: path, query_params: nil)
+        .with(path: path, query_params: nil, request_body: nil)
         .and_return(delete_response)
 
       bookings_response = bookings.destroy(booking_id: booking_id)
@@ -197,10 +197,25 @@ describe Nylas::Bookings do
       query_params = { "foo": "bar" }
       path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
       allow(bookings).to receive(:delete)
-        .with(path: path, query_params: query_params)
+        .with(path: path, query_params: query_params, request_body: nil)
         .and_return(delete_response)
 
       bookings_response = bookings.destroy(booking_id: booking_id, query_params: query_params)
+      expect(bookings_response).to eq(delete_response)
+    end
+
+    it "calls the delete method with request_body for cancellation_reason" do
+      booking_id = "booking-123"
+      request_body = { cancellation_reason: "Meeting no longer needed" }
+      path = "#{api_uri}/v3/scheduling/bookings/#{booking_id}"
+      allow(bookings).to receive(:delete)
+        .with(path: path, query_params: nil, request_body: request_body)
+        .and_return(delete_response)
+
+      bookings_response = bookings.destroy(
+        booking_id: booking_id,
+        request_body: request_body
+      )
       expect(bookings_response).to eq(delete_response)
     end
   end

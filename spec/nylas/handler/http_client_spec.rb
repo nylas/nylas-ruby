@@ -126,6 +126,17 @@ describe Nylas::HttpClient do
     end
 
     context "when building request with a payload" do
+      it "returns the correct request with empty json payload and sets Content-Type" do
+        payload = {}
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(request[:method]).to eq(:post)
+        expect(request[:url]).to eq("https://test.api.nylas.com/foo")
+        expect(request[:payload]).to eq("{}")
+        expect(request[:headers]).to include("Content-type" => "application/json")
+      end
+
       it "returns the correct request with a json payload" do
         payload = { foo: "bar" }
         request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
