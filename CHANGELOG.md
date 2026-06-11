@@ -3,7 +3,7 @@
 ### Unreleased
 * Added Policies resource for managing application policies
 * Added Rules resource for managing inbox rules and listing rule evaluations
-* Added Workspaces resource for managing workspaces, auto-grouping, and manual assignment
+* Added Workspaces resource for managing workspaces, auto-grouping, manual assignment, `default`, `policy_id`, and `rule_ids`
 * Added Domains resource for managing (admin) domains, including info and verify operations
 * Added Applications update support (PATCH /v3/applications)
 * Corrected RedirectUris update verb from PUT to PATCH

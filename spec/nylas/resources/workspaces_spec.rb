@@ -51,7 +51,7 @@ describe Nylas::Workspaces do
         domain: "acme.com",
         auto_group: true,
         policy_id: "policy-123",
-        rules_ids: ["rule-123"]
+        rule_ids: ["rule-123"]
       }
       path = "#{api_uri}/v3/workspaces"
       allow(workspaces).to receive(:post)
