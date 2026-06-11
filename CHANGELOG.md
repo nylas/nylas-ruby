@@ -1,5 +1,15 @@
 # Changelog
 
+### Unreleased
+* Added Policies resource for managing application policies
+* Added Rules resource for managing inbox rules and listing rule evaluations
+* Added Workspaces resource for managing workspaces, auto-grouping, and manual assignment
+* Added Domains resource for managing (admin) domains, including info and verify operations
+* Added Applications update support (PATCH /v3/applications)
+* Corrected RedirectUris update verb from PUT to PATCH
+* Fixed HTTParty content type issue when request body is nil - POST, PUT, PATCH, and DELETE now default to empty object to ensure Content-Type: application/json is sent (#536)
+* Added support for request_body parameter on DELETE (e.g. cancellation_reason for bookings) (#536)
+
 ### [6.7.1]
 * Fix large attachment handling with string keys and custom content_ids
 
@@ -378,4 +388,3 @@
 * various test cleanups ([Steven Harman](https://github.com/stevenharman))
 
 [full changelog](https://github.com/nylas/nylas-ruby/compare/v1.0.0...v1.1.0)
-

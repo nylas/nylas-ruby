@@ -113,6 +113,34 @@ module Nylas
       Threads.new(self)
     end
 
+    # The policy resources for your Nylas application.
+    #
+    # @return [Nylas::Policies] Policy resources for your Nylas application.
+    def policies
+      Policies.new(self)
+    end
+
+    # The rule resources for your Nylas application.
+    #
+    # @return [Nylas::Rules] Rule resources for your Nylas application.
+    def rules
+      Rules.new(self)
+    end
+
+    # The workspace resources for your Nylas application.
+    #
+    # @return [Nylas::Workspaces] Workspace resources for your Nylas application.
+    def workspaces
+      Workspaces.new(self)
+    end
+
+    # The domain resources for your Nylas application.
+    #
+    # @return [Nylas::Domains] Domain resources for your Nylas application.
+    def domains
+      Domains.new(self)
+    end
+
     # The webhook resources for your Nylas application.
     #
     # @return [Nylas::Webhooks] Webhook resources for your Nylas application.
