@@ -71,8 +71,8 @@ module Nylas
       # @param request_body [Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return [Array(Hash, String, Hash)] Nylas data object, API Request ID, and response headers.
-      def post(path:, query_params: {}, request_body: nil, headers: {})
-        response = execute(
+      def post(path:, query_params: {}, request_body: nil, headers: {}, serialized_json_body: nil)
+        request = {
           method: :post,
           path: path,
           query: query_params,
@@ -80,7 +80,9 @@ module Nylas
           headers: headers,
           api_key: api_key,
           timeout: timeout
-        )
+        }
+        request[:serialized_json_body] = serialized_json_body unless serialized_json_body.nil?
+        response = execute(**request)
 
         [response[:data], response[:request_id], response[:headers]]
       end
@@ -98,8 +100,8 @@ module Nylas
       # @param request_body [Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return Nylas data object and API Request ID.
-      def put(path:, query_params: {}, request_body: nil, headers: {})
-        response = execute(
+      def put(path:, query_params: {}, request_body: nil, headers: {}, serialized_json_body: nil)
+        request = {
           method: :put,
           path: path,
           query: query_params,
@@ -107,7 +109,9 @@ module Nylas
           headers: headers,
           api_key: api_key,
           timeout: timeout
-        )
+        }
+        request[:serialized_json_body] = serialized_json_body unless serialized_json_body.nil?
+        response = execute(**request)
 
         [response[:data], response[:request_id]]
       end
@@ -125,8 +129,8 @@ module Nylas
       # @param request_body [Hash, nil] Request body to pass to the call.
       # @param headers [Hash, {}] Additional HTTP headers to include in the payload.
       # @return Nylas data object and API Request ID.
-      def patch(path:, query_params: {}, request_body: nil, headers: {})
-        response = execute(
+      def patch(path:, query_params: {}, request_body: nil, headers: {}, serialized_json_body: nil)
+        request = {
           method: :patch,
           path: path,
           query: query_params,
@@ -134,7 +138,9 @@ module Nylas
           headers: headers,
           api_key: api_key,
           timeout: timeout
-        )
+        }
+        request[:serialized_json_body] = serialized_json_body unless serialized_json_body.nil?
+        response = execute(**request)
 
         [response[:data], response[:request_id]]
       end

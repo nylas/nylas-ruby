@@ -12,6 +12,7 @@ require_relative "nylas/client"
 require_relative "nylas/config"
 
 require_relative "nylas/handler/http_client"
+require_relative "nylas/handler/service_account_signer"
 
 require_relative "nylas/resources/applications"
 require_relative "nylas/resources/attachments"

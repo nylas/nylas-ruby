@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "webmock/rspec"
+
 describe Nylas::Domains do
   let(:domains) { described_class.new(client) }
   let(:signed_headers) do
@@ -182,6 +184,58 @@ describe Nylas::Domains do
 
       expect { domains.list(headers: unsigned_headers) }
         .to raise_error(ArgumentError, /X-Nylas-Signature/)
+    end
+
+    it "uses a signer to generate headers for list requests" do
+      signer = instance_double(Nylas::ServiceAccountSigner)
+      allow(signer).to receive(:build_headers)
+        .with(method: :get, path: "/v3/admin/domains", body: nil)
+        .and_return([signed_headers, nil])
+      path = "#{api_uri}/v3/admin/domains"
+      allow(domains).to receive(:get_list)
+        .with(path: path, query_params: nil, headers: signed_headers)
+        .and_return([[response[0]], response[1], "mock_next_cursor"])
+
+      domains_response = domains.list(signer: signer)
+
+      expect(domains_response).to eq([[response[0]], response[1], "mock_next_cursor"])
+    end
+
+    it "uses a signer to send canonical JSON and no bearer auth for create requests" do
+      private_key = OpenSSL::PKey::RSA.generate(2048)
+      signer = Nylas::ServiceAccountSigner.new(private_key_pem: private_key.to_pem,
+                                               private_key_id: "kid-123")
+      allow(Time).to receive(:now).and_return(Time.at(1_700_000_000))
+      allow(Nylas::ServiceAccountSigner).to receive(:generate_nonce)
+        .and_return("nonce123456789012345")
+      request_body = {
+        name: "Marketing domain",
+        domain_address: "mail.example.com"
+      }
+      canonical_body = '{"domain_address":"mail.example.com","name":"Marketing domain"}'
+      captured_request = nil
+      request_stub = stub_request(:post, "#{api_uri}/v3/admin/domains")
+                     .with { |request| captured_request = request }
+                     .to_return(
+                       status: 200,
+                       body: {
+                         data: response[0],
+                         request_id: "mock_request_id"
+                       }.to_json,
+                       headers: { "Content-Type" => "application/json" }
+                     )
+
+      domains.create(request_body: request_body, signer: signer)
+
+      expect(request_stub).to have_been_requested
+      expect(captured_request.body).to eq(canonical_body)
+      expect(captured_request.headers).to include(
+        "X-Nylas-Kid" => "kid-123",
+        "X-Nylas-Nonce" => "nonce123456789012345",
+        "X-Nylas-Timestamp" => "1700000000"
+      )
+      expect(captured_request.headers["X-Nylas-Signature"]).not_to be_empty
+      expect(captured_request.headers).not_to include("Authorization")
     end
   end
 end

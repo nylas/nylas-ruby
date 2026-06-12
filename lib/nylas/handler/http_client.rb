@@ -30,11 +30,14 @@ module Nylas
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
     # fragment.
     # @param payload [Hash, nil] Body to send with the request.
+    # @param serialized_json_body [String, nil] Pre-serialized JSON body to send as-is.
     # @param api_key [Hash, nil] API key to send with the request.
     # @return [Object] Parsed JSON response from the API.
-    def execute(method:, path:, timeout:, headers: {}, query: {}, payload: nil, api_key: nil)
+    def execute(method:, path:, timeout:, headers: {}, query: {}, payload: nil, api_key: nil,
+                serialized_json_body: nil)
       request = build_request(method: method, path: path, headers: headers,
-                              query: query, payload: payload, api_key: api_key, timeout: timeout)
+                              query: query, payload: payload, api_key: api_key, timeout: timeout,
+                              serialized_json_body: serialized_json_body)
       begin
         httparty_execute(**request) do |response, _request, result|
           content_type = nil
@@ -91,12 +94,14 @@ module Nylas
     # @param query [Hash, {}] Hash of names and values to include in the query section of the URI
     # fragment.
     # @param payload [Hash, nil] Body to send with the request.
+    # @param serialized_json_body [String, nil] Pre-serialized JSON body to send as-is.
     # @param timeout [Integer, nil] Timeout value to send with the request.
     # @param api_key [Hash, nil] API key to send with the request.
     # @return [Object] The request information after processing. This includes an updated payload
     # and headers.
     def build_request(
-      method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil
+      method:, path: nil, headers: {}, query: {}, payload: nil, timeout: nil, api_key: nil,
+      serialized_json_body: nil
     )
       url = build_url(path, query)
       resulting_headers = default_headers.merge(headers).merge(auth_header(api_key))
@@ -104,7 +109,10 @@ module Nylas
       # Check for multipart flag using both string and symbol keys for backwards compatibility
       is_multipart = !payload.nil? && (payload["multipart"] || payload[:multipart])
 
-      if !payload.nil? && !is_multipart
+      if !serialized_json_body.nil?
+        payload = serialized_json_body
+        resulting_headers["Content-type"] = "application/json"
+      elsif !payload.nil? && !is_multipart
         normalize_json_encodings!(payload)
         payload = payload&.to_json
         resulting_headers["Content-type"] = "application/json"
@@ -489,6 +497,8 @@ module Nylas
 
     # Set the authorization header for an API query.
     def auth_header(api_key)
+      return {} if api_key.nil?
+
       { "Authorization" => "Bearer #{api_key}" }
     end
   end
