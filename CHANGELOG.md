@@ -3,8 +3,9 @@
 ### Unreleased
 * Added Policies resource for managing application policies
 * Added Rules resource for managing inbox rules and listing rule evaluations
+* Added Lists resource support for creating application lists
 * Added Workspaces resource for managing workspaces, auto-grouping, manual assignment, `default`, `policy_id`, and `rule_ids`
-* Added Domains resource for managing (admin) domains, including info and verify operations
+* Added Domains resource for signed Service Account Manage Domains requests, including info and verify operations
 * Added Applications update support (PATCH /v3/applications)
 * Corrected RedirectUris update verb from PUT to PATCH
 * Fixed HTTParty content type issue when request body is nil - POST, PUT, PATCH, and DELETE now default to empty object to ensure Content-Type: application/json is sent (#536)

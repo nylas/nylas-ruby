@@ -8,6 +8,7 @@ require_relative "resources/auth"
 require_relative "resources/webhooks"
 require_relative "resources/applications"
 require_relative "resources/folders"
+require_relative "resources/lists"
 require_relative "resources/notetakers"
 require_relative "resources/scheduler"
 
@@ -97,6 +98,13 @@ module Nylas
     # @return [Nylas::Grants] Grant resources for your Nylas application
     def grants
       Grants.new(self)
+    end
+
+    # The list resources for your Nylas application.
+    #
+    # @return [Nylas::Lists] List resources for your Nylas application
+    def lists
+      Lists.new(self)
     end
 
     # The message resources for your Nylas application.
