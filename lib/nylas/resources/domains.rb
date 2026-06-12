@@ -6,14 +6,24 @@ require_relative "../handler/service_account_signer"
 require "uri"
 
 module Nylas
-  # Module representing the possible 'type' values in a domain verification attempt.
+  # Module representing the possible 'type' values in a domain verification request.
   # @see https://developer.nylas.com/docs/reference/api/manage-domains/
-  module DomainVerificationType
+  module DomainVerificationRequestType
     OWNERSHIP = "ownership"
     MX = "mx"
     SPF = "spf"
     DKIM = "dkim"
     FEEDBACK = "feedback"
+  end
+
+  # Module representing the possible 'type' values in a domain verification result.
+  # @see https://developer.nylas.com/docs/reference/api/manage-domains/
+  module DomainVerificationType
+    OWNERSHIP = DomainVerificationRequestType::OWNERSHIP
+    MX = DomainVerificationRequestType::MX
+    SPF = DomainVerificationRequestType::SPF
+    DKIM = DomainVerificationRequestType::DKIM
+    FEEDBACK = DomainVerificationRequestType::FEEDBACK
     DMARC = "dmarc"
     ARC = "arc"
   end
