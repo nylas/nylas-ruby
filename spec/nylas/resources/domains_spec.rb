@@ -49,7 +49,7 @@ describe Nylas::Domains do
     end
 
     it "calls the get_list method with the correct parameters and query params" do
-      query_params = { domain: "mail.example.com", region: "us" }
+      query_params = { limit: 10, page_token: "cursor-123" }
       path = "#{api_uri}/v3/admin/domains"
       allow(domains).to receive(:get_list)
         .with(path: path, query_params: query_params, headers: signed_headers)

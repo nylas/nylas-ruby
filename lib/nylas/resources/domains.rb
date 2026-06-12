@@ -57,7 +57,7 @@ module Nylas
     # Return all domains for the caller's organization.
     #
     # @param query_params [Hash, nil] Query params to pass to the request.
-    #   Supported keys: `domain` (filter by exact domain address), `region`, `limit`, `page_token`.
+    #   Supported keys: `limit`, `page_token`.
     # @param headers [Hash, nil] Nylas Service Account request signing headers.
     # @param signer [ServiceAccountSigner, nil] Signer to generate Nylas Service Account headers.
     # @return [Array(Array(Hash), String, String, Hash)]
