@@ -3,6 +3,7 @@
 require_relative "resource"
 require_relative "../handler/api_operations"
 require_relative "../handler/service_account_signer"
+require "uri"
 
 module Nylas
   # Module representing the possible 'type' values in a domain verification attempt.
@@ -70,7 +71,7 @@ module Nylas
     # @param signer [ServiceAccountSigner, nil] Signer to generate Nylas Service Account headers.
     # @return [Array(Hash, String, Hash)] The domain, API request ID, and response headers.
     def find(domain_id:, headers: nil, signer: nil)
-      relative_path = "#{DOMAINS_PATH}/#{domain_id}"
+      relative_path = "#{DOMAINS_PATH}/#{encoded_domain_id(domain_id)}"
       request_headers, = signed_request_headers(method: :get, relative_path: relative_path,
                                                 headers: headers, signer: signer)
 
@@ -115,7 +116,7 @@ module Nylas
     # @param signer [ServiceAccountSigner, nil] Signer to generate Nylas Service Account headers.
     # @return [Array(Hash, String)] The updated domain fields and API Request ID.
     def update(domain_id:, request_body:, headers: nil, signer: nil)
-      relative_path = "#{DOMAINS_PATH}/#{domain_id}"
+      relative_path = "#{DOMAINS_PATH}/#{encoded_domain_id(domain_id)}"
       request_headers, serialized_body = signed_request_headers(
         method: :put,
         relative_path: relative_path,
@@ -141,7 +142,7 @@ module Nylas
     # @param signer [ServiceAccountSigner, nil] Signer to generate Nylas Service Account headers.
     # @return [Array(TrueClass, String)] True and the API Request ID for the delete operation.
     def destroy(domain_id:, headers: nil, signer: nil)
-      relative_path = "#{DOMAINS_PATH}/#{domain_id}"
+      relative_path = "#{DOMAINS_PATH}/#{encoded_domain_id(domain_id)}"
       request_headers, = signed_request_headers(method: :delete, relative_path: relative_path,
                                                 headers: headers, signer: signer)
 
@@ -163,7 +164,7 @@ module Nylas
     # @return [Array(Hash, String, Hash)]
     #   The domain verification result, API Request ID, and response headers.
     def info(domain_id:, request_body:, headers: nil, signer: nil)
-      relative_path = "#{DOMAINS_PATH}/#{domain_id}/info"
+      relative_path = "#{DOMAINS_PATH}/#{encoded_domain_id(domain_id)}/info"
       request_headers, serialized_body = signed_request_headers(
         method: :post,
         relative_path: relative_path,
@@ -191,7 +192,7 @@ module Nylas
     # @return [Array(Hash, String, Hash)]
     #   The domain verification result, API Request ID, and response headers.
     def verify(domain_id:, request_body:, headers: nil, signer: nil)
-      relative_path = "#{DOMAINS_PATH}/#{domain_id}/verify"
+      relative_path = "#{DOMAINS_PATH}/#{encoded_domain_id(domain_id)}/verify"
       request_headers, serialized_body = signed_request_headers(
         method: :post,
         relative_path: relative_path,
@@ -220,9 +221,13 @@ module Nylas
       "#{api_uri}#{relative_path}"
     end
 
+    def encoded_domain_id(domain_id)
+      URI.encode_www_form_component(domain_id)
+    end
+
     def signed_request_headers(method:, relative_path:, headers:, signer:, body: nil)
       request_headers = headers.nil? ? {} : headers.dup
-      serialized_body = nil
+      serialized_body = body.nil? ? nil : Nylas::ServiceAccountSigner.canonical_json(body)
       if signer
         signer_headers, serialized_body = signer.build_headers(
           method: method,

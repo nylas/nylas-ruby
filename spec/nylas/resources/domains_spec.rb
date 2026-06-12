@@ -63,8 +63,8 @@ describe Nylas::Domains do
 
   describe "#find" do
     it "calls the get method with the correct parameters" do
-      domain_id = "f9d3c1b2-1a2b-4c3d-8e4f-1234567890ab"
-      path = "#{api_uri}/v3/admin/domains/#{domain_id}"
+      domain_id = "domain/with/slash"
+      path = "#{api_uri}/v3/admin/domains/domain%2Fwith%2Fslash"
       allow(domains).to receive(:get)
         .with(path: path, headers: signed_headers)
         .and_return(response)
@@ -95,7 +95,10 @@ describe Nylas::Domains do
       }
       path = "#{api_uri}/v3/admin/domains"
       allow(domains).to receive(:post)
-        .with(path: path, request_body: request_body, headers: signed_headers)
+        .with(path: path,
+              request_body: nil,
+              serialized_json_body: '{"domain_address":"mail.example.com","name":"Marketing domain"}',
+              headers: signed_headers)
         .and_return(response)
 
       domain_response = domains.create(request_body: request_body, headers: signed_headers)
@@ -110,7 +113,10 @@ describe Nylas::Domains do
       request_body = { name: "Renamed domain" }
       path = "#{api_uri}/v3/admin/domains/#{domain_id}"
       allow(domains).to receive(:put)
-        .with(path: path, request_body: request_body, headers: signed_headers)
+        .with(path: path,
+              request_body: nil,
+              serialized_json_body: '{"name":"Renamed domain"}',
+              headers: signed_headers)
         .and_return([{ name: "Renamed domain", updated_at: 1234567890 }, "mock_request_id"])
 
       domain_response = domains.update(domain_id: domain_id, request_body: request_body,
@@ -147,7 +153,8 @@ describe Nylas::Domains do
         message: "Please configure the TXT record."
       }, "mock_request_id"]
       allow(domains).to receive(:post)
-        .with(path: path, request_body: request_body, headers: signed_headers)
+        .with(path: path, request_body: nil, serialized_json_body: '{"type":"ownership"}',
+              headers: signed_headers)
         .and_return(result)
 
       domain_response = domains.info(domain_id: domain_id, request_body: request_body,
@@ -168,7 +175,8 @@ describe Nylas::Domains do
         status: "done"
       }, "mock_request_id"]
       allow(domains).to receive(:post)
-        .with(path: path, request_body: request_body, headers: signed_headers)
+        .with(path: path, request_body: nil, serialized_json_body: '{"type":"dkim"}',
+              headers: signed_headers)
         .and_return(result)
 
       domain_response = domains.verify(domain_id: domain_id, request_body: request_body,
