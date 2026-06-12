@@ -77,7 +77,14 @@ describe Nylas::Applications do
           subtitle: "string",
           background_color: "#003400",
           spacing: 5
-        }
+        },
+        callback_uris: [
+          {
+            id: "0556d035-6cb6-4262-a035-6b77e11cf8fc",
+            url: "https://example.com/callback",
+            platform: "web"
+          }
+        ]
       }
       path = "#{api_uri}/v3/applications"
       allow(application).to receive(:patch)

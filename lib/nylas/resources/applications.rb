@@ -27,7 +27,9 @@ module Nylas
 
     # Update application details.
     #
-    # @param request_body [Hash] The values to update the application with.
+    # @param request_body [Hash] The values to update the application with. Include
+    #   +callback_uris+ entries with +id+ when preserving or updating existing
+    #   callback URIs.
     # @return [Array(Hash, String)] The updated application details and API Request ID.
     def update(request_body:)
       patch(
