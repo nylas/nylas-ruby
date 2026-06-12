@@ -8,6 +8,7 @@ require_relative "resources/auth"
 require_relative "resources/webhooks"
 require_relative "resources/applications"
 require_relative "resources/folders"
+require_relative "resources/lists"
 require_relative "resources/notetakers"
 require_relative "resources/scheduler"
 
@@ -99,6 +100,13 @@ module Nylas
       Grants.new(self)
     end
 
+    # The list resources for your Nylas application.
+    #
+    # @return [Nylas::Lists] List resources for your Nylas application
+    def lists
+      Lists.new(self)
+    end
+
     # The message resources for your Nylas application.
     #
     # @return [Nylas::Messages] Message resources for your Nylas application
@@ -111,6 +119,34 @@ module Nylas
     # @return [Nylas::Threads] Thread resources for your Nylas application.
     def threads
       Threads.new(self)
+    end
+
+    # The policy resources for your Nylas application.
+    #
+    # @return [Nylas::Policies] Policy resources for your Nylas application.
+    def policies
+      Policies.new(self)
+    end
+
+    # The rule resources for your Nylas application.
+    #
+    # @return [Nylas::Rules] Rule resources for your Nylas application.
+    def rules
+      Rules.new(self)
+    end
+
+    # The workspace resources for your Nylas application.
+    #
+    # @return [Nylas::Workspaces] Workspace resources for your Nylas application.
+    def workspaces
+      Workspaces.new(self)
+    end
+
+    # The domain resources for your Nylas application.
+    #
+    # @return [Nylas::Domains] Domain resources for your Nylas application.
+    def domains
+      Domains.new(self)
     end
 
     # The webhook resources for your Nylas application.

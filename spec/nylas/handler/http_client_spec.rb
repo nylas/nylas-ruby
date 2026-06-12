@@ -75,6 +75,28 @@ describe Nylas::HttpClient do
       )
     end
 
+    it "does not add an authorization header when no API key is provided" do
+      request = http_client.send(:build_request, method: :get, path: "https://test.api.nylas.com/foo",
+                                                 api_key: nil)
+
+      expect(request[:headers]).to eq(
+        "User-Agent" => "Nylas Ruby SDK 1.0.0 - 5.0.0",
+        "X-Nylas-API-Wrapper" => "ruby"
+      )
+    end
+
+    it "sends pre-serialized JSON bodies without re-serializing them" do
+      request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                 api_key: "fake-key",
+                                                 serialized_json_body: '{"a":1,"b":2}')
+
+      expect(request[:payload]).to eq('{"a":1,"b":2}')
+      expect(request[:headers]).to include(
+        "Authorization" => "Bearer fake-key",
+        "Content-type" => "application/json"
+      )
+    end
+
     it "returns the correct request with custom headers" do
       extra_headers = {
         "X-Custom-Header" => "custom-value",

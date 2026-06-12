@@ -8,6 +8,7 @@ module Nylas
   # Application
   class Applications < Resource
     include ApiOperations::Get
+    include ApiOperations::Patch
 
     attr_reader :redirect_uris
 
@@ -22,6 +23,17 @@ module Nylas
     # @return [Array(Hash, String)] Application details and API Request ID.
     def get_details
       get(path: "#{api_uri}/v3/applications")
+    end
+
+    # Update application details.
+    #
+    # @param request_body [Hash] The values to update the application with.
+    # @return [Array(Hash, String)] The updated application details and API Request ID.
+    def update(request_body:)
+      patch(
+        path: "#{api_uri}/v3/applications",
+        request_body: request_body
+      )
     end
   end
 end
