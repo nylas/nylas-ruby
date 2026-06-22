@@ -83,7 +83,8 @@ module Nylas
     # Runs as a background job and returns immediately with a job ID. Rate limited to one
     # call per minute per application.
     #
-    # @param request_body [Hash] Optional filters to scope which grants are grouped.
+    # @param request_body [Hash] Optional filters to scope which grants are grouped,
+    #   including +after_created_at+, +invalid_also+, and +specific_domain+.
     # @return [Array(Hash, String, Hash)] The job info, API Request ID, and response headers.
     def auto_group(request_body: nil)
       post(
