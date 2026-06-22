@@ -143,7 +143,7 @@ describe Nylas::ApiOperations do
           method: :post,
           path: path,
           query: {},
-          payload: nil,
+          payload: {},
           headers: {},
           api_key: api_key,
           timeout: timeout
@@ -164,7 +164,7 @@ describe Nylas::ApiOperations do
           method: :post,
           path: path,
           query: {},
-          payload: nil,
+          payload: {},
           headers: {},
           api_key: api_key,
           timeout: timeout
@@ -173,6 +173,22 @@ describe Nylas::ApiOperations do
         response = api_operations.send(:post, path: path)
 
         expect(response).to eq([mock_response[:data], mock_response[:request_id], nil])
+      end
+
+      it "passes request_body to execute when provided" do
+        path = "#{api_uri}/path"
+        request_body = { foo: "bar" }
+        allow(api_operations).to receive(:execute).with(
+          method: :post,
+          path: path,
+          query: {},
+          payload: request_body,
+          headers: {},
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(mock_response)
+
+        api_operations.send(:post, path: path, request_body: request_body)
       end
     end
   end
@@ -206,7 +222,7 @@ describe Nylas::ApiOperations do
           method: :put,
           path: path,
           query: {},
-          payload: nil,
+          payload: {},
           headers: {},
           api_key: api_key,
           timeout: timeout
@@ -215,6 +231,22 @@ describe Nylas::ApiOperations do
         response = api_operations.send(:put, path: path)
 
         expect(response).to eq([mock_response[:data], mock_response[:request_id]])
+      end
+
+      it "passes request_body to execute when provided" do
+        path = "#{api_uri}/path"
+        request_body = { foo: "bar" }
+        allow(api_operations).to receive(:execute).with(
+          method: :put,
+          path: path,
+          query: {},
+          payload: request_body,
+          headers: {},
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(mock_response)
+
+        api_operations.send(:put, path: path, request_body: request_body)
       end
     end
   end
@@ -248,7 +280,7 @@ describe Nylas::ApiOperations do
           method: :patch,
           path: path,
           query: {},
-          payload: nil,
+          payload: {},
           headers: {},
           api_key: api_key,
           timeout: timeout
@@ -257,6 +289,22 @@ describe Nylas::ApiOperations do
         response = api_operations.send(:patch, path: path)
 
         expect(response).to eq([mock_response[:data], mock_response[:request_id]])
+      end
+
+      it "passes request_body to execute when provided" do
+        path = "#{api_uri}/path"
+        request_body = { foo: "bar" }
+        allow(api_operations).to receive(:execute).with(
+          method: :patch,
+          path: path,
+          query: {},
+          payload: request_body,
+          headers: {},
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(mock_response)
+
+        api_operations.send(:patch, path: path, request_body: request_body)
       end
     end
   end
@@ -271,7 +319,7 @@ describe Nylas::ApiOperations do
           method: :delete,
           path: path,
           query: query_params,
-          payload: nil,
+          payload: {},
           headers: headers,
           api_key: api_key,
           timeout: timeout
@@ -288,7 +336,7 @@ describe Nylas::ApiOperations do
           method: :delete,
           path: path,
           query: {},
-          payload: nil,
+          payload: {},
           headers: {},
           api_key: api_key,
           timeout: timeout
@@ -297,6 +345,22 @@ describe Nylas::ApiOperations do
         response = api_operations.send(:delete, path: path)
 
         expect(response).to eq([mock_response[:data], mock_response[:request_id]])
+      end
+
+      it "passes request_body to execute when provided" do
+        path = "#{api_uri}/path"
+        request_body = { cancellation_reason: "Meeting cancelled" }
+        allow(api_operations).to receive(:execute).with(
+          method: :delete,
+          path: path,
+          query: {},
+          payload: request_body,
+          headers: {},
+          api_key: api_key,
+          timeout: timeout
+        ).and_return(mock_response)
+
+        api_operations.send(:delete, path: path, request_body: request_body)
       end
     end
   end

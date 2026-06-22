@@ -75,6 +75,46 @@ describe Nylas::HttpClient do
     end
   end
 
+  describe "Integration Tests - Content-Type for body-less requests (HTTParty fix)" do
+    it "sends Content-Type: application/json for POST with empty payload" do
+      stub_request(:post, "https://test.api.nylas.com/v3/connect/revoke")
+        .with(
+          body: "{}",
+          headers: { "Content-Type" => "application/json" }
+        )
+        .to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json" })
+
+      http_client.send(:execute,
+                       method: :post,
+                       path: "https://test.api.nylas.com/v3/connect/revoke",
+                       timeout: 30,
+                       payload: {},
+                       api_key: "fake-key")
+
+      expect(WebMock).to have_requested(:post, "https://test.api.nylas.com/v3/connect/revoke")
+        .with(headers: { "Content-Type" => "application/json" }, body: "{}")
+    end
+
+    it "sends Content-Type: application/json for DELETE with empty payload" do
+      stub_request(:delete, "https://test.api.nylas.com/v3/scheduling/bookings/booking-123")
+        .with(
+          body: "{}",
+          headers: { "Content-Type" => "application/json" }
+        )
+        .to_return(status: 200, body: "{}", headers: { "Content-Type" => "application/json" })
+
+      http_client.send(:execute,
+                       method: :delete,
+                       path: "https://test.api.nylas.com/v3/scheduling/bookings/booking-123",
+                       timeout: 30,
+                       payload: {},
+                       api_key: "fake-key")
+
+      expect(WebMock).to have_requested(:delete, "https://test.api.nylas.com/v3/scheduling/bookings/booking-123")
+        .with(headers: { "Content-Type" => "application/json" }, body: "{}")
+    end
+  end
+
   describe "Integration Tests - backwards compatibility" do
     it "maintains the same response format as rest-client" do
       response_json = { "data" => { "id" => "123", "name" => "test" } }
