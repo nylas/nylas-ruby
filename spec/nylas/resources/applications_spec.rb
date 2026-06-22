@@ -53,9 +53,47 @@ describe Nylas::Applications do
         .with(path: path)
         .and_return(response)
 
-      response = application.get_details
+      application_response = application.get_details
 
-      expect(response).to eq(response)
+      expect(application_response).to eq(response)
+    end
+  end
+
+  describe "#update" do
+    it "calls the patch method with the correct parameters" do
+      request_body = {
+        branding: {
+          name: "My application",
+          icon_url: "https://my-app.com/my-icon.png",
+          website_url: "https://my-app.com",
+          description: "Online banking application."
+        },
+        hosted_authentication: {
+          background_image_url: "https://my-app.com/bg.jpg",
+          alignment: "left",
+          color_primary: "#dc0000",
+          color_secondary: "#000056",
+          title: "string",
+          subtitle: "string",
+          background_color: "#003400",
+          spacing: 5
+        },
+        callback_uris: [
+          {
+            id: "0556d035-6cb6-4262-a035-6b77e11cf8fc",
+            url: "https://example.com/callback",
+            platform: "web"
+          }
+        ]
+      }
+      path = "#{api_uri}/v3/applications"
+      allow(application).to receive(:patch)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      application_response = application.update(request_body: request_body)
+
+      expect(application_response).to eq(response)
     end
   end
 end

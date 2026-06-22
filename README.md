@@ -1,121 +1,185 @@
-<a href="https://www.nylas.com/">
-    <img src="https://brand.nylas.com/assets/downloads/logo_horizontal_png/Nylas-Logo-Horizontal-Blue_.png" alt="Aimeos logo" title="Aimeos" align="right" height="60" />
-</a>
+<div align="center">
+  <a href="https://www.nylas.com/">
+    <img src="/diagrams/nylas-logo.png" alt="Nylas" height="80" />
+  </a>
 
-# Nylas Ruby SDK
+  <h1>Nylas Ruby SDK</h1>
 
-[![Gem (including prereleases)](https://img.shields.io/gem/v/nylas?include_prereleases)](https://rubygems.org/gems/nylas)
-[![codecov](https://codecov.io/gh/nylas/nylas-ruby/branch/main/graph/badge.svg?token=IKH0YMH4KA)](https://codecov.io/gh/nylas/nylas-ruby)
+  <p>
+    <strong>The official Ruby SDK for Nylas — the infrastructure that powers communications</strong>
+  </p>
 
-This is the GitHub repository for the Nylas Ruby SDK. This repo is primarily for anyone who wants to make contributions to the SDK or install it from source. For documentation on how to use this SDK to access the Nylas Email, Calendar, or Contacts APIs, see the official [Ruby SDK Quickstart Guide](https://developer.nylas.com/docs/sdks/ruby/).
+  <p>
+    <a href="https://rubygems.org/gems/nylas"><img src="https://img.shields.io/gem/v/nylas" alt="version" /></a>
+    <a href="https://codecov.io/gh/nylas/nylas-ruby"><img src="https://codecov.io/gh/nylas/nylas-ruby/branch/main/graph/badge.svg?token=IKH0YMH4KA" alt="code coverage" /></a>
+    <a href="https://rubygems.org/gems/nylas"><img src="https://img.shields.io/gem/dt/nylas" alt="downloads" /></a>
+    <a href="LICENSE.txt"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license" /></a>
+  </p>
 
-The Nylas Communications Platform provides REST APIs for [Email](https://developer.nylas.com/docs/email/), [Calendar](https://developer.nylas.com/docs/calendar/), and [Contacts](https://developer.nylas.com/docs/contacts/), and the Nylas SDK is the quickest way to build your integration using Ruby.
+  <p>
+    <a href="https://developer.nylas.com/docs/v3/sdks/ruby/">📖 SDK Guide</a> ·
+    <a href="https://developer.nylas.com/docs/api/v3/">📚 API Reference</a> ·
+    <a href="https://dashboard-v3.nylas.com/register">🚀 Sign up</a> ·
+    <a href="https://github.com/orgs/nylas-samples/repositories?q=ruby">💡 Samples</a> ·
+    <a href="https://forums.nylas.com">💬 Forum</a>
+  </p>
+</div>
 
-Here are some resources to help you get started:
+<br />
 
-- [Sign up for the Nylas v3 Beta program to access the v3 Dashboard](https://info.nylas.com/apiv3betasignup.html?utm_source=github&utm_medium=devrel-surfaces&utm_campaign=&utm_content=ruby-sdk-upgrade)
-- [Nylas API v3 Quickstart Guide](https://developer.nylas.com/docs/v3-beta/v3-quickstart/)
-- [Nylas SDK Reference](https://nylas-ruby-sdk-reference.pages.dev/)
-- [Nylas API Reference](https://developer.nylas.com/docs/api/v3-beta/)
-- [Nylas Samples repo for code samples and example applications](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=ruby)
+The official Ruby SDK for [Nylas](https://developer.nylas.com/docs/v3/) — the infrastructure that powers communications. Integrate with Gmail, Microsoft, IMAP, Zoom, and 250+ email, calendar, and meeting providers in 5 minutes. Covers [Email](https://developer.nylas.com/docs/v3/email/), [Calendar](https://developer.nylas.com/docs/v3/calendar/), [Contacts](https://developer.nylas.com/docs/v3/email/contacts/), [Scheduler](https://developer.nylas.com/docs/v3/scheduler/), [Notetaker](https://developer.nylas.com/docs/v3/notetaker/), and [Agent Accounts](https://developer.nylas.com/docs/v3/agent-accounts/).
 
-If you have a question about the Nylas Communications Platform, [contact Nylas Support](https://support.nylas.com/) for help.
+This repository is for contributors and anyone installing the SDK from source. If you just want to use the SDK in your app, head straight to the **[Ruby SDK guide](https://developer.nylas.com/docs/v3/sdks/ruby/)** on developer.nylas.com.
 
-## ⚙️ Install
+## Get started
 
-### Prerequisites
+1. [Sign up for a free Nylas account](https://dashboard-v3.nylas.com/register).
+2. Follow the [getting started guide](https://developer.nylas.com/docs/v3/getting-started/) to provision an application and create your API key.
+3. Bootstrap a project with the Nylas CLI:
 
-- Ruby 3.0 or above.
-- Ruby Frameworks: `httparty` and `yajl-ruby`.
+   ```bash
+   brew install nylas/nylas-cli/nylas
+   nylas init
+   ```
 
-### Install
+## ⚙️  Install
 
-Add this line to your application's Gemfile:
+> **Requirements:** Ruby 3.0 or later.
+
+Add the gem to your Gemfile:
 
 ```ruby
-gem 'nylas'
+gem "nylas"
 ```
 
-And then execute:
+Then install:
 
 ```bash
-bundle
+bundle install
 ```
 
-To run scripts that use the Nylas Ruby SDK, install the `nylas` gem.
+Or install it directly:
 
 ```bash
 gem install nylas
 ```
 
-To install the SDK from source, clone this repo and install with bundle.
+### Build from source
 
 ```bash
-git clone https://github.com/nylas/nylas-ruby.git && cd nylas-ruby
+git clone https://github.com/nylas/nylas-ruby.git
+cd nylas-ruby
 bundle install
 ```
 
-### Set up Ruby SDK for Development
-
-Install [RubyGems](https://rubygems.org/pages/download) if you don't already have it:
-
-```shell
-gem install bundler
-gem update --system
-```
-
-Install the SDK from source
-
-```shell
-bundle install
-```
-
-You can run tests locally using ```rspec```:
-
-```shell
-rspec spec
-```
+Run the test suite with `rspec spec`.
 
 ## ⚡️ Usage
 
-To use this SDK, you must first [sign up for the v3 Beta and get a free Nylas account](https://info.nylas.com/apiv3betasignup.html?utm_source=github&utm_medium=devrel-surfaces&utm_campaign=&utm_content=ruby-sdk-upgrade).
-
-Then, follow the Quickstart guide to [set up your first app and get your API keys](https://developer.nylas.com/docs/v3-beta/v3-quickstart/).
-
-For code examples that demonstrate how to use this SDK, take a look at our [Ruby repos in the Nylas Samples collection](https://github.com/orgs/nylas-samples/repositories?q=&type=all&language=ruby).
-
-### 🚀 Making Your First Request
-
-All of the functionality of the Nylas Communications Platform is available through the `Client` object. To access data for an account that’s connected to Nylas, create a new API client object and pass in your Nylas API key. In the following example, replace `NYLAS_API_KEY` with your Nylas API Key, and you can provide other additional configurations such as the Nylas API url and the timeout.
+Initialize the client with your API key:
 
 ```ruby
-require 'nylas'
+require "nylas"
 
 nylas = Nylas::Client.new(
-  api_key: "NYLAS_API_KEY",
+  api_key: "NYLAS_API_KEY"
 )
 ```
 
-Now, you can use `nylas` to access full email, calendar, and contacts functionality, for example to list all the calendars for a given account:
+Then make a request — for example, list a grant's calendars:
 
 ```ruby
-calendars, _request_ids = nylas.calendars.list(identifier: "GRANT_ID")
+calendars, request_id, next_cursor = nylas.calendars.list(identifier: "GRANT_ID")
 ```
 
-## 📚 Documentation
+Every SDK call returns a tuple. List endpoints return `[data, request_id, next_cursor, headers]`; single-record endpoints return `[data, request_id]`. Destructure the elements you need and ignore the rest with `_`. Use `next_cursor` to paginate:
 
-Nylas maintains a [reference guide for the Ruby SDK](https://nylas-ruby-sdk-reference.pages.dev/) to help you get familiar with the available methods and classes.
+```ruby
+cursor = nil
+loop do
+  page, _request_id, cursor = nylas.calendars.list(
+    identifier: "GRANT_ID",
+    query_params: { page_token: cursor }
+  )
+  page.each { |calendar| puts calendar[:name] }
+  break unless cursor
+end
+```
 
-## ✨ Upgrading from 5.x
+For step-by-step walkthroughs, see the developer guides:
 
-See [UPGRADE.md](UPGRADE.md) for instructions on upgrading from 5.x to 6.x.
+- [Email](https://developer.nylas.com/docs/v3/email/)
+- [Calendar](https://developer.nylas.com/docs/v3/calendar/)
+- [Scheduler](https://developer.nylas.com/docs/v3/scheduler/)
+- [Notetaker](https://developer.nylas.com/docs/v3/notetaker/)
+- [Agent Accounts](https://developer.nylas.com/docs/v3/agent-accounts/)
+- [Notifications & webhooks](https://developer.nylas.com/docs/v3/notifications/)
 
-**Note**: The Ruby SDK v6.x is not compatible with the Nylas API earlier than v3-beta. If you are using Nylas v2.7 or earlier, continue using the v5.x Nylas Ruby SDK.
+### Error handling
+
+The SDK raises typed errors you can rescue. API failures raise `Nylas::NylasApiError` (with `type`, `status_code`, `request_id`, `provider_error`, `headers`); OAuth failures raise `Nylas::NylasOAuthError`; request timeouts raise `Nylas::NylasSdkTimeoutError`.
+
+```ruby
+begin
+  nylas.messages.find(identifier: "GRANT_ID", message_id: "MESSAGE_ID")
+rescue Nylas::NylasApiError => e
+  warn "Nylas API error #{e.status_code} (#{e.type}): #{e.message}"
+rescue Nylas::NylasSdkTimeoutError => e
+  warn "Request to #{e.url} timed out after #{e.timeout}s"
+end
+```
+
+## 💡 Examples
+
+- Local examples live in [`examples/`](examples/) (messages, events, folders, notetaker).
+- The [Nylas Samples org](https://github.com/orgs/nylas-samples/repositories?q=ruby) has end-to-end Ruby apps you can clone and run.
+
+## 🤖 AI agents
+
+[nylas/skills](https://github.com/nylas/skills) drops Nylas into Claude Code, Cursor, Codex, and other agents that support the skills format:
+
+```bash
+npx skills add nylas/skills
+/plugin marketplace add nylas/skills   # Claude Code
+```
+
+The CLI also installs an MCP server for Claude Desktop, Claude Code, Cursor, Windsurf, or VS Code:
+
+```bash
+brew install nylas/nylas-cli/nylas
+nylas mcp install
+```
+
+Walkthrough: [give AI agents email access via MCP](https://cli.nylas.com/guides/give-ai-agents-email-access-via-mcp).
+
+## 📚 Reference
+
+- [Ruby SDK guide](https://developer.nylas.com/docs/v3/sdks/ruby/)
+- [API reference](https://developer.nylas.com/docs/api/v3/)
+- [Getting started](https://developer.nylas.com/docs/v3/getting-started/)
+- [Email](https://developer.nylas.com/docs/v3/email/) · [Calendar](https://developer.nylas.com/docs/v3/calendar/) · [Scheduler](https://developer.nylas.com/docs/v3/scheduler/) · [Notetaker](https://developer.nylas.com/docs/v3/notetaker/) · [Agent Accounts](https://developer.nylas.com/docs/v3/agent-accounts/) · [Notifications](https://developer.nylas.com/docs/v3/notifications/)
+- [Data residency](https://developer.nylas.com/docs/dev-guide/platform/data-residency/)
+- [Nylas CLI](https://cli.nylas.com)
+- [Forum](https://forums.nylas.com)
+
+## ✨ Upgrading
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes, and [UPGRADE.md](UPGRADE.md) for the 5.x → 6.x migration guide. The 6.x line targets Nylas API v3; if you're still on v2.7 or earlier, stay on the 5.x SDK.
 
 ## 💙 Contributing
 
-Please refer to [Contributing](Contributing.md) for information about how to make contributions to this project. We welcome questions, bug reports, and pull requests.
+Bug reports, questions, and pull requests are welcome. See [Contributing.md](Contributing.md) for the workflow, and the [Nylas Forum](https://forums.nylas.com) for broader discussion.
+
+## 🔒 Security
+
+To report a security vulnerability, follow the [Nylas Vulnerability Disclosure Policy](https://www.nylas.com/security/vulnerability-disclosure-policy/). Please don't open a public GitHub issue for security reports.
+
+## 🔗 Other Nylas SDKs
+
+- [nylas-nodejs](https://github.com/nylas/nylas-nodejs)
+- [nylas-python](https://github.com/nylas/nylas-python)
+- [nylas-java](https://github.com/nylas/nylas-java) (Java & Kotlin)
 
 ## 📝 License
 
-This project is licensed under the terms of the MIT license. Please refer to [LICENSE](LICENSE.txt) for the full terms.
+MIT — see [LICENSE.txt](LICENSE.txt).

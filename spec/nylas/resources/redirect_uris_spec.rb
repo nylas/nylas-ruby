@@ -87,7 +87,7 @@ describe Nylas::RedirectUris do
         }
       }
       path = "#{api_uri}/v3/applications/redirect-uris/#{redirect_uri_id}"
-      allow(redirect_uris).to receive(:put)
+      allow(redirect_uris).to receive(:patch)
         .with(path: path, request_body: request_body)
         .and_return(response)
 

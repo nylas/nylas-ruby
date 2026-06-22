@@ -8,7 +8,7 @@ module Nylas
   class RedirectUris < Resource
     include ApiOperations::Get
     include ApiOperations::Post
-    include ApiOperations::Put
+    include ApiOperations::Patch
     include ApiOperations::Delete
 
     # Return all redirect uris.
@@ -47,7 +47,7 @@ module Nylas
     # @param request_body [Hash] The values to update the redirect uri with
     # @return [Array(Hash, String)] The updated redirect uri and API Request ID.
     def update(redirect_uri_id:, request_body:)
-      put(
+      patch(
         path: "#{api_uri}/v3/applications/redirect-uris/#{redirect_uri_id}",
         request_body: request_body
       )
