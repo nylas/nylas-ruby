@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### [6.8.0]
 * Added Policies resource for managing application policies
 * Added Rules resource for managing inbox rules and listing rule evaluations
 * Added Lists resource support for creating application lists
