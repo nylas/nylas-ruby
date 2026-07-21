@@ -251,5 +251,23 @@ describe Nylas::Calendars do
 
       calendars.get_free_busy(identifier: identifier, request_body: request_body)
     end
+
+    it "forwards the tentative_as_busy field in the request body" do
+      identifier = "abc-123-grant-id"
+      request_body = {
+        start_time: 1614556800,
+        end_time: 1614643200,
+        emails: ["test@gmail.com"],
+        tentative_as_busy: false
+      }
+
+      allow(calendars).to receive(:post)
+        .with(path: "#{api_uri}/v3/grants/#{identifier}/calendars/free-busy", request_body: request_body)
+
+      calendars.get_free_busy(identifier: identifier, request_body: request_body)
+
+      expect(calendars).to have_received(:post)
+        .with(path: "#{api_uri}/v3/grants/#{identifier}/calendars/free-busy", request_body: request_body)
+    end
   end
 end
