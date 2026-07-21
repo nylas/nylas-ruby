@@ -1,6 +1,6 @@
 # Changelog
 
-### Unreleased
+### [6.8.1]
 * Documented `tentative_as_busy` support in the `Calendars#get_free_busy` request body, consistent with other Nylas SDKs
 
 ### [6.8.0]
