@@ -90,8 +90,13 @@ module Nylas
 
     # Get the free/busy schedule for a list of email addresses.
     #
-    # @param identifier [str] The identifier of the grant to act upon.
-    # @param request_body [Hash] Request body to pass to the request.
+    # @param identifier [String] The identifier of the grant to act upon.
+    # @param request_body [Hash] Request body to pass to the request. Supported keys:
+    #   - `:start_time` [Integer] Unix timestamp for the start time to check free/busy for.
+    #   - `:end_time` [Integer] Unix timestamp for the end time to check free/busy for.
+    #   - `:emails` [Array<String>] List of email addresses to check free/busy for.
+    #   - `:tentative_as_busy` [Boolean, nil] When set to `false`, treats tentative calendar events as
+    #     `busy: false`. Only applicable for Microsoft and EWS calendar providers. Defaults to `true`.
     # @return [Array(Array(Hash), String)] The free/busy response.
     def get_free_busy(identifier:, request_body:)
       post(

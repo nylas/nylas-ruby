@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Documented `tentative_as_busy` support in the `Calendars#get_free_busy` request body, consistent with other Nylas SDKs
+
 ### [6.8.0]
 * Added Policies resource for managing application policies
 * Added Rules resource for managing inbox rules and listing rule evaluations
