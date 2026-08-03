@@ -97,6 +97,29 @@ describe Nylas::Drafts do
       expect(draft_response).to eq(response)
     end
 
+    it "forwards a custom tracking hostname in the request body" do
+      identifier = "abc-123-grant-id"
+      request_body = {
+        subject: "Tracked draft",
+        to: [{ email: "recipient@example.com" }],
+        body: '<a href="https://example.com">View update</a>',
+        tracking_options: {
+          links: true,
+          opens: true,
+          domain_name: "links.example.com"
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/drafts"
+
+      allow(drafts).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      draft_response = drafts.create(identifier: identifier, request_body: request_body)
+
+      expect(draft_response).to eq(response)
+    end
+
     it "calls the post method with the correct parameters for small attachments" do
       identifier = "abc-123-grant-id"
       mock_file = instance_double("file")
@@ -171,6 +194,28 @@ describe Nylas::Drafts do
         body: "This is the body of my draft message."
       }
       path = "#{api_uri}/v3/grants/#{identifier}/drafts/#{draft_id}"
+      allow(drafts).to receive(:put)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      draft_response = drafts.update(identifier: identifier, draft_id: draft_id,
+                                     request_body: request_body)
+
+      expect(draft_response).to eq(response)
+    end
+
+    it "forwards a replacement custom tracking hostname in the request body" do
+      identifier = "abc-123-grant-id"
+      draft_id = "5d3qmne77v32r8l4phyuksl2x"
+      request_body = {
+        tracking_options: {
+          links: true,
+          opens: true,
+          domain_name: "replacement-links.example.com"
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/drafts/#{draft_id}"
+
       allow(drafts).to receive(:put)
         .with(path: path, request_body: request_body)
         .and_return(response)

@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Documented `tracking_options.domain_name` hash support for custom link and open tracking hostnames. See the [message tracking documentation](https://developer.nylas.com/docs/v3/email/message-tracking/)
+
 ### [6.8.1]
 * Documented `tentative_as_busy` support in the `Calendars#get_free_busy` request body, consistent with other Nylas SDKs
 

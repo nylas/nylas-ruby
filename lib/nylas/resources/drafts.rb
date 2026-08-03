@@ -39,6 +39,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to create the draft.
     # @param request_body [Hash] The values to create the message with.
+    #   Use `:tracking_options` with `:links` or `:opens` enabled to track the draft. To use a custom
+    #   tracking hostname, set `:domain_name` inside `:tracking_options` to an active hostname owned
+    #   by your organization.
     #   If you're attaching files, you must pass an array of [File] objects, or
     #   you can pass in base64 encoded strings if the total attachment size is less than 3mb.
     #   You can also use {FileUtils::attach_file_request_builder} to build each object attach.
@@ -61,6 +64,9 @@ module Nylas
     # @param identifier [String] Grant ID or email account in which to update the draft.
     # @param draft_id [String] The id of the draft to update.
     # @param request_body [Hash] The values to create the message with.
+    #   To replace the draft's custom tracking hostname, set `:tracking_options` with `:links` or
+    #   `:opens` enabled and a `:domain_name`. Omit `:tracking_options` to preserve the draft's
+    #   existing tracking settings.
     #   If you're attaching files, you must pass an array of [File] objects, or
     #   you can pass in base64 encoded strings if the total attachment size is less than 3mb.
     #   You can also use {FileUtils::attach_file_request_builder} to build each object attach.
