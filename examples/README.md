@@ -118,10 +118,11 @@ nylas.messages.send(
 )
 ```
 
-##### Transactional Send
+##### Transactional Send request shape (pseudo-code)
 
 The sender domain belongs in the Transactional Send route. The distinct `tracking_options.domain_name`
-value belongs in the request body and is used for recipient-visible links and open pixels.
+value belongs in the request body and is used for recipient-visible links and open pixels. The Ruby SDK
+does not expose a Transactional Send method, so this example illustrates the API request shape.
 
 ```ruby
 sender_domain = "sender.example.com"
@@ -138,7 +139,7 @@ transactional_request_body = {
   }
 }
 
-# POST transactional_path with transactional_request_body.
+# Pseudo-code: POST transactional_path with transactional_request_body.
 ```
 
 ##### Drafts
