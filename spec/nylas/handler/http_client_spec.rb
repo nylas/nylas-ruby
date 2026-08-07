@@ -175,6 +175,26 @@ describe Nylas::HttpClient do
         )
       end
 
+      it "serializes a custom tracking hostname using the documented JSON shape" do
+        payload = {
+          tracking_options: {
+            links: true,
+            opens: true,
+            domain_name: "links.example.com"
+          }
+        }
+        request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",
+                                                   payload: payload, api_key: "fake-key")
+
+        expect(JSON.parse(request[:payload])).to eq(
+          "tracking_options" => {
+            "links" => true,
+            "opens" => true,
+            "domain_name" => "links.example.com"
+          }
+        )
+      end
+
       it "returns the correct request with a multipart flag (string key)" do
         payload = { "multipart" => true }
         request = http_client.send(:build_request, method: :post, path: "https://test.api.nylas.com/foo",

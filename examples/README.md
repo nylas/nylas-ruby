@@ -92,6 +92,104 @@ Before running any example, make sure to:
   export NYLAS_TEST_EMAIL="test@example.com"  # Email address to send test messages to
   ```
 
+#### Custom tracking hostnames
+
+Set `tracking_options.domain_name` to an active custom hostname owned by your organization. Enable
+link tracking, open tracking, or both in the same hash. If `domain_name` is omitted, tracked messages
+use the default Nylas tracking hostname. See the
+[message tracking documentation](https://developer.nylas.com/docs/v3/email/message-tracking/) for
+registration, validation, and failure behavior.
+
+##### Regular Send
+
+```ruby
+nylas.messages.send(
+  identifier: grant_id,
+  request_body: {
+    to: [{ email: "recipient@example.com" }],
+    subject: "Your update",
+    body: '<a href="https://example.com">View update</a>',
+    tracking_options: {
+      links: true,
+      opens: true,
+      domain_name: "links.example.com"
+    }
+  }
+)
+```
+
+##### Transactional Send request shape (pseudo-code)
+
+The sender domain belongs in the Transactional Send route. The distinct `tracking_options.domain_name`
+value belongs in the request body and is used for recipient-visible links and open pixels. The Ruby SDK
+does not expose a Transactional Send method, so this example illustrates the API request shape.
+
+```ruby
+sender_domain = "sender.example.com"
+transactional_path = "/v3/domains/#{sender_domain}/messages/send"
+transactional_request_body = {
+  from: [{ email: "billing@sender.example.com" }],
+  to: [{ email: "recipient@example.com" }],
+  subject: "Your receipt",
+  body: '<a href="https://example.com/receipt">View receipt</a>',
+  tracking_options: {
+    links: true,
+    opens: true,
+    domain_name: "links.example.com"
+  }
+}
+
+# Pseudo-code: POST transactional_path with transactional_request_body.
+```
+
+##### Drafts
+
+```ruby
+draft, = nylas.drafts.create(
+  identifier: grant_id,
+  request_body: {
+    to: [{ email: "recipient@example.com" }],
+    subject: "Draft update",
+    body: '<a href="https://example.com">View update</a>',
+    tracking_options: {
+      links: true,
+      opens: true,
+      domain_name: "links.example.com"
+    }
+  }
+)
+
+nylas.drafts.update(
+  identifier: grant_id,
+  draft_id: draft[:id],
+  request_body: {
+    subject: "Updated draft subject"
+    # Omit tracking_options to preserve the draft's existing tracking settings.
+  }
+)
+```
+
+##### Scheduled Send
+
+Custom tracking hostnames are validated when the message is scheduled and revalidated before delivery.
+
+```ruby
+nylas.messages.send(
+  identifier: grant_id,
+  request_body: {
+    to: [{ email: "recipient@example.com" }],
+    subject: "Scheduled update",
+    body: '<a href="https://example.com">View update</a>',
+    send_at: Time.now.to_i + 3600,
+    tracking_options: {
+      links: true,
+      opens: true,
+      domain_name: "links.example.com"
+    }
+  }
+)
+```
+
 ### Notetaker
 - `notetaker/notetaker_example.rb`: Shows basic Notetaker functionality, including:
   - Inviting a Notetaker to a meeting
@@ -123,4 +221,4 @@ When adding new examples:
 If you encounter any issues or have questions about these examples, please:
 1. Check the [Nylas documentation](https://developer.nylas.com)
 2. Visit our [GitHub repository](https://github.com/nylas/nylas-ruby)
-3. Contact [Nylas support](https://support.nylas.com) 
+3. Contact [Nylas support](https://support.nylas.com)

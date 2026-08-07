@@ -277,6 +277,53 @@ describe Nylas::Messages do
       expect(message_response).to eq(response)
     end
 
+    it "forwards a custom tracking hostname in the request body" do
+      identifier = "abc-123-grant-id"
+      request_body = {
+        subject: "Tracked message",
+        to: [{ email: "recipient@example.com" }],
+        body: '<a href="https://example.com">View update</a>',
+        tracking_options: {
+          links: true,
+          opens: true,
+          domain_name: "links.example.com"
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/messages/send"
+
+      allow(messages).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      message_response = messages.send(identifier: identifier, request_body: request_body)
+
+      expect(message_response).to eq(response)
+    end
+
+    it "forwards a custom tracking hostname for a scheduled send" do
+      identifier = "abc-123-grant-id"
+      request_body = {
+        subject: "Scheduled tracked message",
+        to: [{ email: "recipient@example.com" }],
+        body: '<a href="https://example.com">View update</a>',
+        send_at: 1_893_456_000,
+        tracking_options: {
+          links: true,
+          opens: true,
+          domain_name: "links.example.com"
+        }
+      }
+      path = "#{api_uri}/v3/grants/#{identifier}/messages/send"
+
+      allow(messages).to receive(:post)
+        .with(path: path, request_body: request_body)
+        .and_return(response)
+
+      message_response = messages.send(identifier: identifier, request_body: request_body)
+
+      expect(message_response).to eq(response)
+    end
+
     it "calls the post method with the correct parameters and attachments" do
       identifier = "abc-123-grant-id"
       mock_file = instance_double("file")
