@@ -5,11 +5,16 @@ require_relative "../handler/api_operations"
 
 module Nylas
   # Module representing the possible 'trigger' values in a Webhook.
+  # Native iCloud contacts support CONTACT_UPDATED and CONTACT_DELETED. Yahoo
+  # contacts support neither trigger, including for changes made through the
+  # Nylas API. There is no CONTACT_CREATED trigger.
   # @see https://developer.nylas.com/docs/api#post/a/client_id/webhooks
   module WebhookTrigger
     CALENDAR_CREATED = "calendar.created"
     CALENDAR_UPDATED = "calendar.updated"
     CALENDAR_DELETED = "calendar.deleted"
+    CONTACT_UPDATED = "contact.updated"
+    CONTACT_DELETED = "contact.deleted"
     EVENT_CREATED = "event.created"
     EVENT_UPDATED = "event.updated"
     EVENT_DELETED = "event.deleted"
