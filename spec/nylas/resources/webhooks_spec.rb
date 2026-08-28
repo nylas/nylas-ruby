@@ -134,4 +134,15 @@ describe Nylas::Webhooks do
         .to raise_error(RuntimeError, "Invalid URL or no challenge parameter found.")
     end
   end
+
+  describe Nylas::WebhookTrigger do
+    it "uses the supported contact webhook wire names" do
+      expect(described_class::CONTACT_UPDATED).to eq("contact.updated")
+      expect(described_class::CONTACT_DELETED).to eq("contact.deleted")
+    end
+
+    it "does not expose the unsupported contact.created trigger" do
+      expect(described_class.const_defined?(:CONTACT_CREATED, false)).to be(false)
+    end
+  end
 end

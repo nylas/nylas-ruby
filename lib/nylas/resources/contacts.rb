@@ -14,7 +14,10 @@ module Nylas
     # Return all contacts.
     #
     # @param identifier [String] Grant ID or email account to query.
-    # @param query_params [Hash, nil] Query params to pass to the request.
+    # @param query_params [Hash, nil] Query params to pass to the request. Use
+    #   `metadata_pair: { key1: "value" }` to filter by one indexed metadata
+    #   key (`key1` through `key5`). Metadata filters cannot be combined with
+    #   provider-side contact filters.
     # @return [Array(Array(Hash), String, String)] The list of contacts, API Request ID, and next cursor.
     def list(identifier:, query_params: nil)
       get_list(
@@ -39,7 +42,8 @@ module Nylas
     # Create a contact.
     #
     # @param identifier [String] Grant ID or email account in which to create the object.
-    # @param request_body [Hash] The values to create the contact with.
+    # @param request_body [Hash] The values to create the contact with. The
+    #   optional `metadata` hash is stored by Nylas, not by the provider.
     # @return [Array(Hash, String)] The created contact and API Request ID.
     def create(identifier:, request_body:)
       post(
@@ -52,7 +56,9 @@ module Nylas
     #
     # @param identifier [String] Grant ID or email account in which to update an object.
     # @param contact_id [String] The id of the contact to update.
-    # @param request_body [Hash] The values to update the contact with
+    # @param request_body [Hash] The values to update the contact with. Omitting
+    #   `metadata` or setting it to `nil` preserves existing metadata, a hash
+    #   replaces it, and an empty hash clears it.
     # @return [Array(Hash, String)] The updated contact and API Request ID.
     def update(identifier:, contact_id:, request_body:)
       put(

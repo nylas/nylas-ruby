@@ -14,6 +14,7 @@ describe Nylas::Contacts do
       im_addresses: [{ type: "other", im_address: "myjabberaddress" }],
       job_title: "Software Engineer",
       manager_name: "Bill",
+      metadata: { key1: "sync_eligible" },
       middle_name: "Jacob",
       nickname: "JD",
       notes: "Loves ramen",
@@ -58,7 +59,7 @@ describe Nylas::Contacts do
 
     it "calls the get method with the correct parameters and query params" do
       identifier = "abc-123-grant-id"
-      query_params = { foo: "bar" }
+      query_params = { metadata_pair: { key1: "sync_eligible" } }
       path = "#{api_uri}/v3/grants/#{identifier}/contacts"
       allow(contacts).to receive(:get_list)
         .with(path: path, query_params: query_params)
@@ -106,7 +107,8 @@ describe Nylas::Contacts do
       request_body = {
         given_name: "John",
         surname: "Doe",
-        company_name: "Nylas"
+        company_name: "Nylas",
+        metadata: { key1: "sync_eligible" }
       }
       path = "#{api_uri}/v3/grants/#{identifier}/contacts"
       allow(contacts).to receive(:post)
@@ -126,7 +128,8 @@ describe Nylas::Contacts do
       request_body = {
         given_name: "John",
         surname: "Doe",
-        company_name: "Nylas"
+        company_name: "Nylas",
+        metadata: {}
       }
       path = "#{api_uri}/v3/grants/#{identifier}/contacts/#{contact_id}"
       allow(contacts).to receive(:put)
