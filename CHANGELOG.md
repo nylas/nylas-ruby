@@ -1,7 +1,7 @@
 # Changelog
 
 ### Unreleased
-* Fixed `Notetakers#download_media` raising an error when the API returns 207 Multi-Status. A 207 is now treated as success, so the media that is available and the `errors` list are returned
+* Treat 207 Multi-Status responses as successful, so a response that carries partial results is returned instead of raising an error
 * Documented `tracking_options.domain_name` hash support for custom link and open tracking hostnames. See the [message tracking documentation](https://developer.nylas.com/docs/v3/email/message-tracking/)
 * Documented Contact `metadata` and `metadata_pair` hashes, and added `contact.updated` and `contact.deleted` webhook trigger constants
 
