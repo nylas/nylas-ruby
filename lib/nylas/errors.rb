@@ -83,5 +83,5 @@ module Nylas
     end
   end
 
-  HTTP_SUCCESS_CODES = [200, 201, 202, 302].freeze
+  HTTP_SUCCESS_CODES = [200, 201, 202, 207, 302].freeze
 end

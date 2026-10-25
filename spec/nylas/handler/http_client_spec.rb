@@ -704,6 +704,21 @@ describe Nylas::HttpClient do
                          "https://test.api.nylas.com/foo")
       end.not_to raise_error
     end
+
+    it "does not raise an error for a 207 Multi-Status response" do
+      response = {
+        request_id: "request-id",
+        data: {
+          recording: { url: "https://test.storage/recording.mp4" },
+          errors: [{ artifact: "summary", code: "generation_failed" }]
+        }
+      }
+
+      expect do
+        http_client.send(:handle_failed_response, 207, response,
+                         "https://test.api.nylas.com/foo")
+      end.not_to raise_error
+    end
   end
 
   describe "#parse_json_evaluate_error" do
@@ -716,6 +731,19 @@ describe Nylas::HttpClient do
       }
 
       expect(http_client.send(:parse_json_evaluate_error, 200, response.to_json,
+                              "https://test.api.nylas.com/foo", "application/json")).to eq(response)
+    end
+
+    it "returns the parsed response for a 207 Multi-Status response" do
+      response = {
+        request_id: "request-id",
+        data: {
+          recording: { url: "https://test.storage/recording.mp4" },
+          errors: [{ artifact: "summary", code: "generation_failed" }]
+        }
+      }
+
+      expect(http_client.send(:parse_json_evaluate_error, 207, response.to_json,
                               "https://test.api.nylas.com/foo", "application/json")).to eq(response)
     end
 
