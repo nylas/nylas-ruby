@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   docs:
     # ubuntu-latest is now ubuntu-26.04, which has no prebuilt Ruby 3.0 or 3.1.
