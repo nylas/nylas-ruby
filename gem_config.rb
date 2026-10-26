@@ -38,7 +38,7 @@ module GemConfig
   def self.dev_dependencies
     [["bundler", ">= 1.3.0"],
      ["rdoc", ">= 6.3", "< 8.0"],
-     ["yard", "~> 0.9.34"],
+     ["yard", "~> 0.9.44"],
      ["rubocop", "~> 1.51"],
      ["rubocop-rspec", "~> 3.5"],
      ["rubocop-capybara", "~> 2.20"]] + testing_and_debugging_dependencies
@@ -49,7 +49,7 @@ module GemConfig
      ["rspec-json_matcher", "~> 0.2.0"],
      ["webmock", "~> 3.18", ">= 3.18.1"],
      ["simplecov", "~> 0.22.0"],
-     ["simplecov-cobertura", "~> 2.1.0"],
+     ["simplecov-cobertura", "~> 3.2"],
      ["webrick", "~> 1.8", ">= 1.8.1"]]
   end
 end

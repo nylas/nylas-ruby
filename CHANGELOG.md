@@ -1,13 +1,16 @@
 # Changelog
 
 ### [6.9.0] / 2026-10-26
+* Required HTTParty 0.24.0 or later to exclude versions affected by CVE-2025-68696 (potential SSRF and API key leakage)
 * Treat 207 Multi-Status responses as successful, so a response that carries partial results is returned instead of raising an error
 * Documented `tracking_options.domain_name` hash support for custom link and open tracking hostnames. See the [message tracking documentation](https://developer.nylas.com/docs/v3/email/message-tracking/)
 * Documented Contact `metadata` and `metadata_pair` hashes, and added `contact.updated` and `contact.deleted` webhook trigger constants
-* Updated CI runner images and SDK reference documentation deployment, and added gem builds to the Ruby test matrix
+* Updated CI runner images and SDK reference documentation deployment, made Ruby 3.0/3.1/3.2 versions explicit, and added gem builds to the Ruby test matrix
 * Corrected gem metadata and SDK reference links, and included the changelog, README, and license in the gem package
 * Updated the local test command to match the supported Ruby 3.0+ test suite
 * Declared the RDoc development dependency so SDK reference documentation also builds on Ruby 4.0, and verified documentation output in CI
+* Required YARD 0.9.44 or later for development to exclude known documentation server path traversal vulnerabilities
+* Updated the coverage formatter for compatibility with current REXML releases
 
 ### [6.8.1]
 * Documented `tentative_as_busy` support in the `Calendars#get_free_busy` request body, consistent with other Nylas SDKs

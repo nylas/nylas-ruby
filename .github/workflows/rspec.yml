@@ -24,11 +24,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ruby: 3.0
-          - ruby: 3.1
-          - ruby: 3.2
+          # Keep the existing required check names while passing explicit Ruby versions.
+          - ruby: '3.0'
+            check_name: Ruby 3
+          - ruby: '3.1'
+            check_name: Ruby 3.1
+          - ruby: '3.2'
+            check_name: Ruby 3.2
 
-    name: Ruby ${{ matrix.ruby }}
+    name: ${{ matrix.check_name }}
     steps:
     - uses: actions/checkout@v2
 
