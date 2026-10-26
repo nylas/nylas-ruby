@@ -46,6 +46,9 @@ jobs:
     - name: Run tests
       run: bundle exec rspec spec
 
+    - name: Build gem
+      run: gem build nylas.gemspec
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
