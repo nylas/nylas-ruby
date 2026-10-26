@@ -27,7 +27,9 @@ jobs:
           ruby-version: '3.0'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Generate documentation
-        run: bundle exec yard
+        run: |
+          bundle exec yard
+          test -s doc/index.html
       - name: Set env BRANCH
         run: echo "BRANCH=$(echo $GITHUB_REF | cut -d'/' -f 3)" >> $GITHUB_ENV
       - name: Set env CLOUDFLARE_BRANCH

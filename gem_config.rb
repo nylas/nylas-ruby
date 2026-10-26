@@ -6,8 +6,9 @@ require "./lib/nylas/version"
 module GemConfig
   def self.apply(gem)
     gem.description = %(Gem for interacting with the Nylas API.)
-    gem.files = Dir.glob("lib/{nylas.rb,nylas/**/*.rb}")
+    gem.files = Dir.glob("lib/{nylas.rb,nylas/**/*.rb}") + %w[CHANGELOG.md LICENSE.txt README.md]
     gem.license = "MIT"
+    gem.homepage = "https://www.nylas.com"
     gem.version = Nylas::VERSION
     gem.platform = "ruby"
     gem.required_ruby_version = ">= 3.0"
@@ -26,8 +27,8 @@ module GemConfig
   def self.metadata
     {
       "bug_tracker_uri" => "https://github.com/nylas/nylas-ruby/issues",
-      "changelog_uri" => "https://github.com/nylas/nylas-ruby/blob/master/CHANGELOG.md",
-      "documentation_uri" => "https://developer.nylas.com/docs/sdks/ruby/",
+      "changelog_uri" => "https://github.com/nylas/nylas-ruby/blob/main/CHANGELOG.md",
+      "documentation_uri" => "https://developer.nylas.com/docs/v3/sdks/ruby/",
       "homepage_uri" => "https://www.nylas.com",
       "source_code_uri" => "https://github.com/nylas/nylas-ruby",
       "github_repo" => "https://github.com/nylas/nylas-ruby"
@@ -36,7 +37,8 @@ module GemConfig
 
   def self.dev_dependencies
     [["bundler", ">= 1.3.0"],
-     ["yard", "~> 0.9.34"],
+     ["rdoc", ">= 6.3", "< 8.0"],
+     ["yard", "~> 0.9.44"],
      ["rubocop", "~> 1.51"],
      ["rubocop-rspec", "~> 3.5"],
      ["rubocop-capybara", "~> 2.20"]] + testing_and_debugging_dependencies
@@ -47,7 +49,7 @@ module GemConfig
      ["rspec-json_matcher", "~> 0.2.0"],
      ["webmock", "~> 3.18", ">= 3.18.1"],
      ["simplecov", "~> 0.22.0"],
-     ["simplecov-cobertura", "~> 2.1.0"],
+     ["simplecov-cobertura", "~> 3.2"],
      ["webrick", "~> 1.8", ">= 1.8.1"]]
   end
 end

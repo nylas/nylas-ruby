@@ -121,7 +121,7 @@ module Nylas
     #   validated when the send is scheduled and revalidated before delivery.
     #   If you're attaching files, you must pass an array of [File] objects, or
     #   you can pass in base64 encoded strings if the total attachment size is less than 3mb.
-    #   You can also use {FileUtils::attach_file_request_builder} to build each object attach.
+    #   You can also use {Nylas::FileUtils.attach_file_request_builder} to build each attachment.
     # @return [Array(Hash, String)] The sent message and the API Request ID.
     def send(identifier:, request_body:)
       payload, opened_files = FileUtils.handle_message_payload(request_body)

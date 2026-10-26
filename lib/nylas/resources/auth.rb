@@ -19,7 +19,7 @@ module Nylas
     # Get info about a specific token based on the identifier you include.
     # Use either the ID Token or Access Token.
     #
-    # @param ID of the request.
+    # @param query_params [Hash, nil] Query parameters containing the token to inspect.
     # @return [Hash] Token Info.
     def access_token_info(query_params: nil)
       get(

@@ -19,7 +19,7 @@ Pull requests are welcome for bug fixes. If you want to implement something new,
 While writing your code contribution, make sure you follow the testing conventions found in the [spec](https://github.com/nylas/nylas-ruby/tree/master/spec/nylas) [directory](https://github.com/nylas/nylas-ruby/tree/master/spec/nylas) for any components that you add. 
 
  - Pull requests may be submitted before they are feature complete to get feedback and thoughts from the core team.
- - Pull requests should pass tests across the supported versions of Ruby, as defined in .travis.yml. To do so, run bin/test.
+ - Pull requests should pass tests across the supported versions of Ruby, as defined in `.github/workflows/rspec.yml`. Run `bin/test` to test your current Ruby version; GitHub Actions runs the full version matrix.
  - Pull requests should add new tests to cover the functionality that is added or a bug that is fixed.
 
 ## Creating a Pull Request
