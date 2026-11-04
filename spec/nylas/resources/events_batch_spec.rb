@@ -82,6 +82,16 @@ describe Nylas::Events do
       expect(request).to have_been_requested.once
     end
 
+    it "rejects blank, dot-segment, and non-string grant identifiers before sending any HTTP request" do
+      [nil, true, false, 123, {}, [], "", "   ", "\t\n", ".", "..", " . ", "\t..\n"].each do |identifier|
+        expect do
+          events.batch(identifier: identifier, query_params: query_params, request_body: request_body)
+        end.to raise_error(ArgumentError, "Invalid grant identifier.")
+      end
+
+      expect(WebMock).not_to have_requested(:any, /.*/)
+    end
+
     it "returns mixed 207 results with provider errors and retry metadata without retrying" do
       results = [
         { status: 200, data: { id: "created-event", title: "Standup" } },

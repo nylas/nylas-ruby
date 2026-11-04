@@ -77,7 +77,12 @@ module Nylas
     #   :provider_error [Hash]. A successful delete has no :data. Failed results may include
     #   :retry_after [Numeric] (seconds, including zero) and :provider_event_created [Boolean].
     #   Never retry an operation with :provider_event_created set to true; it would create a duplicate.
+    # @raise [ArgumentError] If the grant identifier is not a nonblank String or is a URL dot segment.
     def batch(identifier:, request_body:, query_params:)
+      unless identifier.is_a?(String) && !identifier.strip.empty? && !%w[. ..].include?(identifier.strip)
+        raise ArgumentError, "Invalid grant identifier."
+      end
+
       encoded_identifier = URI.encode_www_form_component(identifier).gsub("+", "%20")
       post(
         path: "#{api_uri}/v3/grants/#{encoded_identifier}/events/batch",
