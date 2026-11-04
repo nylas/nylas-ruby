@@ -1,7 +1,8 @@
 # Changelog
 
-### Unreleased
-* Added Events batch endpoint (Google and Microsoft).
+### [6.10.0] / 2026-11-04
+* Added Events batch endpoint (Google and Microsoft). Supports create, update, and delete operations with ordered results, HTTP 207 responses, and retry safety metadata. ([#553](https://github.com/nylas/nylas-ruby/pull/553), [TT-5546](https://nylas.atlassian.net/browse/TT-5546))
+* Validated batch grant identifiers and encoded them as a single URL path segment.
 
 ### [6.9.0] / 2026-10-26
 * Required HTTParty 0.24.0 or later to exclude versions affected by CVE-2025-68696 (potential SSRF and API key leakage)
