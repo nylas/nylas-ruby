@@ -2,6 +2,7 @@
 
 require_relative "resource"
 require_relative "../handler/api_operations"
+require "uri"
 
 module Nylas
   # Nylas Events API
@@ -46,6 +47,45 @@ module Nylas
     def create(identifier:, request_body:, query_params:)
       post(
         path: "#{api_uri}/v3/grants/#{identifier}/events",
+        query_params: query_params,
+        request_body: request_body
+      )
+    end
+
+    # Create, update, or delete events in one request (Google and Microsoft).
+    #
+    # Results follow the operation order. Both 200 and 207 responses return normally;
+    # inspect each result's status and error, even when every operation failed.
+    # The API validates the operations and batch size. No operations are retried automatically.
+    #
+    # @param identifier [String] Grant ID or email account in which to modify events.
+    # @param request_body [Hash] The batch request.
+    # @option request_body [Array<Hash>] :operations The event operations to execute.
+    #   Each operation has a :method of "create", "update", or "delete".
+    #   Create and update require :body, using the same event Hash as {#create} or {#update}.
+    #   Update and delete require :event_id [String].
+    # @param query_params [Hash] Query parameters applied to every operation.
+    # @option query_params [String] :calendar_id The required calendar ID.
+    # @option query_params [Boolean] :notify_participants Defaults to true on the server.
+    #   Microsoft does not support false.
+    # @option query_params [String] :grant_email Optional grant email.
+    # @option query_params [Boolean] :tentative_as_busy Whether tentative events count as busy.
+    # @option query_params [String] :select Comma-separated event fields to return.
+    # @return [Array(Array<Hash>, String, Hash)] Ordered results, API request ID, and response headers.
+    #   Each result has :status [Integer], optional :data [Hash] with the event for a successful
+    #   create or update, and optional :error [Hash] with :type [String], :message [String], and
+    #   :provider_error [Hash]. A successful delete has no :data. Failed results may include
+    #   :retry_after [Numeric] (seconds, including zero) and :provider_event_created [Boolean].
+    #   Never retry an operation with :provider_event_created set to true; it would create a duplicate.
+    # @raise [ArgumentError] If the grant identifier is not a nonblank String or is a URL dot segment.
+    def batch(identifier:, request_body:, query_params:)
+      unless identifier.is_a?(String) && !identifier.strip.empty? && !%w[. ..].include?(identifier.strip)
+        raise ArgumentError, "Invalid grant identifier."
+      end
+
+      encoded_identifier = URI.encode_www_form_component(identifier).gsub("+", "%20")
+      post(
+        path: "#{api_uri}/v3/grants/#{encoded_identifier}/events/batch",
         query_params: query_params,
         request_body: request_body
       )

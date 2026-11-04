@@ -1,5 +1,8 @@
 # Changelog
 
+### Unreleased
+* Added Events batch endpoint (Google and Microsoft).
+
 ### [6.9.0] / 2026-10-26
 * Required HTTParty 0.24.0 or later to exclude versions affected by CVE-2025-68696 (potential SSRF and API key leakage)
 * Treat 207 Multi-Status responses as successful, so a response that carries partial results is returned instead of raising an error
